@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 下厨房广告专项（可选）
+desc: 仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。默认不导入；需设备验收。
+http:
+  mitm:
+  - api.xiachufang.com
+  rewrite:
+  - ^https://api\.xiachufang\.com/v\d+/ad/[^?#]*(?:\?|$) - reject

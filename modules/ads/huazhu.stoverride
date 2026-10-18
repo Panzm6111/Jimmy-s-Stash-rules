@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 华住会广告专项（可选）
+desc: 仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。默认不导入；需设备验收。
+http:
+  mitm:
+  - appapi.huazhu.com
+  rewrite:
+  - ^https://appapi\.huazhu\.com(?::\d+)?/client/app/getAppStartPage/(?:\?|$) - reject

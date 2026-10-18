@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 知乎广告专项（可选）
+desc: 仅独立开屏、顶部横幅和 ad-style-service；保留回答、搜索和普通推荐。默认不导入；需设备验收。
+http:
+  mitm:
+  - api.zhihu.com
+  rewrite:
+  - ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$) - reject
+  - ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$) - reject

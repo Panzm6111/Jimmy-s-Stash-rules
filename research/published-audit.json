@@ -1,0 +1,323 @@
+{
+  "checked_at": "2026-10-19T00:54:47.088838+08:00",
+  "target": "published",
+  "passed": 0,
+  "total": 63,
+  "results": [
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/main.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/58tongcheng.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/alipan.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/amap.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/baidu-netdisk.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/bilibili.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cainiao.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cmcc.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/ctrip.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/damai.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/dianping.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/eastmoney.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/expanded.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/huazhu.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong-finance.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/kfc.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/liepin.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/luckin.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/maimai.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/mcdonalds.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/mijia.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-mail.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-music.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/pinduoduo.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/railway12306.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taobao.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taopiaopiao.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/tieba.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/uc.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/umetrip.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unicom.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unionpay.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/weibo.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wps.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiachufang.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xianyu.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaohongshu.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaoyuzhou.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/zhihu.stoverride",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ads-basic.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/apple.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/microsoft.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/openai.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/netflix.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/telegram.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/youtube.yaml",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js",
+      "status": 404,
+      "ok": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js",
+      "status": 404,
+      "ok": false
+    }
+  ]
+}

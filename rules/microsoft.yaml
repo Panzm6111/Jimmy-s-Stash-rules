@@ -1,0 +1,14 @@
+payload:
+- DOMAIN-SUFFIX,microsoft.com
+- DOMAIN-SUFFIX,microsoftonline.com
+- DOMAIN-SUFFIX,office.com
+- DOMAIN-SUFFIX,office365.com
+- DOMAIN-SUFFIX,live.com
+- DOMAIN-SUFFIX,onedrive.com
+- DOMAIN-SUFFIX,1drv.ms
+- DOMAIN-SUFFIX,sharepoint.com
+- DOMAIN-SUFFIX,xbox.com
+- DOMAIN-SUFFIX,xboxlive.com
+- DOMAIN-SUFFIX,bing.com
+- DOMAIN-SUFFIX,github.com
+- DOMAIN-SUFFIX,githubusercontent.com

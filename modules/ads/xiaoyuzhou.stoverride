@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 小宇宙广告专项（可选）
+desc: 仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。默认不导入；需设备验收。
+http:
+  mitm:
+  - api.xiaoyuzhoufm.com
+  rewrite:
+  - ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$) - reject

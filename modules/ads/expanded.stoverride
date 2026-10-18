@@ -1,0 +1,6 @@
+name: 扩展域名广告（可选）
+desc: 替换基础广告规则集的来源，沿用核心规则优先级；关闭后恢复基础包。不需要 MITM。
+rule-providers:
+  基础广告:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml
+    interval: 86400

@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 闲鱼广告专项（可选）
+desc: 仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。默认不导入；需设备验收。
+http:
+  mitm:
+  - acs.m.goofish.com
+  rewrite:
+  - ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject

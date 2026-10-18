@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 菜鸟广告专项（可选）
+desc: 仅 ads.show 返回中带明确 adItemDetail 的广告项；保留积分/券/消息/包裹。默认不导入；需设备验收。
+script-providers:
+  jimmy_cainiao_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js
+    interval: 86400
+http:
+  mitm:
+  - cn-acs.m.cainiao.com
+  script:
+  - match: ^https://cn-acs\.m\.cainiao\.com/gw/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_cainiao_ads
+    type: response
+    require-body: true
+    timeout: 5

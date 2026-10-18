@@ -1,0 +1,77 @@
+{
+  "positive": {
+    "美国": [
+      "🇺🇸 US 01",
+      "美国1",
+      "美國02",
+      "United States 3",
+      "USA-4",
+      "Los Angeles",
+      "洛杉矶专线",
+      "New-York",
+      "[US] 05",
+      "🇺🇸01",
+      "US01"
+    ],
+    "日本": [
+      "🇯🇵 Japan 01",
+      "日本2",
+      "东京",
+      "東京03",
+      "大阪",
+      "[JP]-4",
+      "Tokyo-5",
+      "Osaka",
+      "🇯🇵01",
+      "JP01"
+    ],
+    "香港": [
+      "🇭🇰 Hong Kong",
+      "香港02",
+      "[HK]-3",
+      "Hong-Kong-4",
+      "hk-5",
+      "🇭🇰01",
+      "HK01"
+    ],
+    "新加坡": [
+      "🇸🇬 Singapore",
+      "新加坡2",
+      "狮城",
+      "獅城03",
+      "[SG]-4",
+      "sg-5",
+      "🇸🇬01",
+      "SG01"
+    ],
+    "台湾": [
+      "🇹🇼 Taiwan",
+      "台湾2",
+      "台灣",
+      "臺灣",
+      "台北3",
+      "臺北",
+      "[TW]-4",
+      "Taipei",
+      "🇹🇼01",
+      "TW01"
+    ]
+  },
+  "negative": [
+    "Russia",
+    "Australia",
+    "Austria",
+    "🇬🇧 UK",
+    "JustTest",
+    "BUSINESS",
+    "GB 01",
+    "流量剩余",
+    "USSR",
+    "Dubai",
+    "未知节点",
+    "South America BR01",
+    "Latin America AR01",
+    "Canada North America",
+    "American Samoa AS01"
+  ]
+}

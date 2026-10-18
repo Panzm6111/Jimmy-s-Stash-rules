@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 阿里云盘广告专项（可选）
+desc: 仅 onboard_list 的4种推广banner；保留备份、更新、签到/权益入口。默认不导入；需设备验收。
+script-providers:
+  jimmy_alipan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js
+    interval: 86400
+http:
+  mitm:
+  - member.alipan.com
+  script:
+  - match: ^https://member\.alipan\.com/v1/users/onboard_list/?(?:\?|$)
+    name: jimmy_alipan_ads
+    type: response
+    require-body: true
+    timeout: 5

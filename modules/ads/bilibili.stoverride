@@ -1,0 +1,15 @@
+name: 哔哩哔哩广告处理（可选）
+desc: 仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。默认不导入，需设备验收。
+http:
+  mitm:
+    - app.bilibili.com
+  script:
+    - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/(splash\/(list|show)|feed\/index)(\?|$)
+      name: jimmy_bilibili_ads
+      type: response
+      require-body: true
+      timeout: 5
+script-providers:
+  jimmy_bilibili_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js
+    interval: 86400

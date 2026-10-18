@@ -1,0 +1,393 @@
+{
+  "checked_at": "2026-10-18",
+  "method": "GitHub repository search; bounded top-five discovery, then selected code inspection",
+  "results": [
+    {
+      "query": "京东 签到",
+      "results": [
+        {
+          "name": "ruicky/jd_sign_bot",
+          "description": "<em>京</em><em>东</em><em>签</em><em>到</em>机器人",
+          "archived": true
+        },
+        {
+          "name": "e1399579/autojs",
+          "description": "Auto.js脚本：支付宝<em>签</em><em>到</em>、<em>京</em><em>东</em><em>签</em><em>到</em>",
+          "archived": false
+        },
+        {
+          "name": "liang7hi/oh-my-route",
+          "description": "<em>京</em><em>东</em><em>签</em><em>到</em>工具，定时领京豆",
+          "archived": false
+        },
+        {
+          "name": "via-ya/sazs34_jd",
+          "description": "<em>京</em><em>东</em><em>签</em><em>到</em>",
+          "archived": false
+        },
+        {
+          "name": "CaoZ/JD-Coin",
+          "description": "自动登录<em>京</em><em>东</em>，打卡领钢镚，<em>签</em><em>到</em>领京豆",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "淘宝 签到",
+      "results": [
+        {
+          "name": "bjc5233/autojs",
+          "description": "android autojs<em>签</em><em>到</em>脚本【百度地图<em>签</em><em>到</em>、大众点评<em>签</em><em>到</em>、叮咚买菜<em>签</em><em>到</em>、飞猪<em>签</em><em>到</em>里程、京东<em>签</em><em>到</em>京豆、京东金融<em>签</em><em>到</em>钢镚、联想<em>签</em><em>到</em>延保、拼多多<em>签</em><em>到</em>、上海移动和你<em>签</em><em>到</em>、什么值得买<em>签</em><em>到</em>、苏宁易购<em>签</em><em>到</em>、<em>淘</em><em>宝</em><em>签</em><em>到</em>淘金币、腾讯wifi管家<em>签</em><em>到</em>、微信读书(TODO)、小米商城抢购w…",
+          "archived": false
+        },
+        {
+          "name": "Rockyzsu/red_bag",
+          "description": "支付宝红包/<em>淘</em><em>宝</em>领喵币/雪球红包/苏宁易购/京东/<em>淘</em><em>宝</em>自动<em>签</em><em>到</em> 领取金币",
+          "archived": false
+        },
+        {
+          "name": "G-T-L/TaoBaoQianDao",
+          "description": "<em>淘</em><em>宝</em><em>签</em><em>到</em>脚本,基于Autojs",
+          "archived": false
+        },
+        {
+          "name": "bayson/autojs",
+          "description": "android autojs 注册登陆<em>签</em><em>到</em>脚本，实现只需要修改JSON配置文件，就能自定义操作流程。已实现微博自动注册，远程获取内容，自动发微博等功能！新增加网易163邮箱注册，抖音注册、点赞！正在实现【百度地图<em>签</em><em>到</em>、大众点评<em>签</em><em>到</em>、叮咚买菜<em>签</em><em>到</em>、拼多多<em>签</em><em>到</em>、什么值得买<em>签</em><em>到</em>、…",
+          "archived": false
+        },
+        {
+          "name": "brazhao110/surge-scripts",
+          "description": "Surge 自动<em>签</em><em>到</em>脚本 - JD/JD金融/<em>淘</em><em>宝</em>/闲鱼",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "中国移动 签到",
+      "results": [
+        {
+          "name": "yupaiLy/cmcc-auto-checkin",
+          "description": "<em>中</em><em>国</em><em>移</em><em>动</em> App 自动<em>签</em><em>到</em>（<em>签</em><em>到</em>领流量/话费）· Bark 推送",
+          "archived": false
+        },
+        {
+          "name": "Litre-WU/Sign",
+          "description": "<em>签</em><em>到</em>啦 (目前支持京东京豆、南航、川航、携程、微信游戏刷提现券、美团优惠券、统一快乐星球、<em>中</em><em>国</em><em>移</em><em>动</em>等)",
+          "archived": false
+        },
+        {
+          "name": "jacobhere/Jego_sign",
+          "description": "<em>中</em><em>国</em><em>移</em><em>动</em>无忧行<em>签</em><em>到</em>",
+          "archived": false
+        },
+        {
+          "name": "gdstxl00/-",
+          "description": "<em>中</em><em>国</em><em>移</em><em>动</em>APP/移动营业厅<em>签</em><em>到</em> Quantumult X 脚本",
+          "archived": false
+        },
+        {
+          "name": "Rain520/cmcc-daily",
+          "description": "<em>中</em><em>国</em><em>移</em><em>动</em> App 日常<em>签</em><em>到</em>的自托管网页应用：多账号管理、每任务独立计划、加密备份迁移，一条 Docker Compose 部署",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "中国联通 签到",
+      "results": [
+        {
+          "name": "ityadong/node-signin",
+          "description": "通过Docker或GitHub Actions来每日自动执行<em>签</em><em>到</em>任务：稀土掘金、<em>中</em><em>国</em><em>联</em><em>通</em>",
+          "archived": false
+        },
+        {
+          "name": "872119925/XY-UNICOM",
+          "description": "<em>中</em><em>国</em> <em>联</em><em>通</em><em>签</em><em>到</em>",
+          "archived": false
+        },
+        {
+          "name": "xbwlgzs1/unicom-daily-tasks",
+          "description": "<em>中</em><em>国</em><em>联</em><em>通</em>手机营业厅日常任务（<em>签</em><em>到</em>/抽奖/积分）Windows 图形版 · 多账号管理 · 实时日志 · Excel 导出",
+          "archived": false
+        },
+        {
+          "name": "cirosantilli/china-dictatorship",
+          "description": "... 易 可视化 多账户 纯本地量化解决方案INFO SPIDER 是一个集众多数据源于一身的爬虫工具箱 旨在安全快捷的帮助用户拿回自己的数据 工具代码开源 流程透明 支持数据源包括GitHub QQ邮箱 网易邮箱 阿里邮箱 新浪邮箱 Hotmail邮箱 Outlook邮…",
+          "archived": false
+        },
+        {
+          "name": "gege-circle/.github",
+          "description": "... 据源包括GitHub QQ邮箱 网易邮箱 阿里邮箱 新浪邮箱 Hotmail邮箱 Outlook邮箱 京东 淘宝 支付宝 中国移动 <em>中</em><em>国</em><em>联</em><em>通</em> 中国电信 知乎 哔哩哔哩 网易云音乐 QQ好友 QQ群 生成朋友圈相册 浏览器浏览历史 123 6 博客园 CSDN博客 开…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "美团 签到",
+      "results": [
+        {
+          "name": "Litre-WU/Sign",
+          "description": "<em>签</em><em>到</em>啦 (目前支持京东京豆、南航、川航、携程、微信游戏刷提现券、<em>美</em><em>团</em>优惠券、统一快乐星球、中国移动等)",
+          "archived": false
+        },
+        {
+          "name": "lazykitty2026/deepsea",
+          "description": "☆青龙面板脚本更新自用可用薅羊毛库☆【<em>美</em><em>团</em>自动领神券优惠券☆顺丰速运<em>签</em><em>到</em>☆小米运动自动刷步数（微信/支付宝）】",
+          "archived": false
+        },
+        {
+          "name": "linbailo/zyqinglong",
+          "description": "青龙面板脚本自用库薅羊毛（✅ 滴滴出行领券✅ 滴滴加油领券✅ 滴滴代驾领券/滴滴<em>签</em><em>到</em>领券打卡✅ 滴滴果园✅ mt论坛✅ <em>美</em><em>团</em>✅ 饿了么✅ 得物✅ 顺丰✅ 霸王茶姬✅ 益禾堂✅ 塔斯汀✅ 海底捞）",
+          "archived": false
+        },
+        {
+          "name": "zll2317463866/tiger",
+          "description": "青龙面板||京东||羊毛||饿了么||<em>美</em><em>团</em>||各类<em>签</em><em>到</em>脚本",
+          "archived": false
+        },
+        {
+          "name": "gweesin/appScript-autojs",
+          "description": "使用autojs写的android app<em>签</em><em>到</em>脚本。【今日校园、飞猪、京东、简书、口袋梦三国、哔哩哔哩、支付宝、淘宝、QQ 音乐、饿了么、拼多多、<em>美</em><em>团</em>、百度地图、百度文库、百度贴吧、百度网盘、起点读书、网易云音乐、大众点评、腾讯 wifi 管家、全民 K 歌、梨涡、CSDN…",
+          "archived": true
+        }
+      ]
+    },
+    {
+      "query": "饿了么 签到",
+      "results": [
+        {
+          "name": "linbailo/zyqinglong",
+          "description": "青龙面板脚本自用库薅羊毛（✅ 滴滴出行领券✅ 滴滴加油领券✅ 滴滴代驾领券/滴滴<em>签</em><em>到</em>领券打卡✅ 滴滴果园✅ mt论坛✅ 美团✅ <em>饿</em><em>了</em><em>么</em>✅ 得物✅ 顺丰✅ 霸王茶姬✅ 益禾堂✅ 塔斯汀✅ 海底捞）",
+          "archived": false
+        },
+        {
+          "name": "zll2317463866/tiger",
+          "description": "青龙面板||京东||羊毛||<em>饿</em><em>了</em><em>么</em>||美团||各类<em>签</em><em>到</em>脚本",
+          "archived": false
+        },
+        {
+          "name": "chenjunhua8080/elemeHelper",
+          "description": "<em>饿</em><em>了</em><em>么</em>最大红包、还可以一键<em>签</em><em>到</em>噢~【springboot】",
+          "archived": false
+        },
+        {
+          "name": "gweesin/appScript-autojs",
+          "description": "使用autojs写的android app<em>签</em><em>到</em>脚本。【今日校园、飞猪、京东、简书、口袋梦三国、哔哩哔哩、支付宝、淘宝、QQ 音乐、<em>饿</em><em>了</em><em>么</em>、拼多多、美团、百度地图、百度文库、百度贴吧、百度网盘、起点读书、网易云音乐、大众点评、腾讯 wifi 管家、全民 K 歌、梨涡、CSDN…",
+          "archived": true
+        },
+        {
+          "name": "huangxy7/jd_scripts",
+          "description": "awesome脚本Nas羊毛docker自动nodejs约i茅台damai秒杀pxq抢票12306工具autojs面板qinglong神器go数据PDF程序tv入门java有趣next博客halo建站API收集python机器人AI一键admin生PT成bot部JD群晖<em>签</em><em>到</em>W…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "滴滴 签到",
+      "results": [
+        {
+          "name": "linbailo/zyqinglong",
+          "description": "青龙面板脚本自用库薅羊毛（✅ <em>滴</em><em>滴</em>出行领券✅ <em>滴</em><em>滴</em>加油领券✅ <em>滴</em><em>滴</em>代驾领券/<em>滴</em><em>滴</em><em>签</em><em>到</em>领券打卡✅ <em>滴</em><em>滴</em>果园✅ mt论坛✅ 美团✅ 饿了么✅ 得物✅ 顺丰✅ 霸王茶姬✅ 益禾堂✅ 塔斯汀✅ 海底捞）",
+          "archived": false
+        },
+        {
+          "name": "cirosantilli/china-dictatorship",
+          "description": "... 容及辅助练习也将逐步添加进这个代码仓 Hope Boot 一款现代化的脚手架项目一个简单漂亮的SSM Spring SpringMVC Mybatis 博客系统根据Gson库使用的要求 将JSONObject格式的String 解析成实体B站 哔哩哔哩 Bilibi…",
+          "archived": false
+        },
+        {
+          "name": "gege-circle/.github",
+          "description": "... Mybatis 博客系统根据Gson库使用的要求 将JSONObject格式的String 解析成实体B站 哔哩哔哩 Bilibili 自动<em>签</em><em>到</em>投币工具 每天轻松获取65经验值 支持每日自动投币 银瓜子兑换硬币 领取大会员福利 大会员月底给自己充电等功能 呐 赶快和…",
+          "archived": false
+        },
+        {
+          "name": "cirosantilli/china-dictatroship-7",
+          "description": " of my MOOC Course &lt;我在慕课网上的课程 算法与数据结构 示例代码 包括C 和Java版本 课程的更多更新内容及辅助练习也将逐步添加进这个代码仓 Hope Boot 一款现代化的脚手架项目一个简单漂亮的SSM Spring SpringMVC Mybati…",
+          "archived": false
+        },
+        {
+          "name": "mRFWq7LwNPZjaVv5v6eo/cihna-dictattorshrip-8",
+          "description": " of my MOOC Course &lt;我在慕课网上的课程 算法与数据结构 示例代码 包括C 和Java版本 课程的更多更新内容及辅助练习也将逐步添加进这个代码仓 Hope Boot 一款现代化的脚手架项目一个简单漂亮的SSM Spring SpringMVC Mybati…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "优酷 签到",
+      "results": [
+        {
+          "name": "gweesin/appScript-autojs",
+          "description": "使用autojs写的android app<em>签</em><em>到</em>脚本。【今日校园、飞猪、京东、简书、口袋梦三国、哔哩哔哩、支付宝、淘宝、QQ 音乐、饿了么、拼多多、美团、百度地图、百度文库、百度贴吧、百度网盘、起点读书、网易云音乐、大众点评、腾讯 wifi 管家、全民 K 歌、梨涡、CSDN…",
+          "archived": true
+        },
+        {
+          "name": "bigoceans/NetClean",
+          "description": "一站式网页净化工具箱：① 屏蔽百度/Google/Bing/360/知乎/豆瓣/微博/B站/<em>优</em><em>酷</em>/腾讯视频/微信公号/YouTube/Twitter/CSDN/吾爱破解/好看视频 等 20+ 站点的广告与弹窗；② 搜索结果卡片式美化、关键词/网址过滤、干净复制、暗黑护眼模式…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "瑞幸 签到",
+      "results": []
+    },
+    {
+      "query": "库迪 签到",
+      "results": []
+    },
+    {
+      "query": "肯德基 签到",
+      "results": []
+    },
+    {
+      "query": "海底捞 签到",
+      "results": [
+        {
+          "name": "checkToke/yangtai",
+          "description": "青龙面板、上车， 巴奴火锅、一汽大众、<em>海</em><em>底</em><em>捞</em>、屈臣氏、霸王茶姬、华住会、东呈会、万达酒店、益禾堂 自动<em>签</em><em>到</em> 。大疆商城监控库存、价格变化",
+          "archived": false
+        },
+        {
+          "name": "linbailo/zyqinglong",
+          "description": "青龙面板脚本自用库薅羊毛（✅ 滴滴出行领券✅ 滴滴加油领券✅ 滴滴代驾领券/滴滴<em>签</em><em>到</em>领券打卡✅ 滴滴果园✅ mt论坛✅ 美团✅ 饿了么✅ 得物✅ 顺丰✅ 霸王茶姬✅ 益禾堂✅ 塔斯汀✅ <em>海</em><em>底</em><em>捞</em>）",
+          "archived": false
+        },
+        {
+          "name": "openmartin/haidilao_check",
+          "description": "<em>海</em><em>底</em><em>捞</em><em>签</em><em>到</em>",
+          "archived": false
+        },
+        {
+          "name": "leisvip/WPS_Script-Collection",
+          "description": "WPS<em>签</em><em>到</em>定时重放脚本框架，兼容青龙，夸克网盘|永辉生活|霸王茶姬|所有女生|兴攀农场|屈臣氏|华住会|天气预报|和风天气|steamtools|恩山论坛|熊猫代理|达美乐比萨|LinkAi|<em>海</em><em>底</em><em>捞</em>|鸿星尔克|词霸每日一句|金山词霸|钉钉AI|阿里云盘|百度贴吧|WPS（打…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "华住会 签到",
+      "results": [
+        {
+          "name": "checkToke/yangtai",
+          "description": "青龙面板、上车， 巴奴火锅、一汽大众、海底捞、屈臣氏、霸王茶姬、<em>华</em><em>住</em><em>会</em>、东呈会、万达酒店、益禾堂 自动<em>签</em><em>到</em> 。大疆商城监控库存、价格变化",
+          "archived": false
+        },
+        {
+          "name": "Dimlitter/huazhu-auto-checkin",
+          "description": "简易的<em>华</em><em>住</em><em>会</em>APP自动<em>签</em><em>到</em>，支持源码与docker运行",
+          "archived": false
+        },
+        {
+          "name": "leisvip/WPS_Script-Collection",
+          "description": "WPS<em>签</em><em>到</em>定时重放脚本框架，兼容青龙，夸克网盘|永辉生活|霸王茶姬|所有女生|兴攀农场|屈臣氏|<em>华</em><em>住</em><em>会</em>|天气预报|和风天气|steamtools|恩山论坛|熊猫代理|达美乐比萨|LinkAi|海底捞|鸿星尔克|词霸每日一句|金山词霸|钉钉AI|阿里云盘|百度贴吧|WPS（打…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "携程 签到",
+      "results": [
+        {
+          "name": "Litre-WU/Sign",
+          "description": "<em>签</em><em>到</em>啦 (目前支持京东京豆、南航、川航、<em>携</em><em>程</em>、微信游戏刷提现券、美团优惠券、统一快乐星球、中国移动等)",
+          "archived": false
+        },
+        {
+          "name": "cirosantilli/china-dictatorship",
+          "description": "... 容及辅助练习也将逐步添加进这个代码仓 Hope Boot 一款现代化的脚手架项目一个简单漂亮的SSM Spring SpringMVC Mybatis 博客系统根据Gson库使用的要求 将JSONObject格式的String 解析成实体B站 哔哩哔哩 Bilibi…",
+          "archived": false
+        },
+        {
+          "name": "gege-circle/.github",
+          "description": "... Mybatis 博客系统根据Gson库使用的要求 将JSONObject格式的String 解析成实体B站 哔哩哔哩 Bilibili 自动<em>签</em><em>到</em>投币工具 每天轻松获取65经验值 支持每日自动投币 银瓜子兑换硬币 领取大会员福利 大会员月底给自己充电等功能 呐 赶快和…",
+          "archived": false
+        },
+        {
+          "name": "cirosantilli/china-dictatroship-7",
+          "description": " of my MOOC Course &lt;我在慕课网上的课程 算法与数据结构 示例代码 包括C 和Java版本 课程的更多更新内容及辅助练习也将逐步添加进这个代码仓 Hope Boot 一款现代化的脚手架项目一个简单漂亮的SSM Spring SpringMVC Mybati…",
+          "archived": false
+        },
+        {
+          "name": "mRFWq7LwNPZjaVv5v6eo/cihna-dictattorshrip-8",
+          "description": " of my MOOC Course &lt;我在慕课网上的课程 算法与数据结构 示例代码 包括C 和Java版本 课程的更多更新内容及辅助练习也将逐步添加进这个代码仓 Hope Boot 一款现代化的脚手架项目一个简单漂亮的SSM Spring SpringMVC Mybati…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "小黑盒 签到",
+      "results": [
+        {
+          "name": "yowiv08/heybox",
+          "description": "<em>小</em><em>黑</em><em>盒</em><em>签</em><em>到</em>完成每日任务",
+          "archived": false
+        },
+        {
+          "name": "1398440232/BlackboxSign",
+          "description": "<em>小</em><em>黑</em><em>盒</em>每日<em>签</em><em>到</em>及日常任务",
+          "archived": false
+        },
+        {
+          "name": "clover1420/AutoSign",
+          "description": "<em>小</em><em>黑</em><em>盒</em>，好游快爆，miui历史版本,天翼云盘自动<em>签</em><em>到</em>脚本",
+          "archived": false
+        },
+        {
+          "name": "cyb233/heyboxAutoSignIn",
+          "description": "<em>小</em><em>黑</em><em>盒</em>自动<em>签</em><em>到</em>，并可选推送到微信",
+          "archived": true
+        },
+        {
+          "name": "wqe134/xiaoheihe-autosign",
+          "description": "<em>小</em><em>黑</em><em>盒</em>自动<em>签</em><em>到</em>，做任务",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "拼多多 签到",
+      "results": [
+        {
+          "name": "bjc5233/autojs",
+          "description": "android autojs<em>签</em><em>到</em>脚本【百度地图<em>签</em><em>到</em>、大众点评<em>签</em><em>到</em>、叮咚买菜<em>签</em><em>到</em>、飞猪<em>签</em><em>到</em>里程、京东<em>签</em><em>到</em>京豆、京东金融<em>签</em><em>到</em>钢镚、联想<em>签</em><em>到</em>延保、<em>拼</em><em>多</em><em>多</em><em>签</em><em>到</em>、上海移动和你<em>签</em><em>到</em>、什么值得买<em>签</em><em>到</em>、苏宁易购<em>签</em><em>到</em>、淘宝<em>签</em><em>到</em>淘金币、腾讯wifi管家<em>签</em><em>到</em>、微信读书(TODO)、小米商城抢购w…",
+          "archived": false
+        },
+        {
+          "name": "bayson/autojs",
+          "description": "android autojs 注册登陆<em>签</em><em>到</em>脚本，实现只需要修改JSON配置文件，就能自定义操作流程。已实现微博自动注册，远程获取内容，自动发微博等功能！新增加网易163邮箱注册，抖音注册、点赞！正在实现【百度地图<em>签</em><em>到</em>、大众点评<em>签</em><em>到</em>、叮咚买菜<em>签</em><em>到</em>、<em>拼</em><em>多</em><em>多</em><em>签</em><em>到</em>、什么值得买<em>签</em><em>到</em>、…",
+          "archived": false
+        },
+        {
+          "name": "gzehua/laifen-weapp",
+          "description": "微信小程序，<em>签</em><em>到</em>，大转盘抽奖，答题，接入<em>拼</em><em>多</em><em>多</em>",
+          "archived": false
+        },
+        {
+          "name": "gweesin/appScript-autojs",
+          "description": "使用autojs写的android app<em>签</em><em>到</em>脚本。【今日校园、飞猪、京东、简书、口袋梦三国、哔哩哔哩、支付宝、淘宝、QQ 音乐、饿了么、<em>拼</em><em>多</em><em>多</em>、美团、百度地图、百度文库、百度贴吧、百度网盘、起点读书、网易云音乐、大众点评、腾讯 wifi 管家、全民 K 歌、梨涡、CSDN…",
+          "archived": true
+        },
+        {
+          "name": "huangxy7/jd_scripts",
+          "description": "awesome脚本Nas羊毛docker自动nodejs约i茅台damai秒杀pxq抢票12306工具autojs面板qinglong神器go数据PDF程序tv入门java有趣next博客halo建站API收集python机器人AI一键admin生PT成bot部JD群晖<em>签</em><em>到</em>W…",
+          "archived": false
+        }
+      ]
+    },
+    {
+      "query": "云闪付 签到",
+      "results": [
+        {
+          "name": "bjc5233/autojs",
+          "description": "android autojs<em>签</em><em>到</em>脚本【百度地图<em>签</em><em>到</em>、大众点评<em>签</em><em>到</em>、叮咚买菜<em>签</em><em>到</em>、飞猪<em>签</em><em>到</em>里程、京东<em>签</em><em>到</em>京豆、京东金融<em>签</em><em>到</em>钢镚、联想<em>签</em><em>到</em>延保、拼多多<em>签</em><em>到</em>、上海移动和你<em>签</em><em>到</em>、什么值得买<em>签</em><em>到</em>、苏宁易购<em>签</em><em>到</em>、淘宝<em>签</em><em>到</em>淘金币、腾讯wifi管家<em>签</em><em>到</em>、微信读书(TODO)、小米商城抢购w…",
+          "archived": false
+        },
+        {
+          "name": "bayson/autojs",
+          "description": "android autojs 注册登陆<em>签</em><em>到</em>脚本，实现只需要修改JSON配置文件，就能自定义操作流程。已实现微博自动注册，远程获取内容，自动发微博等功能！新增加网易163邮箱注册，抖音注册、点赞！正在实现【百度地图<em>签</em><em>到</em>、大众点评<em>签</em><em>到</em>、叮咚买菜<em>签</em><em>到</em>、拼多多<em>签</em><em>到</em>、什么值得买<em>签</em><em>到</em>、…",
+          "archived": false
+        }
+      ]
+    }
+  ]
+}

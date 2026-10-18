@@ -1,0 +1,27 @@
+# 私人资料只允许在设备端；下列仅作误放防护。
+private/
+.local/
+.env
+.env.*
+!.env.example
+*private*.yaml
+*private*.yml
+*private*.stoverride
+!examples/private-provider.stoverride
+!examples/private-allowlist.stoverride
+*.pem
+*.p12
+*.pfx
+*.key
+*.cer
+*.crt
+*.har
+*.mobileconfig
+*.log
+*.pcap
+*.pcapng
+__pycache__/
+.venv/
+.DS_Store
+# 可重建的公开下载包；私人填好后的配置仍只留在设备。
+dist/

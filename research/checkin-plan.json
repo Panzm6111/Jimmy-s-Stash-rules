@@ -1,0 +1,51 @@
+{
+  "status": "deferred-by-user",
+  "timezone": "Asia/Shanghai",
+  "enabled": [],
+  "recommended_candidates": [
+    "ctrip",
+    "huazhu",
+    "bilibili-live-sign-only"
+  ],
+  "runtime_scripts_created": false,
+  "cron_entries_created": false,
+  "credentials_collected": false,
+  "scope": [
+    "京东",
+    "淘宝／天猫",
+    "中国移动",
+    "中国联通",
+    "美团",
+    "饿了么",
+    "滴滴出行",
+    "哔哩哔哩",
+    "爱奇艺",
+    "腾讯视频",
+    "优酷",
+    "网易云音乐",
+    "QQ 音乐",
+    "瑞幸",
+    "库迪",
+    "麦当劳",
+    "肯德基",
+    "海底捞",
+    "华住会",
+    "携程",
+    "小黑盒",
+    "顺丰速运",
+    "拼多多",
+    "云闪付"
+  ],
+  "excluded": [
+    "什么值得买",
+    "苏宁易购"
+  ],
+  "schedule_note": "历史提案，仅备忘；不创建调度，不提示选平台，不收集凭据。用户明确恢复需求后再重新核实。",
+  "reason": "用户明确暂停自动签到，当前只完善代理分流、地区池、订阅兼容、去广告与教程。",
+  "resume_requires_explicit_request": true,
+  "proposed_beijing_times": {
+    "ctrip": "09:10",
+    "huazhu": "09:15",
+    "bilibili-live-sign-only": "09:20"
+  }
+}

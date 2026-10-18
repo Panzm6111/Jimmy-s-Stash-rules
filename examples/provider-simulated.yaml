@@ -1,0 +1,21 @@
+# 纯模拟：文档保留地址，没有真实账号。此文件不能提供网络连接。
+proxies:
+  - name: 🇺🇸 美国 US 01
+    type: ss
+    server: 192.0.2.1
+    port: 443
+    cipher: aes-128-gcm
+    password: EXAMPLE_NOT_A_SECRET
+    udp: true
+  - name: 🇯🇵 Japan 日本 01
+    type: vless
+    server: jp.example.invalid
+    port: 443
+    uuid: 00000000-0000-4000-8000-000000000000
+    tls: true
+    servername: jp.example.invalid
+    network: ws
+    ws-opts:
+      path: /example
+      headers:
+        Host: jp.example.invalid

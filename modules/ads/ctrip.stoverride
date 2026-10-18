@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 携程旅行广告专项（可选）
+desc: 仅 ma-adx 广告主机；不解密预订或支付，不拦易误杀图片的 tripAds。默认不导入；需设备验收。
+rules:
+- DOMAIN,ma-adx.ctrip.com,广告拦截

@@ -1,0 +1,427 @@
+#!/usr/bin/env python3
+"""Repository structural checks and routing model. This is NOT a Stash core validator."""
+from __future__ import annotations
+import argparse
+import copy
+import hashlib
+import itertools
+import ipaddress
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+import unittest
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+RAW = 'https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/'
+BUILTINS = {'DIRECT', 'REJECT'}
+RULE_KINDS = {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'IP-CIDR', 'IP-CIDR6'}
+
+class UniqueLoader(getattr(yaml, "CSafeLoader", yaml.SafeLoader)):
+    pass
+
+def unique_mapping(loader, node, deep=False):
+    result = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        if key in result:
+            raise ValueError('duplicate YAML key')
+        result[key] = loader.construct_object(value_node, deep=deep)
+    return result
+
+UniqueLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, unique_mapping)
+
+def load(path):
+    return yaml.load((ROOT / path).read_text(), Loader=UniqueLoader)
+
+def merge_model(base, override, path=()):
+    """Documented project expectation, requiring comparison with actual Stash merged preview.
+    Maps deep-merge; rules and http.script/mitm arrays prepend; other arrays replace.
+    The shipped layers have no overlapping group definitions; ad handlers match disjoint endpoints.
+    """
+    result = copy.deepcopy(base)
+    for key, value in override.items():
+        if key in {'name', 'desc'}:
+            continue
+        if isinstance(value, dict) and isinstance(result.get(key), dict):
+            result[key] = merge_model(result[key], value, path + (key,))
+        elif key == 'rules' or (path == ('http',) and key in {'script', 'mitm', 'rewrite'}):
+            result[key] = copy.deepcopy(value) + result.get(key, [])
+        else:
+            result[key] = copy.deepcopy(value)
+    return result
+
+def merged(*optional):
+    result = merge_model(load('config/main.yaml'), load('config/core.stoverride'))
+    for file in optional:
+        result = merge_model(result, load(file))
+    # Same shape as the device-private overlay, using a public dummy value only.
+    private = load('examples/private-provider.stoverride')
+    return merge_model(result, private)
+
+def provider_rules(config):
+    result = {}
+    for name, provider in config.get('rule-providers', {}).items():
+        url = provider['url']
+        if not url.startswith(RAW):
+            raise ValueError('unexpected rule URL')
+        path = url[len(RAW):]
+        result[name] = load(path)['payload']
+    return result
+
+def matches(rule, domain='', address=''):
+    parts = rule.split(',')
+    kind, value = parts[:2]
+    domain = domain.lower().rstrip('.')
+    if kind == 'DOMAIN': return domain == value.lower()
+    if kind == 'DOMAIN-SUFFIX': return domain == value.lower() or domain.endswith('.' + value.lower())
+    if kind == 'DOMAIN-KEYWORD': return value.lower() in domain
+    if kind in {'IP-CIDR', 'IP-CIDR6'} and address:
+        return ipaddress.ip_address(address) in ipaddress.ip_network(value, strict=False)
+    return False
+
+def route(config, domain='', address='', country=''):
+    # country is an injected fixture; this code does not perform real GeoIP/DNS.
+    sets = provider_rules(config)
+    for rule in config['rules']:
+        parts = rule.split(',')
+        if parts[0] == 'MATCH': return parts[1]
+        if parts[0] == 'RULE-SET':
+            if any(matches(item, domain, address) for item in sets[parts[1]]): return parts[2]
+        elif parts[0] == 'GEOIP':
+            if country == parts[1]: return parts[2]
+        elif matches(','.join(parts[:2]), domain, address):
+            return parts[2]
+    raise ValueError('no terminal route')
+
+def validate_structure(config):
+    groups = config['proxy-groups']
+    names = [g['name'] for g in groups]
+    assert len(names) == len(set(names)), 'duplicate groups'
+    defined = set(names) | BUILTINS
+    provider_names = set(config['proxy-providers'])
+    graph = {}
+    for group in groups:
+        assert group['type'] in {'select', 'fallback', 'url-test'}, 'unverified group type'
+        assert group.get('proxies'), 'empty static candidate list'
+        assert set(group.get('use', [])) <= provider_names, 'missing proxy provider'
+        assert set(group['proxies']) <= defined, 'missing policy target'
+        graph[group['name']] = [n for n in group['proxies'] if n not in BUILTINS]
+        if 'filter' in group: re.compile(group['filter'])
+    def visit(name, ancestors):
+        assert name not in ancestors, 'policy cycle'
+        for child in graph[name]: visit(child, ancestors | {name})
+    for name in graph: visit(name, set())
+    for rule in config['rules']:
+        p = rule.split(',')
+        assert p[0] in RULE_KINDS | {'RULE-SET', 'GEOIP', 'MATCH'}, 'unverified rule kind'
+        if p[0] == 'RULE-SET': assert p[1] in config['rule-providers'], 'missing rule provider'
+        assert (p[1] if p[0] == 'MATCH' else p[2]) in defined, 'missing rule target'
+    assert any(r.startswith('MATCH,') for r in config['rules'])
+    for name, payload in provider_rules(config).items():
+        assert payload and len(payload) == len(set(payload)), 'empty or duplicate rules'
+        for rule in payload:
+            p = rule.split(',')
+            assert p[0] in RULE_KINDS and len(p) in (2, 3), 'invalid provider format'
+            if p[0] in {'IP-CIDR', 'IP-CIDR6'}: ipaddress.ip_network(p[1], strict=False)
+    scripts = config.get('script-providers', {})
+    for item in config.get('http', {}).get('rewrite', []):
+        pattern, action = item.rsplit(' - ', 1)
+        assert action == 'reject', 'unreviewed rewrite action'
+        re.compile(pattern)
+    for item in config.get('http', {}).get('script', []):
+        assert item['name'] in scripts, 'missing script provider'
+        assert item['type'] == 'response' and item['require-body'] is True
+        assert item['timeout'] <= 10
+        provider = scripts[item['name']]
+        assert ('url' in provider) != ('content' in provider), 'choose exactly one script source'
+        if 'url' in provider:
+            assert (ROOT / provider['url'].removeprefix(RAW)).is_file()
+        else:
+            assert isinstance(provider['content'], str) and provider['content'].strip(), 'empty inline script'
+    for url in [x['url'] for x in config.get('rule-providers', {}).values()] + [x['url'] for x in scripts.values() if 'url' in x]:
+        assert url.startswith(RAW) and '..' not in url[len(RAW):]
+        assert (ROOT / url[len(RAW):]).is_file(), 'broken local public URL'
+
+class ProjectChecks(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.config = merged()
+        cls.groups = {g['name']: g for g in cls.config['proxy-groups']}
+
+    def test_all_yaml_has_unique_keys(self):
+        for ext in ('*.yaml', '*.yml', '*.stoverride'):
+            for file in ROOT.rglob(ext):
+                if '.git' not in file.parts: self.assertIsNotNone(load(file.relative_to(ROOT)))
+
+    def test_layer_combinations(self):
+        options = sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride'))
+        # Full validation of each single module and the complete configuration.
+        # Exhaustive 2^N enumeration is impractical as independently scoped apps grow.
+        for layers in [[], *[[item] for item in options], options, list(reversed(options))]:
+            config = merged(*layers, 'examples/private-allowlist.stoverride')
+            validate_structure(config)
+            expected = sum(len(load(item).get('http', {}).get('script', [])) for item in layers)
+            self.assertEqual(len(config.get('http', {}).get('script', [])), expected)
+
+    def test_all_module_pairs_preserve_independent_actions(self):
+        # Test every pair in both orders with a small merge, then test the full merge
+        # above. Endpoint tests separately reject overlaps and business URLs.
+        modules = [(p, load(p)) for p in sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride'))]
+        for (pa, a), (pb, b) in itertools.permutations(modules, 2):
+            config = merge_model(a, b)
+            for key in ('script', 'mitm', 'rewrite'):
+                self.assertEqual(config.get('http', {}).get(key, []), b.get('http', {}).get(key, []) + a.get('http', {}).get(key, []), (pa, pb, key))
+            self.assertEqual(config.get('rules', []), b.get('rules', []) + a.get('rules', []), (pa, pb))
+            self.assertEqual(set(config.get('script-providers', {})), set(a.get('script-providers', {})) | set(b.get('script-providers', {})))
+
+    def test_reviewed_ad_catalog_and_generated_files(self):
+        from generate_ad_modules import rendered
+        catalog = json.loads((ROOT / 'research/ad-catalog.json').read_text())
+        lock = json.loads((ROOT / 'research/sources.lock.json').read_text())
+        source_hashes = {s['url']: s['sha256'] for s in lock['ad_supporting_sources']}
+        for source in catalog['sources'].values():
+            self.assertEqual(source_hashes[source['url']], source['sha256'])
+        for file, body in rendered(catalog).items(): self.assertEqual((ROOT / file).read_text(), body)
+        all_modules = [load(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride')]
+        patterns = [r.rsplit(' - ', 1)[0] for m in all_modules for r in m.get('http', {}).get('rewrite', [])]
+        patterns += [s['match'] for m in all_modules for s in m.get('http', {}).get('script', [])]
+        for item in catalog['modules']:
+            module = load(item['file'])
+            self.assertFalse(item['default_enabled'])
+            self.assertFalse(item['device_tested'])
+            self.assertEqual(module.get('http', {}).get('mitm', []), item['mitm'])
+            self.assertTrue((ROOT / catalog['sources'][item['source']]['license_file']).is_file())
+            cases = item['rewrite'] + ([item['script']] if item['script'] else [])
+            for case in cases:
+                self.assertRegex(case['positive'], case.get('match'))
+                self.assertEqual(sum(bool(re.search(pattern, case['positive'])) for pattern in patterns), 1, case['positive'])
+                for url in case['negative']:
+                    self.assertEqual(sum(bool(re.search(pattern, url)) for pattern in patterns), 0, url)
+                # Never accept same-prefix foreign domains or arbitrary appended paths.
+                from urllib.parse import urlsplit
+                parsed = urlsplit(case['positive'])
+                deceptive = case['positive'].replace(parsed.netloc, parsed.hostname + '.evil.example')
+                self.assertEqual(sum(bool(re.search(pattern, deceptive)) for pattern in patterns), 0)
+        protected_hosts = {'wallet.95516.com', 'tysdk.95516.com', 'ms.jr.jd.com', 'mobilegw.alipay.com', 'ccbj.ccb.com.cn', 'ebsnew.boc.cn'}
+        self.assertTrue(protected_hosts.isdisjoint(h for item in catalog['modules'] for h in item['mitm']))
+
+    def test_screenshot_inventory_complete_and_scoped(self):
+        inventory = json.loads((ROOT / 'research/app-inventory.json').read_text())
+        apps = inventory['apps']
+        self.assertEqual(len(apps), 135)
+        self.assertEqual(len({a['name'] for a in apps}), 135)
+        self.assertNotIn('隐藏的 App', {a['name'] for a in apps})
+        for app in apps:
+            self.assertTrue(app['decision'])
+            self.assertTrue(app['reason'])
+            self.assertFalse(app['device_tested'])
+            for file in app['modules']: self.assertTrue((ROOT / file).is_file())
+
+    def test_ad_domain_modules_route_and_allowlist(self):
+        catalog = json.loads((ROOT / 'research/ad-catalog.json').read_text())
+        for module in catalog['modules']:
+            if not module['domains']: continue
+            config = merged(module['file'])
+            if not module['mitm']: self.assertNotIn('http', load(module['file']))
+            for host in module['domains']:
+                self.assertEqual(route(config, host), '广告拦截')
+                whitelist = {'rules': ['DOMAIN,' + host + ',DIRECT']}
+                self.assertEqual(route(merge_model(config, whitelist), host), 'DIRECT')
+        all_config = merged(*[m['file'] for m in catalog['modules']])
+        for host in ['login.microsoftonline.com', 'api.push.apple.com']:
+            self.assertEqual(route(all_config, host), 'DIRECT')
+
+    def test_generated_research_matches_inventory(self):
+        from render_app_research import render
+        for file, text in render().items(): self.assertEqual((ROOT / file).read_text(), text)
+
+    def test_local_download_bundle(self):
+        import io
+        import zipfile
+        from build_local_bundle import documents, verify, archive
+        files = documents()
+        report = verify(files)
+        self.assertEqual(report['per_app_overrides'], 40)
+        zipped, count = archive(files)
+        with zipfile.ZipFile(io.BytesIO(zipped)) as bundle:
+            self.assertEqual(count, len(bundle.namelist()))
+            self.assertIn('Jimmy-Stash.yaml', bundle.namelist())
+            self.assertIn('广告增强.stoverride', bundle.namelist())
+            self.assertTrue(any(n.startswith('源码/licenses/') for n in bundle.namelist()))
+            for file, body in files.items(): self.assertEqual(bundle.read(file).decode(), body)
+
+    def test_public_subscription_entry(self):
+        from build_subscription import render, verify, OUTPUT
+        text = render()
+        self.assertEqual((ROOT / OUTPUT).read_text(), text)
+        verify(text)
+
+    def test_region_names_and_nonmatches(self):
+        fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
+        for region, names in fixtures['positive'].items():
+            for name in names:
+                self.assertRegex(name, self.groups[region]['filter'], msg=region)
+                hits = [n for n in fixtures['positive'] if re.search(self.groups[n]['filter'], name)]
+                self.assertEqual(hits, [region], msg=name)
+        for name in fixtures['negative']:
+            self.assertFalse(any(re.search(self.groups[n]['filter'], name) for n in fixtures['positive']), name)
+
+    def test_region_fail_closed_references(self):
+        # Structural/model evidence only; real fallback semantics must be tested in Stash.
+        for region in ['美国', '日本', '香港', '新加坡', '台湾']:
+            group = self.groups[region]
+            self.assertEqual(group['type'], 'fallback')
+            self.assertEqual(group['proxies'], ['REJECT'])
+            self.assertRegex('REJECT', group['filter'])
+            self.assertEqual(group['use'], ['机场'])
+            self.assertNotIn('DIRECT', group['proxies'])
+
+    def test_independent_software_choices(self):
+        choices = {'OpenAI': '美国', 'Netflix': '日本', 'YouTube': '香港'}
+        for app, value in choices.items(): self.assertIn(value, self.groups[app]['proxies'])
+        before = dict(choices)
+        choices['OpenAI'] = '台湾'
+        self.assertEqual(choices['Netflix'], before['Netflix'])
+        self.assertEqual(choices['YouTube'], before['YouTube'])
+        for name in ['OpenAI', 'Netflix', 'YouTube', 'Telegram']:
+            self.assertEqual(self.groups[name]['proxies'][0], '总代理')
+            self.assertEqual(self.groups[name]['use'], ['机场'])
+
+    def test_representative_route_order(self):
+        fixtures = json.loads((ROOT / 'tests/fixtures/routes.json').read_text())
+        for case in fixtures:
+            self.assertEqual(route(self.config, case.get('domain', ''), case.get('ip', ''), case.get('country', '')), case['policy'], case)
+
+    def test_expanded_ad_critical_route_order(self):
+        config = merged('modules/ads/expanded.stoverride')
+        fixtures = json.loads((ROOT / 'tests/fixtures/routes.json').read_text())
+        for case in fixtures:
+            self.assertEqual(route(config, case.get('domain', ''), case.get('ip', ''), case.get('country', '')), case['policy'], case)
+
+    def test_expanded_preserves_lan_and_service_exceptions(self):
+        from unittest.mock import patch
+        config = merged('modules/ads/expanded.stoverride')
+        self.assertEqual(config['rules'], self.config['rules'])
+        self.assertNotIn('rules', load('modules/ads/expanded.stoverride'))
+        sets = provider_rules(config)
+        self.assertTrue(set(provider_rules(self.config)['基础广告']) <= set(sets['基础广告']))
+        # A future over-broad upstream entry must not outrank built-in safety exceptions.
+        sets['基础广告'] += ['DOMAIN-SUFFIX,push.apple.com', 'DOMAIN,login.microsoftonline.com', 'IP-CIDR,192.168.0.0/16']
+        with patch(__name__ + '.provider_rules', return_value=sets):
+            self.assertEqual(route(config, 'api.push.apple.com'), 'DIRECT')
+            self.assertEqual(route(config, 'login.microsoftonline.com'), 'DIRECT')
+            self.assertEqual(route(config, address='192.168.17.1'), 'DIRECT')
+
+    def test_native_handler_patterns(self):
+        config = merged(*sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride')))
+        cases = [('https://app.bilibili.com/x/v2/splash/list?x=1', 1),
+                 ('https://app.bilibili.com/x/v2/feed/index', 1),
+                 ('https://tiebac.baidu.com/c/f/ad/getSplashAd', 1),
+                 ('https://app.bilibili.com/account/login', 0),
+                 ('https://app.bilibili.com/x/v2/splash/listFake', 0),
+                 ('https://app.bilibili.com.evil.example/x/v2/splash/list', 0),
+                 ('https://edith.xiaohongshu.com/api/sns/v1/system_service/splash_config?x=1', 1),
+                 ('https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/?x=1', 1),
+                 ('https://bootrealtime.uve.weibo.com/v1/ad/realtime?x=1', 1),
+                 ('https://bootpreload.uve.weibo.com/v1/ad/preload?x=1', 1),
+                 ('https://guide-acs.m.taobao.com/gw/mtop.taobao.trade.order.create/1.0/?x=1', 0),
+                 ('https://edith.xiaohongshu.com/api/sns/v1/note/feed?x=1', 0)]
+        for url, count in cases:
+            self.assertEqual(sum(bool(re.search(item['match'], url)) for item in config['http']['script']), count)
+
+    def test_provider_checker_rejects_invalid_fixtures(self):
+        from check_provider import check
+        valid = load('examples/provider-simulated.yaml')
+        self.assertEqual(check(valid), {'ss': 1, 'vless': 1})
+        invalid = copy.deepcopy(valid)
+        invalid['proxies'][1]['name'] = invalid['proxies'][0]['name']
+        with self.assertRaises(ValueError): check(invalid)
+        for node in [{'name': 'dummy', 'type': 'ss', 'server': 'example.invalid', 'port': 443},
+                     {'name': 'dummy', 'type': 'vless', 'server': 'example.invalid', 'port': 443, 'uuid': 'not-a-uuid'}]:
+            with self.assertRaises(ValueError): check({'proxies': [node]})
+
+    def test_allowlist_precedes_ads_in_merge_model(self):
+        private_rule = {'rules': ['DOMAIN,ad.doubleclick.net,DIRECT']}
+        self.assertEqual(route(self.config, 'ad.doubleclick.net'), '广告拦截')
+        config = merge_model(self.config, private_rule)
+        self.assertEqual(route(config, 'ad.doubleclick.net'), 'DIRECT')
+
+    def test_private_map_survives_public_update_in_merge_model(self):
+        local = {'proxy-providers': {'机场': {'url': 'https://subscription.example.invalid/DEVICE_ONLY'}}}
+        initial = merge_model(merge_model(load('config/main.yaml'), load('config/core.stoverride')), local)
+        updated = load('config/core.stoverride')
+        updated['desc'] = 'public update fixture'
+        future = merge_model(merge_model(load('config/main.yaml'), updated), local)
+        self.assertEqual(initial['proxy-providers'], future['proxy-providers'])
+        self.assertEqual([g['name'] for g in initial['proxy-groups']], [g['name'] for g in future['proxy-groups']])
+        # Native UI choice persistence is intentionally not asserted here.
+
+    def test_upstream_lock_integrity(self):
+        lock = json.loads((ROOT / 'research/sources.lock.json').read_text())
+        for item in lock['resources'] + lock['ad_scripts']:
+            self.assertEqual(hashlib.sha256((ROOT / item['output']).read_bytes()).hexdigest(), item['output_sha256'])
+
+    def test_checkin_stays_deferred(self):
+        plan = json.loads((ROOT / 'research/checkin-plan.json').read_text())
+        self.assertEqual(len(plan['scope']), 24)
+        self.assertEqual(len(set(plan['scope'])), 24)
+        self.assertEqual(plan['enabled'], [])
+        self.assertFalse(plan['runtime_scripts_created'])
+        self.assertFalse(plan['cron_entries_created'])
+        self.assertTrue(set(plan['scope']).isdisjoint(plan['excluded']))
+        self.assertEqual(plan['status'], 'deferred-by-user')
+        self.assertTrue(plan['resume_requires_explicit_request'])
+        self.assertFalse(list((ROOT / 'scripts').glob('checkin/**/*')))
+        for file in [*(ROOT / 'config').glob('*.yaml'), ROOT / 'config/core.stoverride', *(ROOT / 'modules').rglob('*.stoverride')]:
+            self.assertNotRegex(file.read_text(), r'(?m)^\s*(cron|cron-expression):')
+
+    def test_subscription_example(self):
+        example = load('examples/provider-simulated.yaml')
+        self.assertEqual({x['type'] for x in example['proxies']}, {'ss', 'vless'})
+        self.assertEqual(len({x['name'] for x in example['proxies']}), len(example['proxies']))
+        for node in example['proxies']:
+            self.assertFalse(node.get('skip-cert-verify', False))
+
+    def test_bad_policy_graph_is_rejected(self):
+        cyclic = copy.deepcopy(self.config)
+        cyclic['proxy-groups'][0]['proxies'] = ['OpenAI']
+        with self.assertRaises(AssertionError): validate_structure(cyclic)
+        broken = copy.deepcopy(self.config)
+        broken['proxy-groups'][0]['proxies'] = ['nonexistent-policy']
+        with self.assertRaises(AssertionError): validate_structure(broken)
+
+    def test_no_tls_bypass_or_wildcard_mitm(self):
+        catalog = json.loads((ROOT / 'research/ad-catalog.json').read_text())
+        reviewed_hosts = {h for item in catalog['modules'] for h in item['mitm']}
+        reviewed_hosts.update({'app.bilibili.com', 'tiebac.baidu.com', 'edith.xiaohongshu.com', 'guide-acs.m.taobao.com', 'bootrealtime.uve.weibo.com', 'bootpreload.uve.weibo.com'})
+        for file in [*ROOT.rglob('*.yaml'), *ROOT.rglob('*.stoverride')]:
+            data = load(file.relative_to(ROOT))
+            self.assertNotIn('skip-cert-verify: true', file.read_text())
+            for domain in data.get('http', {}).get('mitm', []):
+                self.assertNotIn('*', domain)
+                self.assertIn(domain, reviewed_hosts)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--emit-merged', type=Path, help='write PLACEHOLDER-only merge model outside checkout')
+    args = parser.parse_args()
+    result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(ProjectChecks))
+    if not result.wasSuccessful(): return 1
+    node = subprocess.run(['node', '--test', str(ROOT / 'tests/ads.test.cjs')], cwd=ROOT)
+    if node.returncode: return node.returncode
+    scan = subprocess.run([sys.executable, str(ROOT / 'tools/scan_secrets.py'), '--history'], cwd=ROOT)
+    if scan.returncode: return scan.returncode
+    if args.emit_merged:
+        destination = args.emit_merged.resolve()
+        if destination.is_relative_to(ROOT): raise ValueError('merged output must stay outside checkout')
+        destination.write_text(yaml.safe_dump(merged(*sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride')), 'examples/private-allowlist.stoverride'), allow_unicode=True, sort_keys=False))
+    print('PASS: structural checks + merge/routing models + ad unit tests + secret-pattern scan.')
+    print('NOT RUN: actual Stash parser/merge, iPhone connection, service unlock, real ads, account check-in, native choice persistence.')
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

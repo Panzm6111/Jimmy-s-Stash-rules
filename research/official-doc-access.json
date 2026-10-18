@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-18T23:02:03.576525+08:00",
+  "official_url": "https://stash.wiki/",
+  "observed_result": "HTTPS CONNECT denied by cloud proxy: 403 Forbidden; official page body not read",
+  "runtime_spec_revision": "1",
+  "runtime_custom_allowed_hosts": [],
+  "network_draft_saved": true,
+  "draft_additions": [
+    "stash.wiki",
+    "www.stash.wiki",
+    "api.github.com"
+  ],
+  "draft_applied": false,
+  "required_next_action": "环境设置中审核保存并按界面要求发布，随后重试官方文档。",
+  "historical_example_review": {
+    "repository": "jinzaizhichi/stash-example",
+    "revision_observed": "c0f273b8539b0aa648e0cab90cae7e5b4922a098",
+    "readme_url": "https://github.com/jinzaizhichi/stash-example/blob/c0f273b8539b0aa648e0cab90cae7e5b4922a098/README.md",
+    "config_url": "https://github.com/jinzaizhichi/stash-example/blob/c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml",
+    "config_sha256": "05541eb4de2573cb0f9f2884be55fc59be4bbecba66ae26c40d39e18d9d7f98f",
+    "notice": "文件明确已不再维护，README指向 https://stash.wiki/features/example-config；未复制代码，不视为当前官方验证。",
+    "license_observed": "未发现LICENSE，不复制",
+    "original_org_example_http_status": 404
+  }
+}

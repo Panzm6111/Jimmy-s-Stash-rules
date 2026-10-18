@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 网易云音乐广告专项（可选）
+desc: 仅 api/ad 或 eapi/ad 广告子路径；保留歌曲、评论、云贝、会员真实状态。默认不导入；需设备验收。
+http:
+  mitm:
+  - interface.music.163.com
+  - interface3.music.163.com
+  - ipv4.music.163.com
+  rewrite:
+  - ^https://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject

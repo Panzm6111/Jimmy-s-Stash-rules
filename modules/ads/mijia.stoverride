@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 米家广告专项（可选）
+desc: 仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。默认不导入；需设备验收。
+http:
+  mitm:
+  - home.mi.com
+  rewrite:
+  - ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$) - reject

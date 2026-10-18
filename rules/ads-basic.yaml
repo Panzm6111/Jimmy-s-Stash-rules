@@ -1,0 +1,24 @@
+# Curated subset of blackmatrix7 AdvertisingLite_Domain.yaml, GPL-2.0.
+# Shared ad SDKs; does not guarantee any App splash removal.
+payload:
+- DOMAIN-SUFFIX,pangle.io
+- DOMAIN-SUFFIX,pangolin.snssdk.com
+- DOMAIN-SUFFIX,mobads-logs.baidu.cn
+- DOMAIN-SUFFIX,mobads-logs.baidu.com
+- DOMAIN-SUFFIX,mobads.baidu.cn
+- DOMAIN-SUFFIX,c.gdt.qq.com
+- DOMAIN-SUFFIX,d.gdt.qq.com
+- DOMAIN-SUFFIX,mi.gdt.qq.com
+- DOMAIN-SUFFIX,nc.gdt.qq.com
+- DOMAIN-SUFFIX,s.gdt.qq.com
+- DOMAIN-SUFFIX,t.gdt.qq.com
+- DOMAIN-SUFFIX,v.gdt.qq.com
+- DOMAIN-SUFFIX,win.gdt.qq.com
+- DOMAIN-SUFFIX,xc.gdt.qq.com
+- DOMAIN,mobads-pre-config.cdn.bcebos.com
+- DOMAIN-SUFFIX,doubleclick.net
+- DOMAIN-SUFFIX,googlesyndication.com
+- DOMAIN-SUFFIX,admob.com
+- DOMAIN-SUFFIX,adsrvr.org
+- DOMAIN-SUFFIX,adnxs.com
+- DOMAIN-SUFFIX,adkwai.com

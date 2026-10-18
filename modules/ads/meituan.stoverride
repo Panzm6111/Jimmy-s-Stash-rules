@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: GPL-2.0
+# Reviewed source: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js
+# License: licenses/blackmatrix7-GPL-2.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 美团广告专项（可选）
+desc: 仅外卖 loadInfo.startpicture.ad/mk 广告数组；保留其他启动数据与券。默认不导入；需设备验收。
+script-providers:
+  jimmy_meituan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js
+    interval: 86400
+http:
+  mitm:
+  - wmapi.meituan.com
+  script:
+  - match: ^https://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
+    name: jimmy_meituan_ads
+    type: response
+    require-body: true
+    timeout: 5

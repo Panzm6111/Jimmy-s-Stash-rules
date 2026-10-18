@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: GPL-2.0
+# Reviewed source: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js
+# License: licenses/blackmatrix7-GPL-2.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 京东广告专项（可选）
+desc: 仅 functionId=start 中展示次数/时长字段；保留订单/商品/京豆/优惠。默认不导入；需设备验收。
+script-providers:
+  jimmy_jingdong_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js
+    interval: 86400
+http:
+  mitm:
+  - api.m.jd.com
+  script:
+  - match: ^https://api\.m\.jd\.com/client\.action\?(?:[^#&]*&)*functionId=start(?:&|$)
+    name: jimmy_jingdong_ads
+    type: response
+    require-body: true
+    timeout: 5

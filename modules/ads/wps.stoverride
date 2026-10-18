@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: WPS Office广告专项（可选）
+desc: 广告统计及 feeds_ad 图片；不改会员、文档、云同步。默认不导入；需设备验收。
+http:
+  mitm:
+  - ios.wps.cn
+  - mobile-pic.cache.iciba.com
+  rewrite:
+  - ^https://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$) - reject
