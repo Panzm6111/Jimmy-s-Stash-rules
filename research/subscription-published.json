@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-19T01:46:17.632837+08:00",
+  "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
+  "http_status": 200,
+  "content_type": "text/plain; charset=utf-8",
+  "bytes": 238463,
+  "sha256": "2166126401773db9c47e5be95648427abf77e7207fce6750a4628174cdf47e7a",
+  "matches_local_bytes": true,
+  "proxy_groups": 16,
+  "rules": 5180,
+  "inline_scripts": 11,
+  "response_handlers": 12,
+  "rewrite_rules": 32,
+  "mitm_hosts": 41,
+  "private_url_is_placeholder": true,
+  "native_stash_tested": false,
+  "iphone_tested": false,
+  "code_release_commit": "376a4317f70f143d9c7d76fd6b72aaaa3d5dedaa"
+}

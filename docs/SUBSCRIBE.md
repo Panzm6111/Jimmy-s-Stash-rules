@@ -46,6 +46,6 @@ OpenAI/Netflix/YouTube/Telegram默认跟随总代理，也可各自选择美国�
 
 ## 验证边界
 
-发布检查将验证固定URL实际HTTP返回及内容哈希；普通YAML/模型通过仍不等于Stash原生解析、代理连接、地区锁定、广告效果或界面选择保留已经通过。当前官方文档站受云网络策略限制，精确版本和部分原生语义待复核。手机检查见[验收清单](PHONE-CHECKLIST.md)。自动签到继续暂停。
+固定URL已实际返回HTTP 200，下载内容与发布文件逐字一致；64/64个公共运行资源均通过HTTP和哈希检查，记录见[PROGRESS.md](../PROGRESS.md)。普通YAML/模型通过仍不等于Stash原生解析、代理连接、地区锁定、广告效果或界面选择保留已经通过。当前官方文档站受云网络策略限制，精确版本和部分原生语义待复核。手机检查见[验收清单](PHONE-CHECKLIST.md)。自动签到继续暂停。
 
 维护者更新原配置/规则/脚本后，运行`python tools/build_subscription.py --write`重建同一入口，再执行`python tools/validate.py`。构建只改变承载方式，不另维护第二套业务逻辑。

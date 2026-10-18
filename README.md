@@ -2,7 +2,7 @@
 
 供个人长期维护的公共分流、地区池与去广告项目。**客户端只使用 Stash**，无需自建服务器、购买额外服务或把订阅交给第三方转换网站。
 
-> 公共订阅入口已准备，实际发布与HTTP校验状态见[PROGRESS.md](PROGRESS.md)。配置只有占位符，私人订阅和证书始终留在设备。官方文档站受云网络策略限制，部分原生语义和最低版本仍待复核；尚未完成iPhone验收，不能把发布成功当作真实连接/去广告通过。自动签到继续暂停。
+> 公共订阅入口已发布到`main`，64/64个公共资源实际HTTP 200且与本地内容一致，详见[PROGRESS.md](PROGRESS.md)。配置只有占位符，私人订阅和证书始终留在设备。官方文档站受云网络策略限制，部分原生语义和最低版本仍待复核；尚未完成iPhone验收，不能把发布成功当作真实连接/去广告通过。自动签到继续暂停。
 
 ## 推荐：粘贴一条链接导入
 
@@ -155,6 +155,6 @@ python tools/audit_remote.py upstream
 python tools/audit_remote.py published
 ```
 
-可在仓库外输出**仅含占位符**的合并模型：`python tools/validate.py --emit-merged /tmp/jimmy-merged-placeholder.yaml`。工具不接受真实机场 URL，不会拿私人数据做云端测试。GitHub Actions 检查已写入 `.github/workflows/validate.yml`，**尚未在 GitHub 运行**。
+可在仓库外输出**仅含占位符**的合并模型：`python tools/validate.py --emit-merged /tmp/jimmy-merged-placeholder.yaml`。工具不接受真实机场 URL，不会拿私人数据做云端测试。GitHub Actions 工作流已随源文件上传，云端执行结果在仓库Actions页面查看；本地测试结果不代表云端执行已经通过。
 
 许可证：本项目原创部分 MIT；第三方规则快照 GPL-2.0；B站/贴吧脚本依据 MIT，新增三款派生模块/脚本依据 GPL-3.0 授权。保留独立许可和来源说明，不把所有第三方文件重标为 MIT。

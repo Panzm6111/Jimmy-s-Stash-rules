@@ -1,323 +1,456 @@
 {
-  "checked_at": "2026-10-19T00:54:47.088838+08:00",
+  "checked_at": "2026-10-19T01:46:03.037451+08:00",
   "target": "published",
-  "passed": 0,
-  "total": 63,
+  "passed": 64,
+  "total": 64,
   "results": [
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 5577,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/main.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 849,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 238463,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/58tongcheng.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 578,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/alipan.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 827,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/amap.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 851,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/baidu-netdisk.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 600,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/bilibili.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 564,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cainiao.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 895,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cmcc.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 622,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/ctrip.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 527,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/damai.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 617,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/dianping.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 599,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/eastmoney.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 519,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/expanded.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 318,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/huazhu.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 607,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong-finance.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 536,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 852,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/kfc.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 581,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/liepin.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 598,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/luckin.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 837,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/maimai.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 631,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/mcdonalds.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 559,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 832,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/mijia.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 620,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-mail.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 712,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-music.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 826,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/pinduoduo.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 673,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/railway12306.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 506,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taobao.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 771,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taopiaopiao.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 646,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/tieba.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 521,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/uc.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 545,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/umetrip.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 590,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unicom.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 759,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unionpay.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 555,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 861,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/weibo.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 873,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wps.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 686,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiachufang.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 575,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xianyu.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 630,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaohongshu.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 702,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaoyuzhou.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 581,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/zhihu.stoverride",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 723,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ads-basic.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 794,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/apple.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 185,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/microsoft.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 385,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/openai.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 202,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1029680,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 107113,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/netflix.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 30348,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/telegram.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1187,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/youtube.yaml",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 5574,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1529,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 2338,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1788,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 2135,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1371,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1507,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 2841,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1056,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1426,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1822,
+      "ok": true
     },
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js",
-      "status": 404,
-      "ok": false
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 2130,
+      "ok": true
     }
   ]
 }
