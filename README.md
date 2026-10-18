@@ -16,11 +16,13 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 2. 刷新“机场”，给“总代理”选地区，使用规则模式连接。软件可独立选地区或跟随总代理。
 3. 本入口已经包含原分流、基础广告和40款专项，无需逐个导入广告模块。HTTP开屏专项需要在设备生成、安装并信任自己的CA，再设置HTTP/MITM；实际效果待手机验证。
 
+若日志显示`dot.pub / NotValidForName`，或出现本项目没有的`Google/NCloud`策略组，先按[运行中排障](docs/SUBSCRIBE.md#已启动但打不开网页或出现dns证书错误)核对选中配置、覆写与DNS设置。确认选中“Jimmy 本机配置”，在“全部节点”手选真节点；流量提示不是节点。日志显示启动成功不等于这份配置已经导入成功。
+
 以后刷新同一公共链接，本机私人覆写单独保留；更新后仍需核对关联与地区选择。详细说明含可复制的私人覆写模板、证书、恢复方法，见[SUBSCRIBE.md](docs/SUBSCRIBE.md)。[本地下载包](docs/LOCAL-IMPORT.md)及下文原分层方式保留为备选，来自同一套维护文件。
 
 ## 你会得到什么
 
-- 美国、日本、香港、新加坡、台湾 5 个地区池；优先固定顺序故障切换，减少频繁更换出口。
+- 美国、日本、香港、新加坡、台湾 5 个地区池；优先固定顺序故障切换，减少频繁更换出口。另有“其他地区”常见国家手选入口，以及不按国家分组的“全部节点”；未知地区名仍在全部节点查找。原“手动节点”保留。
 - OpenAI、Netflix、YouTube、Telegram 可分别选地区、跟随总代理、或手选具体节点；互不影响。Apple/Microsoft 默认直连，并对通知、登录和更新做更具体的处理。
 - 局域网直连、国内常用域名规则、国内 GeoIP 兜底、广告开关和未匹配流量组。
 - 较窄的基础广告域名包；可选数万条扩展包；40款App的独立广告专项。你提供的图片已提取135个名称，其中39款有专项文件，其余逐款记录原因。**实际广告效果均待手机测试**，不处理会员解锁。
@@ -75,7 +77,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core
 启用“Jimmy 公共分流”，应用到 **Jimmy 本机主配置**。私人覆写对 provider URL 具有更高覆盖优先级。首次设置时，在 Stash 的最终配置/合并预览中确认：
 
 - 只有一个名为“机场”的代理集，URL 是你在设备填写的 URL；不要分享这个预览。
-- 有 16 个本项目策略组，没有循环或同名重复；本机模板的 groups 空数组没有抹掉公共组。
+- 有 18 个本项目策略组，没有循环或同名重复；本机模板的 groups 空数组没有抹掉公共组。
 - 局域网/关键服务例外在基础广告之前，广告在一般国内规则之前，最后是 `MATCH,未匹配流量`；模板末尾的 `MATCH,REJECT` 即使仍存在也应位于其后。
 - 私人手动放行规则若启用，应在广告规则与所有 MATCH 之前。
 
@@ -86,7 +88,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core
 1. 在代理集页面更新“机场”。确认真实节点数和 SS/VLESS 数量，比较机场后台；解析通过不等于完整，也不等于连通。
 2. 在策略组页面，将 **总代理** 从默认 `REJECT` 改为你自己希望的地区，例如“日本”。项目不会替你决定国家。
 3. OpenAI 默认“总代理”：会跟随你的总选择。你也可把 OpenAI 单独改为“美国”、Netflix 改为“日本”、YouTube 改为“香港”；这些是操作示例，**没有自动写入默认值**。各软件的选择互不影响。
-4. 想独立固定单节点时：直接在该软件组的节点列表里选具体节点，它只影响这个软件。也可在共享“手动节点”组选择一个节点，再让总代理或某软件选“手动节点”；多个组这样选择时会共享这个手动项。不要只改“手动节点”而忘记上层还在用地区池。
+4. 想看全节点时，进入“全部节点”，列表不按国家分组，已知流量/到期提示前缀会过滤。“其他地区”展示常见其他国家，不是五个地区的严格补集。想独立固定单节点，直接在软件组内选，它只影响该软件；多个软件选“全部节点”“其他地区”或旧“手动节点”时，会共享该入口里的选择。要使用平铺手选节点，先在“全部节点”选真节点，再让总代理选“全部节点”。
 5. Apple/Microsoft 默认 `DIRECT`；通知、iCloud、部分更新/登录有更高优先级直连例外。只有组内覆盖的域名会随组变动，详见 [分流原理](docs/ROUTING.md)。
 6. 保持 Stash **规则模式**，点击连接并允许 iOS 添加 VPN 配置。依 [手机验收清单](docs/PHONE-CHECKLIST.md) 测试；延迟变绿不能证明 Netflix/OpenAI 服务解锁。
 
@@ -148,6 +150,7 @@ python -m pip install -r requirements-dev.txt
 python tools/validate.py
 python tools/check_provider.py
 python tools/build_subscription.py
+python tools/generate_node_filters.py
 python tools/generate_ad_modules.py
 python tools/render_app_research.py
 python tools/audit_remote.py upstream

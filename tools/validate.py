@@ -269,6 +269,60 @@ class ProjectChecks(unittest.TestCase):
         for name in fixtures['negative']:
             self.assertFalse(any(re.search(self.groups[n]['filter'], name) for n in fixtures['positive']), name)
 
+    def test_other_and_all_nodes_do_not_hide_connection_candidates(self):
+        fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
+        self.assertEqual(len(self.groups), 18)
+        other = self.groups['其他地区']
+        all_nodes = self.groups['全部节点']
+        self.assertEqual(other['type'], 'select')
+        self.assertEqual(other['proxies'], ['REJECT'])
+        self.assertEqual(other['use'], ['机场'])
+        self.assertEqual(all_nodes['type'], 'select')
+        self.assertEqual(all_nodes['proxies'], ['REJECT'])
+        self.assertEqual(all_nodes['use'], ['机场'])
+        for name in fixtures['other']:
+            self.assertRegex(name, other['filter'])
+        # Traffic units such as "1024.5 GB" must not be treated as Great Britain.
+        for name in ['剩余流量：1024.5 GB', 'Remaining Traffic: 100GB', 'Traffic Remaining 20 GB']:
+            self.assertNotRegex(name, other['filter'])
+        # The positive other-country list is explicitly not a strict complement.
+        # Flat all-nodes must retain every ordinary and unclassified node name.
+        for name in [n for values in fixtures['positive'].values() for n in values] + fixtures['other'] + fixtures['unclassified']:
+            self.assertRegex(name, all_nodes['filter'], name)
+        self.assertNotRegex('Custom-Node-007', other['filter'])
+        for app in ['总代理', 'OpenAI', 'Netflix', 'YouTube', 'Telegram', 'Apple', 'Microsoft', '未匹配流量']:
+            for choice in ['其他地区', '全部节点', '手动节点']:
+                self.assertIn(choice, self.groups[app]['proxies'])
+        self.assertEqual(self.groups['手动节点']['use'], ['机场'])
+
+    def test_info_names_cannot_be_selected_from_flat_or_app_node_lists(self):
+        from generate_node_filters import check, SELECTORS
+        fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
+        self.assertTrue(check(load('config/core.stoverride')))
+        for selector in SELECTORS:
+            group = self.groups[selector]
+            for info in fixtures['info']:
+                self.assertNotRegex(info, group['filter'], selector)
+            # Filtering dynamic nodes must not hide builtins or static groups.
+            for candidate in group['proxies']:
+                self.assertRegex(candidate, group['filter'], selector)
+            for node in fixtures['unclassified']:
+                self.assertRegex(node, group['filter'], selector)
+        for group in self.groups.values():
+            self.assertNotIn('exclude-filter', group)
+            for extension in ['(?!', '(?=', '(?<=', '(?<!', r'\1', '\\ ']:
+                self.assertNotIn(extension, group.get('filter', ''))
+
+    def test_public_entry_has_project_dns_and_no_foreign_groups(self):
+        config = load('config/stash.yaml')
+        self.assertEqual(config['dns']['nameserver'], [
+            'https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'])
+        self.assertNotIn('fallback', config['dns'])
+        self.assertNotIn('dot.pub', json.dumps(config['dns']))
+        self.assertTrue({'Google', 'NCloud'}.isdisjoint(g['name'] for g in config['proxy-groups']))
+        for provider in config['script-providers'].values():
+            self.assertEqual(set(provider), {'url', 'interval'})
+
     def test_region_fail_closed_references(self):
         # Structural/model evidence only; real fallback semantics must be tested in Stash.
         for region in ['美国', '日本', '香港', '新加坡', '台湾']:

@@ -1,11 +1,13 @@
 # Jimmy Stash 公共订阅入口；由tools/build_subscription.py生成，维护原文件即可。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # 私人机场URL请放在设备本地覆写，不在GitHub填写，不拼接到此公开地址。
-# 内含分流、基础域名广告及40款专项；HTTP/MITM和CA需在设备设置。
+# 识别标记：JIMMY-STASH；18组，含全部节点/其他地区；无Google或NCloud组。
+# 内含分流、基础域名广告及40款专项；11份脚本由Stash按本仓库URL下载。
+# HTTP/MITM和CA需在设备设置；DNS为DoH，不使用dot.pub或fallback DNS。
 # 全部专项：12个响应handler、32条拒绝重写、41个精确MITM主机。
 # 广告组DIRECT只放行域名规则；HTTP处理须用Stash对应开关停用。
 # 源码与独立许可：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md
-# 各内嵌脚本独立执行、保持原许可；无凭据、无证书私钥、无签到任务。
+# 各脚本独立执行、保持原许可；无凭据、无证书私钥、无签到任务。
 # 当前仅离线验证；实际Stash导入、地区失效语义和广告效果待设备验收。
 proxy-providers:
   机场:
@@ -37,6 +39,8 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   - DIRECT
 - name: 手动节点
@@ -45,6 +49,20 @@ proxy-groups:
   - REJECT
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: 全部节点
+  type: select
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: 美国
   type: fallback
   url: https://www.gstatic.com/generate_204
@@ -91,6 +109,16 @@ proxy-groups:
   use:
   - 机场
   filter: (?i)(台湾|台灣|臺灣|台北|臺北|🇹🇼|taiwan|taipei|(^|[^a-z])tw([^a-z]|$)|^REJECT$)
+- name: 其他地区
+  type: select
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(韩国|韓國|首尔|首爾|加拿大|英国|英國|德国|德國|法国|法國|澳大利亚|澳大利亞|澳洲|俄罗斯|俄羅斯|荷兰|荷蘭|印度|泰国|泰國|越南|马来西亚|馬來西亞|印尼|印度尼西亚|菲律賓|菲律宾|土耳其|巴西|阿根廷|阿联酋|阿聯酋|迪拜|南非|意大利|義大利|西班牙|瑞士|瑞典|挪威|波兰|波蘭|芬兰|芬蘭|丹麦|丹麥|爱尔兰|愛爾蘭|新西兰|紐西蘭|墨西哥|以色列|沙特|沙烏地|其他|其它|未知|未分类|未分類|🇰🇷|🇨🇦|🇬🇧|🇩🇪|🇫🇷|🇦🇺|🇷🇺|🇳🇱|🇮🇳|🇹🇭|🇻🇳|🇲🇾|🇮🇩|🇵🇭|🇹🇷|🇧🇷|🇦🇷|🇦🇪|🇿🇦|🇮🇹|🇪🇸|🇨🇭|🇸🇪|🇳🇴|🇵🇱|🇫🇮|🇩🇰|🇮🇪|🇳🇿|🇲🇽|🇮🇱|🇸🇦|korea|seoul|canada|toronto|vancouver|united[
+    _-]*kingdom|britain|london|germany|frankfurt|france|paris|australia|sydney|russia|moscow|netherlands|amsterdam|india|thailand|bangkok|vietnam|malaysia|indonesia|philippines|turkey|brazil|argentina|dubai|south[
+    _-]*africa|italy|spain|switzerland|sweden|norway|poland|finland|denmark|ireland|new[ _-]*zealand|mexico|israel|saudi|other|unknown|(^|[^a-z])(kr|ca|uk|de|fr|au|ru|nl|in|th|vn|my|id|ph|tr|br|ar|ae|za|it|es|ch|se|no|pl|fi|dk|ie|nz|mx|il|sa)([^a-z]|$)|^gb([
+    _-]*[0-9]+)?$|^REJECT$)
 - name: OpenAI
   type: select
   proxies:
@@ -100,10 +128,16 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   - DIRECT
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: Netflix
   type: select
   proxies:
@@ -113,10 +147,16 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   - DIRECT
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: YouTube
   type: select
   proxies:
@@ -126,10 +166,16 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   - DIRECT
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: Telegram
   type: select
   proxies:
@@ -139,10 +185,16 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   - DIRECT
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: Apple
   type: select
   proxies:
@@ -153,9 +205,15 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: Microsoft
   type: select
   proxies:
@@ -166,9 +224,15 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: 未匹配流量
   type: select
   proxies:
@@ -178,10 +242,16 @@ proxy-groups:
   - 香港
   - 新加坡
   - 台湾
+  - 其他地区
+  - 全部节点
   - 手动节点
   - DIRECT
   use:
   - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 - name: 国内直连
   type: select
   proxies:
@@ -5513,386 +5583,35 @@ http:
     timeout: 5
 script-providers:
   jimmy_alipan_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-3.0-only
-       * Derived from fmz200/wool_scripts Scripts/adrive/adrive.js; see sources.lock.json.
-       * Modified 2026-10-19: only four banner anchors; keep backups, news, sign-in and
-       * account features. No logs, storage or network. License: licenses/fmz200-GPL-3.0.txt.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          if (!/^https:\/\/member\.alipan\.com\/v1\/users\/onboard_list\/?(?:\?|$)/.test(String(req.url || ''))) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0', 200, '200', 'Success'].includes(obj.code)) return;
-          if (!Array.isArray(obj.result)) return;
-          const ads = ['backup_top_banner', 'home_top_banner', 'resource_top_banner', 'video_top_banner'];
-          const filtered = obj.result.filter(item => !item || !ads.includes(item.anchor));
-          if (filtered.length !== obj.result.length) {
-            obj.result = filtered;
-            result = {body: JSON.stringify(obj)};
-          }
-        } catch (_) {
-          // Keep the original response on unknown/error data.
-        } finally { $done(result); }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js
+    interval: 86400
   jimmy_bilibili_ads:
-    content: |
-      /* SPDX-License-Identifier: MIT
-       * Derived from app2smile/rules js/bilibili-json.js, revision in research/sources.lock.json.
-       * Copyright (c) 2023 app2smile. See licenses/app2smile-MIT.txt.
-       * Modified 2026-10-18: narrow endpoints, preserve non-ad features, fail open,
-       * no URL/body/header logging, no account storage or outbound requests.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          const path = String(req.url || '').match(/^https:\/\/app\.bilibili\.com(\/x\/v2\/(?:splash\/(?:list|show)|feed\/index))(?:\?|$)/);
-          if (!path || req.method !== 'GET' || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d/.test(String(resp.status))) return;
-          const body = JSON.parse(resp.body);
-          if (!body || body.code !== 0 || !body.data || typeof body.data !== 'object' || Array.isArray(body.data)) return;
-          let changed = false;
-          if (path[1].startsWith('/x/v2/splash/')) {
-            if (Object.prototype.hasOwnProperty.call(body.data, 'show')) {
-              delete body.data.show;
-              changed = true;
-            }
-          } else if (Array.isArray(body.data.items)) {
-            const before = body.data.items;
-            const adTypes = ['ad_web_s', 'ad_av', 'ad_web_gif', 'ad_player', 'ad_inline_3d', 'ad_inline_eggs'];
-            const after = before.filter(item => {
-              if (!item || typeof item !== 'object') return true;
-              if (item.card_type === 'cm_v2' && adTypes.includes(item.card_goto)) return false;
-              if (item.card_type === 'cm_double_v9' && item.card_goto === 'ad_inline_av') return false;
-              if (item.card_type === 'banner_v8' && item.card_goto === 'banner' && Array.isArray(item.banner_item)) {
-                // 不丢弃整个 banner：只删明确标为 ad 的条目。
-                item.banner_item = item.banner_item.filter(v => !v || v.type !== 'ad');
-              }
-              return true;
-            });
-            body.data.items = after;
-            changed = JSON.stringify(body.data.items) !== JSON.stringify(JSON.parse(resp.body).data.items);
-          }
-          if (changed) result = {body: JSON.stringify(body)};
-        } catch (_) {
-          // Stash 的空修改对象保留原响应。不输出异常内容，避免泄露响应数据。
-        } finally {
-          $done(result);
-        }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js
+    interval: 86400
   jimmy_cainiao_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-3.0-only
-       * Derived from fmz200/wool_scripts Scripts/cainiao/cainiao.js; see sources.lock.json.
-       * Modified 2026-10-19: only explicit adItemDetail entries in ads.show. Preserve
-       * coupons, points, package import, messages and ordinary cards. No logs/storage/network.
-       * License: licenses/fmz200-GPL-3.0.txt.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          if (!/^https:\/\/cn-acs\.m\.cainiao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:\/[0-9]+(?:\.[0-9]+)*)?\/?(?:\?|$)/.test(String(req.url || ''))) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'ret') && (!Array.isArray(obj.ret) || !obj.ret.length || !obj.ret.every(value => typeof value === 'string' && /^SUCCESS(?:::|$)/.test(value)))) return;
-          const items = obj.data && obj.data.result;
-          if (!Array.isArray(items)) return;
-          const filtered = items.filter(item => !(item && item.materialContentMapper && item.materialContentMapper.adItemDetail));
-          if (items.length !== filtered.length) {
-            obj.data.result = filtered;
-            result = {body: JSON.stringify(obj)};
-          }
-        } catch (_) {
-          // Do not log response bodies or request headers.
-        } finally { $done(result); }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js
+    interval: 86400
   jimmy_jingdong_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-2.0
-       * Derived from blackmatrix7/ios_rule_script script/startup/startup.js (JD branch).
-       * Source revision/checksum: sources.lock.json. License: licenses/blackmatrix7-GPL-2.0.txt.
-       * Modified 2026-10-19: strict URL/response guards; only existing display counts
-       * and durations; preserve product/order/coupon data. No logging, storage or requests.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          const url = String(req.url || '');
-          if (!/^https:\/\/api\.m\.jd\.com\/client\.action\?[^#]*$/.test(url)) return;
-          const functions = url.split('?')[1].split('&').filter(part => /^functionId=/.test(part));
-          if (functions.length !== 1 || functions[0] !== 'functionId=start') return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
-          if (!Array.isArray(obj.images) || !obj.images.every(Array.isArray)) return;
-          const before = JSON.stringify(obj);
-          function zero(item, key) {
-            if (typeof item[key] === 'number' && Number.isFinite(item[key])) item[key] = 0;
-            else if (typeof item[key] === 'string' && /^\d+$/.test(item[key])) item[key] = '0';
-          }
-          for (const group of obj.images) {
-            for (const ad of group) {
-              if (ad && typeof ad === 'object' && !Array.isArray(ad) && Object.prototype.hasOwnProperty.call(ad, 'showTimes')) {
-                zero(ad, 'showTimes');
-                zero(ad, 'time');
-              }
-            }
-          }
-          zero(obj, 'showTimesDaily');
-          const body = JSON.stringify(obj);
-          if (body !== before) result = {body};
-        } catch (_) {
-          // Unknown formats and errors pass through unchanged.
-        } finally { $done(result); }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js
+    interval: 86400
   jimmy_luckin_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-3.0-only
-       * Endpoint and successful empty-ad result from fmz200/wool_scripts rewrite.snippet.
-       * Modified 2026-10-19: only a successful dedicated adposNew JSON response; no
-       * product, coupon, exchange or order endpoints. No logging/storage/network.
-       * License: licenses/fmz200-GPL-3.0.txt. Source: sources.lock.json.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          if (!/^https:\/\/capi\.lkcoffee\.com\/resource\/m\/sys\/app\/adposNew\/?(?:\?|$)/.test(String(req.url || ''))) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.status !== 'SUCCESS' || obj.error || obj.error_code || obj.success === false) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0', 200, '200'].includes(obj.code)) return;
-          if (Object.keys(obj).some(key => key !== 'status')) result = {body: JSON.stringify({status: 'SUCCESS'})};
-        } catch (_) {
-          // Original failures remain visible; no fabricated account success.
-        } finally { $done(result); }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js
+    interval: 86400
   jimmy_meituan_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-2.0
-       * Derived from blackmatrix7/ios_rule_script script/startup/startup.js (Meituan branch).
-       * Modified 2026-10-19: only known ad/mk arrays, preserving other loadInfo fields.
-       * No logs/storage/network. License: licenses/blackmatrix7-GPL-2.0.txt; source: sources.lock.json.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          if (!/^https:\/\/wmapi\.meituan\.com\/api\/v\d+\/loadInfo\/?(?:\?|$)/.test(String(req.url || ''))) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
-          const splash = obj.data && obj.data.startpicture;
-          if (!splash || typeof splash !== 'object' || Array.isArray(splash)) return;
-          let changed = false;
-          for (const key of ['ad', 'mk']) {
-            if (Array.isArray(splash[key]) && splash[key].length) { splash[key] = []; changed = true; }
-          }
-          if (changed) result = {body: JSON.stringify(obj)};
-        } catch (_) {
-          // Do not discard unknown startup/business data.
-        } finally { $done(result); }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js
+    interval: 86400
   jimmy_taobao_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-3.0-only
-       * Adapted from fmz200/wool_scripts Scripts/myBlockAds.js (Taobao splash branch).
-       * Source revision/checksum: research/sources.lock.json.
-       * Modifications 2026-10-19: only the dedicated splash API and taobao-splash items;
-       * preserve MTOP envelope, normal sections, products, coupons and payment paths.
-       * No generic cloudvideo/poplayer handling, logging, storage or outbound requests.
-       * License text: licenses/fmz200-GPL-3.0.txt.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          const api = 'mtop.taobao.wireless.home.splash.awesome.get';
-          if (!/^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(?:\/\d+(?:\.\d+)*\/?)?(?:\?|$)/.test(String(req.url || ''))) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
-          if (typeof obj.api === 'string' && obj.api.toLowerCase() !== api) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'ret') && (!Array.isArray(obj.ret) || !obj.ret.length || !obj.ret.every(x => typeof x === 'string' && /^SUCCESS(?:::|$)/.test(x)))) return;
-          const sections = obj.data && obj.data.containers && obj.data.containers.splash_home_base && obj.data.containers.splash_home_base.base && obj.data.containers.splash_home_base.base.sections;
-          if (!Array.isArray(sections)) return;
-          for (const section of sections) {
-            const splash = section && section.bizData && section.bizData['taobao-splash'];
-            if (!splash || !Array.isArray(splash.data)) continue;
-            for (const item of splash.data) {
-              if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
-              // Only the fields documented by the reviewed upstream splash handler.
-              const changes = {waitTime:'0', times:'0', hotStart:'false', coldStart:'false',
-                startTime:'3818332800000', endTime:'3818419199000',
-                gmtStart:'2090-12-31 00:00:00', gmtEnd:'2090-12-31 23:59:59',
-                gmtStartMs:'3818332800000', gmtEndMs:'3818419199000', imgUrl:'', videoUrl:''};
-              for (const [key, value] of Object.entries(changes)) {
-                if (Object.prototype.hasOwnProperty.call(item, key) && typeof item[key] === 'string') item[key] = value;
-              }
-            }
-          }
-          const after = JSON.stringify(obj);
-          if (after !== JSON.stringify(JSON.parse(resp.body))) result = {body: after};
-        } catch (_) {
-          // Unknown/broken responses stay unchanged. Do not log tokens or MTOP payloads.
-        } finally {
-          $done(result);
-        }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js
+    interval: 86400
   jimmy_tieba_ads:
-    content: |
-      /* SPDX-License-Identifier: MIT
-       * Derived from app2smile/rules js/tieba-json.js, revision in research/sources.lock.json.
-       * Copyright (c) 2023 app2smile. See licenses/app2smile-MIT.txt.
-       * Modified 2026-10-18: only splash JSON; fail open; no logging or outbound requests.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          if (!/^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(?:\?|$)/.test(String(req.url || ''))) return;
-          if (typeof resp.body !== 'string' || resp.body.length > 1024 * 1024) return;
-          if (resp.status && !/^2\d\d/.test(String(resp.status))) return;
-          const body = JSON.parse(resp.body);
-          if (body && body.error_code === 0 && Object.prototype.hasOwnProperty.call(body, 'data')) {
-            body.error_code = 2230209;
-            body.data = null;
-            result = {body: JSON.stringify(body)};
-          }
-        } catch (_) {
-          // 返回原始内容；不记录请求或响应。
-        } finally {
-          $done(result);
-        }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js
+    interval: 86400
   jimmy_wechat_articles_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-3.0-only
-       * Derived from NobyDa/Script QuantumultX/File/Wechat.js (see sources.lock.json).
-       * Modified 2026-10-19: strict path/schema/error guards; preserve appid and all
-       * non-ad fields. Articles only; no chat, Moments or Channels processing.
-       * No logging/storage/network. License: licenses/NobyDa-GPL-3.0.txt.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          if (!/^https:\/\/mp\.weixin\.qq\.com\/mp\/getappmsgad\/?(?:\?|$)/.test(String(req.url || ''))) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-          if (obj.base_resp && obj.base_resp.ret !== 0) return;
-          if (!Array.isArray(obj.advertisement_info) || typeof obj.advertisement_num !== 'number') return;
-          if (obj.advertisement_info.length || obj.advertisement_num !== 0) {
-            obj.advertisement_info = [];
-            obj.advertisement_num = 0;
-            result = {body: JSON.stringify(obj)};
-          }
-        } catch (_) {
-          // Unknown/error data stays untouched.
-        } finally { $done(result); }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js
+    interval: 86400
   jimmy_weibo_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-3.0-only
-       * Endpoint references: fmz200/wool_scripts QuantumultX/rewrite/weibo.snippet.
-       * Configuration attribution there: fmz200 / zmqcherish / Keywos.
-       * This is a local Stash response handler, not a copied remote Weibo cleanup script.
-       * Modifications 2026-10-19: only two dedicated splash ad paths; no timeline,
-       * messaging, login, notifications, check-in, paid features, logging or storage.
-       * License text: licenses/fmz200-GPL-3.0.txt; source pin: research/sources.lock.json.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          const url = String(req.url || '');
-          const realtime = /^https:\/\/bootrealtime\.uve\.weibo\.com\/v\d+\/ad\/realtime(?:\?|$)/;
-          const preload = /^https:\/\/bootpreload\.uve\.weibo\.com\/v\d+\/ad\/preload(?:\?|$)/;
-          if (!realtime.test(url) && !preload.test(url)) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || !Object.keys(obj).length) return;
-          if (obj.success === false || obj.error || obj.error_code) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'code') && (!/^\d+$/.test(String(obj.code)) || Number(obj.code) >= 400)) return;
-          // Upstream uses reject-dict only at these ad endpoints. Empty dictionary is
-          // emitted via the same Stash response API as the other local ad handlers.
-          result = {body: '{}'};
-        } catch (_) {
-          // Non-JSON/unknown failures retain the original response without logging it.
-        } finally {
-          $done(result);
-        }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js
+    interval: 86400
   jimmy_xiaohongshu_ads:
-    content: |
-      /* SPDX-License-Identifier: GPL-3.0-only
-       * Adapted from fmz200/wool_scripts Scripts/xiaohongshu/xiaohongshu.js.
-       * Original author: fmz200. Source revision and checksum: research/sources.lock.json.
-       * Modifications 2026-10-19: splash only; no feed, download, watermark or account
-       * changes; no logging, storage or outbound requests; fail open.
-       * License text: licenses/fmz200-GPL-3.0.txt.
-       */
-      (() => {
-        let result = {};
-        try {
-          const req = typeof $request === 'object' ? $request : {};
-          const resp = typeof $response === 'object' ? $response : {};
-          if (!/^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config(?:\?|$)/.test(String(req.url || ''))) return;
-          if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-          if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-          const obj = JSON.parse(resp.body);
-          if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false) return;
-          if (Object.prototype.hasOwnProperty.call(obj, 'code') && obj.code !== 0) return;
-          const groups = obj.data && obj.data.ads_groups;
-          if (!Array.isArray(groups) || !groups.length) return;
-          // Keep all non-ad fields. Change only the upstream-recognized ad time windows.
-          function postpone(item) {
-            if (!item || typeof item !== 'object' || Array.isArray(item)) return;
-            for (const [key, value] of [['start_time', 3818332800], ['end_time', 3818419199]]) {
-              const before = item[key];
-              if (typeof before === 'number' && Number.isFinite(before)) item[key] = value;
-              else if (typeof before === 'string' && /^\d+$/.test(before)) item[key] = String(value);
-            }
-          }
-          for (const group of groups) {
-            postpone(group);
-            if (group && Array.isArray(group.ads)) group.ads.forEach(postpone);
-          }
-          const after = JSON.stringify(obj);
-          if (after !== JSON.stringify(JSON.parse(resp.body))) result = {body: after};
-        } catch (_) {
-          // Unknown/broken responses stay unchanged. Never log response/account data.
-        } finally {
-          $done(result);
-        }
-      })();
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js
+    interval: 86400

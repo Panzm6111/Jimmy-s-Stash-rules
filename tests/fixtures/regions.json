@@ -57,6 +57,30 @@
       "TW01"
     ]
   },
+  "other": [
+    "🇰🇷 韩国 01", "Seoul KR02", "🇬🇧 London", "UK01", "GB01", "GB", "德国 DE01",
+    "Frankfurt 02", "France FR01", "Canada CA01", "🇦🇺 Sydney AU01",
+    "Russia RU01", "🇳🇱 Netherlands", "India IN01", "Thailand TH01",
+    "🇻🇳 Vietnam", "Malaysia MY01", "Indonesia ID01", "Philippines PH01",
+    "Turkey TR01", "Brazil BR01", "Argentina AR01", "Dubai AE01",
+    "South Africa ZA01", "Italy IT01", "Spain ES01", "Switzerland CH01",
+    "Sweden SE01", "Norway NO01", "Poland PL01", "Finland FI01",
+    "Denmark DK01", "Ireland IE01", "New Zealand NZ01", "Mexico MX01",
+    "Israel IL01", "Saudi Arabia SA01", "未知节点 01"
+  ],
+  "info": [
+    "剩余流量：1024.5 GB", "剩余流量: 100 GB", "流量剩余 30 GB",
+    "到期时间：2099-01-01", "套餐到期 2099", "订阅到期 2099",
+    "下次重置 5天", "距离下次重置还有10天", "重置时间 30天",
+    "Remaining Traffic: 100GB", "Traffic Remaining 20 GB",
+    "Expire: 2099", "Expiry 2099", "Expiration date 2099",
+    "Update subscription 2099"
+  ],
+  "unclassified": [
+    "Custom-Node-007", "JustTest", "BUSINESS", "A", "剩", "剩余", "流星专线",
+    "台湾-remaining-traffic-test", "Japan expire example", "e", "ex", "r", "t",
+    "未标国家的SS节点", "未标国家的VLESS节点"
+  ],
   "negative": [
     "Russia",
     "Australia",

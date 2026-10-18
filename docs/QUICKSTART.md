@@ -40,7 +40,7 @@ https://example.invalid/REPLACE_ON_DEVICE
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core.stoverride
 ```
 
-启用它，并应用到“Jimmy 本机主配置”。查看最终配置/合并预览，确认有一个“机场”代理集、16个本项目策略组，机场URL仍是本机填写的值。不要分享带订阅地址的预览。
+启用它，并应用到“Jimmy 本机主配置”。查看最终配置/合并预览，确认有一个“机场”代理集、18个本项目策略组，机场URL仍是本机填写的值。不要分享带订阅地址的预览。
 
 如果Stash报错、缺组或合并顺序不符，保持原配置使用，按[反馈方法](PHONE-CHECKLIST.md)只提供错误类别与版本信息。离线检查不能替代Stash自身接受配置。
 
@@ -49,7 +49,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core
 1. 在代理集页面刷新“机场”，对照机场后台核对节点数量，尤其是SS和VLESS。
 2. 在策略组页面，把“总代理”从初始 `REJECT` 改为你想用的地区池：美国、日本、香港、新加坡或台湾。地区中必须有可用节点。
 3. OpenAI、Netflix、YouTube、Telegram默认跟随“总代理”。想单独选地区，就进入该软件组改选地区池；各软件可以不同。
-4. 想固定具体节点，直接在该软件组选择一个节点。“手动节点”组是共享入口，多个软件选它时会共用该手动选择。
+4. 想固定具体节点，直接在该软件组选择一个节点。“全部节点”不按国家分组，“其他地区”按常见其他国家名称筛选、不是严格补集；不知道地区时在“全部节点”找。“全部节点”“其他地区”和保留的旧“手动节点”都是共享入口，多个软件选同一个入口时会共用其中的选择。
 5. Apple、Microsoft先保持默认直连。“广告拦截”保持 `REJECT`。
 6. 选择Stash的“规则”模式，再连接并按系统提示允许VPN。先检查一个国内服务和一个所需海外服务，再逐项做[手机验收](PHONE-CHECKLIST.md)。
 
