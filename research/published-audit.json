@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-19T01:46:03.037451+08:00",
+  "checked_at": "2026-10-19T02:24:03.485058+08:00",
   "target": "published",
   "passed": 64,
   "total": 64,
@@ -8,7 +8,7 @@
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core.stoverride",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 5577,
+      "bytes": 20407,
       "ok": true
     },
     {
@@ -22,7 +22,7 @@
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 238463,
+      "bytes": 232532,
       "ok": true
     },
     {

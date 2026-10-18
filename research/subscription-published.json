@@ -1,19 +1,29 @@
 {
-  "checked_at": "2026-10-19T01:46:17.632837+08:00",
+  "checked_at": "2026-10-19T02:24:03.485058+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "content_type": "text/plain; charset=utf-8",
-  "bytes": 238463,
-  "sha256": "2166126401773db9c47e5be95648427abf77e7207fce6750a4628174cdf47e7a",
+  "bytes": 232532,
+  "sha256": "bdcf51957847ad769a01c552ad8c27274ccf9498cf2e46fd781b6736ad6820f0",
   "matches_local_bytes": true,
-  "proxy_groups": 16,
+  "proxy_groups": 18,
   "rules": 5180,
-  "inline_scripts": 11,
+  "inline_scripts": 0,
+  "remote_scripts": 11,
   "response_handlers": 12,
   "rewrite_rules": 32,
   "mitm_hosts": 41,
   "private_url_is_placeholder": true,
+  "new_selectors": [
+    "全部节点",
+    "其他地区"
+  ],
+  "previous_manual_selector_preserved": true,
+  "other_regions_is_strict_complement": false,
+  "other_regions_uses_positive_name_filter": true,
+  "known_info_prefixes_filtered_in_flat_and_app_lists": true,
+  "negative_lookaheads_or_unverified_exclude_filter_used": false,
+  "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "376a4317f70f143d9c7d76fd6b72aaaa3d5dedaa"
+  "code_release_commit": "5a01d672f298eaf75b100f493c3289c17435ee67"
 }
