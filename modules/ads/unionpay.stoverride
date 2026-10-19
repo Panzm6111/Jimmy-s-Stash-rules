@@ -3,7 +3,7 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 云闪付广告专项（可选）
-desc: 仅 ads.95516.com 和 ads.cup.com.cn；不屏蔽推送/安全SDK，不解密支付。默认不导入；需设备验收。
+desc: 仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。默认不导入；需设备验收。
 rules:
 - DOMAIN,ads.95516.com,广告拦截
 - DOMAIN,ads.cup.com.cn,广告拦截

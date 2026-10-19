@@ -3,6 +3,6 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 东方财富广告专项（可选）
-desc: 仅 emdcadvertise 广告主机；不解密行情、交易或登录。默认不导入；需设备验收。
+desc: 仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。默认不导入；需设备验收。
 rules:
 - DOMAIN,emdcadvertise.eastmoney.com,广告拦截

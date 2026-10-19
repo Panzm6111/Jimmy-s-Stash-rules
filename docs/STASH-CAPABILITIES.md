@@ -1,6 +1,6 @@
 # Stash 能力、证据等级与版本门槛
 
-核实日期：2026-10-18。客户端限定 iPhone Stash，未使用其他内核代替验收。
+核实日期：2026-10-19。客户端限定 iPhone Stash，未使用其他内核代替验收。
 
 ## 当前重要阻塞
 
@@ -23,6 +23,7 @@
 | MITM | 仅 `http.mitm` 中的精确域名，设备生成证书，不含 CA 私钥 | app2smile Stash 原生覆写直接使用 `http.mitm`；当前证书菜单与最低版本待官方和设备确认；不设置泛域名或关闭 TLS 校验 |
 | HTTP拒绝重写 | `http.rewrite` 的 `正则 - reject`；仅独立广告路径 | 已读取 blackmatrix7 固定SHA的原生 `rewrite/Stash/Advertising/Advertising.stoverride`；该文件头2025-08-26。不是直接套用QX重写；不假设reject等于reject-dict/img/200，具体返回、合并和版本仍待官方/手机核对 |
 | 响应脚本 | `http.script` + `script-providers`，response、require-body、timeout；只用 `$request/$response/$done`；推荐公开入口使用与已读原生模块相同的url/interval声明 | 源码原生覆写已读；上游模块标 iOS≥15。**这不是 Stash 最低版本的官方证明**，本项目不凭此编造版本号；也不能把URL替代content说成用户本次DNS/节点错误的根因修复 |
+| 请求空响应 | `http.script`的request、require-body:false；`$done({response:{status:200,headers,body}})`，只用于严格匹配的广告路径 | NobyDa固定SHA的原生Stash模块与对应JS调用链已读并校验，链接见[SOURCES](SOURCES.md#广告失效复审与原生请求响应证据2026-10-19)。不是复制QX动作名；最低版本及设备执行待确认 |
 | 本地包的内嵌脚本 | `script-providers.<name>.content` 保存原JS正文，不加自造type字段；rule-providers按原优先级展开为普通规则 | 历史 `jinzaizhichi/stash-example@c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml` 实际存在content模式，原注释“仅推荐作为开发使用”，文件亦已停止维护。只参考原生字段，不复制无许可示例代码；当前官方/最低版本和iPhone导入仍未验证 |
 | 脚本更新 | `script-providers.interval: 86400`，稳定脚本 URL；源脚本已窄化并固定本仓库路径 | interval 字段来自原生覆写；何时刷新/离线缓存失效行为仍待文档与手机验证，不保证断网更新 |
 | 策略选择保留 | 固定配置名称、策略组名、provider 名；不写未经核实的 profile.store-selected | native 持久化行为未验证。普通 YAML 合并不能保存 UI 的运行时选择；更新前记下选择，更新后核对，必要时重选 |
@@ -43,4 +44,4 @@
 
 [research/projects.json](../research/projects.json) 与 [sources.lock.json](../research/sources.lock.json) 可以复查已读原生模块和脚本，而不是用另一个代理客户端代替 Stash。
 
-2026-10-19 补充：淘宝、小红书、微博模块依据已读源码/规则手工适配为 Stash 响应 handler，详情见 [APP-SPLASH.md](APP-SPLASH.md)。新增精确域名不构成全域解密；不把原 QX 配置直接导入，不使用外部转换网站。当前官方文档访问阻塞仍未解除，设备验收仍独立进行。
+2026-10-19 补充：淘宝、小红书保留响应handler并修正字段兼容；微博改请求handler、脚本兼容旧响应式配置，详情见 [APP-SPLASH.md](APP-SPLASH.md)。新增固定console诊断仅含模块和状态，不含请求数据。精确域名不构成全域解密；不把原QX配置直接导入，不使用外部转换网站。当前官方文档访问阻塞仍未解除，设备验收仍独立进行。

@@ -4,8 +4,16 @@
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 猎聘广告专项（可选）
 desc: 明确命名的 live.get-ad-cards；不拦职位推荐或投递。默认不导入；需设备验收。
+script-providers:
+  jimmy_ad_empty_response:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
+    interval: 86400
 http:
   mitm:
   - api-ac.liepin.com
-  rewrite:
-  - ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject
+  script:
+  - match: ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5

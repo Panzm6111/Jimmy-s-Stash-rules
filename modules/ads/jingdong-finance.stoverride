@@ -3,7 +3,7 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 京东金融广告专项（可选）
-desc: 仅 bdsp-x/dsp-x 独立广告主机；不解密金融或支付。默认不导入；需设备验收。
+desc: 仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。默认不导入；需设备验收。
 rules:
 - DOMAIN,bdsp-x.jd.com,广告拦截
 - DOMAIN,dsp-x.jd.com,广告拦截

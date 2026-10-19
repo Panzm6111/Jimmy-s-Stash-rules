@@ -23,9 +23,9 @@ def render():
             '# 固定地址：' + URL + '\n'
             '# 私人机场URL请放在设备本地覆写，不在GitHub填写，不拼接到此公开地址。\n'
             '# 识别标记：JIMMY-STASH；18组，含全部节点/其他地区；无Google或NCloud组。\n'
-            '# 内含分流、基础域名广告及40款专项；11份脚本由Stash按本仓库URL下载。\n'
+            '# 内含分流、38条基础域名广告及40款候选专项；12份脚本由Stash按本仓库URL下载。\n'
             '# HTTP/MITM和CA需在设备设置；DNS为DoH，不使用dot.pub或fallback DNS。\n'
-            '# 全部专项：12个响应handler、32条拒绝重写、41个精确MITM主机。\n'
+            '# 广告修订2026-10-19：18个请求handler、10个响应handler、16条拒绝重写、41个精确MITM主机。\n'
             '# 广告组DIRECT只放行域名规则；HTTP处理须用Stash对应开关停用。\n'
             '# 源码与独立许可：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
             '# 各脚本独立执行、保持原许可；无凭据、无证书私钥、无签到任务。\n'
@@ -37,9 +37,10 @@ def verify(text):
     assert not config.get('rule-providers')
     assert len(config['proxy-groups']) == 18
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
-    assert len(config['script-providers']) == 11
-    assert len(config['http']['script']) == 12
-    assert len(config['http']['rewrite']) == 32
+    assert len(config['script-providers']) == 12
+    assert len(config['http']['script']) == 28
+    assert sum(s['type'] == 'request' for s in config['http']['script']) == 18
+    assert len(config['http']['rewrite']) == 16
     assert len(config['http']['mitm']) == len(set(config['http']['mitm'])) == 41
     addons = sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride') if p.stem != 'expanded')
     original = merged(*addons)

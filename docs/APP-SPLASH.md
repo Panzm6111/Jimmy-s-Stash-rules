@@ -8,9 +8,9 @@
 
 | 软件 | 专项状态 | 已做的处理 | 保留/限制 |
 |---|---|---|---|
-| 淘宝 | 已制作可选 `taobao.stoverride` + 本地响应脚本 | 只匹配 `guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get`。只修改 `splash_home_base` 中明确命名 `taobao-splash` 的广告条目：显示次数、等待、冷热启动、展示时间，以及其中图片/视频素材字段 | 保留 MTOP 成功/错误信息、普通首页区块和其他字段。不拦整个网关、整个首页、通用 cloudvideo 视频接口或 poplayer 活动弹层，避免误伤商品视频和正常领券。JSONP、未知字段类型或失败结果不改 |
+| 淘宝 | 已制作可选 `taobao.stoverride` + 本地响应脚本 | 只匹配 `guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get`。只修改 `splash_home_base` 中明确命名 `taobao-splash` 的广告条目：显示次数、等待、冷热启动、展示时间，以及其中图片/视频素材字段 | 保留 MTOP 成功/错误信息、普通首页区块和其他字段。不拦整个网关、整个首页、通用 cloudvideo 视频接口或 poplayer 活动弹层，避免误伤商品视频和正常领券。JSONP、未知复杂字段类型或失败结果不改；已知广告控制字段支持数字/布尔值并补齐缺省值 |
 | 小红书 | 已制作可选 `xiaohongshu.stoverride` + 本地响应脚本 | 只匹配 `edith.xiaohongshu.com/api/sns/v*/system_service/splash_config`，调整 `ads_groups` 及其广告项中已知的展示起止时间 | 保留普通系统配置、笔记、搜索、消息、下载权限、水印及账号信息；不带入原脚本的正文日志、无水印保存或画质修改 |
-| 微博 | 已制作可选 `weibo.stoverride` + 本地响应脚本 | 普通微博的两个专用开屏 JSON 接口：`bootrealtime.uve.weibo.com/v*/ad/realtime`、`bootpreload.uve.weibo.com/v*/ad/preload`，正常 JSON 广告响应置为空字典，采用公开规则中该接口的处理方式 | 不挂接通用 api.weibo 域名，不改时间线、消息、登录、签到或会员；不复制其远程整包净化脚本。不声称已覆盖微博国际版或所有备用开屏接口 |
+| 微博 | 已制作可选 `weibo.stoverride` + 本地请求脚本（兼容旧响应式配置） | 普通微博的两个专用开屏 JSON 接口：`bootrealtime.uve.weibo.com/v*/ad/realtime`、`bootpreload.uve.weibo.com/v*/ad/preload`，新模块在请求阶段直接返回空JSON；旧响应式配置也可用新脚本，但需更新模块才会停止等待服务器响应 | 不挂接通用 api.weibo 域名，不改时间线、消息、登录、签到或会员；不复制其远程整包净化脚本。不声称已覆盖微博国际版或所有备用开屏接口 |
 | 独立天猫 App | **尚未实现专项** | 仍只有原通用广告域名层覆盖 | 已检查来源中的淘宝接口、天猫精灵/养车规则、天猫营销域名，都不能证明独立天猫购物 App 的开屏链路。不能把淘宝适配直接标成天猫完成；淘宝内的天猫入口如恰好共用已匹配接口，只按实际请求处理，不据此声称独立 App 支持 |
 
 开屏图片/视频可能已经缓存到 App 私有目录；Stash 响应脚本只能处理后续命中的网络响应，不能删除该目录或保证立刻清除旧广告。网络协议、证书固定、App 版本和接口变化都可能影响效果。不能以此为由关闭 TLS 验证或扩大到全域名解密。
@@ -53,6 +53,6 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads
 
 ## 验证结果的含义
 
-模拟测试覆盖：只改开屏字段、保留其他字段、MTOP失败与登录过期不改、支付/领券/正常视频不匹配、伪装域名不匹配、未知/超大响应放行、重复执行不继续变动、无日志/存储/外联、恰好完成一次。所有可选模块组合做结构合并检查。
+模拟测试覆盖：只改开屏字段、保留其他字段、MTOP失败与登录过期不改、支付/领券/正常视频不匹配、伪装域名不匹配、淘宝/小红书未知或超大响应放行、重复执行不继续变动、只有固定无敏感诊断，无存储/外联、恰好完成一次。所有可选模块组合做结构合并检查。
 
 这些验证不能替代 Stash 原生导入、真实 TLS/MITM、真实响应或广告展示效果。独立天猫专项不在已实现列表；后续需独立版本的明确开屏路径和数据结构证据，不需要用户提交 Cookie、完整抓包或登录信息。

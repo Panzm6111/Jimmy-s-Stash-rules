@@ -133,7 +133,8 @@ def validate_structure(config):
         re.compile(pattern)
     for item in config.get('http', {}).get('script', []):
         assert item['name'] in scripts, 'missing script provider'
-        assert item['type'] == 'response' and item['require-body'] is True
+        assert item['type'] in {'request', 'response'}
+        assert item['require-body'] is (item['type'] == 'response')
         assert item['timeout'] <= 10
         provider = scripts[item['name']]
         assert ('url' in provider) != ('content' in provider), 'choose exactly one script source'
@@ -355,6 +356,18 @@ class ProjectChecks(unittest.TestCase):
         for case in fixtures:
             self.assertEqual(route(config, case.get('domain', ''), case.get('ip', ''), case.get('country', '')), case['policy'], case)
 
+    def test_basic_ads_cover_reviewed_sdks_but_preserve_business_and_allowlist(self):
+        for host in ['v2.gdt.qq.com', 'adsmind.gdtimg.com', 'ads.pgdt.gtimg.cn',
+                     'ads.pangolin-sdk-toutiao.com', 'sf1.pglstatp-toutiao.com',
+                     'mobads.baidu.com', 'config.unityads.unitychina.cn']:
+            self.assertEqual(route(self.config, host), '广告拦截', host)
+            allowed = merge_model(self.config, {'rules': ['DOMAIN,' + host + ',DIRECT']})
+            self.assertEqual(route(allowed, host), 'DIRECT')
+        for host in ['api.m.jd.com', 'guide-acs.m.taobao.com', 'acs.m.taobao.com',
+                     'bootrealtime.uve.weibo.com', 'mp.weixin.qq.com', 'wallet.95516.com',
+                     'mobilegw.alipay.com', 'login.microsoftonline.com', 'api.push.apple.com']:
+            self.assertNotEqual(route(self.config, host), '广告拦截', host)
+
     def test_expanded_preserves_lan_and_service_exceptions(self):
         from unittest.mock import patch
         config = merged('modules/ads/expanded.stoverride')
@@ -465,7 +478,7 @@ def main():
     args = parser.parse_args()
     result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(ProjectChecks))
     if not result.wasSuccessful(): return 1
-    node = subprocess.run(['node', '--test', str(ROOT / 'tests/ads.test.cjs')], cwd=ROOT)
+    node = subprocess.run(['node', '--test', *[str(p) for p in sorted((ROOT / 'tests').glob('ads*.test.cjs'))]], cwd=ROOT)
     if node.returncode: return node.returncode
     scan = subprocess.run([sys.executable, str(ROOT / 'tools/scan_secrets.py'), '--history'], cwd=ROOT)
     if scan.returncode: return scan.returncode

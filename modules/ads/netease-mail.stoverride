@@ -4,10 +4,19 @@
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 网易邮箱大师广告专项（可选）
 desc: mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。默认不导入；需设备验收。
+script-providers:
+  jimmy_ad_empty_response:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
+    interval: 86400
 http:
   mitm:
   - appconf.mail.163.com
   - client.mail.163.com
   rewrite:
-  - ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject
   - ^https://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
+  script:
+  - match: ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5

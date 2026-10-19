@@ -5,19 +5,30 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
-function execute(moduleName, url, body, method = 'GET', status = 200) {
+function execute(moduleName, url, body, method = 'GET', status = 200, logCapture = null, requestOnly = false) {
   const code = fs.readFileSync(path.join(root, 'scripts/ads', moduleName + '.js'), 'utf8');
   let calls = 0, output;
+  const logs = [];
   const context = {
     $request: {url, method, headers: {Cookie: 'TEST_ONLY_NEVER_LOG'}},
-    $response: {body: typeof body === 'string' ? body : JSON.stringify(body), status},
+    $response: {body: typeof body === 'string' ? body : JSON.stringify(body), status, headers: {'Set-Cookie': 'TEST_RESPONSE_COOKIE_NEVER_LOG'}},
     $done: value => { calls++; output = JSON.parse(JSON.stringify(value)); },
-    console: {log: () => { throw new Error('logs forbidden'); }},
+    console: {log: (...values) => logs.push(values)},
+    $notification: new Proxy({}, {get() {throw new Error('notifications forbidden');}}),
     $httpClient: new Proxy({}, {get() {throw new Error('network forbidden');}}),
     $persistentStore: new Proxy({}, {get() {throw new Error('storage forbidden');}})
   };
+  if (requestOnly) delete context.$response;
   vm.runInNewContext(code, context, {timeout: 1000});
   assert.equal(calls, 1);
+  if (['taobao','xiaohongshu','weibo'].includes(moduleName)) {
+    assert.ok(logs.length <= 1, 'at most one fixed diagnostic per matching request');
+    for (const values of logs) {
+      assert.equal(values.length,1);
+      assert.match(values[0],new RegExp('^\\[JimmyAds\\]\\['+moduleName+'\\] (changed|unchanged|unsupported-body|unsupported-schema|unsupported-method|http-error)$'));
+    }
+  } else assert.deepEqual(logs,[], 'other modules must not log');
+  if (logCapture) logCapture.push(...logs.map(values=>values[0]));
   return output;
 }
 const bili = 'https://app.bilibili.com/x/v2/';
@@ -99,6 +110,20 @@ test('小红书：登录失败、未知时间格式与空广告原样放行', ()
     assert.deepEqual(execute('xiaohongshu',xhs,body),{});
   }
 });
+test('小红书：专用广告记录缺时间字段时补齐上游禁用窗口', () => {
+  const body={code:0,data:{normal:{theme:'keep'},ads_groups:[{id:'group',ads:[{id:'ad',image:'keep'}]},{start_time:'1',ads:[]}]}};
+  const out=execute('xiaohongshu',xhs,body);
+  const obj=JSON.parse(out.body);
+  assert.equal(obj.data.ads_groups[0].start_time,3818332800);
+  assert.equal(obj.data.ads_groups[0].end_time,3818419199);
+  assert.equal(obj.data.ads_groups[0].ads[0].start_time,3818332800);
+  assert.equal(obj.data.ads_groups[0].ads[0].end_time,3818419199);
+  assert.equal(obj.data.ads_groups[1].start_time,'3818332800');
+  assert.equal(obj.data.ads_groups[1].end_time,3818419199);
+  assert.deepEqual(obj.data.normal,body.data.normal);
+  assert.equal(obj.data.ads_groups[0].ads[0].image,'keep');
+  assert.deepEqual(execute('xiaohongshu',xhs,out.body),{});
+});
 test('淘宝：只改 taobao-splash 条目，保留MTOP结果和商品/优惠券', () => {
   const before=taobaoPayload();
   const obj=JSON.parse(execute('taobao',tb+'?x=1',before,'POST').body);
@@ -118,6 +143,21 @@ test('淘宝：整包首页、普通视频、弹层、支付和领券均不匹�
     assert.deepEqual(execute('taobao',url,taobaoPayload()),{});
   }
 });
+test('淘宝：补齐明确开屏条目控制字段，兼容数字/布尔值且不动普通商品', () => {
+  const before=taobaoPayload();
+  const ads=before.data.containers.splash_home_base.base.sections[1].bizData['taobao-splash'];
+  ads.data=[{imgUrl:'ad-image',times:3,waitTime:5,coldStart:true,hotStart:true,other:'keep'},null,{}];
+  const out=execute('taobao',tb,before);
+  const obj=JSON.parse(out.body);
+  const ad=obj.data.containers.splash_home_base.base.sections[1].bizData['taobao-splash'].data[0];
+  assert.equal(ad.times,0);assert.equal(ad.waitTime,0);
+  assert.equal(ad.coldStart,false);assert.equal(ad.hotStart,false);
+  assert.equal(ad.startTime,'3818332800000');assert.equal(ad.endTime,'3818419199000');
+  assert.equal(ad.imgUrl,'');assert.equal(ad.other,'keep');
+  assert.deepEqual(obj.data.containers.splash_home_base.base.sections[0],before.data.containers.splash_home_base.base.sections[0]);
+  assert.deepEqual(obj.data.coupons,before.data.coupons);
+  assert.deepEqual(execute('taobao',tb,out.body),{});
+});
 test('淘宝：过期、失败、混合失败、JSONP和未知结构不改', () => {
   for(const ret of [['FAIL_SYS_SESSION_EXPIRED::session expired'],['SUCCESS::ok','FAIL_SYS::failed'],[]]) {
     const body=taobaoPayload();body.ret=ret;
@@ -127,18 +167,35 @@ test('淘宝：过期、失败、混合失败、JSONP和未知结构不改', () 
   const mismatch=taobaoPayload();mismatch.api='mtop.taobao.other.get';
   assert.deepEqual(execute('taobao',tb,mismatch),{});
 });
-test('微博：两个专用开屏JSON接口返回空对象，不接入时间线脚本', () => {
+test('微博：兼容旧response配置，两个专用开屏接口返回空对象', () => {
   for(const url of [wb,'https://bootpreload.uve.weibo.com/v1/ad/preload?x=1']) {
     assert.deepEqual(execute('weibo',url,{code:200,ads:[{id:'test-ad'}]}),{body:'{}'});
   }
 });
-test('微博：消息、正文、登录、签到、会员及错误响应不触碰', () => {
+test('微博：消息、正文、登录、签到、会员及HTTP错误不触碰', () => {
   for(const url of ['https://api.weibo.cn/2/account/login','https://api.weibo.cn/2/messageflow','https://api.weibo.cn/2/statuses/friends_timeline','https://api.weibo.cn/2/checkin/show','https://new.vip.weibo.cn/littleskin/preview',wb+'Fake',wb.replace('bootrealtime.uve.weibo.com','bootrealtime.uve.weibo.com.evil.example'),'https://bootrealtime.uve.weibo.com/v1/ad/preload']) {
     assert.deepEqual(execute('weibo',url,{ads:[1]}),{});
   }
-  for(const body of [{code:401,ads:[1]},{code:'401',ads:[1]},{error:'login expired',ads:[1]},{success:false,ads:[1]},[],{},'broken']) {
-    assert.deepEqual(execute('weibo',wb,body),{});
+  assert.deepEqual(execute('weibo',wb,{ads:[1]},'GET',503),{});
+  assert.deepEqual(execute('weibo',wb,{ads:[1]},'GET',401),{});
+});
+test('微博：旧response配置不再依赖上游JSON格式', () => {
+  for(const body of [{code:401,ads:[1]},{error:'ad endpoint error'},[], 'non-json ad response']) {
+    assert.deepEqual(execute('weibo',wb,body),{body:'{}'});
   }
+  assert.deepEqual(execute('weibo',wb,'{}'),{});
+});
+test('微博：request配置直接生成原生空JSON响应，不访问上游', () => {
+  for(const url of [wb,'https://bootpreload.uve.weibo.com/v1/ad/preload?x=1']) {
+    const logs=[];
+    const out=execute('weibo',url,null,'POST',200,logs,true);
+    assert.deepEqual(out,{response:{status:200,headers:{'Content-Type':'application/json'},body:'{}'}});
+    assert.deepEqual(logs,['[JimmyAds][weibo] changed']);
+  }
+  assert.deepEqual(execute('weibo',wb,null,'DELETE',200,[],true),{});
+  const logs=[];
+  assert.deepEqual(execute('weibo','https://api.weibo.cn/2/account/login',null,'POST',200,logs,true),{});
+  assert.deepEqual(logs,[]);
 });
 test('新增三模块：处理幂等，不在每次重载继续改变数据', () => {
   const cases=[['xiaohongshu',xhs,{code:0,data:{ads_groups:[{start_time:1,end_time:2}]}}],['taobao',tb,taobaoPayload()],['weibo',wb,{ads:[1]}]];
@@ -147,14 +204,62 @@ test('新增三模块：处理幂等，不在每次重载继续改变数据', ()
     assert.deepEqual(execute(name,url,out.body),{});
   }
 });
-test('新增三模块：非成功HTTP、超大内容、非GET/POST与缺失环境安全结束', () => {
+test('新增三模块：非成功HTTP、非GET/POST与缺失环境安全结束', () => {
   for(const [name,url,body] of [['xiaohongshu',xhs,{code:0,data:{ads_groups:[{start_time:1}]}}],['taobao',tb,taobaoPayload()],['weibo',wb,{ads:[1]}]]) {
     assert.deepEqual(execute(name,url,body,'GET',503),{});
-    assert.deepEqual(execute(name,url,'x'.repeat(2*1024*1024+1)),{});
+    if(name!=='weibo') assert.deepEqual(execute(name,url,'x'.repeat(2*1024*1024+1)),{});
     assert.deepEqual(execute(name,url,body,'HEAD'),{});
     let count=0;
     vm.runInNewContext(fs.readFileSync(path.join(root,'scripts/ads',name+'.js'),'utf8'),{$done:()=>count++},{timeout:1000});
     assert.equal(count,1);
+  }
+});
+test('淘宝/小红书诊断：固定状态区分处理、空广告、未知结构、非JSON及HTTP错误', () => {
+  const cases=[
+    ['taobao',tb,taobaoPayload(),{data:{containers:{splash_home_base:{base:{sections:[]}}}}}],
+    ['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'ad'}]}},{code:0,data:{ads_groups:[]}}]
+  ];
+  for(const [name,url,body,empty] of cases) {
+    const logs=[];
+    const out=execute(name,url+'?token=EXAMPLE_NOT_A_SECRET',{...body,private:'TEST_BODY_NEVER_LOG'},'GET','200',logs);
+    assert.deepEqual(logs,[`[JimmyAds][${name}] changed`]);
+    logs.length=0;
+    assert.deepEqual(execute(name,url,out.body,'GET',200,logs),{});
+    assert.deepEqual(logs,[`[JimmyAds][${name}] unchanged`]);
+    for(const [payload,status,expected] of [[empty,200,'unchanged'],[{unknown:'TEST_SCHEMA_NEVER_LOG'},200,'unsupported-schema'],['TEST_PARSE_EXCEPTION_NEVER_LOG',200,'unsupported-body'],[body,503,'http-error']]) {
+      logs.length=0;
+      assert.deepEqual(execute(name,url,payload,'GET',status,logs),{});
+      assert.deepEqual(logs,[`[JimmyAds][${name}] ${expected}`]);
+    }
+  }
+});
+test('三模块诊断：未知路径不记录，URL/请求头/响应头/响应体内容不出现在日志', () => {
+  for(const [name,url,body] of [['taobao',tb,taobaoPayload()],['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'TEST_BODY_NEVER_LOG'}]}}],['weibo',wb,'TEST_BODY_NEVER_LOG']]) {
+    const logs=[];
+    execute(name,url+'?token=EXAMPLE_NOT_A_SECRET',{...body,account:'TEST_ACCOUNT_NEVER_LOG'},'GET',200,logs);
+    assert.equal(logs.length,1);
+    assert.doesNotMatch(logs.join('\n'),/TEST_|EXAMPLE_NOT_A_SECRET|https:|Cookie|token|account/);
+    logs.length=0;
+    execute(name,'https://unrelated.example/login?token=EXAMPLE_NOT_A_SECRET',body,'GET',200,logs);
+    assert.deepEqual(logs,[]);
+  }
+  const logs=[];
+  execute('weibo',wb+'?token=EXAMPLE_NOT_A_SECRET',null,'GET',200,logs,true);
+  assert.deepEqual(logs,['[JimmyAds][weibo] changed']);
+});
+test('三模块诊断：日志设施异常不影响完成一次，也不猜测完整HTTP状态行', () => {
+  for(const [name,url,body] of [['taobao',tb,taobaoPayload()],['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'ad'}]}}],['weibo',wb,'non-JSON']]) {
+    const logs=[];
+    assert.deepEqual(execute(name,url,body,'GET','HTTP/1.1 200 OK',logs),{});
+    assert.deepEqual(logs,[`[JimmyAds][${name}] http-error`]);
+    for(const logger of [undefined,{log:()=>{throw new Error('TEST_LOG_EXCEPTION_NEVER_LOG');}}]) {
+      let calls=0,output;
+      vm.runInNewContext(fs.readFileSync(path.join(root,'scripts/ads',name+'.js'),'utf8'),{
+        $request:{url,method:'GET'},$response:{status:200,body:typeof body==='string'?body:JSON.stringify(body)},
+        console:logger,$done:value=>{calls++;output=value;}
+      },{timeout:1000});
+      assert.equal(calls,1);assert.equal(typeof output.body,'string');
+    }
   }
 });
 

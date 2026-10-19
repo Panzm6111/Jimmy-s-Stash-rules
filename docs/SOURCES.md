@@ -1,6 +1,6 @@
 # 来源、许可证与维护
 
-核实日期 2026-10-18。未运行第三方签到代码；已读取的文件、完整 Git SHA、内容 SHA256 与仓库最新提交时间分别见 [projects.json](../research/projects.json) 和 [sources.lock.json](../research/sources.lock.json)。仓库有新提交不证明每个旧脚本仍然有效。
+核实日期 2026-10-19。未运行第三方签到代码；已读取的文件、完整 Git SHA、内容 SHA256 与仓库最新提交时间分别见 [projects.json](../research/projects.json) 和 [sources.lock.json](../research/sources.lock.json)。仓库有新提交不证明每个旧脚本仍然有效。
 
 ## 实际复用内容
 
@@ -61,8 +61,22 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 
 本轮读取主要三个复用仓库HEAD均与锁定SHA相同。上游审计按URL去重，27个不同公开文件全部HTTP 200且哈希匹配；该结果与GitHub仓库活跃程度都不等于App当前广告实测有效。
 
-原QX `reject-dict`、`reject-img`、`reject-200` 没有按同名字段套进Stash。本项目部分端点选择原生 `http.rewrite: 正则 - reject`；**拒绝的状态码/返回体与源动作不保证等价**，可能空白、等待或接口已改，必须逐款设备验收。只读来源，不请求真实业务接口，不保存账号响应。
+原QX动作名没有套进Stash。2026-10-19修订：16条`reject-dict/reject-200`用原生request脚本返回200与`{}`或空正文；微博另外2条也改为请求式。原14条reject保留；联通2条reject-img仍为普通reject，未实现等价图片响应。所有动作仍需设备验收，不能承诺去除空白或倒计时。只读来源，不请求真实业务接口，不保存账号响应。
 
-本地下载包只改变承载方式：规则集展开为相同优先级的普通规则，11份独立脚本原文放入各自`script-providers.content`，不是拼成一个混合程序。content字段参考已有历史原生Stash示例，旧例注明仅推荐开发使用且不再维护；不视作当前官方版本证明。ZIP保留独立资源许可及完整可读源码，未复制该无许可示例的脚本或整份配置；实际手机兼容性待验收。
+本地下载包只改变承载方式：规则集展开为相同优先级的普通规则，12份独立脚本原文放入各自`script-providers.content`，不是拼成一个混合程序。content字段参考已有历史原生Stash示例，旧例注明仅推荐开发使用且不再维护；不视作当前官方版本证明。ZIP保留独立资源许可及完整可读源码，未复制该无许可示例的脚本或整份配置；实际手机兼容性待验收。
 
 本轮生成的覆写按条目标记GPL-3.0-only或GPL-2.0，人工审核目录的源数据也按条目保留归属。原有MIT原创代码、GPL-2.0规则和独立GPL-3.0文件各自保留许可证，不能用根LICENSE覆盖。所有第三方代码的修改后的可读源码均与本项目一起提供；无混淆运行文件、未知外联、Cookie捕获或签到任务。
+
+## 广告失效复审与原生请求响应证据（2026-10-19）
+
+fmz200、app2smile、NobyDa的远程HEAD仍与现有固定SHA相同，本轮主要修正本地适配与覆盖，不声称上游发布了新的有效接口。淘宝源`myBlockAds.js`85–115行及小红书源`xiaohongshu.js`52–65行直接设置已识别广告条目的控制字段；旧本地实现要求字段已存在，现已补齐缺省字段并保留已知标量类型。
+
+新增`empty-response.js`由已审核目录的16个路径生成，沿用fmz200 GPL-3.0-only端点来源。请求脚本用`$done({response:{status:200,headers,body}})`，**不是将QX rewrite动作名写进Stash**。原生调用链证据：
+
+- [NobyDa原生Stash模块](https://github.com/NobyDa/Script/blob/0b8d083d444f4476700cb9d5d059c07b42da85eb/Stash/IPA-Installer.stoverride)声明`type: request`。
+- [对应JS](https://github.com/NobyDa/Script/blob/0b8d083d444f4476700cb9d5d059c07b42da85eb/IPA-Installer/IPA-Installer.js)第70行构造response对象，第143–146行只对QX展开、Stash保留外层。仅阅读调用方式，**不复制或执行安装器功能**。源内容哈希录入锁文件。
+- 另读BoxJs原生Stash模块及其非QX响应分支作交叉核对，未引入BoxJs功能。当前官方站仍受网络限制，原生示例不等于已核实最新官方文档或最低版本。
+
+基础38条从相同固定版本`AdvertisingLite_Classical.yaml`人工选取，刷新工具用精确集合成员验证；不再标成来自Domain文件。包含17条补漏，未自动启用完整追踪包。诊断只输出固定状态，不记录请求或响应数据。
+
+仍未解决：联通图片返回语义、B站protobuf、源规则中HTTP/非443路径的完整覆盖，以及全部当前App的设备命中/效果。缓存目录中的`Muldec/stash-wiki`实际是另一个媒体库项目，明确排除，不作为iPhone Stash证据。

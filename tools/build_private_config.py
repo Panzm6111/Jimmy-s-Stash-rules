@@ -117,7 +117,8 @@ def verify(config, template, expected_nodes):
     scripts = config.get('script-providers', {})
     for item in config.get('http', {}).get('script', []):
         require(item['name'] in scripts, 'HTTP 引用缺失的脚本。')
-        require(item['type'] == 'response' and item['timeout'] <= 10, '脚本处理或超时异常。')
+        require(item['type'] in {'request', 'response'} and item['timeout'] <= 10, '脚本处理或超时异常。')
+        require(item['require-body'] is (item['type'] == 'response'), '脚本正文读取方式异常。')
     for provider in scripts.values():
         require(set(provider) == {'url', 'interval'}, '脚本声明格式异常。')
         require(provider['url'].startswith(RAW), '存在外部脚本。')
@@ -206,7 +207,7 @@ def render(config):
             '# 地区节点自动故障切换；其他地区为五地区以外的全部候选。\n'
             '# 不含机场旧DNS/分流/控制端口；连接字段原样保留，重名节点仅加显示前缀。\n'
             '# 本地节点和内嵌规则不会自动跟随机场/公共配置更新，需要重新合成。\n'
-            '# 11份广告脚本由Stash从本项目下载；开屏专项仍需设备自建证书。\n'
+            '# 12份广告脚本由Stash从本项目下载；开屏专项仍需设备自建证书。\n'
             '# 原生解析、Reality/Vision支持、连接、解锁和广告效果仍须手机测试。\n'
             '# 来源与许可证：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
             + dump(config))

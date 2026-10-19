@@ -3,7 +3,7 @@
 # License: licenses/blackmatrix7-GPL-2.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 美团广告专项（可选）
-desc: 仅外卖 loadInfo.startpicture.ad/mk 广告数组；保留其他启动数据与券。默认不导入；需设备验收。
+desc: 仅美团外卖 wmapi 的 loadInfo.startpicture.ad/mk；不代表美团主App开屏。默认不导入；需设备验收。
 script-providers:
   jimmy_meituan_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js

@@ -3,7 +3,7 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 中国移动广告专项（可选）
-desc: 仅 explorePage/getAdverList；保留 startInit、账号、缴费和权益。默认不导入；需设备验收。
+desc: 仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。默认不导入；需设备验收。
 http:
   mitm:
   - client.app.coc.10086.cn

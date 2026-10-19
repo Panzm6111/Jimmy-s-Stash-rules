@@ -3,7 +3,7 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 菜鸟广告专项（可选）
-desc: 仅 ads.show 返回中带明确 adItemDetail 的广告项；保留积分/券/消息/包裹。默认不导入；需设备验收。
+desc: 仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。默认不导入；需设备验收。
 script-providers:
   jimmy_cainiao_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js

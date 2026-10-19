@@ -79,7 +79,7 @@ def documents():
     combined['http']['mitm'] = list(dict.fromkeys(combined['http']['mitm']))
     enhanced = {'name': 'Jimmy 广告增强（本地整合）',
                 'desc': '40款专项一次导入；需设备自建CA。不解密银行支付。异常先关闭本覆写；逐款开关可改用包内单App覆写。', **combined}
-    files[ADS] = ('# 由原40个独立模块组装，内嵌11份独立JS资源；不下载远程脚本。\n'
+    files[ADS] = ('# 由原40个独立模块组装，内嵌12份独立JS资源；不下载远程脚本。\n'
                   '# 不与“按App单独开关”中的同款重复启用；各独立资源按原许可分发。\n' + dump(enhanced))
     expanded = flatten(merged('modules/ads/expanded.stoverride'))
     files[EXPANDED] = ('# 可选；完整规则顺序含局域网/系统例外，不能只把38,066条前插。\n'
@@ -105,9 +105,9 @@ def verify(files):
             source_by_name[name] = (ROOT / provider['url'][len(RAW):]).read_text()
     for name, script in enhanced['script-providers'].items():
         assert script == {'content': source_by_name[name]}, 'inline script changed'
-    assert len(source_by_name) == 11
-    assert len(enhanced['http']['script']) == 12
-    assert len(enhanced['http']['rewrite']) == 32
+    assert len(source_by_name) == 12
+    assert len(enhanced['http']['script']) == 28
+    assert len(enhanced['http']['rewrite']) == 16
     assert len(enhanced['http']['mitm']) == len(set(enhanced['http']['mitm'])) == 41
     for config in configs.values():
         assert not config.get('rule-providers')
@@ -129,7 +129,7 @@ def verify(files):
             assert route(original, *args) == route(local, *args), 'flattened route changed'
     return {'main_rules': len(main['rules']), 'expanded_rules': len(expanded['rules']),
             'per_app_overrides': len(addon_paths), 'inline_scripts': len(source_by_name),
-            'script_handlers': 12, 'rewrite_rules': 32, 'mitm_unique': 41,
+            'script_handlers': 28, 'rewrite_rules': 16, 'mitm_unique': 41,
             'route_comparisons': len(fixtures) * len(scenarios)}
 
 def public_sources():

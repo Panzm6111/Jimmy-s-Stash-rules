@@ -3,7 +3,7 @@
 # License: licenses/NobyDa-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 微信广告专项（可选）
-desc: 仅公众号 getappmsgad 的广告数组/数量；不改朋友圈、视频号、好友聊天或安全链接。默认不导入；需设备验收。
+desc: 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。默认不导入；需设备验收。
 script-providers:
   jimmy_wechat_articles_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js

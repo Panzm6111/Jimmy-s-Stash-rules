@@ -60,7 +60,7 @@ def render():
             '4. 重启目标App，分别检查广告和登录/支付/消息/播放/普通领券；原有缓存不会被脚本删除。广告无效、空白等待或业务异常就关闭该覆写并重建连接。',
             '5. “广告拦截→DIRECT”只放行域名规则。要停止HTTP重写或响应脚本，必须关闭对应覆写；域名白名单不能停止它们。关闭域名专项后若扩展包仍含同一主机，也会继续被扩展包阻断。', '',
             f'## 本次新增{len(catalog["modules"])}款', '',
-            'HTTP重写使用Stash原生 `http.rewrite` 的 `正则 - reject`，取自锁定的原生Stash参考。来源中的QX `reject-dict/reject-img/reject-200` **没有被直接导入，也不声称与reject等价**；返回形态、等待、错误提示均需逐款验收。不自动伪造成功业务响应。响应脚本则仅在已知结构上作窄化修改，异常放行。', '',
+            '2026-10-19修订：16条原本要求空JSON/空200的端点改用Stash请求脚本，分别返回200与`{}`或空正文；微博另有2条。仅匹配来源已明确的广告路径，不伪造订单/权益等业务成功。原生普通拒绝保留14条；联通2条来源为reject-img，仍用普通拒绝，图片返回语义未实现，不声称等价。响应修改脚本仍只改已知结构，异常放行。', '',
             '| App | 仅处理的范围 | 需MITM / 精确主机 | 远程覆写地址 |', '|---|---|---|---|']
     for item in catalog['modules']:
         host_text = '是：' + '、'.join(f'`{h}`' for h in item['mitm']) if item['mitm'] else '否；仅独立广告域名'
@@ -68,7 +68,7 @@ def render():
     out2 += ['', '既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[扩展域名包](../modules/ads/expanded.stoverride)不需证书，替换基础广告provider而不叠加整包。', '',
              '## 与原通用包是否重叠', '',
              '以下按**目标主机**实际匹配现有基本域名/关键词规则；不推断该App全部流量，IP规则没有在此推演。通用包已命中时，专项可能只是提供较小范围/独立入口，并不额外增加一次拦截。基础和扩展二选一；同一请求按首条规则处理。', '',
-             '| App | 目标主机 | 基础21条 | 扩展38,066条 |', '|---|---|---|---|']
+             '| App | 目标主机 | 基础规则 | 扩展规则 |', '|---|---|---|---|']
     from validate import matches
     basic = yaml.safe_load((ROOT / 'rules/ads-basic.yaml').read_text())['payload']
     expanded = yaml.safe_load((ROOT / 'rules/vendor/ads-expanded.yaml').read_text())['payload']
@@ -80,7 +80,7 @@ def render():
             out2.append(f'| {item["app"]} | `{host}` | '+('有命中' if a else '未命中')+' | '+('有命中：`'+b[0]+'`' if b else '未命中')+' |')
     out2 += ['', '这张表也解释了为什么通用包不能代替所有App专项：共享业务网关若整域拦截会伤到正常功能，而路径处理只选广告端点。反过来，已被扩展包阻断的独立广告域名不必再叠加同一作用模块。', '',
              '## 合并、优先级与验收', '',
-             f'如果仅为检查而把全部模块合并，预期有 **{scripts}条响应handler、{rewrites}条HTTP拒绝重写、{len(hosts)}个去重后的精确MITM主机**。这不是建议全部启用；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。当前官方数组合并语义仍待复核，必须确认没有只保留最后一款。', '',
+             f'基础{len(basic)}条、扩展{len(expanded):,}条。全部模块合并预期有 **{scripts}条脚本handler（18请求/10响应）、{rewrites}条HTTP拒绝重写、{len(hosts)}个去重后的精确MITM主机**。这些计数不代表实测有效；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。当前官方数组合并语义仍待复核，必须确认没有只保留最后一款。', '',
              '离线验证覆盖每个单模块、全部模块的正序/反序、每个有序模块对和所有端点的正反例；检查没有跨App业务URL误匹配。它不能证明HTTP/3、证书固定、私有协议、原生合并或当前App版本可用。', '',
              '模块内部规则已去重；跨模块共享MITM域名是独立启停带来的重复声明，不重复运行同一路径handler。不要安装另一整包重写与这些端点竞争；未知第三方模块优先级不在项目验证范围。', '',
              '## 更新和维护', '',

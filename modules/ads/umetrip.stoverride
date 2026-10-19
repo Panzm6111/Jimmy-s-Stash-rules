@@ -3,7 +3,7 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 航旅纵横广告专项（可选）
-desc: 仅 fs/advert/polite 广告素材；未改原生 gateway 或航班业务。默认不导入；需设备验收。
+desc: 仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。默认不导入；需设备验收。
 http:
   mitm:
   - oss.umetrip.com

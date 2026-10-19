@@ -1,8 +1,8 @@
 {
   "checked_at": "2026-10-19",
-  "purpose": "图片135款App调查对应的人工审核专项；不代表实机效果。",
+  "purpose": "图片135款App调查对应的人工审核候选专项；用户反馈整体去广告效果不足，尚无逐款设备命中证据，不能按模块数量宣称有效覆盖。",
   "native_rewrite_reference": "bm-native",
-  "rewrite_adaptation": "其他客户端 reject/reject-200/reject-img/reject-dict 均不直接导入。专项选用 Stash 原生 http.rewrite 的 reject；不保证与原HTTP状态/空JSON语义等价，可能空白或等待，需逐款验收。",
+  "rewrite_adaptation": "不导入其他客户端动作名。16条reject-dict/reject-200由Stash原生request脚本返回200与空JSON/空正文；14条来源reject保持普通拒绝。联通2条来源reject-img仍普通拒绝，未实现等价图片响应。仅广告专用路径，真实效果待设备验收。",
   "sources": {
     "fmz-rewrite": {
       "repository": "fmz200/wool_scripts",
@@ -141,10 +141,6 @@
         {
           "line": 871,
           "text": "^https?:\\/\\/pan\\.baidu\\.com\\/rest\\/2\\.0\\/pcs\\/ad url reject"
-        },
-        {
-          "line": 876,
-          "text": "^https?:\\/\\/pan\\.baidu\\.com\\/api\\/useractivity\\/activity url reject"
         }
       ]
     },
@@ -277,7 +273,7 @@
       "id": "umetrip",
       "app": "航旅纵横",
       "file": "modules/ads/umetrip.stoverride",
-      "scope": "仅 fs/advert/polite 广告素材；未改原生 gateway 或航班业务",
+      "scope": "仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -296,7 +292,7 @@
       ],
       "domains": [],
       "script": null,
-      "notes": "上游 gateway 脚本依赖请求头且规则/运行类型可疑，未采用；不承诺全部开屏。",
+      "notes": "素材请求失败仍可能出现缓存、空白或倒计时。上游 gateway 脚本依赖请求头且规则/运行类型有疑点，未采用；不能据此承诺航旅纵横完整开屏去除。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -343,7 +339,7 @@
       "id": "kfc",
       "app": "肯德基",
       "file": "modules/ads/kfc.stoverride",
-      "scope": "仅 advertisement 路径素材；保留 apphome 配置、菜单和优惠券",
+      "scope": "仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -362,7 +358,7 @@
       ],
       "domains": [],
       "script": null,
-      "notes": "修正上游域名拼写；不拦整个 apphome5/6，因可能混有正常活动。仅有素材级证据，不承诺全开屏。",
+      "notes": "修正上游域名拼写；不拦整个 apphome5/6，因为可能混有正常活动。素材拒绝不等于取消展示，仍可能等待、读缓存或出现空白；当前完整开屏没有已验证方案。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -652,7 +648,7 @@
       "id": "netease-music",
       "app": "网易云音乐",
       "file": "modules/ads/netease-music.stoverride",
-      "scope": "仅 api/ad 或 eapi/ad 广告子路径；保留歌曲、评论、云贝、会员真实状态",
+      "scope": "仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -694,7 +690,7 @@
       ],
       "domains": [],
       "script": null,
-      "notes": "只列3个常见精确主机，不使用通配MITM；仅拒绝广告路径，不解码EAPI正文。App是否使用这些端点及是否接受拒绝需实机确认，不承诺全部开屏。",
+      "notes": "上游匹配 interface 加可选数字，本模块只列 interface、interface3、ipv4，其他编号主机不在范围。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -810,7 +806,7 @@
       "id": "wps",
       "app": "WPS Office",
       "file": "modules/ads/wps.stoverride",
-      "scope": "广告统计及 feeds_ad 图片；不改会员、文档、云同步",
+      "scope": "仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -838,7 +834,7 @@
       ],
       "domains": [],
       "script": null,
-      "notes": "统计拦截本身不能证明界面广告已消失。",
+      "notes": "ad-statistics-service 拦截主要影响统计，不能证明界面广告消失；素材拒绝仍可能留下空白或等待。不处理会员、文档和云同步，当前覆盖不等于 WPS 整体去广告。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -890,7 +886,7 @@
       "id": "cmcc",
       "app": "中国移动",
       "file": "modules/ads/cmcc.stoverride",
-      "scope": "仅 explorePage/getAdverList；保留 startInit、账号、缴费和权益",
+      "scope": "仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -910,7 +906,7 @@
       ],
       "domains": [],
       "script": null,
-      "notes": "上游 startInit 属通用启动接口，未整体阻断；不承诺全部开屏。",
+      "notes": "上游 startInit 是混合业务启动接口，不能整体阻断来换取开屏消失；本模块只保留窄广告端点，不包含全部开屏，不碰账号、缴费与权益。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -970,7 +966,7 @@
       "id": "eastmoney",
       "app": "东方财富",
       "file": "modules/ads/eastmoney.stoverride",
-      "scope": "仅 emdcadvertise 广告主机；不解密行情、交易或登录",
+      "scope": "仅 emdcadvertise 独立广告主机；不代表行情页面全部推广",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [],
@@ -979,7 +975,7 @@
         "emdcadvertise.eastmoney.com"
       ],
       "script": null,
-      "notes": "",
+      "notes": "独立广告请求可按域名拦截；没有当前App请求与开屏效果的设备证据，不解密行情、交易或登录。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -997,7 +993,7 @@
       "id": "ctrip",
       "app": "携程旅行",
       "file": "modules/ads/ctrip.stoverride",
-      "scope": "仅 ma-adx 广告主机；不解密预订或支付，不拦易误杀图片的 tripAds",
+      "scope": "仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [],
@@ -1006,7 +1002,7 @@
         "ma-adx.ctrip.com"
       ],
       "script": null,
-      "notes": "只从上游广告端点收窄为该专用广告域名；主站不解密。",
+      "notes": "上游证据仅 _ma.gif 端点，拦截可能主要减少统计，不能据此判断可见广告消失；将路径扩为主机需设备排除误杀。未采用 tripAds，因为上游明确警告8.47.0以上版本部分图片可能无法加载；不解密预订或支付。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1028,7 +1024,7 @@
       "id": "railway12306",
       "app": "铁路12306",
       "file": "modules/ads/railway12306.stoverride",
-      "scope": "仅 ad.12306.cn 广告主机；不解密车票、身份信息或支付",
+      "scope": "仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [],
@@ -1037,7 +1033,7 @@
         "ad.12306.cn"
       ],
       "script": null,
-      "notes": "只使用端点的公开域名事实，未复制外链12306脚本。",
+      "notes": "只使用公开广告端点的主机事实，未复制外链脚本，不解密车票、身份信息或支付。广告请求被阻断后客户端是否读缓存或等待仍需设备确认。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1055,7 +1051,7 @@
       "id": "unionpay",
       "app": "云闪付",
       "file": "modules/ads/unionpay.stoverride",
-      "scope": "仅 ads.95516.com 和 ads.cup.com.cn；不屏蔽推送/安全SDK，不解密支付",
+      "scope": "仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [],
@@ -1065,7 +1061,7 @@
         "ads.cup.com.cn"
       ],
       "script": null,
-      "notes": "扩展包已有重叠；本模块可在基础包下单独启用。",
+      "notes": "两个独立广告主机与扩展包重叠；基础模式可单独启用。保留推送和安全SDK，不解密支付；缓存和其他同域业务推广不在已知覆盖范围。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1083,7 +1079,7 @@
       "id": "uc",
       "app": "UC浏览器",
       "file": "modules/ads/uc.stoverride",
-      "scope": "仅 ads.uc.cn、adslot.uc.cn；保留反诈、安全、语音和网页正文",
+      "scope": "仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [],
@@ -1093,7 +1089,7 @@
         "adslot.uc.cn"
       ],
       "script": null,
-      "notes": "",
+      "notes": "只拦独立广告请求，不提供网页元素隐藏，也不能清除与正文同域的广告；保留反诈、安全、语音和网页正文。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1111,7 +1107,7 @@
       "id": "jingdong-finance",
       "app": "京东金融",
       "file": "modules/ads/jingdong-finance.stoverride",
-      "scope": "仅 bdsp-x/dsp-x 独立广告主机；不解密金融或支付",
+      "scope": "仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [],
@@ -1121,7 +1117,7 @@
         "dsp-x.jd.com"
       ],
       "script": null,
-      "notes": "从上游独立广告ADX端点提取主机，不照搬金融网关、普通图片或邮箱规则；域名级仍需设备排除误杀。",
+      "notes": "上游证据只匹配这两个主机的 /adx/ 路径，本模块提升为整主机拦截，范围更大且需要排除误杀。不解密金融、登录或支付，不屏蔽普通图片或邮箱。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1135,7 +1131,7 @@
       "id": "zhihu",
       "app": "知乎",
       "file": "modules/ads/zhihu.stoverride",
-      "scope": "仅独立开屏、顶部横幅和 ad-style-service；保留回答、搜索和普通推荐",
+      "scope": "仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -1163,7 +1159,7 @@
       ],
       "domains": [],
       "script": null,
-      "notes": "",
+      "notes": "上游其他脚本还处理回答与推荐流，但未整体引入。本模块只匹配明确广告端点，不把有限路径等同于知乎全界面去广告；普通回答、搜索与推荐保留。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1181,7 +1177,7 @@
       "id": "alipan",
       "app": "阿里云盘",
       "file": "modules/ads/alipan.stoverride",
-      "scope": "仅 onboard_list 的4种推广banner；保留备份、更新、签到/权益入口",
+      "scope": "仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告",
       "license": "GPL-3.0-only",
       "source": "adrive",
       "mitm": [
@@ -1199,7 +1195,7 @@
           "https://member.alipan.com/v2/activity/sign_in_luckyBottle"
         ]
       },
-      "notes": "不删除备份列表、功能入口、新闻或签入口。",
+      "notes": "这是推广横幅处理，不是完整开屏控制；保留备份、功能入口、新闻、签到和权益。不应把四种横幅候选扩大成整App有效覆盖。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1229,7 +1225,7 @@
       "id": "cainiao",
       "app": "菜鸟",
       "file": "modules/ads/cainiao.stoverride",
-      "scope": "仅 ads.show 返回中带明确 adItemDetail 的广告项；保留积分/券/消息/包裹",
+      "scope": "仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化",
       "license": "GPL-3.0-only",
       "source": "cainiao",
       "mitm": [
@@ -1247,7 +1243,7 @@
           "https://cn-acs.m.cainiao.com/gw/mtop.nbfriend.message.conversation.list.cn/1.0/"
         ]
       },
-      "notes": "不采用上游删除领券、裹酱积分、寄件和消息等净化逻辑。",
+      "notes": "上游同时处理 ads.show 与 mshow，且删除部分券、裹酱积分、寄件和消息入口；本模块不采用这些业务删改，不能据此称菜鸟全广告已覆盖。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1265,7 +1261,7 @@
       "id": "jingdong",
       "app": "京东",
       "file": "modules/ads/jingdong.stoverride",
-      "scope": "仅 functionId=start 中展示次数/时长字段；保留订单/商品/京豆/优惠",
+      "scope": "仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告",
       "license": "GPL-2.0",
       "source": "bm-startup",
       "mitm": [
@@ -1283,17 +1279,41 @@
           "https://api.m.jd.com/client.action?functionId=myOrderInfo"
         ]
       },
-      "notes": "不拦整个 client.action；仅支持 functionId 在URL的情况，POST正文中的参数不捕获。",
+      "notes": "已核对源码实际 images/showTimes/showTimesDaily 分支；原证据摘录曾错误指向其他App，现已更正。POST正文中的 functionId 不捕获；未知结构放行，不拦整个 client.action，也不处理订单、京豆和券。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
         {
-          "line": 144,
-          "text": "        break;"
+          "line": 111,
+          "text": "      // 京东"
         },
         {
-          "line": 167,
-          "text": "                  \"banner_id\": \"1861064161258799417\","
+          "line": 112,
+          "text": "      case /^https?:\\/\\/api\\.m\\.jd\\.com\\/client\\.action\\?functionId=start/.test($.request.url):"
+        },
+        {
+          "line": 115,
+          "text": "          for (let i = 0; i < obj.images.length; i++) {"
+        },
+        {
+          "line": 116,
+          "text": "            for (let j = 0; j < obj.images[i].length; j++) {"
+        },
+        {
+          "line": 117,
+          "text": "              if (obj.images[i][j].showTimes) {"
+        },
+        {
+          "line": 118,
+          "text": "                obj.images[i][j].showTimes = 0;"
+        },
+        {
+          "line": 121,
+          "text": "                obj.images[i][j].time = 0;"
+        },
+        {
+          "line": 126,
+          "text": "          obj.showTimesDaily = 0;"
         }
       ]
     },
@@ -1301,7 +1321,7 @@
       "id": "meituan",
       "app": "美团",
       "file": "modules/ads/meituan.stoverride",
-      "scope": "仅外卖 loadInfo.startpicture.ad/mk 广告数组；保留其他启动数据与券",
+      "scope": "仅美团外卖 wmapi 的 loadInfo.startpicture.ad/mk；不代表美团主App开屏",
       "license": "GPL-2.0",
       "source": "bm-startup",
       "mitm": [
@@ -1319,17 +1339,33 @@
           "https://wmapi.meituan.com/api/v7/coupon/list"
         ]
       },
-      "notes": "美团主体与外卖频道是否经过该接口需实机确认；不据此外推全部美团广告。",
+      "notes": "源码分支明确是美团外卖，不能把它标成美团主App全部广告支持。当前主App/外卖频道是否仍使用该端点未知；保留其他启动数据和领券。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
         {
-          "line": 104,
-          "text": "          }"
+          "line": 76,
+          "text": "      // 美团外卖"
         },
         {
-          "line": 120,
-          "text": "                obj.images[i][j].referralsTime = \"2030-12-25 00:00:00\";"
+          "line": 77,
+          "text": "      case /^https?:\\/\\/wmapi\\.meituan\\.com\\/api\\/v\\d+\\/loadInfo?/.test($.request.url):"
+        },
+        {
+          "line": 80,
+          "text": "          if (obj.data.startpicture.hasOwnProperty(\"ad\")) {"
+        },
+        {
+          "line": 81,
+          "text": "            obj.data.startpicture.ad = [];"
+        },
+        {
+          "line": 82,
+          "text": "          } else if (obj.data.startpicture.hasOwnProperty(\"mk\")) {"
+        },
+        {
+          "line": 83,
+          "text": "            obj.data.startpicture.mk = [];"
         }
       ]
     },
@@ -1369,7 +1405,7 @@
       "id": "wechat-articles",
       "app": "微信",
       "file": "modules/ads/wechat-articles.stoverride",
-      "scope": "仅公众号 getappmsgad 的广告数组/数量；不改朋友圈、视频号、好友聊天或安全链接",
+      "scope": "仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天",
       "license": "GPL-3.0-only",
       "source": "nobyda-wechat",
       "mitm": [
@@ -1388,7 +1424,7 @@
           "https://mp.weixin.qq.com/mp/cps_product_info?action=1"
         ]
       },
-      "notes": "保留原 appid 和其他文章字段；旧端点是否仍使用需实机确认。",
+      "notes": "公开源仍保留这个历史端点，但没有当前微信版本调用证据；只能作为公众号候选，不称微信整体去广告。保留原 appid 与其他文章字段。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1406,5 +1442,6 @@
         }
       ]
     }
-  ]
+  ],
+  "coverage_evidence": "静态核对仅证明源文件、规则和处理逻辑存在。接口是否仍被当前iOS App调用、MITM是否实际接管、缓存广告是否继续展示、正常功能是否受影响，均需设备观察；尚未确认某一款已有效。"
 }

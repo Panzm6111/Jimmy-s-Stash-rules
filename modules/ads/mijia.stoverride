@@ -4,8 +4,16 @@
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 米家广告专项（可选）
 desc: 仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。默认不导入；需设备验收。
+script-providers:
+  jimmy_ad_empty_response:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
+    interval: 86400
 http:
   mitm:
   - home.mi.com
-  rewrite:
-  - ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$) - reject
+  script:
+  - match: ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5

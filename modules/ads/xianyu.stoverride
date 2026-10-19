@@ -4,8 +4,16 @@
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 闲鱼广告专项（可选）
 desc: 仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。默认不导入；需设备验收。
+script-providers:
+  jimmy_ad_empty_response:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
+    interval: 86400
 http:
   mitm:
   - acs.m.goofish.com
-  rewrite:
-  - ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject
+  script:
+  - match: ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5

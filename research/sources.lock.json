@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-18",
+  "checked_at": "2026-10-19",
   "repository": "Panzm6111/Jimmy-s-Stash-rules",
   "branch": "main",
   "upstream": {
@@ -69,12 +69,12 @@
       "omitted": []
     },
     {
-      "source_path": "rule/Clash/AdvertisingLite/AdvertisingLite_Domain.yaml",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Domain.yaml",
-      "source_sha256": "a14191c99336e91daf0b8ddb156dfa070c1fea9972c1581ab8cde0b93f28d2b5",
+      "source_path": "rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "source_sha256": "f1273a862ad8ca3f930ba5286a935cb78e710ff4184055431b49c957b4379c02",
       "output": "rules/ads-basic.yaml",
-      "output_sha256": "ec16b786976b1c532d25a647773177994e0f4e6282c5468c6facd7edad8bad63",
-      "retained": 21,
+      "output_sha256": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
+      "retained": 38,
       "selection": [
         "DOMAIN-SUFFIX,pangle.io",
         "DOMAIN-SUFFIX,pangolin.snssdk.com",
@@ -96,8 +96,26 @@
         "DOMAIN-SUFFIX,admob.com",
         "DOMAIN-SUFFIX,adsrvr.org",
         "DOMAIN-SUFFIX,adnxs.com",
-        "DOMAIN-SUFFIX,adkwai.com"
-      ]
+        "DOMAIN-SUFFIX,adkwai.com",
+        "DOMAIN-KEYWORD,pangolin-sdk-toutiao",
+        "DOMAIN-KEYWORD,pglstatp-toutiao",
+        "DOMAIN-KEYWORD,mobads.baidu.com",
+        "DOMAIN,v2.gdt.qq.com",
+        "DOMAIN,vr.gdt.qq.com",
+        "DOMAIN,xs.gdt.qq.com",
+        "DOMAIN,adsmind.gdtimg.com",
+        "DOMAIN,qzs.gdtimg.com",
+        "DOMAIN-SUFFIX,canvas.gdt.qq.com",
+        "DOMAIN-SUFFIX,pgdt.gtimg.cn",
+        "DOMAIN-SUFFIX,pgdt.gtimg.com",
+        "DOMAIN-SUFFIX,q.i.gdt.qq.com",
+        "DOMAIN-SUFFIX,rm.gdt.qq.com",
+        "DOMAIN-SUFFIX,ugdtimg.com",
+        "DOMAIN-SUFFIX,unityads.unity3d.com",
+        "DOMAIN,unityads.unitychina.cn",
+        "DOMAIN,config.unityads.unitychina.cn"
+      ],
+      "review_notes": "2026-10-19: 21→38; add reviewed SDK domains/keywords from identical pinned Classical source, not full analytics list. No umeng keyword or business-gateway block."
     }
   ],
   "ad_scripts": [
@@ -130,7 +148,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/xiaohongshu/xiaohongshu.js",
       "source_sha256": "318d89bce1117edb26a93b383804e195649ec4674a04efa9e3ddb4ef7f34b498",
       "output": "scripts/ads/xiaohongshu.js",
-      "output_sha256": "910284782c20849a0270dca62434a09d585095048eb912eac768b140b969b1d3",
+      "output_sha256": "0da66fb2483bce7aad7c17ef06db80fc102380ba2e192c93416976bbdb103e6a",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -143,7 +161,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/myBlockAds.js",
       "source_sha256": "4cf62100424886068a5470daecec319e93ccd034c647d79a9daaa72bbbc341bb",
       "output": "scripts/ads/taobao.js",
-      "output_sha256": "d61896e2549e53453d6a35c09345c3b02bc7da039e54baabe5e9ba1122ec39ae",
+      "output_sha256": "134eab65f7443a19f5a4b401fe7784443d4b21cea6b31a18e06527b342a7f19d",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -156,11 +174,11 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/weibo.snippet",
       "source_sha256": "c8b47d5f2e990f065d98cac2d70d5866c97443d23d96a8393607b13a464e9b29",
       "output": "scripts/ads/weibo.js",
-      "output_sha256": "c4572d960ada2d0dcaef59bdc2acf78c97d293c74a14ac45f1ec8a0826ef7264",
+      "output_sha256": "33f30a06cc01171d444fc89204578004d979a6da61a01f6cd8343afcddf62cb1",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
-      "adaptation": "原来源为其他客户端的响应处理/端点规则；仅提取明确开屏范围，重新制作 Stash 原生覆写和本地响应处理，不使用外部转换站。"
+      "adaptation": "Two dedicated splash endpoints; native request empty JSON; compatible with older response handlers. Fixed non-sensitive diagnostic only."
     },
     {
       "repository": "fmz200/wool_scripts",
@@ -239,6 +257,17 @@
       "license_file": "licenses/NobyDa-GPL-3.0.txt",
       "native_reference": null,
       "adaptation": "仅公众号 getappmsgad 的广告数组/数量；不改朋友圈、视频号、好友聊天或安全链接"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "source_path": "QuantumultX/rewrite/rewrite.snippet",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
+      "source_sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d",
+      "output": "scripts/ads/empty-response.js",
+      "license": "GPL-3.0-only",
+      "adaptation": "16 dedicated ad paths; native Stash request synthetic empty JSON/200; no response inspection, credentials or outbound requests. Generated from reviewed ad-catalog.json.",
+      "output_sha256": "6983e6662f453a51b54acd4da429639e63affdbf43a7b9c21349c4674fd9a3be"
     }
   ],
   "ad_supporting_sources": [
@@ -321,6 +350,16 @@
       "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/LICENSE",
       "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
       "purpose": "公众号广告来源GPL-3.0许可"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/Stash/IPA-Installer.stoverride",
+      "sha256": "e2d7591df2182c80cd8f9cfc73a832ce62f9bc2b1cd33b4b2743af7d1ee2c90f",
+      "purpose": "Read-only native Stash request-handler response-envelope evidence; no IPA installer code included or executed."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/IPA-Installer/IPA-Installer.js",
+      "sha256": "c7b2887cafcbe563f022488e04a7fafed9160465fc939f5d0cfa048232216499",
+      "purpose": "Read-only native Stash request-handler response-envelope evidence; no IPA installer code included or executed."
     }
   ],
   "ad_catalog_checked_at": "2026-10-19"

@@ -2,9 +2,9 @@
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # 私人机场URL请放在设备本地覆写，不在GitHub填写，不拼接到此公开地址。
 # 识别标记：JIMMY-STASH；18组，含全部节点/其他地区；无Google或NCloud组。
-# 内含分流、基础域名广告及40款专项；11份脚本由Stash按本仓库URL下载。
+# 内含分流、38条基础域名广告及40款候选专项；12份脚本由Stash按本仓库URL下载。
 # HTTP/MITM和CA需在设备设置；DNS为DoH，不使用dot.pub或fallback DNS。
-# 全部专项：12个响应handler、32条拒绝重写、41个精确MITM主机。
+# 广告修订2026-10-19：18个请求handler、10个响应handler、16条拒绝重写、41个精确MITM主机。
 # 广告组DIRECT只放行域名规则；HTTP处理须用Stash对应开关停用。
 # 源码与独立许可：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md
 # 各脚本独立执行、保持原许可；无凭据、无证书私钥、无签到任务。
@@ -320,6 +320,23 @@ rules:
 - DOMAIN-SUFFIX,adsrvr.org,广告拦截
 - DOMAIN-SUFFIX,adnxs.com,广告拦截
 - DOMAIN-SUFFIX,adkwai.com,广告拦截
+- DOMAIN-KEYWORD,pangolin-sdk-toutiao,广告拦截
+- DOMAIN-KEYWORD,pglstatp-toutiao,广告拦截
+- DOMAIN-KEYWORD,mobads.baidu.com,广告拦截
+- DOMAIN,v2.gdt.qq.com,广告拦截
+- DOMAIN,vr.gdt.qq.com,广告拦截
+- DOMAIN,xs.gdt.qq.com,广告拦截
+- DOMAIN,adsmind.gdtimg.com,广告拦截
+- DOMAIN,qzs.gdtimg.com,广告拦截
+- DOMAIN-SUFFIX,canvas.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,pgdt.gtimg.cn,广告拦截
+- DOMAIN-SUFFIX,pgdt.gtimg.com,广告拦截
+- DOMAIN-SUFFIX,q.i.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,rm.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,ugdtimg.com,广告拦截
+- DOMAIN-SUFFIX,unityads.unity3d.com,广告拦截
+- DOMAIN,unityads.unitychina.cn,广告拦截
+- DOMAIN,config.unityads.unitychina.cn,广告拦截
 - DOMAIN-SUFFIX,openai.com,OpenAI
 - DOMAIN-SUFFIX,chatgpt.com,OpenAI
 - DOMAIN-SUFFIX,oaistatic.com,OpenAI
@@ -5486,13 +5503,8 @@ http:
   - member.alipan.com
   - app.58.com
   rewrite:
-  - ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$) - reject
-  - ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$) - reject
-  - ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$) - reject
-  - ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject
   - ^https://api\.xiachufang\.com/v\d+/ad/[^?#]*(?:\?|$) - reject
   - ^https://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$) - reject
   - ^https://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$)
     - reject
   - ^https://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject
@@ -5501,40 +5513,54 @@ http:
     reject
   - ^https://api\.pinduoduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
   - ^https://api\.yangkeduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
-  - ^https://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject
   - ^https://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
-  - ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$) - reject
-  - ^https://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$) - reject
-  - ^https://open\.taou\.com/maimai/adshow/?(?:\?|$) - reject
-  - ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$) - reject
-  - ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject
   - ^https://res\.kfc\.com\.cn/advertisement/[^?#]*(?:\?|$) - reject
   - ^https://appapi\.huazhu\.com(?::\d+)?/client/app/getAppStartPage/(?:\?|$) - reject
   - ^https://mapi\.dianping\.com/mapi/operating/loadsplashconfig/?(?:\?|$) - reject
-  - ^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject
   - ^https://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject
   - ^https://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$) - reject
   - ^https://amap\-aos\-info\-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt/?(?:\?|$) - reject
   - ^https://app\.58\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\?|$) - reject
   script:
+  - match: ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
   - match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config(\?|$)
     name: jimmy_xiaohongshu_ads
     type: response
     require-body: true
     timeout: 5
+  - match: ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
   - match: ^https:\/\/bootrealtime\.uve\.weibo\.com\/v\d+\/ad\/realtime(\?|$)
     name: jimmy_weibo_ads
-    type: response
-    require-body: true
+    type: request
+    require-body: false
     timeout: 5
   - match: ^https:\/\/bootpreload\.uve\.weibo\.com\/v\d+\/ad\/preload(\?|$)
     name: jimmy_weibo_ads
-    type: response
-    require-body: true
+    type: request
+    require-body: false
     timeout: 5
   - match: ^https://mp\.weixin\.qq\.com/mp/getappmsgad/?(?:\?|$)
     name: jimmy_wechat_articles_ads
@@ -5551,20 +5577,70 @@ http:
     type: response
     require-body: true
     timeout: 5
+  - match: ^https://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
   - match: ^https://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
     name: jimmy_meituan_ads
     type: response
     require-body: true
+    timeout: 5
+  - match: ^https://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://open\.taou\.com/maimai/adshow/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
     timeout: 5
   - match: ^https://capi\.lkcoffee\.com/resource/m/sys/app/adposNew/?(?:\?|$)
     name: jimmy_luckin_ads
     type: response
     require-body: true
     timeout: 5
+  - match: ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
   - match: ^https://api\.m\.jd\.com/client\.action\?(?:[^#&]*&)*functionId=start(?:&|$)
     name: jimmy_jingdong_ads
     type: response
     require-body: true
+    timeout: 5
+  - match: ^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
     timeout: 5
   - match: ^https://cn-acs\.m\.cainiao\.com/gw/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
     name: jimmy_cainiao_ads
@@ -5576,6 +5652,11 @@ http:
     type: response
     require-body: true
     timeout: 5
+  - match: ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
   - match: ^https://member\.alipan\.com/v1/users/onboard_list/?(?:\?|$)
     name: jimmy_alipan_ads
     type: response
@@ -5584,6 +5665,9 @@ http:
 script-providers:
   jimmy_alipan_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js
+    interval: 86400
+  jimmy_ad_empty_response:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
     interval: 86400
   jimmy_bilibili_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js

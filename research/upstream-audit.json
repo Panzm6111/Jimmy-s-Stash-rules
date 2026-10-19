@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-19T00:51:53.825302+08:00",
+  "checked_at": "2026-10-19T13:50:39.620431+08:00",
   "target": "upstream",
-  "passed": 27,
-  "total": 27,
+  "passed": 28,
+  "total": 28,
   "results": [
     {
       "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/LICENSE",
@@ -33,6 +33,13 @@
       "ok": true
     },
     {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/IPA-Installer/IPA-Installer.js",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 5010,
+      "ok": true
+    },
+    {
       "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/LICENSE",
       "status": 200,
       "sha256_matches": true,
@@ -44,6 +51,13 @@
       "status": 200,
       "sha256_matches": true,
       "bytes": 749,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/Stash/IPA-Installer.stoverride",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 555,
       "ok": true
     },
     {
@@ -72,13 +86,6 @@
       "status": 200,
       "sha256_matches": true,
       "bytes": 1105813,
-      "ok": true
-    },
-    {
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Domain.yaml",
-      "status": 200,
-      "sha256_matches": true,
-      "bytes": 835793,
       "ok": true
     },
     {

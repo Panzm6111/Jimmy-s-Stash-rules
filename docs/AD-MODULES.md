@@ -14,7 +14,7 @@
 
 ## 本次新增35款
 
-HTTP重写使用Stash原生 `http.rewrite` 的 `正则 - reject`，取自锁定的原生Stash参考。来源中的QX `reject-dict/reject-img/reject-200` **没有被直接导入，也不声称与reject等价**；返回形态、等待、错误提示均需逐款验收。不自动伪造成功业务响应。响应脚本则仅在已知结构上作窄化修改，异常放行。
+2026-10-19修订：16条原本要求空JSON/空200的端点改用Stash请求脚本，分别返回200与`{}`或空正文；微博另有2条。仅匹配来源已明确的广告路径，不伪造订单/权益等业务成功。原生普通拒绝保留14条；联通2条来源为reject-img，仍用普通拒绝，图片返回语义未实现，不声称等价。响应修改脚本仍只改已知结构，异常放行。
 
 | App | 仅处理的范围 | 需MITM / 精确主机 | 远程覆写地址 |
 |---|---|---|---|
@@ -22,9 +22,9 @@ HTTP重写使用Stash原生 `http.rewrite` 的 `正则 - reject`，取自锁定�
 | 大麦 | 专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单 | 是：`acs.m.taobao.com` | [damai](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/damai.stoverride) |
 | 大众点评 | 仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价 | 是：`mapi.dianping.com` | [dianping](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/dianping.stoverride) |
 | 高德地图 | 两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片 | 是：`m5.amap.com`、`amap-aos-info-nogw.amap.com` | [amap](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/amap.stoverride) |
-| 航旅纵横 | 仅 fs/advert/polite 广告素材；未改原生 gateway 或航班业务 | 是：`oss.umetrip.com` | [umetrip](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/umetrip.stoverride) |
+| 航旅纵横 | 仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务 | 是：`oss.umetrip.com` | [umetrip](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/umetrip.stoverride) |
 | 华住会 | 仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订 | 是：`appapi.huazhu.com` | [huazhu](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/huazhu.stoverride) |
-| 肯德基 | 仅 advertisement 路径素材；保留 apphome 配置、菜单和优惠券 | 是：`res.kfc.com.cn` | [kfc](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/kfc.stoverride) |
+| 肯德基 | 仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券 | 是：`res.kfc.com.cn` | [kfc](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/kfc.stoverride) |
 | 麦当劳 | 专用 portal/home/splash；保留点餐、支付、领券 | 是：`api.mcd.cn` | [mcdonalds](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/mcdonalds.stoverride) |
 | 脉脉 | 仅 adshow；保留礼物、消息和普通推荐 | 是：`open.taou.com`、`h3.open.taou.com` | [maimai](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/maimai.stoverride) |
 | 猎聘 | 明确命名的 live.get-ad-cards；不拦职位推荐或投递 | 是：`api-ac.liepin.com` | [liepin](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/liepin.stoverride) |
@@ -32,27 +32,27 @@ HTTP重写使用Stash原生 `http.rewrite` 的 `正则 - reject`，取自锁定�
 | 拼多多 | 仅 cappuccino/splash；保留首页、买菜、红包和领券 | 是：`api.pinduoduo.com`、`api.yangkeduo.com` | [pinduoduo](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/pinduoduo.stoverride) |
 | 淘票票 | 仅 queryloadingbanner 启动广告；保留普通活动、选座和购票 | 是：`acs.m.taobao.com` | [taopiaopiao](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taopiaopiao.stoverride) |
 | 网易邮箱大师 | mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步 | 是：`appconf.mail.163.com`、`client.mail.163.com` | [netease-mail](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-mail.stoverride) |
-| 网易云音乐 | 仅 api/ad 或 eapi/ad 广告子路径；保留歌曲、评论、云贝、会员真实状态 | 是：`interface.music.163.com`、`interface3.music.163.com`、`ipv4.music.163.com` | [netease-music](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-music.stoverride) |
+| 网易云音乐 | 仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文 | 是：`interface.music.163.com`、`interface3.music.163.com`、`ipv4.music.163.com` | [netease-music](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-music.stoverride) |
 | 下厨房 | 仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片 | 是：`api.xiachufang.com` | [xiachufang](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiachufang.stoverride) |
 | 闲鱼 | 仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索 | 是：`acs.m.goofish.com` | [xianyu](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xianyu.stoverride) |
 | 小宇宙 | 仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频 | 是：`api.xiaoyuzhoufm.com` | [xiaoyuzhou](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaoyuzhou.stoverride) |
-| WPS Office | 广告统计及 feeds_ad 图片；不改会员、文档、云同步 | 是：`ios.wps.cn`、`mobile-pic.cache.iciba.com` | [wps](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wps.stoverride) |
+| WPS Office | 仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据 | 是：`ios.wps.cn`、`mobile-pic.cache.iciba.com` | [wps](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wps.stoverride) |
 | 58同城 | 仅 home/advertising 和 appadv；保留职位、联系与发布 | 是：`app.58.com` | [58tongcheng](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/58tongcheng.stoverride) |
-| 中国移动 | 仅 explorePage/getAdverList；保留 startInit、账号、缴费和权益 | 是：`client.app.coc.10086.cn` | [cmcc](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cmcc.stoverride) |
+| 中国移动 | 仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据 | 是：`client.app.coc.10086.cn` | [cmcc](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cmcc.stoverride) |
 | 中国联通 | 专用启动/广告接口；保留 accountListData、客户端配置和缴费 | 是：`m.client.10010.com` | [unicom](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unicom.stoverride) |
-| 东方财富 | 仅 emdcadvertise 广告主机；不解密行情、交易或登录 | 否；仅独立广告域名 | [eastmoney](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/eastmoney.stoverride) |
-| 携程旅行 | 仅 ma-adx 广告主机；不解密预订或支付，不拦易误杀图片的 tripAds | 否；仅独立广告域名 | [ctrip](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/ctrip.stoverride) |
-| 铁路12306 | 仅 ad.12306.cn 广告主机；不解密车票、身份信息或支付 | 否；仅独立广告域名 | [railway12306](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/railway12306.stoverride) |
-| 云闪付 | 仅 ads.95516.com 和 ads.cup.com.cn；不屏蔽推送/安全SDK，不解密支付 | 否；仅独立广告域名 | [unionpay](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unionpay.stoverride) |
-| UC浏览器 | 仅 ads.uc.cn、adslot.uc.cn；保留反诈、安全、语音和网页正文 | 否；仅独立广告域名 | [uc](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/uc.stoverride) |
-| 京东金融 | 仅 bdsp-x/dsp-x 独立广告主机；不解密金融或支付 | 否；仅独立广告域名 | [jingdong-finance](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong-finance.stoverride) |
-| 知乎 | 仅独立开屏、顶部横幅和 ad-style-service；保留回答、搜索和普通推荐 | 是：`api.zhihu.com` | [zhihu](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/zhihu.stoverride) |
-| 阿里云盘 | 仅 onboard_list 的4种推广banner；保留备份、更新、签到/权益入口 | 是：`member.alipan.com` | [alipan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/alipan.stoverride) |
-| 菜鸟 | 仅 ads.show 返回中带明确 adItemDetail 的广告项；保留积分/券/消息/包裹 | 是：`cn-acs.m.cainiao.com` | [cainiao](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cainiao.stoverride) |
-| 京东 | 仅 functionId=start 中展示次数/时长字段；保留订单/商品/京豆/优惠 | 是：`api.m.jd.com` | [jingdong](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong.stoverride) |
-| 美团 | 仅外卖 loadInfo.startpicture.ad/mk 广告数组；保留其他启动数据与券 | 是：`wmapi.meituan.com` | [meituan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride) |
+| 东方财富 | 仅 emdcadvertise 独立广告主机；不代表行情页面全部推广 | 否；仅独立广告域名 | [eastmoney](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/eastmoney.stoverride) |
+| 携程旅行 | 仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据 | 否；仅独立广告域名 | [ctrip](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/ctrip.stoverride) |
+| 铁路12306 | 仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏 | 否；仅独立广告域名 | [railway12306](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/railway12306.stoverride) |
+| 云闪付 | 仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告 | 否；仅独立广告域名 | [unionpay](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unionpay.stoverride) |
+| UC浏览器 | 仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告 | 否；仅独立广告域名 | [uc](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/uc.stoverride) |
+| 京东金融 | 仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏 | 否；仅独立广告域名 | [jingdong-finance](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong-finance.stoverride) |
+| 知乎 | 仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告 | 是：`api.zhihu.com` | [zhihu](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/zhihu.stoverride) |
+| 阿里云盘 | 仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告 | 是：`member.alipan.com` | [alipan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/alipan.stoverride) |
+| 菜鸟 | 仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化 | 是：`cn-acs.m.cainiao.com` | [cainiao](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cainiao.stoverride) |
+| 京东 | 仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告 | 是：`api.m.jd.com` | [jingdong](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong.stoverride) |
+| 美团 | 仅美团外卖 wmapi 的 loadInfo.startpicture.ad/mk；不代表美团主App开屏 | 是：`wmapi.meituan.com` | [meituan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride) |
 | 瑞幸咖啡 | 仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券 | 是：`capi.lkcoffee.com` | [luckin](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/luckin.stoverride) |
-| 微信 | 仅公众号 getappmsgad 的广告数组/数量；不改朋友圈、视频号、好友聊天或安全链接 | 是：`mp.weixin.qq.com` | [wechat-articles](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride) |
+| 微信 | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天 | 是：`mp.weixin.qq.com` | [wechat-articles](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride) |
 
 既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[扩展域名包](../modules/ads/expanded.stoverride)不需证书，替换基础广告provider而不叠加整包。
 
@@ -60,7 +60,7 @@ HTTP重写使用Stash原生 `http.rewrite` 的 `正则 - reject`，取自锁定�
 
 以下按**目标主机**实际匹配现有基本域名/关键词规则；不推断该App全部流量，IP规则没有在此推演。通用包已命中时，专项可能只是提供较小范围/独立入口，并不额外增加一次拦截。基础和扩展二选一；同一请求按首条规则处理。
 
-| App | 目标主机 | 基础21条 | 扩展38,066条 |
+| App | 目标主机 | 基础规则 | 扩展规则 |
 |---|---|---|---|
 | 百度网盘 | `pan.baidu.com` | 未命中 | 未命中 |
 | 大麦 | `acs.m.taobao.com` | 未命中 | 未命中 |
@@ -114,7 +114,7 @@ HTTP重写使用Stash原生 `http.rewrite` 的 `正则 - reject`，取自锁定�
 
 ## 合并、优先级与验收
 
-如果仅为检查而把全部模块合并，预期有 **12条响应handler、32条HTTP拒绝重写、41个去重后的精确MITM主机**。这不是建议全部启用；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。当前官方数组合并语义仍待复核，必须确认没有只保留最后一款。
+基础38条、扩展38,066条。全部模块合并预期有 **28条脚本handler（18请求/10响应）、16条HTTP拒绝重写、41个去重后的精确MITM主机**。这些计数不代表实测有效；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。当前官方数组合并语义仍待复核，必须确认没有只保留最后一款。
 
 离线验证覆盖每个单模块、全部模块的正序/反序、每个有序模块对和所有端点的正反例；检查没有跨App业务URL误匹配。它不能证明HTTP/3、证书固定、私有协议、原生合并或当前App版本可用。
 

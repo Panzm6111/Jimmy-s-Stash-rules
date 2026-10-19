@@ -37,10 +37,13 @@ def main():
             available=set(payload)
             for value in item['selection']:
                 kind,domain=value.split(',',1)
-                choices={domain} if kind=='DOMAIN' else {'+.'+domain,'.'+domain}
+                if item['source_path'].endswith('_Classical.yaml'):
+                    choices={value}
+                else:
+                    choices={domain} if kind=='DOMAIN' else {'+.'+domain,'.'+domain}
                 if not available.intersection(choices):raise ValueError('curated ad source changed; manual review required')
             values=item['selection'];omitted=[]
-            header='# Curated subset of blackmatrix7 AdvertisingLite_Domain.yaml, GPL-2.0.\n# Shared ad SDKs; does not guarantee any App splash removal.\n'
+            header='# Curated subset of blackmatrix7 '+item['source_path'].rsplit('/',1)[1]+', GPL-2.0.\n# Shared ad SDKs; does not guarantee any App splash removal.\n'
         else:
             values=list(dict.fromkeys(x for x in payload if x.split(',')[0] in RULE_KINDS))
             omitted=[x for x in payload if x.split(',')[0] not in RULE_KINDS]

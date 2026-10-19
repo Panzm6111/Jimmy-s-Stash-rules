@@ -4,10 +4,22 @@
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 脉脉广告专项（可选）
 desc: 仅 adshow；保留礼物、消息和普通推荐。默认不导入；需设备验收。
+script-providers:
+  jimmy_ad_empty_response:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
+    interval: 86400
 http:
   mitm:
   - open.taou.com
   - h3.open.taou.com
-  rewrite:
-  - ^https://open\.taou\.com/maimai/adshow/?(?:\?|$) - reject
-  - ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$) - reject
+  script:
+  - match: ^https://open\.taou\.com/maimai/adshow/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
