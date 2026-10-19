@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-19T22:06:12.830714+08:00",
+  "checked_at": "2026-10-19T22:30:45.126046+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 240359,
-  "sha256": "58772cfbb5ecef69565722c2484baac1fa3d775b3ef0746d7a6e147cea97db3f",
+  "bytes": 240361,
+  "sha256": "18f633958c3bd52f8442c1a6faaaa6036ed69cc3dcd3b972f751da9776e4240c",
   "matches_local_bytes": true,
   "proxy_groups": 18,
   "rules": 5314,
@@ -41,5 +41,10 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "71e97b725e493587862835d1463b4bf14d059e45"
+  "code_release_commit": "94cd7d13b6b2a7111491d9265cb638eb3aad8785",
+  "hong_kong_name_aliases": [
+    "HK",
+    "HKG"
+  ],
+  "hong_kong_name_case_insensitive": true
 }

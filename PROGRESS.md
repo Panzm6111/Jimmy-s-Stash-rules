@@ -6,7 +6,7 @@
 
 香港池新增HKG缩写，大小写不敏感，支持HKG、hkg、HkG01、[HKG]-02等独立缩写及编号形式；HK原有写法继续支持。保留字母边界，SHKG01、HKGaming、abcHKG不误归香港。公共core和一体化入口同步，私人合成工具同样使用更新后的香港筛选。
 
-4项定向回归全部通过：地区正反例、7个自动池的引用与隔离、生成入口结构/合并与路由、纯HKG02节点的私人合成归类。diff空白检查通过；本次不重复执行未改动的广告JS测试。发布后的入口内容及资源校验见`research/subscription-published.json`、`research/published-audit.json`。没有进行新的手机实测。
+4项定向回归全部通过：地区正反例、7个自动池的引用与隔离、生成入口结构/合并与路由、纯HKG02节点的私人合成归类。diff空白检查通过；本次不重复执行未改动的广告JS测试。发布后的入口内容及资源校验见`research/subscription-published.json`、`research/published-audit.json`。没有进行新的手机实测。代码提交`94cd7d13b6b2a7111491d9265cb638eb3aad8785`已推送到原main，无PR；固定入口HTTP200、240,361字节并与本地一致，67/67公开资源HTTP200且SHA匹配。随后仅补交发布记录，私人订阅和证书未上传。
 
 ## 上轮：自动测速与海外AI分流（2026-10-19）
 
