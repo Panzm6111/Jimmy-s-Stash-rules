@@ -64,7 +64,7 @@ class PrivateConfigChecks(unittest.TestCase):
 
     def test_all_seven_nonempty_pools_use_url_test_and_manual_stays_select(self):
         source = copy.deepcopy(self.source)
-        for name in ('香港 HK 02', '新加坡 SG 02', '台湾 TW 02'):
+        for name in ('HKG02', '新加坡 SG 02', '台湾 TW 02'):
             node = copy.deepcopy(source['proxies'][0])
             node['name'] = name
             source['proxies'].append(node)

@@ -63,7 +63,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: (?i)(香港|🇭🇰|hong[ _-]*kong|(^|[^a-z])hk([^a-z]|$)|^REJECT$)
+  filter: (?i)(香港|🇭🇰|hong[ _-]*kong|(^|[^a-z])hkg?([^a-z]|$)|^REJECT$)
 - name: 新加坡
   type: url-test
   url: https://www.gstatic.com/generate_204
