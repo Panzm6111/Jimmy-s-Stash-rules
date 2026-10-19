@@ -8,7 +8,7 @@
 
 需要环境所有者在环境设置审核并保存网络新增域名 `stash.wiki`、`www.stash.wiki`（以及为后续元数据研究申请的 `api.github.com`），按界面要求发布。随后重试官方文档，补全本文件与配置。草稿保存不等于权限已生效，不会假称已读到官方最新正文。
 
-因此，这轮配置是**已有原生格式参考与离线验证的候选交付**，未声称官方最低版本、真实合并、fallback 的空池细节已经核实。使用前先完成官方文档复核与 [手机验收](PHONE-CHECKLIST.md)。不要仅因离线检查通过就把它当作保证地区出口的生产配置。
+因此，这轮配置是**已有原生格式参考与离线验证的候选交付**，未声称官方最低版本、真实合并、url-test 的空池细节已经核实。用户已反馈原配置节点正常、HTTP/MITM已开启且自建证书完全信任；这不等于本次自动测速修改或广告效果通过设备验收。更新后仍需完成 [手机验收](PHONE-CHECKLIST.md)。
 
 ## 已有来源与仍需确认的能力
 
@@ -17,8 +17,8 @@
 | 主配置 | `config/main.yaml` 为本地启动模板；不放真实 URL，不假设任意 YAML 环境变量展开 | 官方入口 https://stash.wiki/；下载/编辑/更新行为仍待读取当前正文；不编造最低版本 |
 | 覆写与深层映射 | 公共 `.stoverride` + 仅设备保存的私人 provider URL；广告模块有 app2smile 原生 Stash 源码参考 | 原生参考 `module/bilibili.stoverride`、`module/tieba.stoverride` 在锁定版本中实际存在。真实 map/list/rules 合并与覆写顺序需官方文档和合并预览复核 |
 | 代理集 | `proxy-providers`，固定名称“机场”，更新间隔 86400 秒；真实订阅仅设备填写 | `proxies:` 节点文件为本项目明确采用的目标结构；全配置/Base64/URI/不同 VLESS 传输的原生支持不能在本云机断言；须看当前官方代理集/协议文档 |
-| 软件选择地区池 | 软件 `select` 引用5个地区 `fallback` 组；另有全部节点、常见其他地区手选及旧手动入口，共18组；不含Meta专用include-all等键 | select/use/filter/fallback 的确切官方语义和最低版本待复核。未使用未证实的exclude-filter或负向前瞻；其他地区是常见国家正向匹配，非严格补集。地区组的REJECT哨兵及正则已做结构检查，**真实空池/全失效行为是必测门槛** |
-| 自动测速/故障切换 | 优先故障切换，健康检查 30 分钟；不选择每次最低延迟 | 本项目没有启用 url-test 最低延迟模式。官方 fallback 与 url-test 的具体判定、缓存和版本需复核；不假定 REJECT 的健康判定等同其他内核 |
+| 软件选择地区池 | 软件 `select` 引用美国、日本、香港、新加坡、台湾5个 `url-test` 组；“自动节点”“其他地区”同样自动测速，“手动节点”保留select，共18组。海外AI默认美国，Apple默认DIRECT | select/use/filter/url-test 的当前官方语义和最低版本待复核。未使用未证实的exclude-filter或负向前瞻；公共“其他地区”是常见国家正向匹配，非严格补集。地区组的REJECT哨兵及正则已做结构检查，**真实空池/全失效行为仍需手机测试** |
+| 自动测速 | 7池采用原生 `url-test`，HTTPS 204地址、1800秒检查间隔，选择测试延迟最低的可用候选；没有添加未经证实的tolerance/lazy字段 | [历史原生示例](https://github.com/jinzaizhichi/stash-example/blob/c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml#L434) 实际注释说明url-test选择最短URL测试延迟，fallback按顺序选可用候选。示例停止维护，仅参考字段，不复制无许可代码。当前默认容差、缓存、测试和切换时机未实测；不将其他内核行为当作Stash证明 |
 | 规则集 | HTTP classical payload；只留下 DOMAIN/SUFFIX/KEYWORD/IP-CIDR/IP-CIDR6；每日检查公共快照 | 规则数据与完整来源已实际读取；native 格式参考与普通结构测试不等于真实 Stash 核心校验。IP-ASN/PROCESS-NAME 等未核实项已剔除 |
 | MITM | 仅 `http.mitm` 中的精确域名，设备生成证书，不含 CA 私钥 | app2smile Stash 原生覆写直接使用 `http.mitm`；当前证书菜单与最低版本待官方和设备确认；不设置泛域名或关闭 TLS 校验 |
 | HTTP拒绝重写 | `http.rewrite` 的 `正则 - reject`；仅独立广告路径 | 已读取 blackmatrix7 固定SHA的原生 `rewrite/Stash/Advertising/Advertising.stoverride`；该文件头2025-08-26。不是直接套用QX重写；不假设reject等于reject-dict/img/200，具体返回、合并和版本仍待官方/手机核对 |
@@ -37,7 +37,7 @@
 特别核实：
 
 1. 多覆写的规则是前插还是覆盖，http.script 与 http.mitm 是否合并；不同版本 UI 的排序如何对应优先级。
-2. `filter` 是否同时作用于静态 proxies 和 use；`fallback` 的静态节点与 provider 顺序、空集与全部失败是否保留 REJECT。若不符，必须先修配置；不能暗中允许 DIRECT。
+2. `filter` 是否同时作用于静态 proxies 和 use；`url-test` 对REJECT、静态节点与provider的测试处理、缓存、空集与全部失败行为。拒绝连接不能被视作“成功且0毫秒”的最快节点。若设备表现不符，必须先修配置；不能暗中允许DIRECT或其他地区。
 3. 订阅解析格式、VLESS/Reality/XTLS/WS/gRPC 等逐项支持。不能把一个基础 VLESS 示例推广为支持所有机场 VLESS。
 4. provider 更新失败/节点改名对缓存和选择的处理；软件组选择的持久化边界。
 5. 自动签到已暂停，cron/设备存储等内容留待用户以后明确恢复时重新调查，不阻塞当前非签到功能。

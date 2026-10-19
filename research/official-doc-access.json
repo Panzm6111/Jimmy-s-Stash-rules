@@ -21,5 +21,22 @@
     "notice": "文件明确已不再维护，README指向 https://stash.wiki/features/example-config；未复制代码，不视为当前官方验证。",
     "license_observed": "未发现LICENSE，不复制",
     "original_org_example_http_status": 404
+  },
+  "routing_review_2026_10_19": {
+    "official_retry": "HTTPS CONNECT denied by cloud proxy: 403; official body not read",
+    "native_reference": "historical_example_review.config_url lines 434-452",
+    "observed": "url-test selects shortest URL test delay; fallback uses candidate order; only type/url/interval adopted",
+    "unverified": [
+      "current minimum version",
+      "default tolerance and switching timing",
+      "REJECT health treatment",
+      "empty and all-failed provider groups",
+      "runtime choice persistence"
+    ],
+    "not_adopted": [
+      "tolerance",
+      "lazy"
+    ],
+    "configuration": "7 url-test pools, interval 1800, fixed per-country membership; no DIRECT or other pool inside automatic pools"
   }
 }

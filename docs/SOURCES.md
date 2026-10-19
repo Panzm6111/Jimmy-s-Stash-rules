@@ -8,7 +8,8 @@
 |---|---|---|---|
 | [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script) @ `7dd06b44f5093dd5404e1e5f3bca5452d97146ef` | GPL-2.0，原文 [licenses/blackmatrix7-GPL-2.0.txt](../licenses/blackmatrix7-GPL-2.0.txt) | Netflix、YouTube、Telegram、China 和 AdvertisingLite 数据。只转为 native 基本 classical 规则，不导入 Clash 配置/内核专用功能 | 仓库最后提交 2026-10-18 北京时间；各数据文件头的更新时间更早。全量读取后发现部分同名 `.yaml` 是拆分片段，优先使用 Classical；去掉 PROCESS-NAME/IP-ASN 等未核实项；精确遗漏列表在 lock 中 |
 | [app2smile/rules](https://github.com/app2smile/rules) @ `df6366a7024e0b3f0aa3510c5b791eea6f3cba89` | MIT，原文 [licenses/app2smile-MIT.txt](../licenses/app2smile-MIT.txt) | 修改 `bilibili-json.js` 和 `tieba-json.js` 的明确广告处理；保留归属，自己保存无外联的缩小脚本 | 实际存在 `module/bilibili.stoverride`、`module/tieba.stoverride` 原生配置，含 HTTP/MITM/script-providers 字段。仓库提交 2026-03-04，不等于 JSON 处理在当前 App 实测有效 |
-| 项目原创配置、教程、验证工具 | [MIT](../LICENSE) | 稳定组名、分层私人配置、较窄的 OpenAI/Apple/Microsoft 域名表、测试与工具 | 普通 YAML/脚本模型通过不等于 Stash 内核验收；完整能力限制另列 |
+| [v2fly/domain-list-community](https://github.com/v2fly/domain-list-community) @ `6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f` | MIT，原文 [licenses/v2fly-domain-list-community-MIT.txt](../licenses/v2fly-domain-list-community-MIT.txt) | 人工精选15个源文件的海外AI专用域名，转为DOMAIN/DOMAIN-SUFFIX，保留 `rules/openai.yaml` 原地址；加1条本项目既有专用主机 | 提交日期2026-10-19；实际文件及许可证已读取，SHA256、所选/剔除项见[AI来源清单](../research/ai-sources.json)。不直接导入其整套配置或把 `!cn` 分类视为非中国厂商证明；123条规则、25类服务均未做账号解锁实测 |
+| 项目原创配置、教程、验证工具 | [MIT](../LICENSE) | 稳定路径、分层私人配置、较窄的Apple/Microsoft域名表、测试与工具 | 普通 YAML/脚本模型通过不等于 Stash 内核验收；完整能力限制另列 |
 
 上游原始规则以公开源码形式可取得；锁文件记录每个来源路径及 SHA，刷新脚本就是本项目转换流程。修改后的广告脚本保留 MIT 归属与修改说明。第三方数据仍保持其原许可，不用根 MIT 重新授权。没有复制未明确授权的广告/签到包。
 
@@ -30,6 +31,8 @@ python tools/audit_remote.py upstream
 TLS 与已有源内容校验保持开启。刷新同一 SHA 必须匹配原校验值；新 SHA 的许可变化必须先人工审查，不能关闭 TLS 或改预期 checksum 让不匹配的数据通过。刷新只改公共快照/锁文件，不接触私人设备配置；更新后需同步本页核实日期、设备行为与 PROGRESS。
 
 广告脚本不自动拉取上游最新源码：上游广泛修改和日志可能影响隐私/正常功能，须重新阅读代码、更新归属和测试后再替换本项目原路径。
+
+海外AI规则独立记录于 `research/ai-sources.json`，不由 `refresh_rules.py` 全量刷新。维护者先审阅新的源提交、许可及专用域名，再更新清单的选取/剔除项与哈希，运行 `python tools/generate_ai_rules.py --source-dir /可信的上游源码路径 --write`、`python tools/build_subscription.py --write` 与项目验证。该工具可离线逐字校验上游文件、重现规则，不下载私人订阅；手机端不需要执行。范围和共享登录限制见[AI-COVERAGE](AI-COVERAGE.md)。
 
 ## 调查但未复用
 

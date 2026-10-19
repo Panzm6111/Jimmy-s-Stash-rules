@@ -23,6 +23,9 @@ from build_local_bundle import dump
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
+AUTO_POOLS = ('自动节点', *REGIONS, '其他地区')
+PROBE_SETTINGS = {'url': 'https://www.gstatic.com/generate_204', 'interval': 1800}
+PROBE_FIELDS = (*PROBE_SETTINGS, 'tolerance', 'lazy')
 
 
 class BuildError(ValueError):
@@ -78,7 +81,7 @@ def verify(config, template, expected_nodes):
     graph = {}
     for group in groups:
         require('use' not in group and 'filter' not in group, '仍依赖运行时代理集或筛选。')
-        require(group['type'] in {'select', 'fallback'}, '未知策略组类型。')
+        require(group['type'] in {'select', 'url-test'}, '未知策略组类型。')
         require(bool(group.get('proxies')), '存在空策略组。')
         require(set(group['proxies']) <= targets, '存在缺失的策略或节点引用。')
         require(len(group['proxies']) == len(set(group['proxies'])), '策略候选重复。')
@@ -90,19 +93,37 @@ def verify(config, template, expected_nodes):
     for name in names:
         visit(name, set())
     by_name = {g['name']: g for g in groups}
+    template_groups = {g['name']: g for g in template['proxy-groups']}
+    require(not ({'全部节点', 'OpenAI'} & set(names)), '仍有旧策略组名称。')
+    for name in AUTO_POOLS:
+        group = by_name[name]
+        members = group['proxies']
+        require(set(members) <= node_names | {'REJECT'}, '自动池引用其他策略或直连。')
+        require(members[-1] == 'REJECT', '自动池缺少末尾阻断。')
+        if members == ['REJECT']:
+            require(group['type'] == 'select', '空池没有改为阻断选择组。')
+            require(not any(key in group for key in PROBE_FIELDS), '空池残留测速参数。')
+        else:
+            require(group['type'] == 'url-test', '非空池未使用自动测速。')
+            require(all(group.get(key) == value for key, value in PROBE_SETTINGS.items()),
+                    '自动池测速地址或频率改变。')
+            require(not any(key in group for key in ('tolerance', 'lazy')), '自动池包含未核实的测速设置。')
     union = set()
     for name in REGIONS:
         members = by_name[name]['proxies']
         require(set(members) <= node_names | {'REJECT'}, '地区引用其他地区或直连。')
         require(members[-1] == 'REJECT', '地区缺少末尾阻断。')
-        require(by_name[name]['type'] == ('select' if members == ['REJECT'] else 'fallback'),
-                '空地区或非空地区类型不正确。')
+        expected_members = {n for n in node_names if re.search(template_groups[name]['filter'], n)}
+        require(set(members) - {'REJECT'} == expected_members, '地区包含错误节点或遗漏节点。')
         union.update(n for n in members if n in node_names)
-    require(set(by_name['全部节点']['proxies']) - {'REJECT'} == node_names, '全部节点有遗漏。')
+    require(set(by_name['自动节点']['proxies']) - {'REJECT'} == node_names, '自动节点有遗漏。')
+    require(by_name['手动节点']['type'] == 'select' and
+            set(by_name['手动节点']['proxies']) - {'REJECT'} == node_names, '手动节点有遗漏或类型改变。')
     require(set(by_name['其他地区']['proxies']) - {'REJECT'} == node_names - union,
             '其他地区不是五地区的补集。')
     require(by_name['总代理']['proxies'][0] == 'REJECT', '首次出口选择不再中立。')
-    for name in ('OpenAI', 'Netflix', 'YouTube', 'Telegram', '未匹配流量'):
+    require(by_name['海外AI']['proxies'][0] == '美国', '海外 AI 未默认选择美国。')
+    for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):
         require(by_name[name]['proxies'][0] == '总代理', '软件未默认跟随总代理。')
     for name in ('Apple', 'Microsoft'):
         require(by_name[name]['proxies'][0] == 'DIRECT', '系统软件默认直连改变。')
@@ -136,7 +157,7 @@ def compose(source, template=None):
     nodes = source.get('proxies')
     check_nodes(nodes, group_names, allow_name_conflicts=True)
     definitions = {g['name']: g for g in template['proxy-groups']}
-    include = re.compile(definitions['全部节点']['filter'])
+    include = re.compile(definitions['自动节点']['filter'])
     eligible = [copy.deepcopy(n) for n in nodes if include.search(n['name'])]
     require(bool(eligible), '过滤提示条目后没有真实节点。')
     original_eligible = copy.deepcopy(eligible)
@@ -164,6 +185,7 @@ def compose(source, template=None):
                     for name in REGIONS}
     assigned = set().union(*(set(v) for v in region_nodes.values()))
     other_nodes = [n for n in all_names if n not in assigned]
+    pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes}
     result = copy.deepcopy(template)
     result.pop('proxy-providers', None)
     result['proxies'] = eligible
@@ -171,15 +193,13 @@ def compose(source, template=None):
         name = group['name']
         expanded = group.pop('use', [])
         group.pop('filter', None)
-        if name in REGIONS:
-            group['proxies'] = region_nodes[name] + ['REJECT']
-            if not region_nodes[name]:
+        if name in AUTO_POOLS:
+            group['proxies'] = pool_nodes[name] + ['REJECT']
+            if not pool_nodes[name]:
                 group['type'] = 'select'
-                group.pop('url', None)
-                group.pop('interval', None)
-        elif name == '其他地区':
-            group['proxies'] = other_nodes + ['REJECT']
-        elif name in {'全部节点', '手动节点'}:
+                for key in PROBE_FIELDS:
+                    group.pop(key, None)
+        elif name == '手动节点':
             group['proxies'] = all_names + ['REJECT']
         elif expanded:
             group['proxies'] = list(dict.fromkeys(group['proxies'] + all_names))
@@ -203,8 +223,9 @@ def compose(source, template=None):
 def render(config):
     return ('# JIMMY-STASH 本机私人节点快照；含连接凭据，不公开、不提交、不转发。\n'
             '# 本文件可直接作为主配置导入，不需要私人覆写或替换订阅URL。\n'
-            '# 首次导入：总代理选择全部节点或有节点的地区；使用规则模式。\n'
-            '# 地区节点自动故障切换；其他地区为五地区以外的全部候选。\n'
+            '# 首次导入：总代理选择自动节点或有节点的地区；使用规则模式。\n'
+            '# 自动节点和地区池按 URL 测试延迟选最快节点；其他地区为五地区以外的全部候选。\n'
+            '# 海外AI 默认美国，Apple 默认直连；测速不代表解锁，不跨地区兜底。\n'
             '# 不含机场旧DNS/分流/控制端口；连接字段原样保留，重名节点仅加显示前缀。\n'
             '# 本地节点和内嵌规则不会自动跟随机场/公共配置更新，需要重新合成。\n'
             '# 12份广告脚本由Stash从本项目下载；开屏专项仍需设备自建证书。\n'

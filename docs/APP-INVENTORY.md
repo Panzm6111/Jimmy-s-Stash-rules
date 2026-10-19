@@ -37,7 +37,7 @@
 | 9 | 菜鸟 | [cainiao](../modules/ads/cainiao.stoverride) | 仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化；上游同时处理 ads.show 与 mshow，且删除部分券、裹酱积分、寄件和消息入口；本模块不采用这些业务删改，不能据此称菜鸟全广告已覆盖。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js)，GPL-3.0-only。 |
 | 10 | 测距仪 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 11 | 查找 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
-| 12 | ChatGPT | 保留通用规则；未加专项 | 已有OpenAI分流；所检索资源没有可审核的当前App广告专项，不把分流当去广告。 |
+| 12 | ChatGPT | 保留通用规则；未加专项 | 已有海外AI分流（含OpenAI）；所检索资源没有可审核的当前App广告专项，不把分流当去广告。 |
 | 13 | Chrome | 保留通用规则；未加专项 | 网页广告使用通用域名规则；Stash不提供浏览器CSS元素隐藏，不能保证同域广告或空白被移除。 |
 | 14 | 大麦 | [damai](../modules/ads/damai.stoverride) | 专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 15 | 大众点评 | [dianping](../modules/ads/dianping.stoverride) | 仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |

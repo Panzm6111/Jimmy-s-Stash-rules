@@ -173,7 +173,7 @@
       "decision": "保留通用规则；未加专项",
       "modules": [],
       "scope": "通用广告域名可能覆盖第三方SDK；不承诺该App广告消失",
-      "reason": "已有OpenAI分流；所检索资源没有可审核的当前App广告专项，不把分流当去广告。",
+      "reason": "已有海外AI分流（含OpenAI）；所检索资源没有可审核的当前App广告专项，不把分流当去广告。",
       "public_source_matches": [],
       "device_tested": false
     },

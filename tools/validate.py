@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import copy
+from functools import lru_cache
 import hashlib
 import itertools
 import ipaddress
@@ -61,6 +62,12 @@ def merged(*optional):
     private = load('examples/private-provider.stoverride')
     return merge_model(result, private)
 
+@lru_cache(maxsize=32)
+def rule_payload_snapshot(path, mtime_ns, size):
+    # Routing fixtures share large, unchanged YAML lists. Keep an immutable
+    # snapshot per file version; a source edit invalidates its cache key.
+    return tuple(load(path)['payload'])
+
 def provider_rules(config):
     result = {}
     for name, provider in config.get('rule-providers', {}).items():
@@ -68,7 +75,10 @@ def provider_rules(config):
         if not url.startswith(RAW):
             raise ValueError('unexpected rule URL')
         path = url[len(RAW):]
-        result[name] = load(path)['payload']
+        stat = (ROOT / path).stat()
+        # Each caller gets its own list so adversarial-fixture mutations cannot
+        # contaminate another route or module combination.
+        result[name] = list(rule_payload_snapshot(path, stat.st_mtime_ns, stat.st_size))
     return result
 
 def matches(rule, domain='', address=''):
@@ -274,11 +284,11 @@ class ProjectChecks(unittest.TestCase):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
         self.assertEqual(len(self.groups), 18)
         other = self.groups['其他地区']
-        all_nodes = self.groups['全部节点']
-        self.assertEqual(other['type'], 'select')
+        all_nodes = self.groups['自动节点']
+        self.assertEqual(other['type'], 'url-test')
         self.assertEqual(other['proxies'], ['REJECT'])
         self.assertEqual(other['use'], ['机场'])
-        self.assertEqual(all_nodes['type'], 'select')
+        self.assertEqual(all_nodes['type'], 'url-test')
         self.assertEqual(all_nodes['proxies'], ['REJECT'])
         self.assertEqual(all_nodes['use'], ['机场'])
         for name in fixtures['other']:
@@ -291,8 +301,8 @@ class ProjectChecks(unittest.TestCase):
         for name in [n for values in fixtures['positive'].values() for n in values] + fixtures['other'] + fixtures['unclassified']:
             self.assertRegex(name, all_nodes['filter'], name)
         self.assertNotRegex('Custom-Node-007', other['filter'])
-        for app in ['总代理', 'OpenAI', 'Netflix', 'YouTube', 'Telegram', 'Apple', 'Microsoft', '未匹配流量']:
-            for choice in ['其他地区', '全部节点', '手动节点']:
+        for app in ['总代理', '海外AI', 'Netflix', 'YouTube', 'Telegram', 'Apple', 'Microsoft', '未匹配流量']:
+            for choice in ['其他地区', '自动节点', '手动节点']:
                 self.assertIn(choice, self.groups[app]['proxies'])
         self.assertEqual(self.groups['手动节点']['use'], ['机场'])
 
@@ -324,26 +334,47 @@ class ProjectChecks(unittest.TestCase):
         for provider in config['script-providers'].values():
             self.assertEqual(set(provider), {'url', 'interval'})
 
-    def test_region_fail_closed_references(self):
-        # Structural/model evidence only; real fallback semantics must be tested in Stash.
-        for region in ['美国', '日本', '香港', '新加坡', '台湾']:
-            group = self.groups[region]
-            self.assertEqual(group['type'], 'fallback')
+    def test_automatic_pools_probe_and_fail_closed_references(self):
+        # Structural evidence only; Stash owns latency selection and failed-probe handling.
+        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区'}
+        self.assertEqual({g['name'] for g in self.groups.values() if g['type'] == 'url-test'}, pools)
+        for name in pools:
+            group = self.groups[name]
+            self.assertEqual(group['url'], 'https://www.gstatic.com/generate_204')
+            self.assertEqual(group['interval'], 1800)
             self.assertEqual(group['proxies'], ['REJECT'])
             self.assertRegex('REJECT', group['filter'])
             self.assertEqual(group['use'], ['机场'])
             self.assertNotIn('DIRECT', group['proxies'])
+        self.assertEqual(self.groups['手动节点']['type'], 'select')
+        self.assertEqual(self.groups['手动节点']['filter'], self.groups['自动节点']['filter'])
+        self.assertEqual(self.groups['海外AI']['proxies'][0], '美国')
+        self.assertEqual(self.groups['Apple']['proxies'][0], 'DIRECT')
+        self.assertEqual(self.groups['Microsoft']['proxies'][0], 'DIRECT')
+        self.assertEqual(self.groups['总代理']['proxies'][0], 'REJECT')
 
     def test_independent_software_choices(self):
-        choices = {'OpenAI': '美国', 'Netflix': '日本', 'YouTube': '香港'}
+        choices = {'海外AI': '美国', 'Netflix': '日本', 'YouTube': '香港'}
         for app, value in choices.items(): self.assertIn(value, self.groups[app]['proxies'])
         before = dict(choices)
-        choices['OpenAI'] = '台湾'
+        choices['海外AI'] = '台湾'
         self.assertEqual(choices['Netflix'], before['Netflix'])
         self.assertEqual(choices['YouTube'], before['YouTube'])
-        for name in ['OpenAI', 'Netflix', 'YouTube', 'Telegram']:
+        for name in ['Netflix', 'YouTube', 'Telegram', '未匹配流量']:
             self.assertEqual(self.groups[name]['proxies'][0], '总代理')
             self.assertEqual(self.groups[name]['use'], ['机场'])
+        self.assertIn('总代理', self.groups['海外AI']['proxies'])
+        self.assertEqual(self.groups['海外AI']['use'], ['机场'])
+
+    def test_renamed_groups_have_no_stale_references(self):
+        obsolete = {'全部节点', 'OpenAI'}
+        for config in [self.config, load('config/stash.yaml')]:
+            self.assertTrue(obsolete.isdisjoint(g['name'] for g in config['proxy-groups']))
+            for group in config['proxy-groups']:
+                self.assertTrue(obsolete.isdisjoint(group['proxies']))
+            for rule in config['rules']:
+                self.assertTrue(obsolete.isdisjoint(rule.split(',')))
+            self.assertTrue(obsolete.isdisjoint(config.get('rule-providers', {})))
 
     def test_representative_route_order(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/routes.json').read_text())
@@ -431,6 +462,28 @@ class ProjectChecks(unittest.TestCase):
         for item in lock['resources'] + lock['ad_scripts']:
             self.assertEqual(hashlib.sha256((ROOT / item['output']).read_bytes()).hexdigest(), item['output_sha256'])
 
+    def test_ai_source_manifest_and_narrow_domain_scope(self):
+        from generate_ai_rules import rendered, selected_rules
+        manifest = json.loads((ROOT / 'research/ai-sources.json').read_text())
+        self.assertEqual(manifest['group'], '海外AI')
+        self.assertEqual(manifest['output'], 'rules/openai.yaml')
+        self.assertEqual((ROOT / manifest['output']).read_text(), rendered(manifest))
+        upstream = manifest['upstream']
+        self.assertEqual(hashlib.sha256((ROOT / upstream['license_file']).read_bytes()).hexdigest(), upstream['license_sha256'])
+        for source in manifest['sources']:
+            self.assertIn('/' + upstream['revision'] + '/', source['url'])
+            self.assertNotIn('?', source['url'])
+        rules = selected_rules(manifest)
+        self.assertEqual(len(rules), len(set(rules)))
+        # A common shared host or a Chinese AI service must not become an
+        # accidental overseas-AI route when a broader upstream list changes.
+        for host in ['google.com', 'www.google.com', 'accounts.google.com', 'googleapis.com',
+                     'www.microsoft.com', 'login.microsoftonline.com', 'github.com',
+                     'www.bing.com', 'cdn.auth0.com', 'cdn.cloudflare.net',
+                     'chat.deepseek.com', 'www.doubao.com', 'www.kimi.com',
+                     'chat.qwen.ai', 'hailuoai.video', 'www.minimax.io']:
+            self.assertFalse(any(matches(rule, host) for rule in rules), host)
+
     def test_checkin_stays_deferred(self):
         plan = json.loads((ROOT / 'research/checkin-plan.json').read_text())
         self.assertEqual(len(plan['scope']), 24)
@@ -454,7 +507,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_bad_policy_graph_is_rejected(self):
         cyclic = copy.deepcopy(self.config)
-        cyclic['proxy-groups'][0]['proxies'] = ['OpenAI']
+        cyclic['proxy-groups'][0]['proxies'] = ['海外AI']
         with self.assertRaises(AssertionError): validate_structure(cyclic)
         broken = copy.deepcopy(self.config)
         broken['proxy-groups'][0]['proxies'] = ['nonexistent-policy']

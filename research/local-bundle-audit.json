@@ -1,21 +1,21 @@
 {
-  "main_rules": 5186,
-  "expanded_rules": 43214,
+  "main_rules": 5303,
+  "expanded_rules": 43331,
   "per_app_overrides": 40,
   "inline_scripts": 12,
   "script_handlers": 28,
   "rewrite_rules": 16,
   "mitm_unique": 41,
-  "route_comparisons": 84,
-  "archive_members": 164,
-  "zip_bytes": 957971,
-  "zip_sha256": "201ea567c43eb3361bd0757333e73e6d17123c63aaf3e7e12357df33f93242fd",
+  "route_comparisons": 222,
+  "archive_members": 168,
+  "zip_bytes": 982679,
+  "zip_sha256": "b27b75646f0e3cf6c4d1066016e0d8be356d5e1052c811941fb51a341df39745",
   "archive_secret_findings": 0,
   "native_stash_tested": false,
   "iphone_tested": false,
   "script_inline_reference": "jinzaizhichi/stash-example@c0f273b8539b0aa648e0cab90cae7e5b4922a098 config.yaml script-providers.content（历史原生例；非当前文档/最低版本证明）",
   "files_sha256": {
-    "Jimmy-Stash.yaml": "cce8df1e6467d3e8d70f9a7497b226891ba6624b428f7e39cfec0a6ca86cf63e",
+    "Jimmy-Stash.yaml": "442ea5deaec9a524355919e72bc4495b0a1ce46a5d27fdc76d54557a17896560",
     "按App单独开关/58tongcheng.stoverride": "8830519bf55bb0928507fbc0f0f82daa6c1f2223a63df1b57a44b2f28e3122a3",
     "按App单独开关/alipan.stoverride": "500d4096bd9df8b43d1159ff1888bf437fde19e791dbb23435a3e1e66eb7aeb5",
     "按App单独开关/amap.stoverride": "26f86ca51746d76242ab8a2acf8577e2e27248bd17444ecd91d862feb3fc4285",
@@ -57,7 +57,7 @@
     "按App单独开关/xiaoyuzhou.stoverride": "06287b2835d3a6ae65d9fb167d110f67d72bd2d80ad1b89e2c8ab947b6e3f8a9",
     "按App单独开关/zhihu.stoverride": "29a669db3e143b5d02c4414245942ba0a02bef756e4c3e121c164526567fb316",
     "广告增强.stoverride": "3c08796f989b16ff8cd2d0b14f4a5f1761a12d4c505720e92d6596bef2f2c59f",
-    "扩展域名.stoverride": "52d3b5879c7c64d43bab27510f50e94ee6fb21594b4121a731c87899fc7d1345",
-    "先看这里.txt": "8992a58850e571429f83f4d6e902e7df8c0f9dfb1528e95c65eb76850c3f3cf3"
+    "扩展域名.stoverride": "bb4212bc36b296fa5034d2cfd1a2044746053a5d6dabe072457c169c8a3cf75c",
+    "先看这里.txt": "680e66fa0f9a54c55c763bbc0c8b22a38cea47ca1eab29faa2aba0c41aec2872"
   }
 }

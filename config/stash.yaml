@@ -1,7 +1,10 @@
 # Jimmy Stash 公共订阅入口；由tools/build_subscription.py生成，维护原文件即可。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # 私人机场URL请放在设备本地覆写，不在GitHub填写，不拼接到此公开地址。
-# 识别标记：JIMMY-STASH；18组，含全部节点/其他地区；无Google或NCloud组。
+# 识别标记：JIMMY-STASH；18组，含自动节点/其他地区；无Google或NCloud组。
+# 路由修订2026-10-19：7个url-test池，1800秒；海外AI默认美国，Apple默认DIRECT。
+# 自动节点/其他地区可能跨国；固定国家请选对应地区池。手动节点保留。
+# 原全部节点/OpenAI组已更名；更新后核对总代理、海外AI和Apple的保存选择。
 # 内含分流、38条基础域名广告及40款候选专项；12份脚本由Stash按本仓库URL下载。
 # HTTP/MITM和CA需在设备设置；DNS为DoH，不使用dot.pub或fallback DNS。
 # 广告修订2026-10-19：18个请求handler、10个响应handler、16条拒绝重写、41个精确MITM主机。
@@ -40,7 +43,7 @@ proxy-groups:
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   - DIRECT
 - name: 手动节点
@@ -53,8 +56,8 @@ proxy-groups:
     ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
     ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
     ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
-- name: 全部节点
-  type: select
+- name: 自动节点
+  type: url-test
   proxies:
   - REJECT
   use:
@@ -63,8 +66,10 @@ proxy-groups:
     ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
     ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
     ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
 - name: 美国
-  type: fallback
+  type: url-test
   url: https://www.gstatic.com/generate_204
   interval: 1800
   proxies:
@@ -74,7 +79,7 @@ proxy-groups:
   filter: (?i)(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
     _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)
 - name: 日本
-  type: fallback
+  type: url-test
   url: https://www.gstatic.com/generate_204
   interval: 1800
   proxies:
@@ -83,7 +88,7 @@ proxy-groups:
   - 机场
   filter: (?i)(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)
 - name: 香港
-  type: fallback
+  type: url-test
   url: https://www.gstatic.com/generate_204
   interval: 1800
   proxies:
@@ -92,7 +97,7 @@ proxy-groups:
   - 机场
   filter: (?i)(香港|🇭🇰|hong[ _-]*kong|(^|[^a-z])hk([^a-z]|$)|^REJECT$)
 - name: 新加坡
-  type: fallback
+  type: url-test
   url: https://www.gstatic.com/generate_204
   interval: 1800
   proxies:
@@ -101,7 +106,7 @@ proxy-groups:
   - 机场
   filter: (?i)(新加坡|狮城|獅城|🇸🇬|singapore|(^|[^a-z])sg([^a-z]|$)|^REJECT$)
 - name: 台湾
-  type: fallback
+  type: url-test
   url: https://www.gstatic.com/generate_204
   interval: 1800
   proxies:
@@ -110,7 +115,7 @@ proxy-groups:
   - 机场
   filter: (?i)(台湾|台灣|臺灣|台北|臺北|🇹🇼|taiwan|taipei|(^|[^a-z])tw([^a-z]|$)|^REJECT$)
 - name: 其他地区
-  type: select
+  type: url-test
   proxies:
   - REJECT
   use:
@@ -119,17 +124,19 @@ proxy-groups:
     _-]*kingdom|britain|london|germany|frankfurt|france|paris|australia|sydney|russia|moscow|netherlands|amsterdam|india|thailand|bangkok|vietnam|malaysia|indonesia|philippines|turkey|brazil|argentina|dubai|south[
     _-]*africa|italy|spain|switzerland|sweden|norway|poland|finland|denmark|ireland|new[ _-]*zealand|mexico|israel|saudi|other|unknown|(^|[^a-z])(kr|ca|uk|de|fr|au|ru|nl|in|th|vn|my|id|ph|tr|br|ar|ae|za|it|es|ch|se|no|pl|fi|dk|ie|nz|mx|il|sa)([^a-z]|$)|^gb([
     _-]*[0-9]+)?$|^REJECT$)
-- name: OpenAI
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+- name: 海外AI
   type: select
   proxies:
-  - 总代理
   - 美国
+  - 总代理
   - 日本
   - 香港
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   - DIRECT
   use:
@@ -148,7 +155,7 @@ proxy-groups:
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   - DIRECT
   use:
@@ -167,7 +174,7 @@ proxy-groups:
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   - DIRECT
   use:
@@ -186,7 +193,7 @@ proxy-groups:
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   - DIRECT
   use:
@@ -206,7 +213,7 @@ proxy-groups:
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   use:
   - 机场
@@ -225,7 +232,7 @@ proxy-groups:
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   use:
   - 机场
@@ -243,7 +250,7 @@ proxy-groups:
   - 新加坡
   - 台湾
   - 其他地区
-  - 全部节点
+  - 自动节点
   - 手动节点
   - DIRECT
   use:
@@ -337,12 +344,129 @@ rules:
 - DOMAIN-SUFFIX,unityads.unity3d.com,广告拦截
 - DOMAIN,unityads.unitychina.cn,广告拦截
 - DOMAIN,config.unityads.unitychina.cn,广告拦截
-- DOMAIN-SUFFIX,openai.com,OpenAI
-- DOMAIN-SUFFIX,chatgpt.com,OpenAI
-- DOMAIN-SUFFIX,oaistatic.com,OpenAI
-- DOMAIN-SUFFIX,oaiusercontent.com,OpenAI
-- DOMAIN-SUFFIX,chatgpt.livekit.cloud,OpenAI
-- DOMAIN,openai-api.arkoselabs.com,OpenAI
+- DOMAIN-SUFFIX,anthropic.com,海外AI
+- DOMAIN-SUFFIX,clau.de,海外AI
+- DOMAIN-SUFFIX,claude.ai,海外AI
+- DOMAIN-SUFFIX,claude.com,海外AI
+- DOMAIN-SUFFIX,claude.dev,海外AI
+- DOMAIN-SUFFIX,claudemcpclient.com,海外AI
+- DOMAIN-SUFFIX,claudemcpcontent.com,海外AI
+- DOMAIN-SUFFIX,claudeusercontent.com,海外AI
+- DOMAIN,servd-anthropic-website.b-cdn.net,海外AI
+- DOMAIN-SUFFIX,cerebras.ai,海外AI
+- DOMAIN-SUFFIX,cursor-cdn.com,海外AI
+- DOMAIN-SUFFIX,cursor.com,海外AI
+- DOMAIN-SUFFIX,cursor.sh,海外AI
+- DOMAIN-SUFFIX,cursorapi.com,海外AI
+- DOMAIN-SUFFIX,cursorvm.com,海外AI
+- DOMAIN-SUFFIX,elevenlabs.com,海外AI
+- DOMAIN-SUFFIX,elevenlabs.io,海外AI
+- DOMAIN-SUFFIX,githubcopilot.com,海外AI
+- DOMAIN,copilot-proxy.githubusercontent.com,海外AI
+- DOMAIN,copilot-workspace.githubnext.com,海外AI
+- DOMAIN,copilotprodattachments.blob.core.windows.net,海外AI
+- DOMAIN-SUFFIX,deepmind.com,海外AI
+- DOMAIN-SUFFIX,deepmind.google,海外AI
+- DOMAIN-SUFFIX,geller-pa.googleapis.com,海外AI
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,海外AI
+- DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com,海外AI
+- DOMAIN-SUFFIX,robinfrontend-pa.googleapis.com,海外AI
+- DOMAIN,ai.google.dev,海外AI
+- DOMAIN,alkalicore-pa.clients6.google.com,海外AI
+- DOMAIN,alkalimakersuite-pa.clients6.google.com,海外AI
+- DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com,海外AI
+- DOMAIN-SUFFIX,generativeai.google,海外AI
+- DOMAIN-SUFFIX,makersuite.google.com,海外AI
+- DOMAIN-SUFFIX,ai.studio,海外AI
+- DOMAIN-SUFFIX,aistudio.google.com,海外AI
+- DOMAIN-SUFFIX,bard.google.com,海外AI
+- DOMAIN-SUFFIX,gemini.google,海外AI
+- DOMAIN-SUFFIX,gemini.google.com,海外AI
+- DOMAIN-SUFFIX,gemini.gstatic.com,海外AI
+- DOMAIN,geminiweb-pa.clients.google.com,海外AI
+- DOMAIN,geminiweb-pa.clients6.google.com,海外AI
+- DOMAIN,cloudaicompanion.googleapis.com,海外AI
+- DOMAIN,cloudcode-pa.googleapis.com,海外AI
+- DOMAIN,daily-cloudcode-pa.googleapis.com,海外AI
+- DOMAIN,notebooklm-pa.googleapis.com,海外AI
+- DOMAIN,notebooklm.googleapis.com,海外AI
+- DOMAIN-SUFFIX,labstailwind.pa.googleapis.com,海外AI
+- DOMAIN-SUFFIX,notebook.google,海外AI
+- DOMAIN-SUFFIX,notebook.google.com,海外AI
+- DOMAIN-SUFFIX,notebooklm.google,海外AI
+- DOMAIN-SUFFIX,notebooklm.google.com,海外AI
+- DOMAIN-SUFFIX,jules.google,海外AI
+- DOMAIN-SUFFIX,jules.google.com,海外AI
+- DOMAIN-SUFFIX,labs.google,海外AI
+- DOMAIN-SUFFIX,labs.google.com,海外AI
+- DOMAIN-SUFFIX,flow.google,海外AI
+- DOMAIN-SUFFIX,flow.google.com,海外AI
+- DOMAIN-SUFFIX,aisandbox-pa.googleapis.com,海外AI
+- DOMAIN-SUFFIX,aicode.googleapis.com,海外AI
+- DOMAIN-SUFFIX,aida.googleapis.com,海外AI
+- DOMAIN-SUFFIX,opal.google,海外AI
+- DOMAIN-SUFFIX,opal.google.com,海外AI
+- DOMAIN,antigravity-pa.googleapis.com,海外AI
+- DOMAIN,antigravity.googleapis.com,海外AI
+- DOMAIN-SUFFIX,antigravity.google,海外AI
+- DOMAIN-SUFFIX,antigravity-unleash.goog,海外AI
+- DOMAIN-SUFFIX,stitch.withgoogle.com,海外AI
+- DOMAIN-SUFFIX,groq.com,海外AI
+- DOMAIN-SUFFIX,hf.co,海外AI
+- DOMAIN-SUFFIX,hf.space,海外AI
+- DOMAIN-SUFFIX,huggingface.co,海外AI
+- DOMAIN-SUFFIX,grazie.ai,海外AI
+- DOMAIN-SUFFIX,grazie.aws.intellij.net,海外AI
+- DOMAIN-SUFFIX,jetbrains.ai,海外AI
+- DOMAIN-SUFFIX,chat.com,海外AI
+- DOMAIN-SUFFIX,chatgpt.com,海外AI
+- DOMAIN-SUFFIX,oaistatic.com,海外AI
+- DOMAIN-SUFFIX,oaistatsig.com,海外AI
+- DOMAIN-SUFFIX,oaiusercontent.com,海外AI
+- DOMAIN-SUFFIX,openai.com,海外AI
+- DOMAIN-SUFFIX,openai.org,海外AI
+- DOMAIN-SUFFIX,sora.com,海外AI
+- DOMAIN-SUFFIX,openai.com.cdn.cloudflare.net,海外AI
+- DOMAIN,openaiapi-site.azureedge.net,海外AI
+- DOMAIN,openaiassets.blob.core.windows.net,海外AI
+- DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net,海外AI
+- DOMAIN,openaicom.imgix.net,海外AI
+- DOMAIN,openaicomproductionae4b.blob.core.windows.net,海外AI
+- DOMAIN,production-openaicom-storage.azureedge.net,海外AI
+- DOMAIN-SUFFIX,chatgpt.livekit.cloud,海外AI
+- DOMAIN-SUFFIX,perplexity.ai,海外AI
+- DOMAIN-SUFFIX,perplexity.com,海外AI
+- DOMAIN-SUFFIX,pplx.ai,海外AI
+- DOMAIN,ppl-ai-file-upload.s3.amazonaws.com,海外AI
+- DOMAIN,pplx-res.cloudinary.com,海外AI
+- DOMAIN-SUFFIX,poe.com,海外AI
+- DOMAIN-SUFFIX,poecdn.net,海外AI
+- DOMAIN-SUFFIX,codeium.com,海外AI
+- DOMAIN-SUFFIX,codeiumdata.com,海外AI
+- DOMAIN-SUFFIX,windsurf.build,海外AI
+- DOMAIN-SUFFIX,windsurf.com,海外AI
+- DOMAIN-SUFFIX,grok.com,海外AI
+- DOMAIN-SUFFIX,grok.x.com,海外AI
+- DOMAIN-SUFFIX,grokipedia.com,海外AI
+- DOMAIN-SUFFIX,x.ai,海外AI
+- DOMAIN-SUFFIX,coderabbit.ai,海外AI
+- DOMAIN-SUFFIX,coderabbit.gallery.vsassets.io,海外AI
+- DOMAIN-SUFFIX,cohere.ai,海外AI
+- DOMAIN-SUFFIX,cohere.com,海外AI
+- DOMAIN-SUFFIX,copilot.cloud.microsoft,海外AI
+- DOMAIN-SUFFIX,copilot.com,海外AI
+- DOMAIN-SUFFIX,copilot.microsoft.com,海外AI
+- DOMAIN-SUFFIX,clipdrop.co,海外AI
+- DOMAIN-SUFFIX,jasper.ai,海外AI
+- DOMAIN-SUFFIX,meta.ai,海外AI
+- DOMAIN-SUFFIX,metaaivm.com,海外AI
+- DOMAIN-SUFFIX,devin.ai,海外AI
+- DOMAIN-SUFFIX,duck.ai,海外AI
+- DOMAIN-SUFFIX,midjourney.com,海外AI
+- DOMAIN-SUFFIX,mistral.ai,海外AI
+- DOMAIN-SUFFIX,novelai.net,海外AI
+- DOMAIN-SUFFIX,openrouter.ai,海外AI
+- DOMAIN,openai-api.arkoselabs.com,海外AI
 - DOMAIN,e13252.dscg.akamaiedge.net,Netflix
 - DOMAIN,h-netflix.online-metrix.net,Netflix
 - DOMAIN,netflix.com.edgesuite.net,Netflix

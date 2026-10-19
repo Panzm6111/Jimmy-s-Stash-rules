@@ -1,0 +1,560 @@
+{
+  "checked_at": "2026-10-19",
+  "scope": "海外 AI 服务的人工审阅域名；不承诺覆盖全部当前、未来服务及全部登录/共享后端流量。",
+  "output": "rules/openai.yaml",
+  "group": "海外AI",
+  "upstream": {
+    "repository": "https://github.com/v2fly/domain-list-community",
+    "revision": "6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f",
+    "commit_date": "2026-10-19",
+    "license": "MIT",
+    "license_file": "licenses/v2fly-domain-list-community-MIT.txt",
+    "license_url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/LICENSE",
+    "license_sha256": "b9d84a22870d3f21c91a4c6e410c9cc51d00902f5233ad0c84011479244bf7d2",
+    "maintenance_evidence": "git ls-remote HEAD 与检出的提交一致；git log 显示此提交日期为 2026-10-19。逐一读取以下 15 个实际数据文件及 LICENSE。"
+  },
+  "conversion": {
+    "plain_domain": "DOMAIN-SUFFIX",
+    "full:": "DOMAIN",
+    "other_syntax": "不导入 include、regexp、带属性条目；不直接加载其他客户端配置。",
+    "duplicates": "按来源顺序去重，稳定输出",
+    "selection_policy": "人工选取已知海外 AI 专用域名；共享云域名仅保留已列出的专用主机名。category-ai-!cn 不等于非中国厂商名单，其中国 AI 海外域名及未判定服务不选。"
+  },
+  "services": [
+    {
+      "name": "OpenAI / ChatGPT / Sora",
+      "source": "openai"
+    },
+    {
+      "name": "Anthropic / Claude",
+      "source": "anthropic"
+    },
+    {
+      "name": "Google Gemini / AI Studio / NotebookLM / Code Assist / Jules / Flow / Opal / Antigravity / Stitch",
+      "source": "google-deepmind"
+    },
+    {
+      "name": "Microsoft Copilot",
+      "source": "category-ai-!cn",
+      "selected": [
+        "copilot.cloud.microsoft",
+        "copilot.com",
+        "copilot.microsoft.com"
+      ]
+    },
+    {
+      "name": "GitHub Copilot",
+      "source": "github-copilot"
+    },
+    {
+      "name": "Perplexity",
+      "source": "perplexity"
+    },
+    {
+      "name": "Poe",
+      "source": "poe"
+    },
+    {
+      "name": "xAI / Grok",
+      "source": "xai"
+    },
+    {
+      "name": "Meta AI",
+      "source": "category-ai-!cn",
+      "selected": [
+        "meta.ai",
+        "metaaivm.com"
+      ]
+    },
+    {
+      "name": "Cohere",
+      "source": "category-ai-!cn",
+      "selected": [
+        "cohere.ai",
+        "cohere.com"
+      ]
+    },
+    {
+      "name": "Mistral",
+      "source": "category-ai-!cn",
+      "selected": [
+        "mistral.ai"
+      ]
+    },
+    {
+      "name": "Midjourney",
+      "source": "category-ai-!cn",
+      "selected": [
+        "midjourney.com"
+      ]
+    },
+    {
+      "name": "Jasper / Clipdrop",
+      "source": "category-ai-!cn",
+      "selected": [
+        "clipdrop.co",
+        "jasper.ai"
+      ]
+    },
+    {
+      "name": "NovelAI",
+      "source": "category-ai-!cn",
+      "selected": [
+        "novelai.net"
+      ]
+    },
+    {
+      "name": "OpenRouter",
+      "source": "category-ai-!cn",
+      "selected": [
+        "openrouter.ai"
+      ]
+    },
+    {
+      "name": "Groq",
+      "source": "groq"
+    },
+    {
+      "name": "Cerebras",
+      "source": "cerebras"
+    },
+    {
+      "name": "Hugging Face",
+      "source": "huggingface"
+    },
+    {
+      "name": "Cursor",
+      "source": "cursor"
+    },
+    {
+      "name": "Windsurf / Codeium",
+      "source": "windsurf"
+    },
+    {
+      "name": "ElevenLabs",
+      "source": "elevenlabs"
+    },
+    {
+      "name": "JetBrains AI / Grazie",
+      "source": "jetbrains-ai"
+    },
+    {
+      "name": "Devin",
+      "source": "category-ai-!cn",
+      "selected": [
+        "devin.ai"
+      ]
+    },
+    {
+      "name": "CodeRabbit",
+      "source": "category-ai-!cn",
+      "selected": [
+        "coderabbit.ai",
+        "coderabbit.gallery.vsassets.io"
+      ]
+    },
+    {
+      "name": "Duck.ai",
+      "source": "category-ai-!cn",
+      "selected": [
+        "duck.ai"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "anthropic",
+      "path": "data/anthropic",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/anthropic",
+      "sha256": "bf48dc1b342bbfd06f2a93ee8ce180fc424d9c041dafd2d182ffb3f4186698b4",
+      "selected": [
+        "anthropic.com",
+        "clau.de",
+        "claude.ai",
+        "claude.com",
+        "claude.dev",
+        "claudemcpclient.com",
+        "claudemcpcontent.com",
+        "claudeusercontent.com",
+        "full:servd-anthropic-website.b-cdn.net"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "cerebras",
+      "path": "data/cerebras",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/cerebras",
+      "sha256": "713ea33f6828bb2ac34db413204ea4ddb5d8740aef64e521f46f55fbc99d771d",
+      "selected": [
+        "cerebras.ai"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "cursor",
+      "path": "data/cursor",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/cursor",
+      "sha256": "eb7315056ebfb599a7dccedddcb5aa7f7723665aa800e2783fff798c1fa3724e",
+      "selected": [
+        "cursor-cdn.com",
+        "cursor.com",
+        "cursor.sh",
+        "cursorapi.com",
+        "cursorvm.com"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "elevenlabs",
+      "path": "data/elevenlabs",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/elevenlabs",
+      "sha256": "4c284a7e5947f4a40d40c9dc8fedf3e9e3091db0c7680b913b2b19db36ebd561",
+      "selected": [
+        "elevenlabs.com",
+        "elevenlabs.io"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "github-copilot",
+      "path": "data/github-copilot",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/github-copilot",
+      "sha256": "e41465e9e15430bf31d1054d21c0551e8fa3ef24431e317317f409511c64483c",
+      "selected": [
+        "githubcopilot.com",
+        "full:copilot-proxy.githubusercontent.com",
+        "full:copilot-workspace.githubnext.com",
+        "full:copilotprodattachments.blob.core.windows.net"
+      ],
+      "omitted": [
+        "full:copilot-telemetry-service.githubusercontent.com @telemetry",
+        "full:copilot-telemetry.githubusercontent.com @telemetry"
+      ],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "google-deepmind",
+      "path": "data/google-deepmind",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/google-deepmind",
+      "sha256": "6a9195976e75c2b6adb255ec5cc4af6d8b66d0dd2a877437642deed6da244874",
+      "selected": [
+        "deepmind.com",
+        "deepmind.google",
+        "geller-pa.googleapis.com",
+        "generativelanguage.googleapis.com",
+        "proactivebackend-pa.googleapis.com",
+        "robinfrontend-pa.googleapis.com",
+        "full:ai.google.dev",
+        "full:alkalicore-pa.clients6.google.com",
+        "full:alkalimakersuite-pa.clients6.google.com",
+        "full:webchannel-alkalimakersuite-pa.clients6.google.com",
+        "generativeai.google",
+        "makersuite.google.com",
+        "ai.studio",
+        "aistudio.google.com",
+        "bard.google.com",
+        "gemini.google",
+        "gemini.google.com",
+        "gemini.gstatic.com",
+        "full:geminiweb-pa.clients.google.com",
+        "full:geminiweb-pa.clients6.google.com",
+        "full:cloudaicompanion.googleapis.com",
+        "full:cloudcode-pa.googleapis.com",
+        "full:daily-cloudcode-pa.googleapis.com",
+        "full:notebooklm-pa.googleapis.com",
+        "full:notebooklm.googleapis.com",
+        "labstailwind.pa.googleapis.com",
+        "notebook.google",
+        "notebook.google.com",
+        "notebooklm.google",
+        "notebooklm.google.com",
+        "jules.google",
+        "jules.google.com",
+        "labs.google",
+        "labs.google.com",
+        "flow.google",
+        "flow.google.com",
+        "aisandbox-pa.googleapis.com",
+        "aicode.googleapis.com",
+        "aida.googleapis.com",
+        "opal.google",
+        "opal.google.com",
+        "full:antigravity-pa.googleapis.com",
+        "full:antigravity.googleapis.com",
+        "antigravity.google",
+        "antigravity-unleash.goog",
+        "stitch.withgoogle.com"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "groq",
+      "path": "data/groq",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/groq",
+      "sha256": "d779541783d4c835ad341a13ae3c3a008bfa3e535b46f79518b92bdef17588bb",
+      "selected": [
+        "groq.com"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "huggingface",
+      "path": "data/huggingface",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/huggingface",
+      "sha256": "67f5861b31232701f884efd38d9436dd89183fccbd01d6f10d791b9ef6fbf4b8",
+      "selected": [
+        "hf.co",
+        "hf.space",
+        "huggingface.co"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "jetbrains-ai",
+      "path": "data/jetbrains-ai",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/jetbrains-ai",
+      "sha256": "b1bb655fc82a45311745ef0513dc6889f76cb4bfc0cd9cd563788b5e502b6a53",
+      "selected": [
+        "grazie.ai",
+        "grazie.aws.intellij.net",
+        "jetbrains.ai"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "openai",
+      "path": "data/openai",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/openai",
+      "sha256": "5276ab68c1a2d44db2cd745a9146d1645ef3dd3c388fdd1079b6b49267d60ddc",
+      "selected": [
+        "chat.com",
+        "chatgpt.com",
+        "oaistatic.com",
+        "oaistatsig.com",
+        "oaiusercontent.com",
+        "openai.com",
+        "openai.org",
+        "sora.com",
+        "openai.com.cdn.cloudflare.net",
+        "full:openaiapi-site.azureedge.net",
+        "full:openaiassets.blob.core.windows.net",
+        "full:openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net",
+        "full:openaicom.imgix.net",
+        "full:openaicomproductionae4b.blob.core.windows.net",
+        "full:production-openaicom-storage.azureedge.net",
+        "chatgpt.livekit.cloud"
+      ],
+      "omitted": [
+        "chatgpt.site",
+        "crixet.com",
+        "regexp:^chatgpt-async-webps-prod-\\S+-\\d+\\.webpubsub\\.azure\\.com$",
+        "full:browser-intake-datadoghq.com @ads",
+        "full:o33249.ingest.sentry.io @ads",
+        "full:openai.qualtrics.com @ads",
+        "host.livekit.cloud",
+        "turn.livekit.cloud"
+      ],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "perplexity",
+      "path": "data/perplexity",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/perplexity",
+      "sha256": "570581bad658566cb493207c14ebb55110750071071e089b4c40054b00af3db0",
+      "selected": [
+        "perplexity.ai",
+        "perplexity.com",
+        "pplx.ai",
+        "full:ppl-ai-file-upload.s3.amazonaws.com",
+        "full:pplx-res.cloudinary.com"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "poe",
+      "path": "data/poe",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/poe",
+      "sha256": "e689a8d337b64bcf760e5d8dfe03e3d29d8558063db93acba2d1d6eb9c11003a",
+      "selected": [
+        "poe.com",
+        "poecdn.net"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "windsurf",
+      "path": "data/windsurf",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/windsurf",
+      "sha256": "d6d082e40d180efbabde3b1a5bd8fe1bdc804f1a11b79d2128fe41e0b4dc4e16",
+      "selected": [
+        "codeium.com",
+        "codeiumdata.com",
+        "windsurf.build",
+        "windsurf.com"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "xai",
+      "path": "data/xai",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/xai",
+      "sha256": "1e15c6018174f58f6a2f3710c84566909eee45a8092247280d244cf8ea7cd928",
+      "selected": [
+        "grok.com",
+        "grok.x.com",
+        "grokipedia.com",
+        "x.ai"
+      ],
+      "omitted": [],
+      "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
+    },
+    {
+      "id": "category-ai-!cn",
+      "path": "data/category-ai-!cn",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/category-ai-!cn",
+      "sha256": "76d31c06f9a3f14803fb13a0affa1b7609fcadf747da03be901e6221fe1c2e32",
+      "selected": [
+        "coderabbit.ai",
+        "coderabbit.gallery.vsassets.io",
+        "cohere.ai",
+        "cohere.com",
+        "copilot.cloud.microsoft",
+        "copilot.com",
+        "copilot.microsoft.com",
+        "clipdrop.co",
+        "jasper.ai",
+        "meta.ai",
+        "metaaivm.com",
+        "devin.ai",
+        "duck.ai",
+        "midjourney.com",
+        "mistral.ai",
+        "novelai.net",
+        "openrouter.ai"
+      ],
+      "omitted": [
+        "include:anthropic",
+        "include:bytedance-ai-!cn",
+        "include:cerebras",
+        "include:comfy",
+        "include:cursor",
+        "include:elevenlabs",
+        "include:envato",
+        "include:github-copilot",
+        "include:google-deepmind",
+        "include:groq",
+        "include:huggingface",
+        "include:jetbrains-ai",
+        "include:liveperson",
+        "include:manus",
+        "include:openai",
+        "include:perplexity",
+        "include:poe",
+        "include:windsurf",
+        "include:xai",
+        "include:youmind",
+        "copilot-stg.com",
+        "deepwiki.com",
+        "deepwiki.org",
+        "typesafe.ai",
+        "kimi.ai",
+        "moonshot.ai",
+        "muse.ai",
+        "agentclientprotocol.com",
+        "anythingllm.com",
+        "arena.ai",
+        "chutes.ai",
+        "clawhub.ai",
+        "crewai.com",
+        "diabrowser.com",
+        "diabrowser.engineering",
+        "dify.ai",
+        "dreamgen.com",
+        "gateway.ai.cloudflare.com",
+        "h2o.ai",
+        "kiro.dev",
+        "langchain.com",
+        "lmstudio.ai",
+        "lovart.ai",
+        "magnific.com",
+        "minimax.io",
+        "mozilla.ai",
+        "notegpt.io",
+        "ollama.com",
+        "openart.ai",
+        "openclaw.ai",
+        "opencode.ai",
+        "openspec.dev",
+        "plannotator.ai",
+        "qoder.com",
+        "sider.ai",
+        "spicywriter.com",
+        "syntx.ai",
+        "talkai.info",
+        "tapnow.ai",
+        "tripo3d.ai"
+      ],
+      "omission_reason": "仅人工精选明确的海外 AI 服务；未选 include 和其余域名，不把 !cn 分类等同于非中国厂商。"
+    }
+  ],
+  "local_rules": [
+    {
+      "rule": "DOMAIN,openai-api.arkoselabs.com",
+      "license": "MIT (original project rule)",
+      "reason": "保留上一版已有的 OpenAI 专用验证码主机；不扩大为整个 arkoselabs.com。",
+      "source_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/a7679cdb2223ec73acdda483cc1854b957b8f7d6/rules/openai.yaml"
+    }
+  ],
+  "exclusions": {
+    "shared_infrastructure": [
+      "google.com",
+      "googleapis.com",
+      "gstatic.com",
+      "github.com",
+      "githubusercontent.com",
+      "microsoft.com",
+      "bing.com",
+      "auth0.com",
+      "cloudflare.com",
+      "cloudfront.net",
+      "amazonaws.com",
+      "livekit.cloud",
+      "host.livekit.cloud",
+      "turn.livekit.cloud"
+    ],
+    "china_ai_examples": [
+      "deepseek.com",
+      "kimi.com",
+      "kimi.ai",
+      "moonshot.ai",
+      "doubao.com",
+      "qianwen.com",
+      "qwen.ai",
+      "minimax.io"
+    ],
+    "upstream_names_not_reliable_country_classification": [
+      "include:bytedance-ai-!cn",
+      "include:manus",
+      "kimi.ai",
+      "moonshot.ai",
+      "minimax.io"
+    ],
+    "notes": "这些排除项仅表示不加入海外 AI 规则。最终流向仍由原国内/其他分流决定。共享登录/验证码不保证与 AI 主域名同出口；发生区域或登录错误时，应查看实际连接域名后定点补充。"
+  },
+  "verification": {
+    "native_core_tested": false,
+    "account_or_unlock_tested": false,
+    "evidence": "实际源文件、SHA-256、完整许可、结构转换与代表域名规则模型；不等于设备连接或 AI 服务解锁通过。"
+  }
+}

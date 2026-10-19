@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-19T13:50:39.620431+08:00",
+  "checked_at": "2026-10-19T21:54:37.916441+08:00",
   "target": "upstream",
-  "passed": 28,
-  "total": 28,
+  "passed": 44,
+  "total": 44,
   "results": [
     {
       "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/LICENSE",
@@ -198,6 +198,118 @@
       "status": 200,
       "sha256_matches": true,
       "bytes": 28643,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/LICENSE",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1067,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/anthropic",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 163,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/category-ai-!cn",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1171,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/cerebras",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 12,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/cursor",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 63,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/elevenlabs",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 29,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/github-copilot",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 303,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/google-deepmind",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1401,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/groq",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 9,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/huggingface",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 30,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/jetbrains-ai",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 47,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/openai",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 690,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/perplexity",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 108,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/poe",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 19,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/windsurf",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 56,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/xai",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 40,
       "ok": true
     }
   ]

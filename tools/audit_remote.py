@@ -33,16 +33,20 @@ def main():
     parser.add_argument('--report', type=Path)
     args = parser.parse_args()
     lock=json.loads((ROOT/'research/sources.lock.json').read_text())
+    ai=json.loads((ROOT/'research/ai-sources.json').read_text())
     if args.target == 'upstream':
         resources=[(r['url'],r['source_sha256']) for r in lock['resources']]
         resources += [(r['source_url'],r['source_sha256']) for r in lock['ad_scripts']]
         resources += [(r['url'],r['sha256']) for r in lock.get('ad_supporting_sources', [])]
+        resources += [(r['url'],r['sha256']) for r in ai['sources']]
+        resources += [(ai['upstream']['license_url'],ai['upstream']['license_sha256'])]
     else:
         paths={'config/main.yaml','config/core.stoverride','config/stash.yaml'}
         paths.update(str(p.relative_to(ROOT)) for p in (ROOT/'modules/ads').glob('*.stoverride'))
         for r in lock['resources']: paths.add(r['output'])
         for r in lock['ad_scripts']: paths.add(r['output'])
         for p in ['rules/openai.yaml','rules/apple.yaml','rules/microsoft.yaml']: paths.add(p)
+        paths.update({'research/ai-sources.json',ai['upstream']['license_file']})
         resources=[(RAW+p,hashlib.sha256((ROOT/p).read_bytes()).hexdigest()) for p in sorted(paths)]
     # Shared sources referenced by several apps are fetched/count once; reject conflicting hashes.
     expected_by_url = {}

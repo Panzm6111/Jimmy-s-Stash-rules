@@ -1,25 +1,283 @@
 [
-  {"domain":"router.lan","policy":"DIRECT"},
-  {"ip":"192.168.31.1","policy":"DIRECT"},
-  {"ip":"fd00::1","policy":"DIRECT"},
-  {"domain":"api.push.apple.com","policy":"DIRECT"},
-  {"domain":"www.icloud.com","policy":"DIRECT"},
-  {"domain":"download.microsoft.com","policy":"DIRECT"},
-  {"domain":"login.microsoftonline.com","policy":"DIRECT"},
-  {"domain":"ad.doubleclick.net","policy":"广告拦截"},
-  {"domain":"ads.pangle.io","policy":"广告拦截"},
-  {"domain":"api.openai.com","policy":"OpenAI"},
-  {"domain":"chatgpt.com","policy":"OpenAI"},
-  {"domain":"files.oaiusercontent.com","policy":"OpenAI"},
-  {"domain":"www.netflix.com","policy":"Netflix"},
-  {"domain":"www.youtube.com","policy":"YouTube"},
-  {"domain":"rr1.googlevideo.com","policy":"YouTube"},
-  {"domain":"api.telegram.org","policy":"Telegram"},
-  {"domain":"store.apple.com","policy":"Apple"},
-  {"domain":"www.office.com","policy":"Microsoft"},
-  {"domain":"www.jd.com","policy":"国内直连"},
-  {"domain":"www.taobao.com","policy":"国内直连"},
-  {"domain":"www.alipay.com","policy":"国内直连"},
-  {"domain":"unknown.example","country":"CN","policy":"国内直连"},
-  {"domain":"unknown.example","policy":"未匹配流量"}
+  {
+    "domain": "router.lan",
+    "policy": "DIRECT"
+  },
+  {
+    "ip": "192.168.31.1",
+    "policy": "DIRECT"
+  },
+  {
+    "ip": "fd00::1",
+    "policy": "DIRECT"
+  },
+  {
+    "domain": "api.push.apple.com",
+    "policy": "DIRECT"
+  },
+  {
+    "domain": "www.icloud.com",
+    "policy": "DIRECT"
+  },
+  {
+    "domain": "download.microsoft.com",
+    "policy": "DIRECT"
+  },
+  {
+    "domain": "login.microsoftonline.com",
+    "policy": "DIRECT"
+  },
+  {
+    "domain": "ad.doubleclick.net",
+    "policy": "广告拦截"
+  },
+  {
+    "domain": "ads.pangle.io",
+    "policy": "广告拦截"
+  },
+  {
+    "domain": "api.openai.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "chatgpt.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "files.oaiusercontent.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "sora.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.anthropic.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "claude.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "files.claudeusercontent.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "gemini.google.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "aistudio.google.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "generativelanguage.googleapis.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "notebooklm.google.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "cloudcode-pa.googleapis.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "copilot.microsoft.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "copilot.cloud.microsoft",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.githubcopilot.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "copilot-proxy.githubusercontent.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "www.perplexity.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "poe.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "grok.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.x.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "www.meta.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.cohere.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "console.mistral.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "www.midjourney.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "jasper.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "novelai.net",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "openrouter.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.groq.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.cerebras.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "huggingface.co",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.cursor.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "windsurf.com",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.elevenlabs.io",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "api.jetbrains.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "devin.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "coderabbit.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "duck.ai",
+    "policy": "海外AI"
+  },
+  {
+    "domain": "www.netflix.com",
+    "policy": "Netflix"
+  },
+  {
+    "domain": "www.youtube.com",
+    "policy": "YouTube"
+  },
+  {
+    "domain": "rr1.googlevideo.com",
+    "policy": "YouTube"
+  },
+  {
+    "domain": "api.telegram.org",
+    "policy": "Telegram"
+  },
+  {
+    "domain": "store.apple.com",
+    "policy": "Apple"
+  },
+  {
+    "domain": "www.office.com",
+    "policy": "Microsoft"
+  },
+  {
+    "domain": "www.jd.com",
+    "policy": "国内直连"
+  },
+  {
+    "domain": "www.taobao.com",
+    "policy": "国内直连"
+  },
+  {
+    "domain": "www.alipay.com",
+    "policy": "国内直连"
+  },
+  {
+    "domain": "unknown.example",
+    "country": "CN",
+    "policy": "国内直连"
+  },
+  {
+    "domain": "unknown.example",
+    "policy": "未匹配流量"
+  },
+  {
+    "domain": "www.google.com",
+    "policy": "未匹配流量"
+  },
+  {
+    "domain": "cdn.auth0.com",
+    "policy": "未匹配流量"
+  },
+  {
+    "domain": "host.livekit.cloud",
+    "policy": "未匹配流量"
+  },
+  {
+    "domain": "gemini.google.com.evil.example",
+    "policy": "未匹配流量"
+  },
+  {
+    "domain": "not-googleapis.com",
+    "policy": "未匹配流量"
+  },
+  {
+    "domain": "unknown-ai.example",
+    "policy": "未匹配流量"
+  },
+  {
+    "domain": "www.microsoft.com",
+    "policy": "Microsoft"
+  },
+  {
+    "domain": "www.github.com",
+    "policy": "Microsoft"
+  },
+  {
+    "domain": "chat.deepseek.com",
+    "country": "CN",
+    "policy": "国内直连"
+  },
+  {
+    "domain": "kimi.com",
+    "country": "CN",
+    "policy": "国内直连"
+  },
+  {
+    "domain": "www.doubao.com",
+    "country": "CN",
+    "policy": "国内直连"
+  },
+  {
+    "domain": "www.qianwen.com",
+    "country": "CN",
+    "policy": "国内直连"
+  }
 ]
