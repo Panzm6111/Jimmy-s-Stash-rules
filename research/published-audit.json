@@ -1,14 +1,14 @@
 {
-  "checked_at": "2026-10-19T13:54:03.491810+08:00",
+  "checked_at": "2026-10-19T22:06:26.764551+08:00",
   "target": "published",
-  "passed": 65,
-  "total": 65,
+  "passed": 67,
+  "total": 67,
   "results": [
     {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core.stoverride",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 20407,
+      "bytes": 20563,
       "ok": true
     },
     {
@@ -22,7 +22,14 @@
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 234893,
+      "bytes": 240359,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/licenses/v2fly-domain-list-community-MIT.txt",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 1067,
       "ok": true
     },
     {
@@ -313,6 +320,13 @@
       "ok": true
     },
     {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/research/ai-sources.json",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 18184,
+      "ok": true
+    },
+    {
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ads-basic.yaml",
       "status": 200,
       "sha256_matches": true,
@@ -337,7 +351,7 @@
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/openai.yaml",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 202,
+      "bytes": 4497,
       "ok": true
     },
     {

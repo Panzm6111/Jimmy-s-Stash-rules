@@ -1,22 +1,38 @@
 {
-  "checked_at": "2026-10-19T13:53:58.913812+08:00",
+  "checked_at": "2026-10-19T22:06:12.830714+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 234893,
-  "sha256": "abd692cbe7ebe46a5768c53ba3b2d79f1dd749d00311f30cc0d08d3b2b024747",
+  "bytes": 240359,
+  "sha256": "58772cfbb5ecef69565722c2484baac1fa3d775b3ef0746d7a6e147cea97db3f",
   "matches_local_bytes": true,
   "proxy_groups": 18,
-  "rules": 5197,
+  "rules": 5314,
   "inline_scripts": 0,
   "remote_scripts": 12,
+  "request_handlers": 18,
   "response_handlers": 10,
   "rewrite_rules": 16,
   "mitm_hosts": 41,
   "private_url_is_placeholder": true,
   "new_selectors": [
-    "全部节点",
+    "自动节点",
+    "海外AI"
+  ],
+  "automatic_pools": [
+    "自动节点",
+    "美国",
+    "日本",
+    "香港",
+    "新加坡",
+    "台湾",
     "其他地区"
   ],
+  "probe_url": "https://www.gstatic.com/generate_204",
+  "probe_interval_seconds": 1800,
+  "overseas_ai_default": "美国",
+  "apple_default": "DIRECT",
+  "ai_service_categories": 25,
+  "ai_domain_rules": 123,
   "previous_manual_selector_preserved": true,
   "other_regions_is_strict_complement": false,
   "other_regions_uses_positive_name_filter": true,
@@ -25,6 +41,5 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "70e492c7c2f97477c15517d097361b253384bc4a",
-  "request_handlers": 18
+  "code_release_commit": "71e97b725e493587862835d1463b4bf14d059e45"
 }
