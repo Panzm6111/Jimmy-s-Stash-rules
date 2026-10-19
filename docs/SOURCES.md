@@ -59,7 +59,7 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 | [Maasea/sgmodule](https://github.com/Maasea/sgmodule) @ `65075cdb388fc5e3094afd7e7314c67b243f3525` | Apache-2.0；只审阅YouTube实际JS、模块、许可证和WeRead模块，**没有复制到运行代码** | README明确基于Surge；YouTube有Protobuf、请求/响应配套、动态视频域名和UI/后台播放修改，本轮未完成Stash广告专用裁剪与二进制回归。WeRead是阅读提示精简，不当成去广告 |
 | app2smile/rules，沿用前轮固定SHA | MIT；既有B站/贴吧保留。Spotify模块只作调查，没有复制 | 实际Spotify模块修改Premium字段/权限；未作为广告专用模块导入。不把同样“有原生Stash模块”作为所有功能符合本项目范围的证据 |
 
-本轮读取主要三个复用仓库HEAD均与锁定SHA相同。上游审计按URL去重，27个不同公开文件全部HTTP 200且哈希匹配；该结果与GitHub仓库活跃程度都不等于App当前广告实测有效。
+本轮读取主要三个复用仓库HEAD均与锁定SHA相同。上游审计按URL去重，28个不同公开文件全部HTTP 200且哈希匹配；该结果与GitHub仓库活跃程度都不等于App当前广告实测有效。
 
 原QX动作名没有套进Stash。2026-10-19修订：16条`reject-dict/reject-200`用原生request脚本返回200与`{}`或空正文；微博另外2条也改为请求式。原14条reject保留；联通2条reject-img仍为普通reject，未实现等价图片响应。所有动作仍需设备验收，不能承诺去除空白或倒计时。只读来源，不请求真实业务接口，不保存账号响应。
 
