@@ -3,6 +3,6 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 携程旅行广告专项（可选）
-desc: 仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。默认不导入；需设备验收。
+desc: AD-20261020.1；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。独立启停；需设备验收。
 rules:
 - DOMAIN,ma-adx.ctrip.com,广告拦截

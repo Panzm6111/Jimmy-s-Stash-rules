@@ -3,9 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 58同城广告专项（可选）
-desc: 仅 home/advertising 和 appadv；保留职位、联系与发布。默认不导入；需设备验收。
+desc: AD-20261020.1；仅 home/advertising 和 appadv；保留职位、联系与发布。独立启停；需设备验收。
 http:
   mitm:
   - app.58.com
-  rewrite:
+  url-rewrite:
   - ^https://app\.58\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\?|$) - reject

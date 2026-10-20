@@ -3,23 +3,14 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 高德地图广告专项（可选）
-desc: 两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。默认不导入；需设备验收。
+desc: AD-20261020.1；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。独立启停；需设备验收。
 rules:
 - DOMAIN,optimus-ads.amap.com,广告拦截
 - DOMAIN,optimus-ads.amap.com.w.alikunlun.com,广告拦截
-script-providers:
-  jimmy_ad_empty_response:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
-    interval: 86400
 http:
   mitm:
   - m5.amap.com
   - amap-aos-info-nogw.amap.com
-  rewrite:
+  url-rewrite:
+  - ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$) - reject-dict
   - ^https://amap\-aos\-info\-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt/?(?:\?|$) - reject
-  script:
-  - match: ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5

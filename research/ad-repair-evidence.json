@@ -1,0 +1,1923 @@
+{
+  "revision": "AD-20261020.1",
+  "checked_at": "2026-10-20",
+  "baseline": "d8ea21e",
+  "start_commit": "936fe457b0362d0dc439d769e9fa7faa29d56b5b",
+  "scope": "ads-only; 40 original modules retained; sign-in paused; routing/private provider unchanged",
+  "target_versions": "User will update Stash and Apps to latest; numeric versions not reported",
+  "sources": [
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/myBlockAds.js",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/myBlockAds.js",
+      "sha256": "4cf62100424886068a5470daecec319e93ccd034c647d79a9daaa72bbbc341bb",
+      "license": "GPL-3.0-only",
+      "reviewed_ranges": [
+        [
+          63,
+          83
+        ],
+        [
+          85,
+          115
+        ],
+        [
+          126,
+          146
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 63,
+          "text": "  // 淘宝-开屏视频广告"
+        },
+        {
+          "line": 64,
+          "text": "  case /^https:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.cloudvideo\\.video\\.query/.test(url):"
+        },
+        {
+          "line": 65,
+          "text": "    try {"
+        },
+        {
+          "line": 66,
+          "text": "      let obj = JSON.parse(body);"
+        },
+        {
+          "line": 67,
+          "text": "      if (obj?.data?.duration) {"
+        },
+        {
+          "line": 68,
+          "text": "        obj.data.duration = \"0\";"
+        },
+        {
+          "line": 69,
+          "text": "      }"
+        },
+        {
+          "line": 70,
+          "text": "      if (obj?.data?.resources?.length > 0) {"
+        },
+        {
+          "line": 71,
+          "text": "        obj.data.resources = [];"
+        },
+        {
+          "line": 72,
+          "text": "      }"
+        },
+        {
+          "line": 73,
+          "text": "      if (obj?.data?.caches?.length > 0) {"
+        },
+        {
+          "line": 74,
+          "text": "        obj.data.caches = [];"
+        },
+        {
+          "line": 75,
+          "text": "      }"
+        },
+        {
+          "line": 76,
+          "text": "      if (obj?.data?.respTimeInMs) {"
+        },
+        {
+          "line": 77,
+          "text": "        obj.data.respTimeInMs = \"3818332800000\";"
+        },
+        {
+          "line": 78,
+          "text": "      }"
+        },
+        {
+          "line": 79,
+          "text": "      body = JSON.stringify(obj);"
+        },
+        {
+          "line": 80,
+          "text": "    } catch (err) {"
+        },
+        {
+          "line": 81,
+          "text": "      console.log(`淘宝-开屏视频广告, 出现异常: ` + err);"
+        },
+        {
+          "line": 82,
+          "text": "    }"
+        },
+        {
+          "line": 83,
+          "text": "    break;"
+        },
+        {
+          "line": 85,
+          "text": "  case /^https:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get/.test(url):"
+        },
+        {
+          "line": 86,
+          "text": "    try {"
+        },
+        {
+          "line": 87,
+          "text": "      let obj = JSON.parse(body);"
+        },
+        {
+          "line": 88,
+          "text": "      if (obj?.data?.containers?.splash_home_base) {"
+        },
+        {
+          "line": 89,
+          "text": "        let splash = obj.data.containers.splash_home_base;"
+        },
+        {
+          "line": 90,
+          "text": "        if (splash?.base?.sections?.length > 0) {"
+        },
+        {
+          "line": 91,
+          "text": "          for (let items of splash.base.sections) {"
+        },
+        {
+          "line": 92,
+          "text": "            if (\"taobao-splash\" in items.bizData) {"
+        },
+        {
+          "line": 93,
+          "text": "              if (items?.bizData?.[\"taobao-splash\"]?.data?.length > 0) {"
+        },
+        {
+          "line": 94,
+          "text": "                for (let item of items.bizData[\"taobao-splash\"].data) {"
+        },
+        {
+          "line": 95,
+          "text": "                  item.waitTime = \"0\";"
+        },
+        {
+          "line": 96,
+          "text": "                  item.times = \"0\";"
+        },
+        {
+          "line": 97,
+          "text": "                  item.hotStart = \"false\";"
+        },
+        {
+          "line": 98,
+          "text": "                  item.haveVoice = \"false\";"
+        },
+        {
+          "line": 99,
+          "text": "                  item.hideTBLogo = \"false\";"
+        },
+        {
+          "line": 100,
+          "text": "                  item.enable4G = \"false\";"
+        },
+        {
+          "line": 101,
+          "text": "                  item.coldStart = \"false\";"
+        },
+        {
+          "line": 102,
+          "text": "                  item.waitTime = \"0\";"
+        },
+        {
+          "line": 103,
+          "text": "                  item.startTime = \"3818332800000\";"
+        },
+        {
+          "line": 104,
+          "text": "                  item.endTime = \"3818419199000\";"
+        },
+        {
+          "line": 105,
+          "text": "                  item.gmtStart = \"2090-12-31 00:00:00\";"
+        },
+        {
+          "line": 106,
+          "text": "                  item.gmtEnd = \"2090-12-31 23:59:59\";"
+        },
+        {
+          "line": 107,
+          "text": "                  item.gmtStartMs = \"3818332800000\";"
+        },
+        {
+          "line": 108,
+          "text": "                  item.gmtEndMs = \"3818419199000\";"
+        },
+        {
+          "line": 109,
+          "text": "                  if (item?.imgUrl) {"
+        },
+        {
+          "line": 110,
+          "text": "                    item.imgUrl = \"\";"
+        },
+        {
+          "line": 111,
+          "text": "                  }"
+        },
+        {
+          "line": 112,
+          "text": "                  if (item?.videoUrl) {"
+        },
+        {
+          "line": 113,
+          "text": "                    item.videoUrl = \"\";"
+        },
+        {
+          "line": 114,
+          "text": "                  }"
+        },
+        {
+          "line": 115,
+          "text": "                }"
+        },
+        {
+          "line": 126,
+          "text": "  // 淘宝-开屏活动"
+        },
+        {
+          "line": 127,
+          "text": "  case /^https:\\/\\/poplayer\\.template\\.alibaba\\.com\\/\\w+\\.json/.test(url):"
+        },
+        {
+          "line": 128,
+          "text": "    try {"
+        },
+        {
+          "line": 129,
+          "text": "      let obj = JSON.parse(body);"
+        },
+        {
+          "line": 130,
+          "text": "      if (obj?.res?.images?.length > 0) {"
+        },
+        {
+          "line": 131,
+          "text": "        obj.res.images = [];"
+        },
+        {
+          "line": 132,
+          "text": "      }"
+        },
+        {
+          "line": 133,
+          "text": "      if (obj?.res?.videos?.length > 0) {"
+        },
+        {
+          "line": 134,
+          "text": "        obj.res.videos = [];"
+        },
+        {
+          "line": 135,
+          "text": "      }"
+        },
+        {
+          "line": 136,
+          "text": "      if (obj?.enable) {"
+        },
+        {
+          "line": 137,
+          "text": "        obj.enable = false;"
+        },
+        {
+          "line": 138,
+          "text": "      }"
+        },
+        {
+          "line": 139,
+          "text": "      if (obj?.mainRes?.images?.length > 0) {"
+        },
+        {
+          "line": 140,
+          "text": "        obj.mainRes.images = [];"
+        },
+        {
+          "line": 141,
+          "text": "      }"
+        },
+        {
+          "line": 142,
+          "text": "      body = JSON.stringify(obj);"
+        },
+        {
+          "line": 143,
+          "text": "    } catch (err) {"
+        },
+        {
+          "line": 144,
+          "text": "      console.log(`淘宝-开屏活动, 出现异常: ` + err);"
+        },
+        {
+          "line": 145,
+          "text": "    }"
+        },
+        {
+          "line": 146,
+          "text": "    break;"
+        }
+      ]
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/xiaohongshu/xiaohongshu.js",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/xiaohongshu/xiaohongshu.js",
+      "sha256": "318d89bce1117edb26a93b383804e195649ec4674a04efa9e3ddb4ef7f34b498",
+      "license": "GPL-3.0-only",
+      "reviewed_ranges": [
+        [
+          42,
+          65
+        ],
+        [
+          286,
+          310
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 42,
+          "text": "if (url.includes(\"/system_service/config?\")) {"
+        },
+        {
+          "line": 43,
+          "text": "  // 整体配置"
+        },
+        {
+          "line": 44,
+          "text": "  const item = [\"app_theme\", \"loading_img\", \"splash\", \"store\"];"
+        },
+        {
+          "line": 45,
+          "text": "  if (obj.data) {"
+        },
+        {
+          "line": 46,
+          "text": "    for (let i of item) {"
+        },
+        {
+          "line": 47,
+          "text": "      delete obj.data[i];"
+        },
+        {
+          "line": 48,
+          "text": "    }"
+        },
+        {
+          "line": 49,
+          "text": "  }"
+        },
+        {
+          "line": 50,
+          "text": "}"
+        },
+        {
+          "line": 51,
+          "text": ""
+        },
+        {
+          "line": 52,
+          "text": "if (url.includes(\"/system_service/splash_config\")) {"
+        },
+        {
+          "line": 53,
+          "text": "  // 开屏广告"
+        },
+        {
+          "line": 54,
+          "text": "  if (obj?.data?.ads_groups?.length > 0) {"
+        },
+        {
+          "line": 55,
+          "text": "    for (let i of obj.data.ads_groups) {"
+        },
+        {
+          "line": 56,
+          "text": "      i.start_time = 3818332800; // Unix 时间戳 2090-12-31 00:00:00"
+        },
+        {
+          "line": 57,
+          "text": "      i.end_time = 3818419199; // Unix 时间戳 2090-12-31 23:59:59"
+        },
+        {
+          "line": 58,
+          "text": "      if (i?.ads?.length > 0) {"
+        },
+        {
+          "line": 59,
+          "text": "        for (let ii of i.ads) {"
+        },
+        {
+          "line": 60,
+          "text": "          ii.start_time = 3818332800; // Unix 时间戳 2090-12-31 00:00:00"
+        },
+        {
+          "line": 61,
+          "text": "          ii.end_time = 3818419199; // Unix 时间戳 2090-12-31 23:59:59"
+        },
+        {
+          "line": 62,
+          "text": "        }"
+        },
+        {
+          "line": 63,
+          "text": "      }"
+        },
+        {
+          "line": 64,
+          "text": "    }"
+        },
+        {
+          "line": 65,
+          "text": "  }"
+        },
+        {
+          "line": 286,
+          "text": "    for (let item of obj.data) {"
+        },
+        {
+          "line": 287,
+          "text": "      if (item?.model_type === \"live_v2\") {"
+        },
+        {
+          "line": 288,
+          "text": "        // 信息流-直播"
+        },
+        {
+          "line": 289,
+          "text": "      } else if (item?.hasOwnProperty(\"ads_info\")) {"
+        },
+        {
+          "line": 290,
+          "text": "        // 信息流-赞助"
+        },
+        {
+          "line": 291,
+          "text": "      } else if (item?.hasOwnProperty(\"card_icon\")) {"
+        },
+        {
+          "line": 292,
+          "text": "        // 信息流-带货"
+        },
+        {
+          "line": 293,
+          "text": "      } else if (item?.note_attributes?.includes(\"goods\")) {"
+        },
+        {
+          "line": 294,
+          "text": "        // 信息流-商品"
+        },
+        {
+          "line": 295,
+          "text": "      } else {"
+        },
+        {
+          "line": 296,
+          "text": "        if (item?.related_ques) {"
+        },
+        {
+          "line": 297,
+          "text": "          delete item.related_ques;"
+        },
+        {
+          "line": 298,
+          "text": "        }"
+        },
+        {
+          "line": 299,
+          "text": "        newItems.push(item);"
+        },
+        {
+          "line": 300,
+          "text": "      }"
+        },
+        {
+          "line": 301,
+          "text": "    }"
+        },
+        {
+          "line": 302,
+          "text": "    obj.data = newItems;"
+        },
+        {
+          "line": 303,
+          "text": "  }"
+        },
+        {
+          "line": 304,
+          "text": "}"
+        },
+        {
+          "line": 305,
+          "text": ""
+        },
+        {
+          "line": 306,
+          "text": "// 加载评论区"
+        },
+        {
+          "line": 307,
+          "text": "if (url.includes(\"/api/sns/v5/note/comment/list?\") || url.includes(\"/api/sns/v3/note/comment/sub_comments?\")) {"
+        },
+        {
+          "line": 308,
+          "text": "  replaceRedIdWithFmz200(obj.data);"
+        },
+        {
+          "line": 309,
+          "text": "  let livePhotos = [];"
+        },
+        {
+          "line": 310,
+          "text": "  let commentVideos = [];"
+        }
+      ]
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "QuantumultX/rewrite/rewrite.snippet",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
+      "sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d",
+      "license": "GPL-3.0-only",
+      "reviewed_ranges": [
+        [
+          3178,
+          3184
+        ],
+        [
+          4431,
+          4438
+        ],
+        [
+          5506,
+          5511
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 3178,
+          "text": "# hostname = img.meituan.net, s3plus.meituan.net, flowplus.meituan.net"
+        },
+        {
+          "line": 3179,
+          "text": "^https?:\\/\\/wmapi\\.meituan\\.com\\/api\\/v7\\/(loadInfo|openscreen|startpicture)\\? url reject-dict"
+        },
+        {
+          "line": 3180,
+          "text": "^https?:\\/\\/(s3plus|flowplus)\\.meituan\\.net\\/v\\d\\/\\w+\\/linglong\\/\\w+\\.(gif|jpg|mp4) url reject-img"
+        },
+        {
+          "line": 3181,
+          "text": "^https?:\\/\\/img\\.meituan\\.net\\/bizad\\/bizad_brandCpt_\\d+\\.jpg url reject-img"
+        },
+        {
+          "line": 3182,
+          "text": "^https?:\\/\\/img\\.meituan\\.net\\/goodsawardpic\\/[a-f0-9]+\\.png\\.webp url reject-img"
+        },
+        {
+          "line": 3183,
+          "text": "^https?:\\/\\/s3plus\\.meituan\\.net\\/ocean-blk-index\\/index\\/blk_conf_73\\.json url reject-dict"
+        },
+        {
+          "line": 3184,
+          "text": "^https?:\\/\\/s3plus\\.meituan\\.net\\/v1\\/mss_\\w+\\/(brandcpt-vedio|waimai-alita)\\/\\w+\\.zip$ url reject-dict"
+        },
+        {
+          "line": 4431,
+          "text": "^https?:\\/\\/acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.etao\\.noah\\.query\\/.+tao_splash url reject-dict"
+        },
+        {
+          "line": 4432,
+          "text": "^https?:\\/\\/acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.film\\.mtopadvertiseapi\\.queryadvertise url reject-dict"
+        },
+        {
+          "line": 4433,
+          "text": "^https?:\\/\\/acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.o2o\\.ad\\.gateway\\.get url reject-dict"
+        },
+        {
+          "line": 4434,
+          "text": "^https?:\\/\\/acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.idle\\.home\\.welcome url reject-dict"
+        },
+        {
+          "line": 4435,
+          "text": "^https?:\\/\\/acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.trip\\.activity\\.querytmsresources url reject-dict"
+        },
+        {
+          "line": 4436,
+          "text": "^https?:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.(volvo\\.secondfloor\\.getconfig|wireless\\.home\\.newface\\.awesome\\.get) url reject-dict"
+        },
+        {
+          "line": 4437,
+          "text": "^https?:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.(cloudvideo\\.video\\.query|wireless\\.home\\.splash\\.awesome\\.get) url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js"
+        },
+        {
+          "line": 4438,
+          "text": "^https?:\\/\\/poplayer\\.template\\.alibaba\\.com\\/\\w+\\.json url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js"
+        },
+        {
+          "line": 5506,
+          "text": "# hostname = edith.xiaohongshu.com, www.xiaohongshu.com, ci.xiaohongshu.com, rec.xiaohongshu.com"
+        },
+        {
+          "line": 5507,
+          "text": "host, ads-img-qc.xhscdn.com, reject"
+        },
+        {
+          "line": 5508,
+          "text": "host, ads-img-al.xhscdn.com, reject"
+        },
+        {
+          "line": 5509,
+          "text": "host, ads-video-al.xhscdn.com, reject"
+        },
+        {
+          "line": 5510,
+          "text": "host, ads-video-qc.xhscdn.com, reject"
+        },
+        {
+          "line": 5511,
+          "text": "host, t-ads.xiaohongshu.com, reject"
+        }
+      ]
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "QuantumultX/rewrite/weibo.snippet",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/weibo.snippet",
+      "sha256": "c8b47d5f2e990f065d98cac2d70d5866c97443d23d96a8393607b13a464e9b29",
+      "license": "GPL-3.0-only",
+      "reviewed_ranges": [
+        [
+          23,
+          27
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          43,
+          43
+        ],
+        [
+          128,
+          131
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 23,
+          "text": "host-suffix, fastimage.uve.weibo.com, reject"
+        },
+        {
+          "line": 24,
+          "text": "host-suffix, adimg.vue.weibo.com, reject"
+        },
+        {
+          "line": 25,
+          "text": "host-suffix, zymo.mps.weibo.com, reject"
+        },
+        {
+          "line": 26,
+          "text": "host-suffix, weibomingzi.com, reject"
+        },
+        {
+          "line": 27,
+          "text": "host-suffix, sdkapp.uve.weibo.com, reject"
+        },
+        {
+          "line": 32,
+          "text": "host-suffix, adimg.uve.weibo.com, reject"
+        },
+        {
+          "line": 43,
+          "text": "host-suffix, wbapp.uve.weibo.com, reject"
+        },
+        {
+          "line": 128,
+          "text": "^https?:\\/\\/bootrealtime\\.uve\\.weibo\\.com\\/v\\d\\/ad\\/realtime Weibo url-and-header reject-dict"
+        },
+        {
+          "line": 129,
+          "text": "^https?:\\/\\/bootpreload\\.uve\\.weibo\\.com\\/v\\d\\/ad\\/preload Weibo url-and-header reject-dict"
+        },
+        {
+          "line": 130,
+          "text": "^https?:\\/\\/sdkapp\\.uve\\.weibo\\.com\\/interface\\/sdk\\/(get-lbs-cell-info\\.php|sdkconfig\\.php) Weibo url-and-header reject-dict"
+        },
+        {
+          "line": 131,
+          "text": "^https?:\\/\\/(sdk|wb)app\\.uve\\.weibo\\.com(/interface/sdk/sdkad.php|/wbapplua/wbpullad.lua) Weibo url-and-header script-response-body https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_launch.js"
+        }
+      ]
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/weibo/weibo_ads.js",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/weibo/weibo_ads.js",
+      "sha256": "0f1f3eba5b2c96f4f089525ad033b578b6a18a2fd99eb95409e5b0816f4a4b34",
+      "license": "GPL-3.0-only",
+      "reviewed_ranges": [
+        [
+          62,
+          68
+        ],
+        [
+          105,
+          118
+        ],
+        [
+          123,
+          133
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 62,
+          "text": ""
+        },
+        {
+          "line": 63,
+          "text": "  // 5、微博详情页面"
+        },
+        {
+          "line": 64,
+          "text": "  if (url.includes(\"/statuses/extend?\")) {"
+        },
+        {
+          "line": 65,
+          "text": "    delete resp_data.head_cards;"
+        },
+        {
+          "line": 66,
+          "text": "    delete resp_data.top_cards;"
+        },
+        {
+          "line": 67,
+          "text": "    delete resp_data.extend_info;"
+        },
+        {
+          "line": 68,
+          "text": "    delete resp_data.trend; // 博主好物种草"
+        },
+        {
+          "line": 105,
+          "text": "      }"
+        },
+        {
+          "line": 106,
+          "text": ""
+        },
+        {
+          "line": 107,
+          "text": "      if (resp_data.items[i].items) {"
+        },
+        {
+          "line": 108,
+          "text": "        for (let j = 0; j < resp_data.items[i].items.length; j++) {"
+        },
+        {
+          "line": 109,
+          "text": "          if (resp_data.items[i].items[j].data?.card_type === 22"
+        },
+        {
+          "line": 110,
+          "text": "            || resp_data.items[i].items[j].data?.ad_state === 1"
+        },
+        {
+          "line": 111,
+          "text": "            || resp_data.items[i].items[j].data?.content_auth_info?.content_auth_title === \"广告\") {"
+        },
+        {
+          "line": 112,
+          "text": "            resp_data.items[i].items[j] = {};"
+        },
+        {
+          "line": 113,
+          "text": "          } else {"
+        },
+        {
+          "line": 114,
+          "text": "            deleteCommonAndSemanticBrandParams(resp_data.items[i].items[j]);"
+        },
+        {
+          "line": 115,
+          "text": "          }"
+        },
+        {
+          "line": 116,
+          "text": "        }"
+        },
+        {
+          "line": 117,
+          "text": "      }"
+        },
+        {
+          "line": 118,
+          "text": "    }"
+        },
+        {
+          "line": 123,
+          "text": "  if (url.includes(\"/statuses/container_timeline_topic?\")) {"
+        },
+        {
+          "line": 124,
+          "text": "    let foundFeed = false;"
+        },
+        {
+          "line": 125,
+          "text": "    const cardTypes = [19, 179]; // 19：热帖/必刷/分类，31：热搜词，179：关注的超话"
+        },
+        {
+          "line": 126,
+          "text": "    for (let i = 0; i < resp_data.items.length; i++) {"
+        },
+        {
+          "line": 127,
+          "text": "      const item = resp_data.items[i];"
+        },
+        {
+          "line": 128,
+          "text": "      if (item.data?.is_ad === 1 || item.data?.mblogtypename === \"广告\") {"
+        },
+        {
+          "line": 129,
+          "text": "        resp_data.items[i] = {};"
+        },
+        {
+          "line": 130,
+          "text": "        continue;"
+        },
+        {
+          "line": 131,
+          "text": "      }"
+        },
+        {
+          "line": 132,
+          "text": ""
+        },
+        {
+          "line": 133,
+          "text": "      const category = item.category; // feed/card/group"
+        }
+      ]
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/jingdong/jingdong.js",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/jingdong/jingdong.js",
+      "sha256": "3e7cc975f8985a4d2dbdbdefc405d0e3e6c9c07bf3c5361da1ecae206b6c04a1",
+      "license": "GPL-3.0-only",
+      "reviewed_ranges": [
+        [
+          258,
+          266
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 258,
+          "text": "} else if (url.includes(\"functionId=start\")) {"
+        },
+        {
+          "line": 259,
+          "text": "  // 开屏广告"
+        },
+        {
+          "line": 260,
+          "text": "  if (obj?.images?.length > 0) {"
+        },
+        {
+          "line": 261,
+          "text": "    obj.images = [];"
+        },
+        {
+          "line": 262,
+          "text": "  }"
+        },
+        {
+          "line": 263,
+          "text": "  if (obj?.showTimesDaily) {"
+        },
+        {
+          "line": 264,
+          "text": "    obj.showTimesDaily = 0;"
+        },
+        {
+          "line": 265,
+          "text": "  }"
+        },
+        {
+          "line": 266,
+          "text": "} else if (url.includes(\"functionId=welcomeHome\")) {"
+        }
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+      "path": "script/startup/startup.js",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
+      "sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
+      "license": "GPL-2.0",
+      "reviewed_ranges": [
+        [
+          90,
+          108
+        ],
+        [
+          131,
+          152
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 90,
+          "text": "        }"
+        },
+        {
+          "line": 91,
+          "text": "        break;"
+        },
+        {
+          "line": 92,
+          "text": "      // 小爱音箱"
+        },
+        {
+          "line": 93,
+          "text": "      case /^https?:\\/\\/hd\\.mina\\.mi\\.com\\/splashscreen\\/alert/.test($.request.url):"
+        },
+        {
+          "line": 94,
+          "text": "        try {"
+        },
+        {
+          "line": 95,
+          "text": "          let obj = JSON.parse($.response.body);"
+        },
+        {
+          "line": 96,
+          "text": "          let data = [];"
+        },
+        {
+          "line": 97,
+          "text": "          for (let i = 0; i < obj.data.length; i++) {"
+        },
+        {
+          "line": 98,
+          "text": "            let ad = obj.data[i];"
+        },
+        {
+          "line": 99,
+          "text": "            ad.start = \"1924272000000\";"
+        },
+        {
+          "line": 100,
+          "text": "            ad.end = \"1924358400000\";"
+        },
+        {
+          "line": 101,
+          "text": "            ad.stay = 1;"
+        },
+        {
+          "line": 102,
+          "text": "            ad.maxTimes = 1;"
+        },
+        {
+          "line": 103,
+          "text": "            data.push(ad);"
+        },
+        {
+          "line": 104,
+          "text": "          }"
+        },
+        {
+          "line": 105,
+          "text": "          obj.data = data;"
+        },
+        {
+          "line": 106,
+          "text": "          response = { body: JSON.stringify(obj) };"
+        },
+        {
+          "line": 107,
+          "text": "        } catch (err) {"
+        },
+        {
+          "line": 108,
+          "text": "          $.logger.error(`小爱音箱开屏去广告出现异常：${err}`);"
+        },
+        {
+          "line": 131,
+          "text": "        break;"
+        },
+        {
+          "line": 132,
+          "text": "      // 联享家"
+        },
+        {
+          "line": 133,
+          "text": "      case /^https?:\\/\\/mi\\.gdt\\.qq\\.com\\/gdt_mview.fcg/.test($.request.url):"
+        },
+        {
+          "line": 134,
+          "text": "        try {"
+        },
+        {
+          "line": 135,
+          "text": "          let obj = JSON.parse($.response.body);"
+        },
+        {
+          "line": 136,
+          "text": "          obj.seq = \"0\";"
+        },
+        {
+          "line": 137,
+          "text": "          obj.reqinterval = 0;"
+        },
+        {
+          "line": 138,
+          "text": "          delete obj[\"last_ads\"];"
+        },
+        {
+          "line": 139,
+          "text": "          delete obj.data;"
+        },
+        {
+          "line": 140,
+          "text": "          response = { body: JSON.stringify(obj) };"
+        },
+        {
+          "line": 141,
+          "text": "        } catch (err) {"
+        },
+        {
+          "line": 142,
+          "text": "          $.logger.error(`联享家开屏去广告出现异常：${err}`);"
+        },
+        {
+          "line": 143,
+          "text": "        }"
+        },
+        {
+          "line": 144,
+          "text": "        break;"
+        },
+        {
+          "line": 145,
+          "text": "      // 多点"
+        },
+        {
+          "line": 146,
+          "text": "      case /^https?:\\/\\/cmsapi\\.dmall\\.com\\/app\\/home\\/homepageStartUpPic/.test($.request.url):"
+        },
+        {
+          "line": 147,
+          "text": "        try {"
+        },
+        {
+          "line": 148,
+          "text": "          let obj = JSON.parse($.response.body);"
+        },
+        {
+          "line": 149,
+          "text": "          for (let i = 0; i < obj[\"data\"][\"welcomePage\"].length; i++) {"
+        },
+        {
+          "line": 150,
+          "text": "            obj[\"data\"][\"welcomePage\"][i][\"onlineTime\"] = 1915027200000;"
+        },
+        {
+          "line": 151,
+          "text": "            obj[\"data\"][\"welcomePage\"][i][\"offlineTime\"] = 1924272000000;"
+        },
+        {
+          "line": 152,
+          "text": "          }"
+        }
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+      "path": "rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+      "sha256": "eeed89b368eceaed7cd85d20c1f6b7cceeaa6becd8a62a59a758aca1af942ff7",
+      "license": "GPL-2.0",
+      "reviewed_ranges": [
+        [
+          45,
+          51
+        ]
+      ],
+      "excerpts": [
+        {
+          "line": 45,
+          "text": "    # BiliBili_开屏去广告"
+        },
+        {
+          "line": 46,
+          "text": "    - match: ^https?:\\/\\/app\\.bilibili\\.com\\/x\\/v2\\/splash\\/list"
+        },
+        {
+          "line": 47,
+          "text": "      name: startup.js_5686edbb"
+        },
+        {
+          "line": 48,
+          "text": "      type: response"
+        },
+        {
+          "line": 49,
+          "text": "      require-body: true"
+        },
+        {
+          "line": 50,
+          "text": "      timeout: 30"
+        },
+        {
+          "line": 51,
+          "text": "      argument: "
+        }
+      ]
+    }
+  ],
+  "per_app_changes": {
+    "taobao": {
+      "added": "source-confirmed tao_splash scene in mtop.etao.noah.query; native reject-dict",
+      "retained": "dedicated splash JSON display fields",
+      "deferred": [
+        "cloudvideo shared video API lacks ad-only context evidence",
+        "generic poplayer includes normal promotions/coupons"
+      ],
+      "tests": "source-reconstructed simulated JSON and raw/encoded scene URL cases; no live responses"
+    },
+    "weibo": {
+      "added": "four advertising-only exact SDK/material hosts; explicit ad items in topic/search lists",
+      "native": "two boot real/preload JSON paths",
+      "deferred": [
+        "home friends_timeline full feed",
+        "international App",
+        "third-party weibo_launch.js not copied"
+      ],
+      "tests": "explicit ad flags, ordinary/nested items, near URLs, one done, errors, idempotence"
+    },
+    "xiaohongshu": {
+      "added": "system_service/config splash only; four ad material hosts; v6 homefeed nonempty ads_info",
+      "excluded": [
+        "watermark",
+        "download",
+        "quality",
+        "user modifications",
+        "ordinary live/shopping content",
+        "response logging"
+      ],
+      "tests": "preserve themes/store/loading, ordinary items, null/empty markers, unsupported versions"
+    },
+    "meituan": {
+      "added": "v7 openscreen/startpicture and limited linglong/bizad image paths",
+      "retained": "partial loadInfo response fields",
+      "deferred": [
+        "full main-App splash chain",
+        "MP4 cannot be answered as GIF",
+        "normal coupon/material directories excluded"
+      ],
+      "tests": "source catalog URL positives/negatives; image vs nonimage scope"
+    },
+    "jingdong": {
+      "added": "flat image records; valid existing display date fields",
+      "retained": "unique query functionId=start and nested images",
+      "deferred": [
+        "POST-body-only functionId or encrypted schemas not established by sources"
+      ],
+      "tests": "flat/nested numeric scalar controls, malformed/duplicate function IDs, unknown control types, preserve orders/coupons/countdown"
+    }
+  },
+  "native_capabilities": {
+    "basis": "user-supplied current official documentation findings; official network retry403",
+    "http_field": "http.url-rewrite",
+    "legacy_alias_compatibility": "unknown; not asserted as global failure cause",
+    "actions": [
+      "reject",
+      "reject-200",
+      "reject-dict",
+      "reject-img",
+      "reject-array"
+    ],
+    "mock_decision": "not needed for current predefined empty replies; conditional real-response transformations remain JS",
+    "minimum_version": "not independently verified"
+  },
+  "simulation_provenance": {
+    "kind": "reconstructed_from_pinned_upstream_code",
+    "real_deidentified_response_samples": 0,
+    "native_stash_tested": false,
+    "iphone_ad_effect_tested": false
+  },
+  "protocol_and_cache": {
+    "actual_quic_observed": false,
+    "udp_block_added": false,
+    "force_http_engine_added": false,
+    "cache_deletion_attempted": false
+  },
+  "modules": [
+    {
+      "id": "58tongcheng",
+      "name": "58同城广告专项（可选）",
+      "path": "modules/ads/58tongcheng.stoverride",
+      "scope": "AD-20261020.1；仅 home/advertising 和 appadv；保留职位、联系与发布。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://app\\.58\\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "app.58.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "alipan",
+      "name": "阿里云盘广告专项（可选）",
+      "path": "modules/ads/alipan.stoverride",
+      "scope": "AD-20261020.1；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https://member\\.alipan\\.com/v1/users/onboard_list/?(?:\\?|$)"
+      ],
+      "mitm": [
+        "member.alipan.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "amap",
+      "name": "高德地图广告专项（可选）",
+      "path": "modules/ads/amap.stoverride",
+      "scope": "AD-20261020.1；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。独立启停；需设备验收。",
+      "domains": [
+        "optimus-ads.amap.com",
+        "optimus-ads.amap.com.w.alikunlun.com"
+      ],
+      "native_rewrites": [
+        "^https://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$) - reject-dict",
+        "^https://amap\\-aos\\-info\\-nogw\\.amap\\.com/ws/aos/alimama/splash_screen_rt/?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "m5.amap.com",
+        "amap-aos-info-nogw.amap.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "baidu-netdisk",
+      "name": "百度网盘广告专项（可选）",
+      "path": "modules/ads/baidu-netdisk.stoverride",
+      "scope": "AD-20261020.1；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://pan\\.baidu\\.com/rest/\\d+\\.\\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "pan.baidu.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "bilibili",
+      "name": "哔哩哔哩广告处理（可选）",
+      "path": "modules/ads/bilibili.stoverride",
+      "scope": "AD-20261020.1；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。默认不导入，需设备验收。",
+      "domains": [],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https:\\/\\/app\\.bilibili\\.com\\/x\\/v2\\/(splash\\/(list|show)|feed\\/index)(\\?|$)"
+      ],
+      "mitm": [
+        "app.bilibili.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "cainiao",
+      "name": "菜鸟广告专项（可选）",
+      "path": "modules/ads/cainiao.stoverride",
+      "scope": "AD-20261020.1；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https://cn-acs\\.m\\.cainiao\\.com/gw/mtop\\.cainiao\\.guoguo\\.nbnetflow\\.ads\\.show\\.cn(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"
+      ],
+      "mitm": [
+        "cn-acs.m.cainiao.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "cmcc",
+      "name": "中国移动广告专项（可选）",
+      "path": "modules/ads/cmcc.stoverride",
+      "scope": "AD-20261020.1；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "client.app.coc.10086.cn"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "ctrip",
+      "name": "携程旅行广告专项（可选）",
+      "path": "modules/ads/ctrip.stoverride",
+      "scope": "AD-20261020.1；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。独立启停；需设备验收。",
+      "domains": [
+        "ma-adx.ctrip.com"
+      ],
+      "native_rewrites": [],
+      "response_matches": [],
+      "mitm": [],
+      "device_tested": false
+    },
+    {
+      "id": "damai",
+      "name": "大麦广告专项（可选）",
+      "path": "modules/ads/damai.stoverride",
+      "scope": "AD-20261020.1；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$) - reject-200"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "acs.m.taobao.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "dianping",
+      "name": "大众点评广告专项（可选）",
+      "path": "modules/ads/dianping.stoverride",
+      "scope": "AD-20261020.1；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://mapi\\.dianping\\.com/mapi/operating/loadsplashconfig/?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "mapi.dianping.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "eastmoney",
+      "name": "东方财富广告专项（可选）",
+      "path": "modules/ads/eastmoney.stoverride",
+      "scope": "AD-20261020.1；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。独立启停；需设备验收。",
+      "domains": [
+        "emdcadvertise.eastmoney.com"
+      ],
+      "native_rewrites": [],
+      "response_matches": [],
+      "mitm": [],
+      "device_tested": false
+    },
+    {
+      "id": "huazhu",
+      "name": "华住会广告专项（可选）",
+      "path": "modules/ads/huazhu.stoverride",
+      "scope": "AD-20261020.1；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://appapi\\.huazhu\\.com(?::\\d+)?/client/app/getAppStartPage/(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "appapi.huazhu.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "jingdong-finance",
+      "name": "京东金融广告专项（可选）",
+      "path": "modules/ads/jingdong-finance.stoverride",
+      "scope": "AD-20261020.1；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。独立启停；需设备验收。",
+      "domains": [
+        "bdsp-x.jd.com",
+        "dsp-x.jd.com"
+      ],
+      "native_rewrites": [],
+      "response_matches": [],
+      "mitm": [],
+      "device_tested": false
+    },
+    {
+      "id": "jingdong",
+      "name": "京东广告专项（可选）",
+      "path": "modules/ads/jingdong.stoverride",
+      "scope": "AD-20261020.1；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https://api\\.m\\.jd\\.com/client\\.action\\?(?:[^#&]*&)*functionId=start(?:&|$)"
+      ],
+      "mitm": [
+        "api.m.jd.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "kfc",
+      "name": "肯德基广告专项（可选）",
+      "path": "modules/ads/kfc.stoverride",
+      "scope": "AD-20261020.1；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://res\\.kfc\\.com\\.cn/advertisement/[^?#]*(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "res.kfc.com.cn"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "liepin",
+      "name": "猎聘广告专项（可选）",
+      "path": "modules/ads/liepin.stoverride",
+      "scope": "AD-20261020.1；明确命名的 live.get-ad-cards；不拦职位推荐或投递。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "api-ac.liepin.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "luckin",
+      "name": "瑞幸咖啡广告专项（可选）",
+      "path": "modules/ads/luckin.stoverride",
+      "scope": "AD-20261020.1；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https://capi\\.lkcoffee\\.com/resource/m/sys/app/adposNew/?(?:\\?|$)"
+      ],
+      "mitm": [
+        "capi.lkcoffee.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "maimai",
+      "name": "脉脉广告专项（可选）",
+      "path": "modules/ads/maimai.stoverride",
+      "scope": "AD-20261020.1；仅 adshow；保留礼物、消息和普通推荐。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://open\\.taou\\.com/maimai/adshow/?(?:\\?|$) - reject-dict",
+        "^https://h3\\.open\\.taou\\.com/maimai/adshow/?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "open.taou.com",
+        "h3.open.taou.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "mcdonalds",
+      "name": "麦当劳广告专项（可选）",
+      "path": "modules/ads/mcdonalds.stoverride",
+      "scope": "AD-20261020.1；专用 portal/home/splash；保留点餐、支付、领券。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$) - reject-200"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "api.mcd.cn"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "meituan",
+      "name": "美团广告专项（可选）",
+      "path": "modules/ads/meituan.stoverride",
+      "scope": "AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$) - reject-dict",
+        "^https://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$) - reject-img",
+        "^https://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$) - reject-img"
+      ],
+      "response_matches": [
+        "^https://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)"
+      ],
+      "mitm": [
+        "wmapi.meituan.com",
+        "img.meituan.net",
+        "s3plus.meituan.net",
+        "flowplus.meituan.net"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "mijia",
+      "name": "米家广告专项（可选）",
+      "path": "modules/ads/mijia.stoverride",
+      "scope": "AD-20261020.1；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "home.mi.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "netease-mail",
+      "name": "网易邮箱大师广告专项（可选）",
+      "path": "modules/ads/netease-mail.stoverride",
+      "scope": "AD-20261020.1；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$) - reject-200",
+        "^https://client\\.mail\\.163\\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "appconf.mail.163.com",
+        "client.mail.163.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "netease-music",
+      "name": "网易云音乐广告专项（可选）",
+      "path": "modules/ads/netease-music.stoverride",
+      "scope": "AD-20261020.1；仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$) - reject-dict",
+        "^https://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$) - reject-dict",
+        "^https://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "interface.music.163.com",
+        "interface3.music.163.com",
+        "ipv4.music.163.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "pinduoduo",
+      "name": "拼多多广告专项（可选）",
+      "path": "modules/ads/pinduoduo.stoverride",
+      "scope": "AD-20261020.1；仅 cappuccino/splash；保留首页、买菜、红包和领券。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://api\\.pinduoduo\\.com/api/cappuccino/splash/?(?:\\?|$) - reject",
+        "^https://api\\.yangkeduo\\.com/api/cappuccino/splash/?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "api.pinduoduo.com",
+        "api.yangkeduo.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "railway12306",
+      "name": "铁路12306广告专项（可选）",
+      "path": "modules/ads/railway12306.stoverride",
+      "scope": "AD-20261020.1；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。独立启停；需设备验收。",
+      "domains": [
+        "ad.12306.cn"
+      ],
+      "native_rewrites": [],
+      "response_matches": [],
+      "mitm": [],
+      "device_tested": false
+    },
+    {
+      "id": "taobao",
+      "name": "淘宝开屏广告处理（可选）",
+      "path": "modules/ads/taobao.stoverride",
+      "scope": "AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。待真机验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query/(?:[0-9.]+/?)?\\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$ - reject-dict"
+      ],
+      "response_matches": [
+        "^https:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get(\\/\\d+(\\.\\d+)*\\/?)?(\\?|$)"
+      ],
+      "mitm": [
+        "guide-acs.m.taobao.com",
+        "acs.m.taobao.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "taopiaopiao",
+      "name": "淘票票广告专项（可选）",
+      "path": "modules/ads/taopiaopiao.stoverride",
+      "scope": "AD-20261020.1；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "acs.m.taobao.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "tieba",
+      "name": "贴吧开屏广告处理（可选）",
+      "path": "modules/ads/tieba.stoverride",
+      "scope": "AD-20261020.1；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。默认不导入，需设备验收。",
+      "domains": [],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https:\\/\\/tiebac\\.baidu\\.com\\/c\\/f\\/ad\\/getSplashAd(\\?|$)"
+      ],
+      "mitm": [
+        "tiebac.baidu.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "uc",
+      "name": "UC浏览器广告专项（可选）",
+      "path": "modules/ads/uc.stoverride",
+      "scope": "AD-20261020.1；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。独立启停；需设备验收。",
+      "domains": [
+        "ads.uc.cn",
+        "adslot.uc.cn"
+      ],
+      "native_rewrites": [],
+      "response_matches": [],
+      "mitm": [],
+      "device_tested": false
+    },
+    {
+      "id": "umetrip",
+      "name": "航旅纵横广告专项（可选）",
+      "path": "modules/ads/umetrip.stoverride",
+      "scope": "AD-20261020.1；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://oss\\.umetrip\\.com/fs/advert/polite(?:/[^?#]*)?(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "oss.umetrip.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "unicom",
+      "name": "中国联通广告专项（可选）",
+      "path": "modules/ads/unicom.stoverride",
+      "scope": "AD-20261020.1；专用启动/广告接口；保留 accountListData、客户端配置和缴费。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://m\\.client\\.10010\\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\\.htm)?/?(?:\\?|$) - reject-img",
+        "^https://m\\.client\\.10010\\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\\?|$) - reject-img"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "m.client.10010.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "unionpay",
+      "name": "云闪付广告专项（可选）",
+      "path": "modules/ads/unionpay.stoverride",
+      "scope": "AD-20261020.1；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。独立启停；需设备验收。",
+      "domains": [
+        "ads.95516.com",
+        "ads.cup.com.cn"
+      ],
+      "native_rewrites": [],
+      "response_matches": [],
+      "mitm": [],
+      "device_tested": false
+    },
+    {
+      "id": "wechat-articles",
+      "name": "微信广告专项（可选）",
+      "path": "modules/ads/wechat-articles.stoverride",
+      "scope": "AD-20261020.1；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https://mp\\.weixin\\.qq\\.com/mp/getappmsgad/?(?:\\?|$)"
+      ],
+      "mitm": [
+        "mp.weixin.qq.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "weibo",
+      "name": "微博开屏广告处理（可选）",
+      "path": "modules/ads/weibo.stoverride",
+      "scope": "AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收。",
+      "domains": [
+        "sdkapp.uve.weibo.com",
+        "wbapp.uve.weibo.com",
+        "adimg.uve.weibo.com",
+        "adimg.vue.weibo.com"
+      ],
+      "native_rewrites": [
+        "^https://bootrealtime\\.uve\\.weibo\\.com/v\\d+/ad/realtime/?(?:\\?|$) - reject-dict",
+        "^https://bootpreload\\.uve\\.weibo\\.com/v\\d+/ad/preload/?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [
+        "^https://api\\.weibo\\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\\?|$)"
+      ],
+      "mitm": [
+        "bootrealtime.uve.weibo.com",
+        "bootpreload.uve.weibo.com",
+        "api.weibo.cn"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "wps",
+      "name": "WPS Office广告专项（可选）",
+      "path": "modules/ads/wps.stoverride",
+      "scope": "AD-20261020.1；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://ios\\.wps\\.cn/ad-statistics-service(?:/[^?#]*)?(?:\\?|$) - reject",
+        "^https://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$) - reject-200"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "ios.wps.cn",
+        "mobile-pic.cache.iciba.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "xiachufang",
+      "name": "下厨房广告专项（可选）",
+      "path": "modules/ads/xiachufang.stoverride",
+      "scope": "AD-20261020.1；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://api\\.xiachufang\\.com/v\\d+/ad/[^?#]*(?:\\?|$) - reject"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "api.xiachufang.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "xianyu",
+      "name": "闲鱼广告专项（可选）",
+      "path": "modules/ads/xianyu.stoverride",
+      "scope": "AD-20261020.1；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://acs\\.m\\.goofish\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "acs.m.goofish.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "xiaohongshu",
+      "name": "小红书开屏广告处理（可选）",
+      "path": "modules/ads/xiaohongshu.stoverride",
+      "scope": "AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。待真机验收。",
+      "domains": [
+        "ads-img-qc.xhscdn.com",
+        "ads-img-al.xhscdn.com",
+        "ads-video-al.xhscdn.com",
+        "ads-video-qc.xhscdn.com"
+      ],
+      "native_rewrites": [],
+      "response_matches": [
+        "^https://edith\\.xiaohongshu\\.com/api/sns/(?:v\\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\\?|$)"
+      ],
+      "mitm": [
+        "edith.xiaohongshu.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "xiaoyuzhou",
+      "name": "小宇宙广告专项（可选）",
+      "path": "modules/ads/xiaoyuzhou.stoverride",
+      "scope": "AD-20261020.1；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "api.xiaoyuzhoufm.com"
+      ],
+      "device_tested": false
+    },
+    {
+      "id": "zhihu",
+      "name": "知乎广告专项（可选）",
+      "path": "modules/ads/zhihu.stoverride",
+      "scope": "AD-20261020.1；仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告。独立启停；需设备验收。",
+      "domains": [],
+      "native_rewrites": [
+        "^https://api\\.zhihu\\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\\?|$) - reject-dict",
+        "^https://api\\.zhihu\\.com/ad-style-service/request/?(?:\\?|$) - reject-dict"
+      ],
+      "response_matches": [],
+      "mitm": [
+        "api.zhihu.com"
+      ],
+      "device_tested": false
+    }
+  ],
+  "routing_preservation": {
+    "compared_to": "936fe45:config/stash.yaml",
+    "proxy_groups_equal": true,
+    "private_provider_equal": true,
+    "dns_equal": true,
+    "ordered_non_ad_routes_equal": true,
+    "non_ad_route_count": 5265
+  },
+  "upstream_maintenance": {
+    "checked_at": "2026-10-20",
+    "repositories": {
+      "fmz200/wool_scripts": {
+        "head": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+        "equals_pin": true
+      },
+      "app2smile/rules": {
+        "head": "df6366a7024e0b3f0aa3510c5b791eea6f3cba89",
+        "equals_pin": true
+      },
+      "blackmatrix7/ios_rule_script": {
+        "head": "f9e403a75bbc4bee939c6d8dd766cf78f1b512f3",
+        "equals_pin": false,
+        "ad_files": [
+          {
+            "path": "script/startup/startup.js",
+            "sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
+            "bytes": 12208,
+            "equal_to_pinned_source": true
+          },
+          {
+            "path": "rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+            "sha256": "eeed89b368eceaed7cd85d20c1f6b7cceeaa6becd8a62a59a758aca1af942ff7",
+            "bytes": 7819,
+            "equal_to_pinned_source": true
+          },
+          {
+            "path": "rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+            "sha256": "f1273a862ad8ca3f930ba5286a935cb78e710ff4184055431b49c957b4379c02",
+            "bytes": 1105813,
+            "equal_to_pinned_source": true
+          }
+        ]
+      }
+    },
+    "decision": "retain reviewed pinned sources; do not change non-ad routing or blindly import upstream package"
+  },
+  "offline_validation": {
+    "project_checks_passed": 34,
+    "javascript_simulated_checks_passed": 62,
+    "private_builder_checks_passed": 12,
+    "pinned_public_sources_passed": 45,
+    "pinned_public_sources_total": 45,
+    "native_validation_run": false,
+    "real_response_samples": 0
+  }
+}

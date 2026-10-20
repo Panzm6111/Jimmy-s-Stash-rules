@@ -3,20 +3,11 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: WPS Office广告专项（可选）
-desc: 仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。默认不导入；需设备验收。
-script-providers:
-  jimmy_ad_empty_response:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
-    interval: 86400
+desc: AD-20261020.1；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。独立启停；需设备验收。
 http:
   mitm:
   - ios.wps.cn
   - mobile-pic.cache.iciba.com
-  rewrite:
+  url-rewrite:
   - ^https://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
-  script:
-  - match: ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
+  - ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$) - reject-200

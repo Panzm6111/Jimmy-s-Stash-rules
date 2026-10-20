@@ -1,6 +1,6 @@
 # 图片 App 名称与逐款去广告调查
 
-核对日期：2026-10-19（北京时间）。共 **135 个可见名称**；其中 **39 款有本地专项文件**，8款找到方案但暂缓，其余88款保留通用规则。专项文件存在不等于实际广告已去除。
+核对日期：2026-10-20（北京时间）。共 **135 个可见名称**；其中 **39 款有本地专项文件**，8款找到方案但暂缓，其余88款保留通用规则。专项文件存在不等于实际广告已去除。
 
 对1320×26408长图分12段人工核对可见名称；不保留/发布原截图；不根据名称推断账号持有情况。
 
@@ -32,7 +32,7 @@
 | 4 | Authenticator | 保留通用规则；未加专项 | 按图标可辨认为Google风格验证器；未发现已审核的独立广告端点，不解密验证与账号通信。 |
 | 5 | 百度网盘 | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) | 网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 6 | 备忘录 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
-| 7 | 哔哩哔哩 | [bilibili](../modules/ads/bilibili.stoverride) | 仅历史 JSON 开屏与推荐中明确广告；不包含 Protobuf 流量或全部视频广告；原源代码含2023年的JSON路径/结构；上游仓库有新提交不证明这些端点在当前iOS版本仍使用。现有文件保留候选，不能据此宣称B站全广告有效去除。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
+| 7 | 哔哩哔哩 | [bilibili](../modules/ads/bilibili.stoverride) | 仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。默认不导入，需设备验收。；原源代码含2023年的JSON路径/结构；上游仓库有新提交不证明这些端点在当前iOS版本仍使用。现有文件保留候选，不能据此宣称B站全广告有效去除。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
 | 8 | 播客 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 9 | 菜鸟 | [cainiao](../modules/ads/cainiao.stoverride) | 仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化；上游同时处理 ads.show 与 mshow，且删除部分券、裹酱积分、寄件和消息入口；本模块不采用这些业务删改，不能据此称菜鸟全广告已覆盖。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js)，GPL-3.0-only。 |
 | 10 | 测距仪 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
@@ -69,7 +69,7 @@
 | 41 | 健康 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 42 | 健身 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 43 | 交管12123 | 保留通用规则；未加专项 | 发现公开的 gab.122.gov.cn/eapp/m/sysquery/adver；本轮不加入政务业务主域名解密，SDK广告仅可能被通用规则覆盖。 [公开合集对应段落](https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet#L41)（GPL-3.0）。 |
-| 44 | 京东 | [jingdong](../modules/ads/jingdong.stoverride) | 仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告；已核对源码实际 images/showTimes/showTimesDaily 分支；原证据摘录曾错误指向其他App，现已更正。POST正文中的 functionId 不捕获；未知结构放行，不拦整个 client.action，也不处理订单、京豆和券。 来源：[blackmatrix7/ios_rule_script](https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js)，GPL-2.0。 |
+| 44 | 京东 | [jingdong](../modules/ads/jingdong.stoverride) | 仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源：[blackmatrix7/ios_rule_script](https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js)，GPL-2.0。 |
 | 45 | 京东金融 | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) | 仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏；上游证据只匹配这两个主机的 /adx/ 路径，本模块提升为整主机拦截，范围更大且需要排除误杀。不解密金融、登录或支付，不屏蔽普通图片或邮箱。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 46 | 肯德基 | [kfc](../modules/ads/kfc.stoverride) | 仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券；修正上游域名拼写；不拦整个 apphome5/6，因为可能混有正常活动。素材拒绝不等于取消展示，仍可能等待、读缓存或出现空白；当前完整开屏没有已验证方案。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 47 | 库乐队 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
@@ -81,7 +81,7 @@
 | 53 | 麦当劳 | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 专用 portal/home/splash；保留点餐、支付、领券；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 54 | 脉脉 | [maimai](../modules/ads/maimai.stoverride) | 仅 adshow；保留礼物、消息和普通推荐；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 55 | 每日英语听力 | 保留通用规则；未加专项 | 本次资源未找到同名、可审计且明确去广告的App方案；不混同欧路词典或会员解锁。 |
-| 56 | 美团 | [meituan](../modules/ads/meituan.stoverride) | 仅美团外卖 wmapi 的 loadInfo.startpicture.ad/mk；不代表美团主App开屏；源码分支明确是美团外卖，不能把它标成美团主App全部广告支持。当前主App/外卖频道是否仍使用该端点未知；保留其他启动数据和领券。 来源：[blackmatrix7/ios_rule_script](https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js)，GPL-2.0。 |
+| 56 | 美团 | [meituan](../modules/ads/meituan.stoverride) | 外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 57 | 米家 | [mijia](../modules/ads/mijia.stoverride) | 仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 58 | 密码 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 59 | 墨墨背单词 | 保留通用规则；未加专项 | 本次资源未找到可保留学习/词量真实权限的可靠广告专项，不改付费权限。 |
@@ -109,7 +109,7 @@
 | 81 | Starbucks | 找到方案但暂缓采用 | 找到的是微信小程序UI精简，不是图中独立Starbucks App的可靠开屏方案；未套用。 |
 | 82 | Stash | 保留通用规则；未加专项 | 代理工具本身无需加入无明确目标的广告过滤；保留更新、规则与证书管理。 |
 | 83 | Steam | 保留通用规则；未加专项 | 商店促销/游戏内容与正常业务共用服务；未实现不影响购买和库同步的精确广告方案。 |
-| 84 | 淘宝 | [taobao](../modules/ads/taobao.stoverride) | 专用 splash API 的广告条目；不拦整包首页或领券；沿用前轮稳定路径；未把规则/脚本测试当作真实App广告效果。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
+| 84 | 淘宝 | [taobao](../modules/ads/taobao.stoverride) | AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。待真机验收。；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
 | 85 | 淘票票 | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) | 仅 queryloadingbanner 启动广告；保留普通活动、选座和购票；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 86 | 腾讯会议 | 保留通用规则；未加专项 | 本次公开资源未找到可审核的独立广告专项，保留入会、音视频与通知。 |
 | 87 | 提示 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
@@ -124,7 +124,7 @@
 | 96 | 王者荣耀 | 保留通用规则；未加专项 | 游戏活动、资源与公告共用接口；没有采用可能影响登录、更新和对局的泛拦。 |
 | 97 | 网易邮箱大师 | [netease-mail](../modules/ads/netease-mail.stoverride) | mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 98 | 网易云音乐 | [netease-music](../modules/ads/netease-music.stoverride) | 仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文；上游匹配 interface 加可选数字，本模块只列 interface、interface3、ipv4，其他编号主机不在范围。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
-| 99 | 微博 | [weibo](../modules/ads/weibo.stoverride) | 仅实时与预加载两个开屏端点；不包含时间线、评论或消息广告；沿用前轮稳定路径；未把规则/脚本测试当作真实App广告效果。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
+| 99 | 微博 | [weibo](../modules/ads/weibo.stoverride) | AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收。；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
 | 100 | 微信 | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天；公开源仍保留这个历史端点，但没有当前微信版本调用证据；只能作为公众号候选，不称微信整体去广告。保留原 appid 与其他文章字段。 来源：[NobyDa/Script](https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js)，GPL-3.0-only。 |
 | 101 | 微信读书 | 找到方案但暂缓采用 | Maasea WeRead模块删除评论/分享数字和阅读提示，属于UI精简，不是已确认广告过滤；不移除这些正常功能。 |
 | 102 | 微信输入法 | 保留通用规则；未加专项 | 输入法主功能与广告证据不同，未找到可审核的独立广告规则；不解密输入/账号通信。 |
@@ -136,7 +136,7 @@
 | 108 | WPS Office | [wps](../modules/ads/wps.stoverride) | 仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据；ad-statistics-service 拦截主要影响统计，不能证明界面广告消失；素材拒绝仍可能留下空白或等待。不处理会员、文档和云同步，当前覆盖不等于 WPS 整体去广告。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 109 | 下厨房 | [xiachufang](../modules/ads/xiachufang.stoverride) | 仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 110 | 闲鱼 | [xianyu](../modules/ads/xianyu.stoverride) | 仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
-| 111 | 小红书 | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | 仅 splash_config 开屏时间字段候选；不包含笔记信息流、缓存素材或全部推广；沿用前轮稳定路径；未把规则/脚本测试当作真实App广告效果。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
+| 111 | 小红书 | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。待真机验收。；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
 | 112 | 小米耳机 | 保留通用规则；未加专项 | 不能用米家/小爱音箱的规则代替耳机App专项；未发现同名可靠广告端点。 |
 | 113 | 小米互联服务 | 保留通用规则；未加专项 | 跨设备互联与广告服务不是一回事；未采用可能干扰连接的泛拦。 |
 | 114 | 小宇宙 | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) | 仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频；采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |

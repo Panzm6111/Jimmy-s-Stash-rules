@@ -48,7 +48,7 @@ def merge_model(base, override, path=()):
             continue
         if isinstance(value, dict) and isinstance(result.get(key), dict):
             result[key] = merge_model(result[key], value, path + (key,))
-        elif key == 'rules' or (path == ('http',) and key in {'script', 'mitm', 'rewrite'}):
+        elif key == 'rules' or (path == ('http',) and key in {'script', 'mitm', 'url-rewrite'}):
             result[key] = copy.deepcopy(value) + result.get(key, [])
         else:
             result[key] = copy.deepcopy(value)
@@ -137,9 +137,10 @@ def validate_structure(config):
             assert p[0] in RULE_KINDS and len(p) in (2, 3), 'invalid provider format'
             if p[0] in {'IP-CIDR', 'IP-CIDR6'}: ipaddress.ip_network(p[1], strict=False)
     scripts = config.get('script-providers', {})
-    for item in config.get('http', {}).get('rewrite', []):
+    assert 'rewrite' not in config.get('http', {}), 'legacy HTTP rewrite key must not reappear'
+    for item in config.get('http', {}).get('url-rewrite', []):
         pattern, action = item.rsplit(' - ', 1)
-        assert action == 'reject', 'unreviewed rewrite action'
+        assert action in {'reject', 'reject-200', 'reject-dict', 'reject-array', 'reject-img'}, 'unreviewed rewrite action'
         re.compile(pattern)
     for item in config.get('http', {}).get('script', []):
         assert item['name'] in scripts, 'missing script provider'
@@ -183,7 +184,7 @@ class ProjectChecks(unittest.TestCase):
         modules = [(p, load(p)) for p in sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride'))]
         for (pa, a), (pb, b) in itertools.permutations(modules, 2):
             config = merge_model(a, b)
-            for key in ('script', 'mitm', 'rewrite'):
+            for key in ('script', 'mitm', 'url-rewrite'):
                 self.assertEqual(config.get('http', {}).get(key, []), b.get('http', {}).get(key, []) + a.get('http', {}).get(key, []), (pa, pb, key))
             self.assertEqual(config.get('rules', []), b.get('rules', []) + a.get('rules', []), (pa, pb))
             self.assertEqual(set(config.get('script-providers', {})), set(a.get('script-providers', {})) | set(b.get('script-providers', {})))
@@ -197,7 +198,7 @@ class ProjectChecks(unittest.TestCase):
             self.assertEqual(source_hashes[source['url']], source['sha256'])
         for file, body in rendered(catalog).items(): self.assertEqual((ROOT / file).read_text(), body)
         all_modules = [load(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride')]
-        patterns = [r.rsplit(' - ', 1)[0] for m in all_modules for r in m.get('http', {}).get('rewrite', [])]
+        patterns = [r.rsplit(' - ', 1)[0] for m in all_modules for r in m.get('http', {}).get('url-rewrite', [])]
         patterns += [s['match'] for m in all_modules for s in m.get('http', {}).get('script', [])]
         for item in catalog['modules']:
             module = load(item['file'])
@@ -218,6 +219,57 @@ class ProjectChecks(unittest.TestCase):
                 self.assertEqual(sum(bool(re.search(pattern, deceptive)) for pattern in patterns), 0)
         protected_hosts = {'wallet.95516.com', 'tysdk.95516.com', 'ms.jr.jd.com', 'mobilegw.alipay.com', 'ccbj.ccb.com.cn', 'ebsnew.boc.cn'}
         self.assertTrue(protected_hosts.isdisjoint(h for item in catalog['modules'] for h in item['mitm']))
+
+    def test_generated_ad_runtime_and_native_fixed_actions(self):
+        from build_ad_scripts import rendered
+        for file, body in rendered().items(): self.assertEqual((ROOT / file).read_text(), body)
+        from build_ad_diagnostics import rendered as probe_rendered
+        for file, body in probe_rendered().items(): self.assertEqual((ROOT / file).read_text(), body)
+        self.assertFalse((ROOT / 'scripts/ads/empty-response.js').exists())
+        all_paths = sorted(p.relative_to(ROOT) for p in (ROOT / 'modules/ads').glob('*.stoverride') if p.stem != 'expanded')
+        config = merged(*all_paths)
+        self.assertTrue(all(h['type'] == 'response' for h in config['http']['script']))
+        self.assertTrue(all(h.get('argument') == 'diagnostic=0' for h in config['http']['script']))
+        # Native actions own fixed responses. No JS handler may also own them.
+        for item in json.loads((ROOT / 'research/ad-catalog.json').read_text())['modules']:
+            for case in item['rewrite']:
+                self.assertFalse(any(re.search(h['match'], case['positive']) for h in config['http']['script']))
+
+    def test_public_expanded_provider_is_reachable_and_ordered(self):
+        base = load('config/stash.yaml')
+        expanded = merge_model(base, load('modules/ads/expanded.stoverride'))
+        self.assertNotEqual(route(base, 'ad.12306.cn'), '广告拦截')
+        self.assertEqual(route(expanded, 'ad.12306.cn'), '广告拦截')
+        for host in ['api.push.apple.com', 'login.microsoftonline.com']:
+            self.assertEqual(route(expanded, host), 'DIRECT')
+        self.assertEqual(route(expanded, address='192.168.17.1'), 'DIRECT')
+        allowed = merge_model(expanded, {'rules':['DOMAIN,ad.12306.cn,DIRECT']})
+        self.assertEqual(route(allowed, 'ad.12306.cn'), 'DIRECT')
+        self.assertLess(base['rules'].index('RULE-SET,基础广告,广告拦截'), base['rules'].index('MATCH,未匹配流量'))
+        self.assertEqual(set(base['rule-providers']), {r.split(',')[1] for r in base['rules'] if r.startswith('RULE-SET,')})
+
+    def test_each_app_switch_removes_its_actions_without_touching_routing(self):
+        base = load('config/stash.yaml')
+        paths = sorted(p for p in (ROOT / 'modules/ads').glob('*.stoverride') if p.stem != 'expanded')
+        self.assertNotIn('http', base)
+        self.assertNotIn('script-providers', base)
+        for path in paths:
+            module = load(path.relative_to(ROOT))
+            on = merge_model(base, module)
+            off = copy.deepcopy(base)  # native UI excludes the disabled override
+            self.assertEqual(on['proxy-providers'], off['proxy-providers'])
+            self.assertEqual(on['proxy-groups'], off['proxy-groups'])
+            self.assertEqual(on['dns'], off['dns'])
+            self.assertFalse(off.get('http'))
+            for key in ('script', 'url-rewrite'):
+                self.assertEqual(on.get('http', {}).get(key, []), module.get('http', {}).get(key, []))
+        # Toggle Taobao with Weibo still enabled: no second Taobao match survives.
+        weibo = load('modules/ads/weibo.stoverride')
+        off = merge_model(base, weibo)
+        taobao = load('modules/ads/taobao.stoverride')
+        url = 'https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/'
+        self.assertFalse(any(re.search(h['match'], url) for h in off['http']['script']))
+        self.assertEqual(len(off['http']['script']), len(weibo['http']['script']))
 
     def test_screenshot_inventory_complete_and_scoped(self):
         inventory = json.loads((ROOT / 'research/app-inventory.json').read_text())
@@ -248,6 +300,24 @@ class ProjectChecks(unittest.TestCase):
     def test_generated_research_matches_inventory(self):
         from render_app_research import render
         for file, text in render().items(): self.assertEqual((ROOT / file).read_text(), text)
+        from render_ad_architecture import rendered
+        for file, text in rendered().items(): self.assertEqual((ROOT / file).read_text(), text)
+
+    def test_added_ad_scene_urls_do_not_catch_business_or_duplicate_handlers(self):
+        tb = load('modules/ads/taobao.stoverride')['http']['url-rewrite'][0].rsplit(' - ',1)[0]
+        prefix='https://acs.m.taobao.com/gw/mtop.etao.noah.query/1.0/'
+        for query in ['?scene=tao_splash', '?data=%7B%22scene%22%3A%22tao_splash%22%7D']:
+            self.assertRegex(prefix+query, tb)
+        for url in [prefix+'?scene=normal_coupon',prefix+'?scene=not_tao_splash',prefix+'?scene=tao_splash_extra',
+                    prefix.replace('.query/','.queryExtra/')+'?scene=tao_splash',
+                    prefix.replace('acs.m.taobao.com','acs.m.taobao.com.evil.example')+'?scene=tao_splash']:
+            self.assertNotRegex(url, tb)
+        for module, hosts, normal in [
+            ('xiaohongshu',['ads-img-qc.xhscdn.com','ads-video-al.xhscdn.com'],'sns-img-qc.xhscdn.com'),
+            ('weibo',['sdkapp.uve.weibo.com','wbapp.uve.weibo.com','adimg.uve.weibo.com'],'api.weibo.cn')]:
+            config=merged('modules/ads/'+module+'.stoverride')
+            for host in hosts:self.assertEqual(route(config,host),'广告拦截')
+            self.assertNotEqual(route(config,normal),'广告拦截')
 
     def test_local_download_bundle(self):
         import io
@@ -331,7 +401,7 @@ class ProjectChecks(unittest.TestCase):
         self.assertNotIn('fallback', config['dns'])
         self.assertNotIn('dot.pub', json.dumps(config['dns']))
         self.assertTrue({'Google', 'NCloud'}.isdisjoint(g['name'] for g in config['proxy-groups']))
-        for provider in config['script-providers'].values():
+        for provider in config.get('script-providers', {}).values():
             self.assertEqual(set(provider), {'url', 'interval'})
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
@@ -428,7 +498,8 @@ class ProjectChecks(unittest.TestCase):
                  ('https://guide-acs.m.taobao.com/gw/mtop.taobao.trade.order.create/1.0/?x=1', 0),
                  ('https://edith.xiaohongshu.com/api/sns/v1/note/feed?x=1', 0)]
         for url, count in cases:
-            self.assertEqual(sum(bool(re.search(item['match'], url)) for item in config['http']['script']), count)
+            patterns = [item['match'] for item in config['http']['script']] + [r.rsplit(' - ',1)[0] for r in config['http']['url-rewrite']]
+            self.assertEqual(sum(bool(re.search(p, url)) for p in patterns), count)
 
     def test_provider_checker_rejects_invalid_fixtures(self):
         from check_provider import check
@@ -516,7 +587,7 @@ class ProjectChecks(unittest.TestCase):
     def test_no_tls_bypass_or_wildcard_mitm(self):
         catalog = json.loads((ROOT / 'research/ad-catalog.json').read_text())
         reviewed_hosts = {h for item in catalog['modules'] for h in item['mitm']}
-        reviewed_hosts.update({'app.bilibili.com', 'tiebac.baidu.com', 'edith.xiaohongshu.com', 'guide-acs.m.taobao.com', 'bootrealtime.uve.weibo.com', 'bootpreload.uve.weibo.com'})
+        reviewed_hosts.update({'app.bilibili.com', 'tiebac.baidu.com', 'edith.xiaohongshu.com', 'guide-acs.m.taobao.com', 'bootrealtime.uve.weibo.com', 'bootpreload.uve.weibo.com', 'api.weibo.cn'})
         for file in [*ROOT.rglob('*.yaml'), *ROOT.rglob('*.stoverride')]:
             data = load(file.relative_to(ROOT))
             self.assertNotIn('skip-cert-verify: true', file.read_text())

@@ -12,45 +12,32 @@ OUTPUT = 'config/stash.yaml'
 URL = RAW + OUTPUT
 
 def render():
-    addons = sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride') if p.stem != 'expanded')
-    config = flatten(merged(*addons))
-    config['http']['mitm'] = list(dict.fromkeys(config['http']['mitm']))
+    config = flatten(merged(), keep_providers={'基础广告'})
     # Keep the private device-only edit at the top. Public script providers use
     # the same URL declaration as the reviewed native Stash modules, while the
     # optional offline bundle separately retains content-based providers.
     config = {'proxy-providers': config.pop('proxy-providers'), **config}
-    return ('# Jimmy Stash 公共订阅入口；由tools/build_subscription.py生成，维护原文件即可。\n'
+    return ('# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
-            '# 私人机场URL请放在设备本地覆写，不在GitHub填写，不拼接到此公开地址。\n'
-            '# 识别标记：JIMMY-STASH；18组，含自动节点/其他地区；无Google或NCloud组。\n'
-            '# 路由修订2026-10-19：7个url-test池，1800秒；海外AI默认美国，Apple默认DIRECT。\n'
-            '# 自动节点/其他地区可能跨国；固定国家请选对应地区池。手动节点保留。\n'
-            '# 原全部节点/OpenAI组已更名；更新后核对总代理、海外AI和Apple的保存选择。\n'
-            '# 内含分流、38条基础域名广告及40款候选专项；12份脚本由Stash按本仓库URL下载。\n'
-            '# HTTP/MITM和CA需在设备设置；DNS为DoH，不使用dot.pub或fallback DNS。\n'
-            '# 广告修订2026-10-19：18个请求handler、10个响应handler、16条拒绝重写、41个精确MITM主机。\n'
-            '# 广告组DIRECT只放行域名规则；HTTP处理须用Stash对应开关停用。\n'
-            '# 源码与独立许可：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
-            '# 各脚本独立执行、保持原许可；无凭据、无证书私钥、无签到任务。\n'
-            '# 当前仅离线验证；实际Stash导入、地区失效语义和广告效果待设备验收。\n' + dump(config))
+            '# JIMMY-STASH AD-20261020.1；18个原策略组、DNS、私人订阅接入保留。\n'
+            '# 通用广告：基础广告 RULE-SET 有实际引用；可选 expanded 覆写现在有效。\n'
+            '# App专项独立启停：本主配置不内置HTTP处理；按 docs/AD-MODULES.md 导入所需原模块。\n'
+            '# 已装旧版须刷新主配置及所选App覆写，不要叠加旧整合广告增强。\n'
+            '# 私人机场URL只在设备本地覆写，不放到GitHub。总代理首次REJECT，需选择出口。\n'
+            '# 当前仅离线验证；真实Stash解析、MITM、脚本执行与广告效果待iPhone验收。\n'
+            + dump(config))
 
 def verify(text):
     config = yaml.safe_load(text)
     validate_structure(config)
-    assert not config.get('rule-providers')
+    assert set(config['rule-providers']) == {'基础广告'}
+    assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
+    assert 'http' not in config and not config.get('script-providers')
     assert len(config['proxy-groups']) == 18
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
-    assert len(config['script-providers']) == 12
-    assert len(config['http']['script']) == 28
-    assert sum(s['type'] == 'request' for s in config['http']['script']) == 18
-    assert len(config['http']['rewrite']) == 16
-    assert len(config['http']['mitm']) == len(set(config['http']['mitm'])) == 41
-    addons = sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride') if p.stem != 'expanded')
-    original = merged(*addons)
-    for name, provider in original['script-providers'].items():
-        assert config['script-providers'][name] == provider
-        assert set(provider) == {'url', 'interval'}
-        assert provider['interval'] == 86400
+    original = merged()
+    expanded = merge_model(config, load('modules/ads/expanded.stoverride'))
+    assert route(expanded, 'ad.12306.cn') == '广告拦截'
     for case in json.loads((ROOT / 'tests/fixtures/routes.json').read_text()):
         args = (case.get('domain', ''), case.get('ip', ''), case.get('country', ''))
         assert route(config, *args) == route(original, *args)

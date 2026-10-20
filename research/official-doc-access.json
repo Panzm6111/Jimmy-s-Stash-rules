@@ -38,5 +38,14 @@
       "lazy"
     ],
     "configuration": "7 url-test pools, interval 1800, fixed per-country membership; no DIRECT or other pool inside automatic pools"
+  },
+  "ad_repair_2026_10_20": {
+    "official_url": "https://stash.wiki/features/http-engine",
+    "observed_result": "normal and escalated HTTPS read both denied with HTTP403; body not read",
+    "basis_for_native_change": "User supplied current-official-document findings: http.url-rewrite and five native reject actions; not represented as independently downloaded documentation",
+    "legacy_rewrite_alias": "unverified; not declared cause of all failures",
+    "script_argument_reference": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+    "minimum_stash_version": "unverified; target user will update to latest",
+    "http3": "User-supplied official finding: current HTTP/3 bypasses rewriting; actual transport not observed, no UDP block added"
   }
 }

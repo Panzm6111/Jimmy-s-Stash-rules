@@ -4,7 +4,7 @@
 
 > 公共订阅沿用`main`的原入口，最新提交与HTTP/哈希校验结果见[PROGRESS.md](PROGRESS.md)。配置只有占位符，私人订阅和证书始终留在设备。官方文档站受云网络策略限制，部分原生语义和最低版本仍待复核；尚未完成iPhone验收，不能把发布成功当作真实连接/去广告通过。自动签到继续暂停。
 
-> 2026-10-19广告修订：已记录“淘宝、微博开屏仍在”的失败反馈，修正脚本字段处理、空响应适配并补齐基础SDK规则。**这不是手机效果已通过。** 已安装用户先按[更新与固定日志检查](docs/ADBLOCKING.md#已安装用户怎么更新)操作，保留现在能上网的配置和本机私人信息。
+> **AD-20261020.1 去广告修复：** 固定响应改用原生 URL 重写；补齐部分启动/预载/素材/广告字段处理，修复扩展包接入。为实现真正的逐App开关，原主入口现只带分流和通用域名规则，App专项按需启用；原40款范围保留。已安装用户按[一次迁移](docs/ADBLOCKING.md#已安装用户怎么更新)同时刷新原配置与模块，停用旧整合广告增强。**尚无iPhone效果验收，不保证所有开屏消失。**
 
 ## 推荐：粘贴一条链接导入
 
@@ -16,7 +16,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 1. 按[订阅导入教程](docs/SUBSCRIBE.md)在**设备本地私人覆写**填一次机场URL，并关联这份配置；不要在GitHub填写。
 2. 刷新“机场”，将“总代理”从 `REJECT` 改为“自动节点”或所需地区，使用规则模式连接。“海外AI”默认美国，Apple/Microsoft默认直连；各软件仍可独立选择。
-3. 本入口已经包含原分流、基础广告和40款专项，无需逐个导入广告模块。HTTP开屏专项需要在设备生成、安装并信任自己的CA，再设置HTTP/MITM；实际效果待手机验证。
+3. 本入口包含原分流和38条基础广告的真实规则集引用。需要开屏处理时，从[40款原模块目录](docs/AD-MODULES.md)导入并启用所需App覆写；关闭该覆写就撤销其专项。沿用设备已完全信任的自建CA，HTTP/MITM保持开启，避免重复添加同款。
 
 若日志显示`dot.pub / NotValidForName`，或出现本项目没有的`Google/NCloud`策略组，先按[运行中排障](docs/SUBSCRIBE.md#已启动但打不开网页或出现dns证书错误)核对选中配置、覆写与DNS设置。确认选中“Jimmy 本机配置”，在“手动节点”手选真节点；流量提示不是节点。日志显示启动成功不等于这份配置已经导入成功。
 
@@ -29,7 +29,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 - “自动节点”、美国、日本、香港、新加坡、台湾和“其他地区”共7个自动测速池，按最近成功的HTTPS探测延迟选最低者；30分钟检测一次，不保证任意时刻最快。“自动节点”可跨国家切换，“其他地区”可在其中多个国家间切换；需要手选全部节点时使用保留的“手动节点”。
 - “海外AI”取代原OpenAI组，涵盖常用海外AI服务，默认选美国；可另选地区、跟随总代理或手选具体节点。Netflix、YouTube、Telegram默认跟随总代理；各软件选择互不影响。Apple/Microsoft 默认直连，并对通知、登录和更新做更具体的处理。AI覆盖范围与遗漏边界见[说明](docs/AI-COVERAGE.md)。
 - 局域网直连、国内常用域名规则、国内 GeoIP 兜底、广告开关和未匹配流量组。
-- 较窄的基础广告域名包；可选数万条扩展包；40款App的独立广告专项。你提供的图片已提取135个名称，其中39款有专项文件，其余逐款记录原因。**实际广告效果均待手机测试**，不处理会员解锁。
+- 较窄的基础广告域名包；可选扩展包现在可实际接入原公共入口；40款App的独立广告专项。你提供的图片已提取135个名称，其中39款有专项文件，其余逐款记录原因。**实际广告效果均待手机测试**，不处理会员解锁。
 - 自动签到已暂停；含拼多多、云闪付的 [24 平台调查备忘](docs/CHECKIN-RESEARCH.md) 保留供日后参考。
 - 固定主路径、来源与许可证记录、离线验证、上游快照更新工具、排障和回退教程。
 
@@ -43,7 +43,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 ## 可选：原分层方式安装
 
-使用上面的一体化订阅入口时，跳过本节，不重复添加core或同款广告handler。
+使用上面的公共订阅入口时，跳过下面main+core的分层安装，不重复添加core。App专项仍按需添加，每款只启用一份。
 
 ### 0. 确认前提
 
@@ -138,7 +138,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core
 - [一条链接订阅导入与本机私人设置（推荐）](docs/SUBSCRIBE.md)
 - [订阅兼容、漏节点与 SS/VLESS](docs/SUBSCRIPTION.md)
 - [广告覆盖、MITM、模块启停](docs/ADBLOCKING.md)
-- [完整去广告方案与调查规格：配置原文、40款范围、12份JS源码](docs/AD-ARCHITECTURE.md)
+- [完整去广告方案与调查规格：配置原文、40款范围、11份广告JS＋可选诊断源码](docs/AD-ARCHITECTURE.md)
 - [图片135款App名称与逐款调查](docs/APP-INVENTORY.md)
 - [全部专项模块、稳定导入链接与通用规则重叠](docs/AD-MODULES.md)
 - [淘宝、小红书、微博与独立天猫的专项范围](docs/APP-SPLASH.md)
@@ -155,7 +155,9 @@ Python 3.12、Node.js 22 或 24；验证依赖只有 PyYAML，不运行其他代
 
 ```sh
 python -m pip install -r requirements-dev.txt
+python tools/build_ads.py
 python tools/validate.py
+python -m unittest discover -s tests -p test_private_config.py -v
 python tools/check_provider.py
 python tools/build_subscription.py
 python tools/generate_node_filters.py

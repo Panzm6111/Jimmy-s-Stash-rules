@@ -1,954 +1,113 @@
 {
-  "reviewed_at": "2026-10-20",
-  "runtime_source_commit": "d8ea21e2f8fc6238d8eb6e116f024817b59f0661",
-  "review_type": "Current repository implementation inventory; no new iPhone tests or runtime changes",
+  "revision": "AD-20261020.1",
+  "baseline": "d8ea21e",
+  "before_repair_commit": "936fe457b0362d0dc439d769e9fa7faa29d56b5b",
   "counts": {
-    "main_rules": 5314,
-    "default_ad_routing_rules": 49,
-    "basic_rules": 38,
-    "expanded_rules": 38066,
     "app_modules": 40,
-    "domain_only_apps": 6,
-    "script_files": 12,
-    "request_handlers": 18,
-    "response_handlers": 10,
-    "reject_rewrites": 16,
-    "mitm_hosts": 41
+    "public_main_rules": 5266,
+    "basic_ad_payload": 38,
+    "expanded_ad_payload": 38066,
+    "app_domain_rules": 19,
+    "native_url_rewrites": 38,
+    "response_handlers": 11,
+    "request_handlers": 0,
+    "runtime_js_providers": 11,
+    "mitm_exact_hosts": 45,
+    "optional_probe_js": 1
   },
-  "rule_types": {
-    "basic": {
-      "DOMAIN-SUFFIX": 27,
-      "DOMAIN": 8,
-      "DOMAIN-KEYWORD": 3
-    },
-    "expanded": {
-      "DOMAIN": 23753,
-      "DOMAIN-SUFFIX": 13939,
-      "DOMAIN-KEYWORD": 187,
-      "IP-CIDR": 186,
-      "IP-CIDR6": 1
-    }
-  },
-  "techniques": {
-    "domains": [
-      {
-        "app": "高德地图",
-        "entries": 2
-      },
-      {
-        "app": "携程旅行",
-        "entries": 1
-      },
-      {
-        "app": "东方财富",
-        "entries": 1
-      },
-      {
-        "app": "京东金融",
-        "entries": 2
-      },
-      {
-        "app": "铁路12306",
-        "entries": 1
-      },
-      {
-        "app": "UC浏览器",
-        "entries": 2
-      },
-      {
-        "app": "云闪付",
-        "entries": 2
-      }
-    ],
-    "rewrite": [
-      {
-        "app": "58同城",
-        "entries": 1
-      },
-      {
-        "app": "高德地图",
-        "entries": 1
-      },
-      {
-        "app": "百度网盘",
-        "entries": 1
-      },
-      {
-        "app": "中国移动",
-        "entries": 1
-      },
-      {
-        "app": "大众点评",
-        "entries": 1
-      },
-      {
-        "app": "华住会",
-        "entries": 1
-      },
-      {
-        "app": "肯德基",
-        "entries": 1
-      },
-      {
-        "app": "网易邮箱大师",
-        "entries": 1
-      },
-      {
-        "app": "拼多多",
-        "entries": 2
-      },
-      {
-        "app": "淘票票",
-        "entries": 1
-      },
-      {
-        "app": "航旅纵横",
-        "entries": 1
-      },
-      {
-        "app": "中国联通",
-        "entries": 2
-      },
-      {
-        "app": "WPS Office",
-        "entries": 1
-      },
-      {
-        "app": "下厨房",
-        "entries": 1
-      }
-    ],
-    "request": [
-      {
-        "app": "高德地图",
-        "entries": 1
-      },
-      {
-        "app": "大麦",
-        "entries": 1
-      },
-      {
-        "app": "猎聘",
-        "entries": 1
-      },
-      {
-        "app": "脉脉",
-        "entries": 2
-      },
-      {
-        "app": "麦当劳",
-        "entries": 1
-      },
-      {
-        "app": "米家",
-        "entries": 1
-      },
-      {
-        "app": "网易邮箱大师",
-        "entries": 1
-      },
-      {
-        "app": "网易云音乐",
-        "entries": 3
-      },
-      {
-        "app": "微博",
-        "entries": 2
-      },
-      {
-        "app": "WPS Office",
-        "entries": 1
-      },
-      {
-        "app": "闲鱼",
-        "entries": 1
-      },
-      {
-        "app": "小宇宙",
-        "entries": 1
-      },
-      {
-        "app": "知乎",
-        "entries": 2
-      }
-    ],
-    "response": [
-      {
-        "app": "阿里云盘",
-        "entries": 1
-      },
-      {
-        "app": "哔哩哔哩",
-        "entries": 1
-      },
-      {
-        "app": "菜鸟",
-        "entries": 1
-      },
-      {
-        "app": "京东",
-        "entries": 1
-      },
-      {
-        "app": "瑞幸咖啡",
-        "entries": 1
-      },
-      {
-        "app": "美团",
-        "entries": 1
-      },
-      {
-        "app": "淘宝",
-        "entries": 1
-      },
-      {
-        "app": "百度贴吧",
-        "entries": 1
-      },
-      {
-        "app": "微信",
-        "entries": 1
-      },
-      {
-        "app": "小红书",
-        "entries": 1
-      }
-    ]
-  },
-  "modules": [
-    {
-      "app": "58同城",
-      "file": "modules/ads/58tongcheng.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "app.58.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "阿里云盘",
-      "file": "modules/ads/alipan.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "member.alipan.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "高德地图",
-      "file": "modules/ads/amap.stoverride",
-      "methods": {
-        "domains": 2,
-        "rewrite": 1,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "m5.amap.com",
-        "amap-aos-info-nogw.amap.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "百度网盘",
-      "file": "modules/ads/baidu-netdisk.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "pan.baidu.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "哔哩哔哩",
-      "file": "modules/ads/bilibili.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "app.bilibili.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "菜鸟",
-      "file": "modules/ads/cainiao.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "cn-acs.m.cainiao.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "中国移动",
-      "file": "modules/ads/cmcc.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "client.app.coc.10086.cn"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "携程旅行",
-      "file": "modules/ads/ctrip.stoverride",
-      "methods": {
-        "domains": 1,
-        "rewrite": 0,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [],
-      "device_tested": false
-    },
-    {
-      "app": "大麦",
-      "file": "modules/ads/damai.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "acs.m.taobao.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "大众点评",
-      "file": "modules/ads/dianping.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "mapi.dianping.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "东方财富",
-      "file": "modules/ads/eastmoney.stoverride",
-      "methods": {
-        "domains": 1,
-        "rewrite": 0,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [],
-      "device_tested": false
-    },
-    {
-      "app": "华住会",
-      "file": "modules/ads/huazhu.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "appapi.huazhu.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "京东金融",
-      "file": "modules/ads/jingdong-finance.stoverride",
-      "methods": {
-        "domains": 2,
-        "rewrite": 0,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [],
-      "device_tested": false
-    },
-    {
-      "app": "京东",
-      "file": "modules/ads/jingdong.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "api.m.jd.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "肯德基",
-      "file": "modules/ads/kfc.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "res.kfc.com.cn"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "猎聘",
-      "file": "modules/ads/liepin.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "api-ac.liepin.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "瑞幸咖啡",
-      "file": "modules/ads/luckin.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "capi.lkcoffee.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "脉脉",
-      "file": "modules/ads/maimai.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 2,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "open.taou.com",
-        "h3.open.taou.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "麦当劳",
-      "file": "modules/ads/mcdonalds.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "api.mcd.cn"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "美团",
-      "file": "modules/ads/meituan.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "wmapi.meituan.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "米家",
-      "file": "modules/ads/mijia.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "home.mi.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "网易邮箱大师",
-      "file": "modules/ads/netease-mail.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "appconf.mail.163.com",
-        "client.mail.163.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "网易云音乐",
-      "file": "modules/ads/netease-music.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 3,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "interface.music.163.com",
-        "interface3.music.163.com",
-        "ipv4.music.163.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "拼多多",
-      "file": "modules/ads/pinduoduo.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 2,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "api.pinduoduo.com",
-        "api.yangkeduo.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "铁路12306",
-      "file": "modules/ads/railway12306.stoverride",
-      "methods": {
-        "domains": 1,
-        "rewrite": 0,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [],
-      "device_tested": false
-    },
-    {
-      "app": "淘宝",
-      "file": "modules/ads/taobao.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "guide-acs.m.taobao.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "淘票票",
-      "file": "modules/ads/taopiaopiao.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "acs.m.taobao.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "百度贴吧",
-      "file": "modules/ads/tieba.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "tiebac.baidu.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "UC浏览器",
-      "file": "modules/ads/uc.stoverride",
-      "methods": {
-        "domains": 2,
-        "rewrite": 0,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [],
-      "device_tested": false
-    },
-    {
-      "app": "航旅纵横",
-      "file": "modules/ads/umetrip.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "oss.umetrip.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "中国联通",
-      "file": "modules/ads/unicom.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 2,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "m.client.10010.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "云闪付",
-      "file": "modules/ads/unionpay.stoverride",
-      "methods": {
-        "domains": 2,
-        "rewrite": 0,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [],
-      "device_tested": false
-    },
-    {
-      "app": "微信",
-      "file": "modules/ads/wechat-articles.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "mp.weixin.qq.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "微博",
-      "file": "modules/ads/weibo.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 2,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "bootrealtime.uve.weibo.com",
-        "bootpreload.uve.weibo.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "WPS Office",
-      "file": "modules/ads/wps.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "ios.wps.cn",
-        "mobile-pic.cache.iciba.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "下厨房",
-      "file": "modules/ads/xiachufang.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 1,
-        "request": 0,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "api.xiachufang.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "闲鱼",
-      "file": "modules/ads/xianyu.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "acs.m.goofish.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "小红书",
-      "file": "modules/ads/xiaohongshu.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 0,
-        "response": 1
-      },
-      "mitm_hosts": [
-        "edith.xiaohongshu.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "小宇宙",
-      "file": "modules/ads/xiaoyuzhou.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 1,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "api.xiaoyuzhoufm.com"
-      ],
-      "device_tested": false
-    },
-    {
-      "app": "知乎",
-      "file": "modules/ads/zhihu.stoverride",
-      "methods": {
-        "domains": 0,
-        "rewrite": 0,
-        "request": 2,
-        "response": 0
-      },
-      "mitm_hosts": [
-        "api.zhihu.com"
-      ],
-      "device_tested": false
-    }
-  ],
-  "integrated_contains_all_40_apps": true,
-  "integrated_has_per_app_toggles": false,
-  "integrated_has_rule_set_reference_for_expanded_overlay": false,
-  "remote_expanded_provider_overlay_works_with_core_rule_set": true,
-  "local_bundle_expanded_is_a_flat_rule_snapshot": true,
-  "device_mitm_enabled_and_ca_trusted_user_reported": true,
-  "iphone_ad_removal_verified": false,
-  "runtime_files_changed_in_this_review": false,
   "input_sha256": {
+    "config/stash.yaml": "5a0e982df98e194c8165fe8c63be593b72eb9922f10fc404c46261d206eaa6ac",
+    "config/main.yaml": "17c62f4dd6d71ee048d37fd85b8479136bdf89e39101a019a417ea2265f77651",
     "config/core.stoverride": "9691f2b4386c0a0978d9d34e05865616a619105a24c127d2fa1a4986ecd88e48",
-    "config/stash.yaml": "18f633958c3bd52f8442c1a6faaaa6036ed69cc3dcd3b972f751da9776e4240c",
-    "modules/ads/58tongcheng.stoverride": "0599397b1418c6ee6313bea02a7fa111f7ebc5fd11b4ec38f03a18e1533950b0",
-    "modules/ads/alipan.stoverride": "7a1a1c135b76d65ccbf1db45ae6a713aa8b682de1c39ac669f72ed9a65857c60",
-    "modules/ads/amap.stoverride": "66d6f068a590aa13390cb6f712db00d8cc78b82d435ac6ad0b7bbb8d6440b5df",
-    "modules/ads/baidu-netdisk.stoverride": "403f3aa602b55ed877baaf50930cc802132a5a71b38b23a73c68ee222ab55025",
-    "modules/ads/bilibili.stoverride": "32c3b4b43b371d901dbf087287255dd5566cc09dc6f93b244e16149c12ce7b31",
-    "modules/ads/cainiao.stoverride": "fc642494e0ad6b761fdd74d1ff2cece079a5c1dfa6df6fa447d971ed7797f89b",
-    "modules/ads/cmcc.stoverride": "bf6191c5fcef17d6a8c3229cd9ccdcd4d725069e47671800e958cdaa614b57dc",
-    "modules/ads/ctrip.stoverride": "c9d6892406ea532878a06a1c5d81a9eca78d96e711804858c201998f342e0a10",
-    "modules/ads/damai.stoverride": "6a9049c565708326191308897d5602bef3a64f34bccb150e859bb9a21e7d49e0",
-    "modules/ads/dianping.stoverride": "f0b8c825351d9c2dfa5452af7401ac7af2ecb03fa8673e701573f91ec5743295",
-    "modules/ads/eastmoney.stoverride": "8c2c8f3f93147a0bfece6c73d5e1bfa111d2be2305b682f8e07de415f20578ac",
-    "modules/ads/expanded.stoverride": "b3466d5d81f527996e6a83d0ce7fcfc8d582e084fac904149889833edfbdf947",
-    "modules/ads/huazhu.stoverride": "155b54b05649f450b3d0942542d1d93973c7ef0795ff59beff45d32eb4dcdacc",
-    "modules/ads/jingdong-finance.stoverride": "84e0c954c3a00a58812e25c53d926d1e970d1647b9ce6bc67bf964c0714e21e8",
-    "modules/ads/jingdong.stoverride": "6973ebdf5f4d8d565a26a9ece624e6f78bbddb505102d3ce5c65fe3780e61628",
-    "modules/ads/kfc.stoverride": "132ff58f81e61de44f212cb59f9e98020609d04d8edadd0a766d7a2a8711f74c",
-    "modules/ads/liepin.stoverride": "3c4741facf7e57fb7dec9365c0fbbf790e9ea216c13fc1cffa45618e9780012b",
-    "modules/ads/luckin.stoverride": "74c3b204b17bae3a225e0339aaad24546654d265b3cef2c9c3d52b59e7e20a0a",
-    "modules/ads/maimai.stoverride": "5a6279ad5a0e7918bb710779036d228d0b88d58d3b3f7fc9c981cb2a0c76df89",
-    "modules/ads/mcdonalds.stoverride": "8bc1a8a2e0e6a87a2b1f820d8264a564408ef82fabca80584537eb567d8f0418",
-    "modules/ads/meituan.stoverride": "fe710327b8bff9a8eafa8249914fe528a7f8140a8ea15de9c4eb94ec1a49325d",
-    "modules/ads/mijia.stoverride": "48a133782b5ba3e8146fd452cafbb7a0e87f97689b6ca0ecef0ba6b7a27db4f9",
-    "modules/ads/netease-mail.stoverride": "43bacb2c0819c1a5970513e302572e6ddc8797ad617978245d62c3498a0801d8",
-    "modules/ads/netease-music.stoverride": "c1ee83b631d5f56563d8bc2174e26d86e6f28d4dfc520cdf5030db6e3f625d47",
-    "modules/ads/pinduoduo.stoverride": "4cac5732ad765b9f080058c49a03c140cb320a5aedb747a77d0d6bf78fc1e8e3",
-    "modules/ads/railway12306.stoverride": "72dc14d2a048cd0db26fd3e0705ada51ffe936c2fede48478e032f79d0a6e22e",
-    "modules/ads/taobao.stoverride": "66e02ff481152f1582190d178dc14423bd47be2f96d8779127e8c42bd52e0b69",
-    "modules/ads/taopiaopiao.stoverride": "b08863aac932283430f6e47c3308b5b6246d979494ee1a971a54ed0e4e4f27b7",
-    "modules/ads/tieba.stoverride": "9180c8a4512852d4c37a66a89584a0a9964c0a2ed7ee858b70375f3ef53f6c3d",
-    "modules/ads/uc.stoverride": "292db3a85eebaa55c1ebea97c54092283231812f1d7297dc0103f2fa0c052551",
-    "modules/ads/umetrip.stoverride": "b034e025f390abb28d18182b912b82290b319d3eae07e7ff80171b87363c9dec",
-    "modules/ads/unicom.stoverride": "f5f01a791d6dc168c6e9316d83377c486e45d408acf3b39e310522030802661d",
-    "modules/ads/unionpay.stoverride": "2fd4068898bf0587202fd1f8a1a151c23ca46b74b89d8458f621a18212fa3db6",
-    "modules/ads/wechat-articles.stoverride": "183a36c2b1865a92de609bf5f5d469d5d9a5f70a85051458e126715002b06098",
-    "modules/ads/weibo.stoverride": "b2ab257e05bb9c1a842a386db353aa7369b0aba8ba64ed9516bc6aa7d9c287b9",
-    "modules/ads/wps.stoverride": "e08acfbb6e1a556a05fc1536169064c5a03e14c65259a67e43c30c2bca26db60",
-    "modules/ads/xiachufang.stoverride": "c75200dd1a12dcc1750dc59bf56a9c6e0a92bc88b4171e8dd4d13a23223c7d5d",
-    "modules/ads/xianyu.stoverride": "48251bf439650a1bf05c627c3f18a8cd658dc78397ec4c0a7a01242546b6393e",
-    "modules/ads/xiaohongshu.stoverride": "88530b8f5679de349d337637cf10109274db43a4d2c2040bf01c906dd0bf85f8",
-    "modules/ads/xiaoyuzhou.stoverride": "423ad1a704d623f8f173241c9420011bd02096f84111188bb25c1d9bece8d5d1",
-    "modules/ads/zhihu.stoverride": "3ea1574acdbd3595a5cedcf24880bef4f3d7e090e10738983de9ad7af7f43c1d",
-    "research/ad-catalog.json": "8f1665ef867447240cfebfde12df1be0fcc10af58a9ddabef08d36de1ba4ac06",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
     "rules/vendor/ads-expanded.yaml": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
-    "scripts/ads/alipan.js": "c90be8f4fa02ca8d4857229e49a82066305ee53b101a97dcf441d7dbb15fd1fa",
-    "scripts/ads/bilibili.js": "09994000b9d3c5332848f6788dd1948e9f7f961b81aecd4247e39c78792e8cc5",
-    "scripts/ads/cainiao.js": "95e56c4c6c787fc85adcaf0be5ac9be8fb68b2f4b4338828e1d1c4d3b36a84d4",
-    "scripts/ads/empty-response.js": "6983e6662f453a51b54acd4da429639e63affdbf43a7b9c21349c4674fd9a3be",
-    "scripts/ads/jingdong.js": "1586841af3a30ccf246d98730c49d3027323db6b4bfa6fa578067e03676515ab",
-    "scripts/ads/luckin.js": "ebe583ac0d7c8a6194470787c75ffc5e80cf04539d8798ff2ea01616069aead6",
-    "scripts/ads/meituan.js": "f9eca13c143039ad7a47320ffb0e056f8cf9e1886f1f5e7996656d35bb18ce53",
-    "scripts/ads/taobao.js": "134eab65f7443a19f5a4b401fe7784443d4b21cea6b31a18e06527b342a7f19d",
-    "scripts/ads/tieba.js": "a9a763d2c3b4bb185d1fcc12871d13431860ca20a10fcc1ecf613e1a3464da6e",
-    "scripts/ads/wechat-articles.js": "7cd38a1b9bc4b66eea6f7295806e35ece420d88676f3b3efa7f0fc5a838b19f5",
-    "scripts/ads/weibo.js": "33f30a06cc01171d444fc89204578004d979a6da61a01f6cd8343afcddf62cb1",
-    "scripts/ads/xiaohongshu.js": "0da66fb2483bce7aad7c17ef06db80fc102380ba2e192c93416976bbdb103e6a"
+    "research/ad-catalog.json": "2ebac11549d7ecc2994591348a7e4ad0f5bef709d800822ea4a0ca74776221f4",
+    "research/sources.lock.json": "5caa6d2df72ed3e228fd7854e5344c47866712fecb9524179c56d30bae83d715",
+    "research/ad-repair-evidence.json": "d6f8e3a0774aee9ca63e9ba26c10c0d95b954cea1c97ab0be5b50ebe552aa138",
+    "tools/generate_ad_modules.py": "834c9928191b504abdf56349349ad8b4df01ed42906214b5658eec5864a36960",
+    "tools/build_ad_scripts.py": "0af78f79d83532318c23c3a442c31927e16dad43163640178aa8b737b3ae3a79",
+    "tools/build_ad_diagnostics.py": "91b314865ff29c604dca4c29239650a05caed7236b9cfd732787e75146a18342",
+    "tools/build_subscription.py": "bbf48ff36c2f7390415616daecd9913840c8b3c17c857b16b0fe104e08261829",
+    "tools/build_local_bundle.py": "0c96ed535ed2e15c24bfdccd283494da6610fd9bf0d7bf040c4a18cf82be6fc8",
+    "tools/build_private_config.py": "c7da729707ea50e55e49ec46d57d8549a4698602eef22ec29fc0d7d4a9a54cf7",
+    "tools/render_ad_architecture.py": "575dd18580ff9fb2b29064afaaebbd91b59b60f32c69e26fe6f429e916b3f51a",
+    "tools/build_ads.py": "8ad51b9e11c96f806747c787c8f8bed1a9d1caf2ad6603a233aa547ca3bf3266",
+    "modules/diagnostics/ads.stoverride": "b043de4d33b822af6edf865b93205f9c813aea609ebfb7e45799bff69ae7615c",
+    "modules/ads/58tongcheng.stoverride": "318aa4b4f2cfc4e38a021223f13619fb2b2afd6201079aefddcc710596cfcb6f",
+    "modules/ads/alipan.stoverride": "7bf1cbb1244362c3324a140c867cbc085afb59bc70ac4f6afee0e9bc3db9a83c",
+    "modules/ads/amap.stoverride": "1cdf57ee1ad101bbb5a06e31ac796b9c528dc6613e4d301d8e4251897e12ba51",
+    "modules/ads/baidu-netdisk.stoverride": "919dcfe79c6da487de6ac3478d08a983dd5613c034d3a98684483d1da4db748a",
+    "modules/ads/bilibili.stoverride": "e936a9cb7f08681a80fede5fee3e261943786f646ef1d9f3e0f426ee2ca7d202",
+    "modules/ads/cainiao.stoverride": "ecf9d460c34d2389af2b4f0ec2553c9baf23029353ca14360173a35239964b3c",
+    "modules/ads/cmcc.stoverride": "3fdc844a13d8695560b13e58a4c69919725f2c8a7df4b52c27b717413550acf7",
+    "modules/ads/ctrip.stoverride": "caa247d4d61790c1778f64da54b147bb51b591ba222f2e2db2a69e9c3aeccc27",
+    "modules/ads/damai.stoverride": "8113bc1244c303e8ccce566bed354c4881f84f4fa6b3efaa9400f2c6b889d82c",
+    "modules/ads/dianping.stoverride": "2dd5342ca759ae13cbc3c2cc412cc71d81b48c0605135eeb856e3cab28a33392",
+    "modules/ads/eastmoney.stoverride": "a356a7e876d3c3cddd7d22eea01e1e2110b05a2b0fcb58d31a3dd87e4286395f",
+    "modules/ads/huazhu.stoverride": "4a114b51877144707cba954dbe3964707af812e6826d4ecad52f217345c0b5a5",
+    "modules/ads/jingdong-finance.stoverride": "26e50ed96ef46d3c1f44dc3828405409aaeb9645bf8726cc9312c4a0c01f6c5d",
+    "modules/ads/jingdong.stoverride": "8ef97ded0523dc7892a5f59ab8ec5cf9841e52899d57f03945cf803eab37a6f1",
+    "modules/ads/kfc.stoverride": "6d7c148786d1dcab8b180b2f718600bb9e277163b86e1b21209a92d7d2a24828",
+    "modules/ads/liepin.stoverride": "802d275d54c03b1152a200d5ce3e9354b354dcaf19cf85d7b77d1536691961ae",
+    "modules/ads/luckin.stoverride": "434edb8ce0e60121d1d1232a39c562cd9180ab5e3d55fd010b51d069b6f647fd",
+    "modules/ads/maimai.stoverride": "891895014057f574e285085e5e984cb38f9165cbd5b9cf7869a6053f406bacef",
+    "modules/ads/mcdonalds.stoverride": "0c9acf6010712bd44a52194e08d8a0d36ef640aa2b80638e953e3227e530d31b",
+    "modules/ads/meituan.stoverride": "8380bfb992a2508df2cc218ef7f5ac847cca847e27bfc6ff61d0975ff746fce9",
+    "modules/ads/mijia.stoverride": "908bef109a93ae80e8a359b752c473a653e249331fbe47673318be29424657fa",
+    "modules/ads/netease-mail.stoverride": "933dd5e27ceb784763aebad0c69e5303aa45143e7f8f01572047877b7451d214",
+    "modules/ads/netease-music.stoverride": "3099846123b4771e49dcc548fbc703cfcbd1b11d7072b760426aef6579901aab",
+    "modules/ads/pinduoduo.stoverride": "edf4d69aaf1006afbf291b4ee6b5aea6631f2cf35253c6f9bb5594d9ddce7b26",
+    "modules/ads/railway12306.stoverride": "16ce63c1e4a357ddca4d62bdf00e427d229713998eee5e798c09632a77e9f064",
+    "modules/ads/taobao.stoverride": "bca38204de0858e6294a142601b056cdb8818a0122e1248180a196f9134155bf",
+    "modules/ads/taopiaopiao.stoverride": "26f8360e2aa09ddedbdf9088ec072afdfdb7879a52ad50e873643b75aac8455d",
+    "modules/ads/tieba.stoverride": "c52eb4c1ad08d3d2658a3b2e12c0f98f7363facaea125632a04c633da9543233",
+    "modules/ads/uc.stoverride": "1ae896db8bb2150ba7bdadfd9a9f1d3f40186166c1e4dbe82b2226613101993f",
+    "modules/ads/umetrip.stoverride": "176805aebaeb26907e0da431a98b5a588ca2cabc0f1a78d4fbc9e0c8ff2dd049",
+    "modules/ads/unicom.stoverride": "b39c96b0af727dbec3e93366d457dda3e70a4c87d2edf121b996c9bac7ae770d",
+    "modules/ads/unionpay.stoverride": "d7c5f24c5e42023d34b65161a6895c9e92ddaaf1e6df8f23dc5744c3ac3a98eb",
+    "modules/ads/wechat-articles.stoverride": "57ea7b8a41ef4ac4ae205588bc40b3bf66fac46f1bd1cac0219ae5c640ad4252",
+    "modules/ads/weibo.stoverride": "dbf9b01324d3349b7ff76c6f080ad63f69aedb1e6e27cedf2ba4ebfc6cbcf2ed",
+    "modules/ads/wps.stoverride": "5577388dad725b1f60d6872313b5824944616ce1cffca22b5b885c54bb28e633",
+    "modules/ads/xiachufang.stoverride": "3f6b329fa80bdf0f57de6ca517cde3be784ad96ec1306bb354660bf690e813b6",
+    "modules/ads/xianyu.stoverride": "cd234a047b653fdc19ba485aa6616b6997bad59facf883219ca0bcaf8d447c75",
+    "modules/ads/xiaohongshu.stoverride": "aa7b6b138e762d89c68a989ab58d9e8a31a4361ce851b4af4d30abd0fb7d11d0",
+    "modules/ads/xiaoyuzhou.stoverride": "a41301c6486a9820f48a39c055e2d09c5502f42115fa5ad4ecab8c552ac58451",
+    "modules/ads/zhihu.stoverride": "2320996371ecaa94d51f492098913cff5d3e49b2fe57b4a26f41c96ee2b20c5b",
+    "scripts/ads/alipan.js": "729a277242f2bbbe626c34716e4eddff031c161d3011b8f39e7e346799991aa8",
+    "scripts/ads/bilibili.js": "54b416c99de3dd6d401cac10481883bafcebf677e18981383338384a007bc43e",
+    "scripts/ads/cainiao.js": "4d0f186e786bb281b6e9e5bff468867a43c0ca05e446fd49f2db07e3f74adae7",
+    "scripts/ads/jingdong.js": "432e156d6e7cfc9d720a0a232c8b108fa1cc983640de516bccbe92de26cf32f6",
+    "scripts/ads/luckin.js": "109b19679e9a43c0d69b5168ad9b05d1494a88df0f7a74f1b041a93c1414997b",
+    "scripts/ads/meituan.js": "71f1c46a1230f684b5f58b94e8b306325a17eaa964d51dbc870efa8f1f492798",
+    "scripts/ads/probe.js": "a6f98eb006a8fd72be69fa7d068c93e817f318ccc7b61b55ee6d73a3a8e958d2",
+    "scripts/ads/taobao.js": "05b71cbaa7950ce569b98ddcce59eca448b29db4ec650e99ee6a3f1f2551b57a",
+    "scripts/ads/tieba.js": "6c39725a2cf24c51bdccc5ee6d470feeea2c637d9714e3b7767632407b7cf6c3",
+    "scripts/ads/wechat-articles.js": "831411fb29e910a29a288c8fd77b1a4579ecf9074ae4a9e7ee6b29fe52e0c2f0",
+    "scripts/ads/weibo.js": "db34ab8f1236362feaac08a4bbebdaaab422cb3d60aff5e9f68f20a88b65a7ca",
+    "scripts/ads/xiaohongshu.js": "f5f79fdf840a88e6c46e6786386c1243b247721b612699fe133aa9fecd48988d",
+    "tools/ad_transforms/alipan.js": "eac611ab594dda111098845761e0306cde7b33fd829b3b615e7353ad2960b7c2",
+    "tools/ad_transforms/bilibili.js": "745da36c728f72aa6b4009b6b249c9336318d73eb131f775975162a3127ba7e1",
+    "tools/ad_transforms/cainiao.js": "f14d94e64479191ec7862b8594904c99e0a29b81d7a0997bee9b8e48579dda20",
+    "tools/ad_transforms/jingdong.js": "2dfbff222e3192f08e6d6071b3b659e5ac4c322eea7576d1dceb298774e0c73f",
+    "tools/ad_transforms/luckin.js": "e1938f2fb7bc6695e2277f62593ffde0b1008d39972b6e5b29f356d252a4c60a",
+    "tools/ad_transforms/meituan.js": "7aba5cf353eba63f1340016de645fbc37a61123a4bb75ceced31a5def9a51981",
+    "tools/ad_transforms/taobao.js": "42c0412ae8d8827868c0ce581cf814bb64fdcc8a7f9b803b811a478d576fa2bf",
+    "tools/ad_transforms/tieba.js": "36362e7fd38425e5f8ea36dbbf052667ea8b608be66a35dca5efdb3cd3d08ee0",
+    "tools/ad_transforms/wechat-articles.js": "27419c0ee1b0e9432bfd273993a7530c42ab1b2337b3adb6b8383812c15504f5",
+    "tools/ad_transforms/weibo.js": "c21863ed898f2e96fca1d587029bf260c6b2648e99def54b8c9fabd682253edc",
+    "tools/ad_transforms/xiaohongshu.js": "12a25f1e2c658851683bc8eed2d1955e3cd38033b3f037ca43512968eafce671"
   },
-  "review_validation": {
-    "source_hashes_checked": 58,
-    "all_40_modules_in_document": true,
-    "expanded_overlay_reference_model_checked": true,
-    "generated_research_test_passed": true,
-    "local_markdown_links_checked": 246,
-    "broken_local_markdown_links": 0,
-    "changed_file_secret_findings": 0,
-    "new_iphone_tests": false,
-    "full_ad_test_suite_rerun": false
+  "prose_prefix_sha256": "645c9e462731c4c3b640455d0e9296c6ec574bef685a31622a7b24f706737a60",
+  "documentation": {
+    "path": "docs/AD-ARCHITECTURE.md",
+    "bytes": 97563,
+    "sha256": "dfb625d361c5694ff461f936d371d7e4a0a460011140d7a46154c4f5c94d9e2b",
+    "source_scripts_embedded": 12
   },
-  "publication": {
-    "checked_at": "2026-10-20T12:39:36.609597+08:00",
-    "documentation_release_commit": "8e6a68636496f1431740bb48492cff468495e941",
-    "published_document": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/AD-ARCHITECTURE.md",
-    "passed": 5,
-    "total": 5,
-    "results": [
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/README.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 17522,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 27430,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/ADBLOCKING.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 14216,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-MODULES.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 16484,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/APP-SPLASH.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 6679,
-        "ok": true
-      }
-    ]
-  },
-  "detailed_specification": {
-    "reviewed_at": "2026-10-20",
-    "source_commit": "c831aa3d03244cd1e6f42f328163e1ea25ef1935",
-    "contains_complete_ad_configuration_snapshot": true,
-    "ad_routes": 49,
-    "http_match_entries": 44,
-    "complete_js_sources": 12,
-    "source_files_unchanged": true,
-    "phone_runtime_object_shapes_verified": false,
-    "root_cause_identified": false,
-    "validation": {
-      "ad_snapshot_matches_runtime_source": true,
-      "ad_routes": 49,
-      "http_match_declarations": 44,
-      "mitm_hosts": 41,
-      "embedded_js_sources_match_original_files": 12,
-      "embedded_js_syntax_checks_passed": 12,
-      "public_file_sha256_values_included": 15,
-      "unchanged_reviewed_source_hashes": 58,
-      "local_markdown_links": 277,
-      "broken_local_links": 0,
-      "changed_file_secret_findings": 0,
-      "runtime_files_changed": 0,
-      "new_native_stash_or_iphone_test": false,
-      "document_lines": 1337,
-      "document_bytes": 78319
-    },
-    "publication": {
-      "checked_at": "2026-10-20T13:56:20.066915+08:00",
-      "document_release_commit": "7703571626dc716022fa867efba84b772fcc6e38",
-      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/AD-ARCHITECTURE.md",
-      "raw_url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
-      "sha256": "d18dbb995dc3062a90b36d9702cffd9a7fdb4122a4de10d98ff42af3f6cf277e",
-      "http_status": 200,
-      "matches_local_bytes": true,
-      "passed": 2,
-      "total": 2,
-      "results": [
-        {
-          "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
-          "status": 200,
-          "sha256_matches": true,
-          "bytes": 78319,
-          "ok": true
-        },
-        {
-          "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/README.md",
-          "status": 200,
-          "sha256_matches": true,
-          "bytes": 17540,
-          "ok": true
-        }
-      ]
-    }
-  }
+  "native_stash_tested": false,
+  "iphone_effect_tested": false,
+  "real_response_samples": 0,
+  "official_document_body_downloaded": false,
+  "legacy_rewrite_alias_confirmed": false,
+  "publication_evidence": "research/subscription-published.json and research/published-audit.json; this generator does not publish"
 }

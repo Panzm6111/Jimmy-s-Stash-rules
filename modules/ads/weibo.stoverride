@@ -1,23 +1,28 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# Adapted from fmz200/wool_scripts endpoint references; see research/sources.lock.json.
+# Source pins and independent licenses: docs/SOURCES.md
 name: 微博开屏广告处理（可选）
-desc: 仅普通微博两个开屏实时/预加载接口；请求阶段返回空JSON。不改时间线、消息、会员或签到，需设备验收。
+desc: AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收。
 http:
   mitm:
   - bootrealtime.uve.weibo.com
   - bootpreload.uve.weibo.com
+  - api.weibo.cn
   script:
-  - match: ^https:\/\/bootrealtime\.uve\.weibo\.com\/v\d+\/ad\/realtime(\?|$)
+  - match: ^https://api\.weibo\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\?|$)
     name: jimmy_weibo_ads
-    type: request
-    require-body: false
+    type: response
+    require-body: true
     timeout: 5
-  - match: ^https:\/\/bootpreload\.uve\.weibo\.com\/v\d+\/ad\/preload(\?|$)
-    name: jimmy_weibo_ads
-    type: request
-    require-body: false
-    timeout: 5
+    argument: diagnostic=0
+  url-rewrite:
+  - ^https://bootrealtime\.uve\.weibo\.com/v\d+/ad/realtime/?(?:\?|$) - reject-dict
+  - ^https://bootpreload\.uve\.weibo\.com/v\d+/ad/preload/?(?:\?|$) - reject-dict
 script-providers:
   jimmy_weibo_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js
     interval: 86400
+rules:
+- DOMAIN,sdkapp.uve.weibo.com,广告拦截
+- DOMAIN,wbapp.uve.weibo.com,广告拦截
+- DOMAIN,adimg.uve.weibo.com,广告拦截
+- DOMAIN,adimg.vue.weibo.com,广告拦截

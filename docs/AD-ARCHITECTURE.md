@@ -1,575 +1,410 @@
-# Stash去广告方案：完整技术说明与排查规格
+# Stash 去广告：当前实现、修复证据与排查规格
 
-整理日期：2026-10-20。审阅基线：`d8ea21e`；配置、规则、40个专项模块和12份JS均直接读取。本文盘点已写入代码的功能，不将文件存在、模拟通过或证书受信任记为真实广告已去除。用户此前已确认HTTP/MITM开启且自建证书完全信任，也反馈过淘宝、微博等开屏仍在；目前没有逐款设备验收通过记录。自动签到继续暂停。
+修订：**AD-20261020.1**。本轮从 `936fe45` 检查，确认审阅基线 `d8ea21e` 之后只有说明补全等变化，没有把已做的路由/HKG修复退回。本文和全部生成结果沿用原路径。**已修改运行配置、生成器与脚本；没有完成真实 iPhone 去广告验收。** 用户已确认 HTTP/MITM 开启、自建 CA 完全信任，并将 Stash、App 更新到最新版；本轮不再把未装证书当作统一解释。自动签到继续暂停。
 
-本文可独立交给调查者审阅。第1—10部分说明当前方案；第11部分提供从真实公共主配置提取的全部广告规则、HTTP处理声明及脚本地址；第12—14部分记录脚本对运行环境的具体假设、手机端手工接入与源码校验值；第15部分附上12份运行JS完整原文。配置片段是供核对的技术材料，不是一份可直接导入的完整配置。本次补全只展开已有方案，不调整实际规则或JS，也没有诊断出唯一失败根因。
+## 1. 已确认的问题、修复及证据边界
 
-**1. 当前实际装了什么**
-
-推荐入口是 [config/stash.yaml](../config/stash.yaml)。它由同一套源文件生成，包含基础域名包和全部40款候选专项；机场URL只作为节点来源，私人参数及CA私钥保存在设备端。
-
-这里的“默认”描述仓库文件。手机可能保存不同的策略组选择、HTTP设置或额外覆写；下文按规则模式、流量确实进入Stash解释，以最终生效配置为准。
-
-| 项目 | 当前代码数量与含义 |
-|---|---|
-| 主配置总分流规则 | 5,314条，主要还包含国内、软件和地区相关分流，不能全部计为去广告规则 |
-| 默认广告路由 | 49条＝38条基础域名规则＋11条App专用主机规则，目标均为“广告拦截”组 |
-| 可选扩展包 | 38,066条；默认一体化入口没有载入，适用方式见第7部分 |
-| 独立文件 | 40个App专项＋1个扩展包；文件独立不等于一体化配置里有40个开关 |
-| 普通URL拒绝 | 16条`http.rewrite`，涉及14个App |
-| 请求阶段脚本 | 18个处理项，涉及13个App，直接构造空JSON或空正文响应 |
-| 响应阶段脚本 | 10个处理项，涉及10个App，修改已知JSON字段 |
-| JS资源 | 12份＝10份响应修改脚本＋微博脚本＋共享空响应脚本；多个处理项可复用一份JS |
-| MITM主机 | 41个去重后的精确主机；不含全域通配解密 |
-
-同一App可以同时使用域名、URL拒绝和脚本，因此各技术涉及的App数量不能直接相加。完整40款在第4部分。
-
-**2. 整体工作关系**
-
-```mermaid
-flowchart TD
-  A[App流量进入Stash] --> B[域名或IP分流规则]
-  B --> C[广告拦截策略组]
-  C --> D[REJECT阻断或DIRECT直连]
-  A --> E[HTTP引擎]
-  F[设备自建并信任的CA] --> G[指定HTTPS主机的MITM]
-  E --> G
-  G --> H[匹配广告URL路径]
-  H --> I[普通拒绝]
-  H --> J[请求脚本直接返回空响应]
-  H --> K[响应脚本修改已知JSON]
-```
-
-这是职责关系图；域名/IP层和HTTP层是两套独立配置。域名阻断不需要证书；本文所列专项URL均匹配HTTPS，路径处理需要HTTP引擎、可成功解密的MITM及匹配的主机。证书本身不识别或删除广告。
-
-本项目使用阿里/腾讯DoH作普通解析，没有部署DNS返回黑洞地址、浏览器内容过滤插件、界面自动点击或iOS进程注入方案。国内业务选DIRECT也不等于关闭Stash的广告处理；是否能处理仍取决于流量是否实际进入Stash及HTTP设置。
-
-**3. 四种已经实现的处理方式**
-
-| 方式 | 具体实现 | 适用情况 | 主要限制 |
-|---|---|---|---|
-| 域名/IP阻断 | 域名、后缀、关键词或IP段命中后交给“广告拦截”策略组，文件默认REJECT | 独立广告服务器、第三方广告SDK | 广告与正常业务共用主机时不能整域拦截；DIRECT表示直接连接该主机，可达性另论 |
-| URL路径拒绝 | `http.rewrite`的`正则 - reject`，只匹配专用广告路径 | 开屏接口、素材或独立广告端点 | 请求失败不保证App跳过广告，可能重试、空白或保留倒计时；联通2条原图片响应尚未等价实现 |
-| 请求脚本空响应 | `type: request`、`require-body: false`，用`$done({response: ...})`直接构造200与`{}`或空正文 | 来源明确要求空JSON/空200的广告端点 | 不等待原服务器，不校验原响应结构；如果App不接受空结果或换接口，仍可能无效 |
-| JSON响应修改 | `type: response`、`require-body: true`，解析服务器JSON，只改已识别广告字段，再调用`$done({body: ...})` | 广告和正常内容同处一个响应、不能直接拒绝整个接口 | 依赖当前路径和JSON结构；缓存、接口改版、非JSON、Protobuf或其他协议可能不命中 |
-
-基础38条由27条DOMAIN-SUFFIX、8条DOMAIN、3条DOMAIN-KEYWORD组成，涉及穿山甲/Pangle、百度广告、广点通、Google广告、快手及Unity等已列明主机。不能据此认定所有国产App都使用这些SDK。完整基础规则在文末。
-
-基础与扩展都可能拦到用户主动观看的奖励广告，依赖观看广告才能领券的流程无法保证；普通领券接口没有被直接整域封禁，也不等于所有关联流程已经在手机验证。
-
-扩展包的类型是：23,753条DOMAIN、13,939条DOMAIN-SUFFIX、187条DOMAIN-KEYWORD、186条IPv4段、1条IPv6段，共38,066条。它比基础包更广，可能涉及统计、追踪及奖励广告，更多不等于对每款App更有效。
-
-**4. 已有40款专项逐项盘点**
-
-下表的“已实现”均指代码范围，全部仍待真实设备逐款验收。文件链接中可查看完整正则、主机和调用脚本，不需要导入另一套项目。
-
-| 序号 | App | 当前手段及处理项数 | 仅处理范围 | 模块源码 |
-|---|---|---|---|---|
-| 1 | 58同城 | URL拒绝1 | 仅 home/advertising 和 appadv；保留职位、联系与发布 | [58tongcheng](../modules/ads/58tongcheng.stoverride) |
-| 2 | 阿里云盘 | JSON响应修改1 | 仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告 | [alipan](../modules/ads/alipan.stoverride) |
-| 3 | 高德地图 | 域名2；URL拒绝1；请求空响应1 | 两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片 | [amap](../modules/ads/amap.stoverride) |
-| 4 | 百度网盘 | URL拒绝1 | 网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享 | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) |
-| 5 | 哔哩哔哩 | JSON响应修改1 | JSON开屏与推荐流的明确广告卡片；不含Protobuf、视频贴片或UP主植入 | [bilibili](../modules/ads/bilibili.stoverride) |
-| 6 | 菜鸟 | JSON响应修改1 | 仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化 | [cainiao](../modules/ads/cainiao.stoverride) |
-| 7 | 中国移动 | URL拒绝1 | 仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据 | [cmcc](../modules/ads/cmcc.stoverride) |
-| 8 | 携程旅行 | 域名1 | 仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据 | [ctrip](../modules/ads/ctrip.stoverride) |
-| 9 | 大麦 | 请求空响应1 | 专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单 | [damai](../modules/ads/damai.stoverride) |
-| 10 | 大众点评 | URL拒绝1 | 仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价 | [dianping](../modules/ads/dianping.stoverride) |
-| 11 | 东方财富 | 域名1 | 仅 emdcadvertise 独立广告主机；不代表行情页面全部推广 | [eastmoney](../modules/ads/eastmoney.stoverride) |
-| 12 | 华住会 | URL拒绝1 | 仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订 | [huazhu](../modules/ads/huazhu.stoverride) |
-| 13 | 京东金融 | 域名2 | 仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏 | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) |
-| 14 | 京东 | JSON响应修改1 | 仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告 | [jingdong](../modules/ads/jingdong.stoverride) |
-| 15 | 肯德基 | URL拒绝1 | 仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券 | [kfc](../modules/ads/kfc.stoverride) |
-| 16 | 猎聘 | 请求空响应1 | 明确命名的 live.get-ad-cards；不拦职位推荐或投递 | [liepin](../modules/ads/liepin.stoverride) |
-| 17 | 瑞幸咖啡 | JSON响应修改1 | 仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券 | [luckin](../modules/ads/luckin.stoverride) |
-| 18 | 脉脉 | 请求空响应2 | 仅 adshow；保留礼物、消息和普通推荐 | [maimai](../modules/ads/maimai.stoverride) |
-| 19 | 麦当劳 | 请求空响应1 | 专用 portal/home/splash；保留点餐、支付、领券 | [mcdonalds](../modules/ads/mcdonalds.stoverride) |
-| 20 | 美团 | JSON响应修改1 | 仅美团外卖 wmapi 的 loadInfo.startpicture.ad/mk；不代表美团主App开屏 | [meituan](../modules/ads/meituan.stoverride) |
-| 21 | 米家 | 请求空响应1 | 仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化 | [mijia](../modules/ads/mijia.stoverride) |
-| 22 | 网易邮箱大师 | URL拒绝1；请求空响应1 | mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步 | [netease-mail](../modules/ads/netease-mail.stoverride) |
-| 23 | 网易云音乐 | 请求空响应3 | 仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文 | [netease-music](../modules/ads/netease-music.stoverride) |
-| 24 | 拼多多 | URL拒绝2 | 仅 cappuccino/splash；保留首页、买菜、红包和领券 | [pinduoduo](../modules/ads/pinduoduo.stoverride) |
-| 25 | 铁路12306 | 域名1 | 仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏 | [railway12306](../modules/ads/railway12306.stoverride) |
-| 26 | 淘宝 | JSON响应修改1 | 专用splash API的taobao-splash广告条目；不含普通首页、商品视频及独立天猫App | [taobao](../modules/ads/taobao.stoverride) |
-| 27 | 淘票票 | URL拒绝1 | 仅 queryloadingbanner 启动广告；保留普通活动、选座和购票 | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) |
-| 28 | 百度贴吧 | JSON响应修改1 | getSplashAd开屏JSON；不含帖子、直播或会员 | [tieba](../modules/ads/tieba.stoverride) |
-| 29 | UC浏览器 | 域名2 | 仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告 | [uc](../modules/ads/uc.stoverride) |
-| 30 | 航旅纵横 | URL拒绝1 | 仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务 | [umetrip](../modules/ads/umetrip.stoverride) |
-| 31 | 中国联通 | URL拒绝2 | 专用启动/广告接口；保留 accountListData、客户端配置和缴费 | [unicom](../modules/ads/unicom.stoverride) |
-| 32 | 云闪付 | 域名2 | 仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告 | [unionpay](../modules/ads/unionpay.stoverride) |
-| 33 | 微信 | JSON响应修改1 | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天 | [wechat-articles](../modules/ads/wechat-articles.stoverride) |
-| 34 | 微博 | 请求空响应2 | 两个实时/预加载开屏接口；不含时间线、国际版全部接口或消息 | [weibo](../modules/ads/weibo.stoverride) |
-| 35 | WPS Office | URL拒绝1；请求空响应1 | 仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据 | [wps](../modules/ads/wps.stoverride) |
-| 36 | 下厨房 | URL拒绝1 | 仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片 | [xiachufang](../modules/ads/xiachufang.stoverride) |
-| 37 | 闲鱼 | 请求空响应1 | 仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索 | [xianyu](../modules/ads/xianyu.stoverride) |
-| 38 | 小红书 | JSON响应修改1 | splash_config中已知广告展示时间；不含笔记信息流、下载或水印 | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) |
-| 39 | 小宇宙 | 请求空响应1 | 仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频 | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) |
-| 40 | 知乎 | 请求空响应2 | 仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告 | [zhihu](../modules/ads/zhihu.stoverride) |
-
-**5. 脚本到底改了哪些内容**
-
-| 脚本 | 已实现的具体修改 | 刻意保留的边界 |
+| 问题 | 这次实际修改 | 能确认到哪一层 |
 |---|---|---|
-| [bilibili.js](../scripts/ads/bilibili.js) | 开屏成功JSON删除`data.show`；推荐流删除列明的广告卡片，并只过滤banner中的广告子项 | 不删普通推荐、非广告banner或正常视频；不处理Protobuf、视频贴片或UP主植入 |
-| [tieba.js](../scripts/ads/tieba.js) | `getSplashAd`成功响应改成无广告错误码`2230209`，`data`置空 | 只限这个广告接口，不处理帖子、直播或账号权益 |
-| [taobao.js](../scripts/ads/taobao.js) | 只改`splash_home_base`中的`taobao-splash`记录：展示次数/等待归零、冷热启动关闭、展示窗口推迟到2090年、图片与视频地址清空；补齐缺省控制字段并保留已知标量类型 | 保留MTOP外层结果、普通首页、商品、正常视频及券；不是淘宝全界面或独立天猫专项 |
-| [xiaohongshu.js](../scripts/ads/xiaohongshu.js) | 只将`splash_config`中`ads_groups`及子广告的已知起止时间推迟到2090年，兼容数字/数字字符串并补齐缺省值 | 不处理笔记、信息流、下载、水印或消息；不删除已缓存广告文件 |
-| [alipan.js](../scripts/ads/alipan.js) | `onboard_list`过滤`backup_top_banner`、`home_top_banner`、`resource_top_banner`、`video_top_banner`四类锚点 | 保留备份、账号、新闻等其他卡片，不宣称开屏全净化 |
-| [cainiao.js](../scripts/ads/cainiao.js) | 在`ads.show`结果中删除`materialContentMapper.adItemDetail`广告项 | 保留其他卡片、包裹、积分和正常领券；不含`mshow`等其他接口 |
-| [jingdong.js](../scripts/ads/jingdong.js) | 只限唯一`functionId=start`：已有`showTimes`、`time`、`showTimesDaily`显示字段归零 | 不改商品、订单或券；不代表所有新版京东开屏结构 |
-| [meituan.js](../scripts/ads/meituan.js) | `wmapi`的`loadInfo`中，仅清空`data.startpicture.ad`与`mk`广告数组 | 美团外卖端点，不代表美团主App全部开屏；其他启动字段保留 |
-| [luckin.js](../scripts/ads/luckin.js) | 专用`adposNew`广告接口的已知成功JSON缩减为`status: SUCCESS` | 不处理点单、支付、商品或券接口；不把原来的失败响应伪装为成功 |
-| [wechat-articles.js](../scripts/ads/wechat-articles.js) | 历史公众号`getappmsgad`中，`advertisement_info`清空，`advertisement_num`归零 | 保留文章和appid；不处理聊天、朋友圈或视频号 |
-| [weibo.js](../scripts/ads/weibo.js) | 新配置在两个开屏请求阶段直接返回200与`{}`；也兼容旧response配置的空JSON正文修改 | 不挂整个微博API，不处理时间线、消息、会员或国际版全部广告 |
-| [empty-response.js](../scripts/ads/empty-response.js) | 按审核目录匹配16个处理项，返回200与空JSON/空正文；通过一个公共JS供12款App复用 | 不读取请求正文、不等待服务器、不操作业务账号；不匹配时放行 |
+| 主配置没有广告 RULE-SET，expanded 只换了不存在的 provider | `build_subscription.py` 保留并引用唯一“基础广告”provider，其他分流继续按原顺序展开 | 模型证明开启 expanded 后 `ad.12306.cn` 从原路由改为广告组；局域网、Apple 推送、Microsoft 登录例外与手动放行仍优先 |
+| 配置用旧 `http.rewrite`，与用户核对的当前官方 `http.url-rewrite` 不同 | 修改真正的目录生成器与旧5款模块，统一生成 `url-rewrite` | 字段现与用户提供的当前官方调查一致；**旧 rewrite 是否仍为别名未验证，不能据此断言所有失败的根因** |
+| 固定空响应绕到 JS；联通图片改成普通拒绝 | 原生 reject、reject-200、reject-dict、reject-img 分别保留；删除共享空响应脚本及对应 provider/request handler | 静态动作、端点正反例和无重复处理通过；真实状态码、头部与 App 回退须 Stash 验收 |
+| 请求脚本依赖 `$response` 未定义；null/空对象会放行 | 固定响应不再经过请求 JS | 消除了该代码路径；**没有证明旧 Stash 真会传入 null/空对象** |
+| 关闭同名覆写，主配置里的专项仍运行 | 原入口不内置任何 HTTP 专项；保留40款独立覆写 | 模型检查逐款加入/移除可撤销其动作，保留另一款与原代理/DNS。原生 UI 合并还要预览确认 |
+| 脚本无版本、解析/结构问题难区分 | 统一自包含运行模板，临时参数诊断和独立只读探针 | 默认无日志；所有返回只调用一次 `$done`，固定状态不包含私人值。不是“没日志=没广告” |
 
-共享空响应的当前分配如下；微博的2个请求处理项使用自己的脚本，所以请求处理项合计为18：
+官方能力核对的实际限制：本轮常规和额外权限下请求官方站均得到云网络 403，**没有下载到当前正文**。`url-rewrite`、五种 reject 动作、Mock 和 HTTP/3 限制依据是本次用户提供的官方调查结论。`argument` 另有锁定版本 blackmatrix7 原生 Stash 模块声明作为参考。不能把这些说成已独立核实最低版本；目标为用户将更新的最新版，数字版本未提供。来源和未核实点见 [能力记录](STASH-CAPABILITIES.md)、[访问记录](../research/official-doc-access.json)。
 
-| 返回类型 | App |
-|---|---|
-| 200＋空JSON `{}` | 高德、脉脉、猎聘、米家、网易云音乐、闲鱼、小宇宙、知乎；另有微博自己的2个接口 |
-| 200＋空正文 | 大麦、麦当劳、网易邮箱大师素材、WPS广告素材 |
+## 2. 现在到底怎么接入与开关
 
-原来源的reject-dict/reject-200没有直接塞进Stash：这里已经改成原生request脚本。联通来源中的2条reject-img仍是普通reject，尚未提供等价空图片。
-
-所有28个脚本处理项设置5秒超时；10份JSON响应脚本有正文字符串长度限制（阈值为1,048,576或2,097,152个JS字符串码元，非精确网络字节数）。多数脚本限制GET/POST，B站只接受GET；贴吧依靠精确接口与状态/结构判断，没有额外的方法限制。未知结构、非JSON、已识别失败响应或脚本异常通常返回空修改对象以保留原响应。这个保护不等于TLS解密失败、原生超时、普通reject或空响应策略都会自动放行。
-
-**6. 开关、证书和单App模块的真实关系**
-
-| 操作或状态 | 域名/IP规则 | URL拒绝、请求脚本、响应脚本 |
-|---|---|---|
-| “广告拦截”选REJECT | 阻断命中的广告域名/IP | 不改变HTTP层的设置 |
-| “广告拦截”选DIRECT | 命中的域名/IP改为直接连接 | 仍可能继续处理HTTPS广告路径 |
-| 本机域名白名单 | 可优先放行指定主机 | 不能取消同主机的HTTP路径处理 |
-| 关闭HTTP引擎或不进行相关HTTPS MITM | 域名/IP层仍可工作 | 相应HTTPS路径无法按这套方案处理；需核对实际运行状态和连接重建 |
-| 安装并信任本人CA | 不改变域名规则 | 是MITM解密的条件之一，还要开启引擎、配置主机并命中路径 |
-| 在按需分层模式关闭某App覆写 | 撤销该覆写提供的规则，但通用包可能仍覆盖同一主机 | 撤销该覆写的处理；其他配置层不能有同款处理副本 |
-| 在一体化模式停用额外添加的同款单App覆写 | 主配置内置的域名规则仍在 | 主配置内置处理仍在，不能据此当作已关闭该App专项 |
-| 断开Stash VPN、流量不再进入Stash | 本项目不能继续拦截 | 本项目不能继续处理；以实际VPN/连接状态为准 |
-
-**当前一体化主配置没有逐款App启停的策略组或参数。** 40款专项在生成时已组装；独立文件名里的“可选”和目录中`default_enabled: false`描述的是不额外自动安装单独覆写，不能推断一体化入口未包含它们。要逐款开关，应使用既有的core分层方式，或本地包基础主配置配单App文件；不叠加同款模块。
-
-CA由用户在设备生成并信任，本仓库没有提供或上传证书私钥。虽然脚本只按广告路径修改，MITM解密能力的范围仍是下面41个整个精确主机；其中部分是业务共享网关，并非每个主机只承载广告。
+稳定主链接仍为：
 
 ```text
-acs.m.goofish.com
-acs.m.taobao.com
-amap-aos-info-nogw.amap.com
-api-ac.liepin.com
-api.m.jd.com
-api.mcd.cn
-api.pinduoduo.com
-api.xiachufang.com
-api.xiaoyuzhoufm.com
-api.yangkeduo.com
-api.zhihu.com
-app.58.com
-app.bilibili.com
-appapi.huazhu.com
-appconf.mail.163.com
-bootpreload.uve.weibo.com
-bootrealtime.uve.weibo.com
-capi.lkcoffee.com
-client.app.coc.10086.cn
-client.mail.163.com
-cn-acs.m.cainiao.com
-edith.xiaohongshu.com
-guide-acs.m.taobao.com
-h3.open.taou.com
-home.mi.com
-interface.music.163.com
-interface3.music.163.com
-ios.wps.cn
-ipv4.music.163.com
-m.client.10010.com
-m5.amap.com
-mapi.dianping.com
-member.alipan.com
-mobile-pic.cache.iciba.com
-mp.weixin.qq.com
-open.taou.com
-oss.umetrip.com
-pan.baidu.com
-res.kfc.com.cn
-tiebac.baidu.com
-wmapi.meituan.com
+https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-没有`*`泛化解密，没有银行/支付主域的整域解密，也没有通过关闭TLS校验解决兼容性。证书固定、HTTP/3、非443端口和应用私有协议的覆盖未完成，不能承诺这些流量一定进入脚本。
+主配置保留18个策略组、7个测速池、私人“机场”provider、原 DNS 与分流。**主配置默认是38条通用广告规则，不包含 App HTTP 专项。** 它保留“基础广告”规则集真实引用；[expanded.stoverride](../modules/ads/expanded.stoverride)现在对这个入口和 core 都有效，开启时把同一个 provider 换成38,066条快照，不同时叠加两套。扩展包会增加误拦风险，也不能代替开屏接口处理，默认仍不启用。
 
-**7. 三种配置载体，以及扩展包为何可能加了也没作用**
-
-| 载体 | 公共规则与JS放在哪里 | 逐App开关 | 扩展包的正确适用方式 |
-|---|---|---|---|
-| 推荐一体化`config/stash.yaml` | 规则已展开内嵌；12份JS通过本仓库稳定URL获取 | 当前没有；40款已内置 | 默认没有38,066条。直接叠加远程`modules/ads/expanded.stoverride`无对应RULE-SET引用，不能启用扩展包 |
-| `config/main.yaml`＋`core.stoverride`分层 | core保留RULE-SET及远程规则集；App覆写独立挂接 | 有，可独立启停已添加文件 | `expanded.stoverride`替换“基础广告”规则集URL，沿用原优先级；基础与扩展二选一 |
-| 工具生成的本地包 | `Jimmy-Stash.yaml`内嵌基础规则；广告增强或单App文件内嵌JS | 选单App文件时有；整合“广告增强”没有逐款开关 | 包内专用`扩展域名.stoverride`包含按原顺序展开的整套规则，与只改provider URL的远程expanded文件不同；它是静态快照 |
-
-这是对现有实现的盘点，本轮没有把38,066条加入推荐入口，也没有改变去广告强度或新增开关。
-
-本地包的优先级沿用[原指南](LOCAL-IMPORT.md)：私人白名单及所需App/广告增强高于扩展整套规则，扩展高于基础主配置；扩展内有终止MATCH，不能随意交换顺序。原生覆写顺序仍需通过最终配置预览核对。
-
-一体化入口目前先列11条专用广告主机规则，再是core的局域网/关键系统直连例外、38条基础广告、各软件/国内分流与最终规则。core分层中的扩展替换仍在原基础广告RULE-SET位置；本机精确白名单应置于更高优先级。HTTP处理单独按主机与路径匹配。不能把全量广告规则前插后宣称仍保留全部原优先级。
-
-**8. 下载与更新各自如何生效**
-
-| 内容 | 当前机制 | 更新后能获得什么 |
-|---|---|---|
-| 一体化公共主配置 | 在配置列表刷新原URL；未保证自动定时刷新 | 新内嵌规则、主机名单、处理项和策略组；只刷新JS不会改这些声明 |
-| core与独立App覆写 | 刷新原覆写并应用；未保证覆写本身按interval自动刷新 | 新声明、路径、主机或规则集地址；勿重复添加同款 |
-| core远程规则集 | `interval: 86400`请求刷新，也可手动刷新 | 本仓库已发布快照；不能更新已经展开在主配置内的那份规则 |
-| 一体化/远程模块JS | `script-providers.interval: 86400`请求刷新 | 同一URL的新JS；旧handler类型或MITM名单不会因JS更新自动改变 |
-| 本地包内嵌JS、规则 | 静态文件，没有远程自动更新关系 | 需重新取得/生成相关公共文件；先备份设备私人参数 |
-| 机场代理集 | 设备填写URL，`interval: 86400`请求刷新 | 节点变化；不会同步本仓库去广告或自动叠入机场自带规则 |
-
-interval是请求更新间隔，断网或iOS运行限制下不保证准时成功；也未保证离线缓存永久存在。公共配置、规则集、脚本和私人参数的更新机制不同。公共更新保留原路径，不将真实机场URL、Cookie、证书私钥写入仓库。
-
-**9. 来源、维护和保护措施**
-
-| 已复用来源 | 许可 | 本项目实际使用 |
-|---|---|---|
-| blackmatrix7/ios_rule_script | GPL-2.0 | 基础/扩展广告数据；京东、美团的窄化响应分支；Stash原生rewrite格式参考 |
-| app2smile/rules | MIT | B站、贴吧的窄化JSON处理及原生Stash模块格式证据 |
-| fmz200/wool_scripts | GPL-3.0-only | 多数专项路径及淘宝、小红书、阿里云盘、菜鸟等处理片段；手工制作为Stash原生声明和本地JS |
-| NobyDa/Script | GPL-3.0-only | 公众号文章广告字段；原生Stash请求响应调用链的辅助证据 |
-
-完整固定提交、原文件及输出SHA、许可证与修改记录见 [sources.lock.json](../research/sources.lock.json)、[ad-catalog.json](../research/ad-catalog.json)、[SOURCES.md](SOURCES.md)。上游更新不会未经审核自动进入本项目；不使用第三方订阅转换网站，不直接套用其他客户端整包配置。当前官方文档正文仍没有完成复核，最低版本和部分原生执行语义见 [STASH-CAPABILITIES](STASH-CAPABILITIES.md)。
-
-本地JS没有外部HTTP请求、Cookie采集器、账户持久化、推送通知或签到任务。它们会在Stash内存中读取匹配的URL/响应，部分脚本只输出固定模块名及状态，不输出请求URL、头、正文或异常文本；这不代表Stash客户端自己的所有网络日志也经过同样脱敏。
-
-JSON修改做过幂等测试：重复处理已修改的数据不会持续破坏结构。这不是按天去重或“每天只执行一次”；每次匹配的广告请求仍可能触发处理，也不代表自动签到已实现。
-
-淘宝、小红书、微博的`[JimmyAds] ... changed`只表示脚本产生了修改；`unsupported-schema`等表示保留未知内容；共享请求脚本用`empty-json`/`empty-200`表明构造响应。其余8份JSON响应脚本不提供同样诊断。缺少标记不能直接证明没有运行，出现标记也不能证明屏幕广告已消失。
-
-**10. 已知未实现、失败原因与验收边界**
-
-没有实现独立天猫购物App专项、微博全部信息流、小红书信息流、微信朋友圈/视频号、B站Protobuf及视频贴片、YouTube/YouTube Music专用视频广告处理，或对全部App缓存广告的清理。滴滴、盒马、夸克、Spotify、Starbucks、微信读书、YouTube和YouTube Music有公开方案线索，但因范围、混淆、会员字段或Stash适配等原因未纳入。其余135款调查结果见 [APP-INVENTORY](APP-INVENTORY.md)，不把“有通用包”标成专项完成。
-
-当前效果不佳可能出现在不同层：默认49条广告路由覆盖有限；扩展接法无引用；运行的是旧配置/旧handler；路径换了；JSON结构不支持；广告已缓存；HTTP/MITM未覆盖真实链路；证书固定/HTTP3/端口；或App对空响应、拒绝的处理与预期不同。用户已确认过证书信任，不应将这些情况一概归咎于未装证书。
-
-已有验证包括脚本语法与成功/失败/未知数据、重复执行保护、正常业务保留、端点正反例、各模块及组合的结构/合并模型、规则优先级、资源HTTP/哈希及敏感模式扫描。它们不等于Stash原生解析/合并、真实MITM命中、广告去除率或所有登录/支付/播放/领券已在手机通过。本轮只梳理与校正文档，不声称重新完成全部运行测试。
-
-排查时先区分“域名被拒绝”还是“HTTP处理影响”，再核对脚本资源、固定诊断和命中主机/路径。发生业务异常，暂停相应HTTP处理；按需模式可关闭单App覆写，一体化模式需用HTTP/MITM相关设置暂停整层。域名误拦另用“广告拦截→DIRECT”或本机精确白名单。保留原配置和私人订阅，不需要发送Cookie、完整请求或证书。
-
-**附：基础38条规则原文**
+App 专项改为真正的独立覆写。原40个文件全部保留，地址见下方完整表或 [模块目录](AD-MODULES.md)。例如淘宝仍是：
 
 ```text
-DOMAIN-SUFFIX,pangle.io
-DOMAIN-SUFFIX,pangolin.snssdk.com
-DOMAIN-SUFFIX,mobads-logs.baidu.cn
-DOMAIN-SUFFIX,mobads-logs.baidu.com
-DOMAIN-SUFFIX,mobads.baidu.cn
-DOMAIN-SUFFIX,c.gdt.qq.com
-DOMAIN-SUFFIX,d.gdt.qq.com
-DOMAIN-SUFFIX,mi.gdt.qq.com
-DOMAIN-SUFFIX,nc.gdt.qq.com
-DOMAIN-SUFFIX,s.gdt.qq.com
-DOMAIN-SUFFIX,t.gdt.qq.com
-DOMAIN-SUFFIX,v.gdt.qq.com
-DOMAIN-SUFFIX,win.gdt.qq.com
-DOMAIN-SUFFIX,xc.gdt.qq.com
-DOMAIN,mobads-pre-config.cdn.bcebos.com
-DOMAIN-SUFFIX,doubleclick.net
-DOMAIN-SUFFIX,googlesyndication.com
-DOMAIN-SUFFIX,admob.com
-DOMAIN-SUFFIX,adsrvr.org
-DOMAIN-SUFFIX,adnxs.com
-DOMAIN-SUFFIX,adkwai.com
-DOMAIN-KEYWORD,pangolin-sdk-toutiao
-DOMAIN-KEYWORD,pglstatp-toutiao
-DOMAIN-KEYWORD,mobads.baidu.com
-DOMAIN,v2.gdt.qq.com
-DOMAIN,vr.gdt.qq.com
-DOMAIN,xs.gdt.qq.com
-DOMAIN,adsmind.gdtimg.com
-DOMAIN,qzs.gdtimg.com
-DOMAIN-SUFFIX,canvas.gdt.qq.com
-DOMAIN-SUFFIX,pgdt.gtimg.cn
-DOMAIN-SUFFIX,pgdt.gtimg.com
-DOMAIN-SUFFIX,q.i.gdt.qq.com
-DOMAIN-SUFFIX,rm.gdt.qq.com
-DOMAIN-SUFFIX,ugdtimg.com
-DOMAIN-SUFFIX,unityads.unity3d.com
-DOMAIN,unityads.unitychina.cn
-DOMAIN,config.unityads.unitychina.cn
+https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taobao.stoverride
 ```
 
-逐款远程链接、通用包重叠与精确主机详见 [AD-MODULES](AD-MODULES.md)；本机安装/停用详见 [ADBLOCKING](ADBLOCKING.md)；审阅数据记录在 [ad-architecture-audit.json](../research/ad-architecture-audit.json)。后续沿用本文稳定路径更新。
+首次迁移需要：刷新**原主配置**；停止旧的整合“广告增强”与旧同款副本；按原稳定地址添加/刷新所需 App 覆写并关联当前主配置。一款只启用一份。在最终预览中确认每个匹配只有一个处理项。不能只刷新 JS：新主机、原生动作、handler 或开关结构都在配置/覆写里。
 
-<!-- DETAILED-SPEC-BEGIN -->
+关闭某 App 覆写并重建连接，就撤销它声明的脚本、重写、MITM 与专项路由。通用广告包或别的覆写可能仍阻断同一域名；这不是该开关没有关闭。必要时在设备私人白名单中把**确认误拦的精确主机**放 DIRECT，优先于广告 RULE-SET。共享主机仍被另一款需要时，MITM 声明也可能保留。“广告拦截→DIRECT”只控制域名路由，不能停止 HTTP 改写。
 
-**11. 真实公共主配置中的去广告声明原文**
+本地 ZIP 的基础主配置同样不含 HTTP；单 App 文件内嵌相同 JS。保留“广告增强”合包用于用户明确接受整包总开关时使用，**不能与逐款模式同时启用，也不宣称合包有逐款开关**。离线 expanded 是含终止 MATCH 的整套有序路由快照，按本地教程使用，不能随意前插当普通广告列表。
 
-以下片段逐项抽取自`config/stash.yaml`，包括：广告组默认值、49条广告路由、41个MITM主机、16条URL拒绝、18个request和10个response声明，以及12个脚本名称/地址/刷新间隔。没有为了说明而改写正则或替换脚本地址。
+## 3. 优先五款的广告链逐项核查
 
-它省略机场代理集、其他策略组、普通分流及DNS等非广告内容，因此不能直接当作完整配置导入。49条广告规则在真实主配置中的位置仍按第7部分，不应把本片段机械前插到其他配置。
+详细证据与每个分支的固定源码版本、行号、哈希见 [ad-repair-evidence.json](../research/ad-repair-evidence.json)。下面“实现”都指代码端，不等于当前 App 实测成功。全部测试样本为从固定源码重建的模拟结构；本轮没有用户真实脱敏响应样本。
+
+| App/环节 | 当前实现与匹配范围 | 来源、正常业务影响与验证 |
+|---|---|---|
+| 淘宝：实时开屏、预加载展示数据 | 保留 `guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get` 的已有响应分支；只改 `splash_home_base` 内 `taobao-splash` 条目的次数、等待、冷热启动、时间窗和图片/视频 URL | fmz200 `myBlockAds.js` 85–115行。MTOP失败不改；不删除普通首页、券、订单；兼容数字/布尔/字符串、补缺省字段、幂等与未知结构测试 |
+| 淘宝：明确广告场景的补充请求 | 新增 `acs.m.taobao.com/gw/mtop.etao.noah.query/...` 且查询含独立 `tao_splash` 标记时原生空 JSON | fmz200合集4431行。没有这个广告标记的相同共享 API 不匹配；正例、普通场景、近似路径、伪域名测试 |
+| 淘宝：cloudvideo 视频 | 已读 `cloudvideo.video.query` 上游63–83行，**未泛化启用** | 上游对整个响应清资源/时长，接口可能也用于商品视频；缺少当前开屏场景判别证据。本轮不能证明视频开屏完整覆盖，不能改为整个视频 API 拒绝 |
+| 淘宝：活动弹层/素材 | 已读 `poplayer.template.alibaba.com` 分支126–146行，**未泛化启用**；开屏主分支会清已识别广告条目的素材 URL | 上游只看通用活动结构，也可能清正常促销/领券；缺少广告专用判别。不封整域或整个活动 JSON |
+| 微博：实时与预载 | `bootrealtime.../v*/ad/realtime`、`bootpreload.../v*/ad/preload` 改原生 reject-dict，支持结尾 `/` | fmz200 `weibo.snippet` 128–129行。不再等 JS 返回或依赖请求 `$response` 形态；近似路径不匹配 |
+| 微博：SDK 广告/素材 | 新增精确广告主机 `sdkapp.uve.weibo.com`、`wbapp.uve.weibo.com`、`adimg.uve.weibo.com`、`adimg.vue.weibo.com` 的广告组路由 | 上游域名列表及 sdkad/wbpullad 路径旁证。SDK这两主机由上游列为广告专用，采用域名路由，**没有再重复添加相同主机 HTTP handler**；未拦通用微博 API/头像主机 |
+| 微博：信息流 | `api.weibo.cn/2/searchall`、`statuses/container_timeline_topic`、`...topicpage` 的 `items` 中明确 `mblogtypename=广告`、`is_ad=1` 或 `ad_state=1` 项；搜索另处理一层子项 | fmz200 `weibo_ads.js` 当前锁定文件。保留正常项、账号信息、推荐、评论、导航；不复制清理页签、日志或关注项。**未声称覆盖首页 friends_timeline 的全部广告** |
+| 小红书：开屏计划/预载 | 原 `system_service/splash_config`，推迟已识别 `ads_groups` 与子广告的时间 | fmz200小红书52–65行；数字/数字字符串/缺省字段测试，结构化未知时间不硬改 |
+| 小红书：启动配置 | 新增 `system_service/config`，只删除已存在的 `data.splash` | 上游42–50行也删除 theme/loading/store，本项目不复制这些；保留主题、商城、加载图、普通业务配置。结尾 `/` 与 code数字字符串变体测试 |
+| 小红书：广告素材 | 四个 `ads-img-{qc,al}.xhscdn.com`、`ads-video-{al,qc}.xhscdn.com` 精确广告组路由 | fmz200合集5507–5510行；不封图片/视频共享CDN，不MITM素材域名 |
+| 小红书：信息流 | 仅 `/api/sns/v6/homefeed` 中 `ads_info` 为非空对象的明确赞助项 | 上游286–310行；保留普通笔记、直播、带货/商品属性、card_icon、空/null标记。不加入水印、下载、画质、用户信息修改；其他版本路径不猜测 |
+| 美团：loadInfo | 保留 `wmapi.meituan.com/api/v*/loadInfo` 响应中已知 `data.startpicture.ad/mk` 广告数组处理 | blackmatrix7 startup外卖分支；保留其他启动业务字段，不把整个loadInfo空响应 |
+| 美团：实时/预载专用接口 | 新增 `wmapi.meituan.com/api/v7/openscreen`、`startpicture` 原生空JSON | fmz200合集3179行；限定来源版本v7，不推断所有版本。**仍属外卖链路，不能称美团主App全部启动广告已覆盖** |
+| 美团：素材 | 新增 `img.meituan.net/bizad/bizad_brandCpt_数字.jpg`；`s3plus/flowplus.meituan.net/v*/.../linglong/...gif或jpg` 原生空图片 | 上游3180–3181行；不拦商品图片/领券素材目录。MP4不是合法GIF，未把图片空响应泛化到视频，未导入ZIP/活动总配置规则 |
+| 京东：启动与展示控制 | `api.m.jd.com/client.action` 查询中唯一 `functionId=start`；兼容二维广告列表与平铺广告记录；只改已知标量 showTimes/time、有效格式展示日期和 daily计数 | blackmatrix7 startup京东分支；fmz200京东258–266行仅作平铺结构线索。保留订单/券/倒计时，不采用上游 countdown=100。重复 functionId、未知字段类型、正常函数、幂等测试 |
+| 京东：尚缺证据的变体 | 没有任意扫描所有 client.action POST 正文，未猜测其他 functionId/加密结构 | 已读来源都把start放在URL。本地解析不能证明最新版请求布局；若当前请求改为正文参数，需要脱敏命中元数据后补，不要求Cookie或正文 |
+
+其余原有专项继续按已审阅路径提供，固定响应统一原生化；阿里云盘、菜鸟、瑞幸、微信公众号、B站、贴吧等响应分支也使用同一受保护运行模板。没有扩大其会员/下载/积分/正常券业务权限，没有拿“40个文件”替代实际效果结论。完整范围和实际动作在生成附录中逐项列出。
+
+## 4. 原生固定响应与保留 JS 的边界
+
+| 动作 | 预期意义 | 本项目使用边界 |
+|---|---|---|
+| reject | 原生拒绝请求，与合法空结果不同 | 只保留来源原本的专用广告拒绝路径；不能保证不重试、不留倒计时 |
+| reject-200 | 200、空正文 | 来源要求空正文的专用广告/素材端点 |
+| reject-dict | 200、JSON空对象 | 来源明确允许空广告JSON的专用端点；不是伪造支付/订单成功 |
+| reject-array | 200、JSON空数组 | 校验器支持当前官方列出的动作；当前选用条目没有需要空数组的路径，不为凑数量新增 |
+| reject-img | 原生空图片响应 | 恢复联通原意，并用于新增限定图片素材；不套给MP4 |
+| Mock | 可以自定义固定响应时再采用 | 已评估；当前内置动作满足固定空结果，不需要自造头部/状态的Mock。瑞幸等要先判断真实成功响应，因此保留响应JS，不能在请求期直接Mock成功 |
+
+这些预期依据用户提供的当前官方能力调查及来源动作意图；**本地不模拟一个HTTP服务来冒充Stash原生返回的状态/Content-Type/图片字节验证**。当前规则没有证据要求自定义响应头，因此不声称原生动作保留了旧JS的 Cache-Control:no-store。若手机证据显示需特定响应头，必须按正式Mock约定补测，不随意返回404当无广告结果。
+
+## 5. 脚本 API、失败保护和日志
+
+11个响应脚本各自独立执行，保留原许可，运行模板构建时内嵌，不要求手机加载模块。只读 `$request.url/method`、`$response.body/status` 和临时 `$argument`；不读取Cookie/Authorization、不保存正文、不联网、不写存储、不通知。探针只读URL用于内存匹配，**不读取请求或响应正文、头部**。
+
+- 响应handler统一 `type: response`、`require-body: true`、`timeout: 5`。B站限GET，其他限GET/POST。缺失/null/空响应对象、正文非字符串或空正文均放行。没有把空对象响应当成功业务结构。
+- 正文限 **2 MiB UTF-8编码长度**，不再把JS字符串码元数当网络字节数。二进制不猜测解码；不开启 binary-mode 或处理protobuf。
+- 实际原生参考使用 `$response.status`。数字200和字符串"200"接受；错误、完整HTTP状态行或非预期形态不猜测放行修改。只有statusCode的形态输出unsupported-status；两者都不存在时沿用旧无状态字段保护分支，仍要求JSON与已知业务结构。具体原生对象形态待真机记录。
+- 保留业务错误/MTOP错误，空修改对象 `$done({})` 保留原响应；产生修改只返回 `{body: JSON字符串}`，不手动伪造压缩/长度头。Stash自动重编码和头部处理仍是原生验收项。
+- try/finally确保本地执行恰好调用一次`$done`。没有异步请求/重试。**原生5秒超时由Stash记录，JS被终止后不能自己补发timeout日志或保证回退**。
+- 临时诊断：在目标覆写的 HTTP 脚本条目把 `argument: diagnostic=0` 改成 `argument: diagnostic=1`。如果编辑远程覆写需要副本，就建**临时诊断副本**，暂停原件，只启用这个副本。诊断后删/停副本并恢复原远程覆写；这不是长期维护第二版配置。
+
+日志示例：`[JimmyAds][taobao][AD-20261020.1] changed`。状态仅为固定枚举：url-unmatched、unsupported-method、body-unavailable、body-too-large、http-error、unsupported-status、non-json、parse-error、unsupported-schema、unchanged、changed、exception。没有异常详情、账号值、完整URL/查询或正文。默认参数0完全不记录，开启时每次调用最多一条；测试包含注入私人哨兵及故障日志设施。
+
+<a id="6-临时只读诊断先确定请求有没有进入引擎"></a>
+
+## 6. 临时只读诊断：先确定请求有没有进入引擎
+
+独立诊断覆写，**默认不导入、不启用**：
+
+```text
+https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/diagnostics/ads.stoverride
+```
+
+1. 记下哪些App专项已开，**暂时关闭这些专项及旧整合广告增强**；保留分流、私人订阅和HTTP/MITM。诊断覆写只观察当前已审阅的45个精确MITM主机，不解密全域名。
+2. 启用诊断覆写，刷新其`jimmy_ads_probe`脚本，重建连接，冷启动目标App；诊断会输出固定 `request-url-matched` 或 `request-url-unmatched`，不改变请求。记录广告位置、时间及模块/版本/状态。
+3. 在Stash本机连接/HTTP记录中查看目标主机、端口、TCP或UDP、是否已解密；**不要分享完整记录**。没有探针日志可能是资源未下载、脚本未挂载、没发新请求、未进HTTP、缓存或不在当前主机列表，不能单凭无日志判定原因。
+4. 关闭探针，恢复目标App专项，只给对应响应handler临时开`diagnostic=1`，再次观察。探针不与正式改写竞争；不能假定Stash的不同改写步骤都必定按同一顺序执行。
+5. 原生固定动作不运行响应JS，在Stash本机看其重写命中；响应handler看下面决策表。排查完成关闭探针和临时诊断。
+
+| 观察到的证据 | 可以判断的方向 | 不能直接下的结论 |
+|---|---|---|
+| 主配置/覆写不是AD-20261020.1，或日志是旧标记 | 至少有一层未更新；刷新主配置、覆写、JS后重建连接 | 单刷新JS不能补新MITM主机/handler |
+| TCP443连接存在，但没有解密HTTP记录 | 检查实际主机/端口、HTTP/MITM适用范围、证书固定或其他加密；既有CA信任记录保留 | 不先要求重装证书；不关闭TLS验证 |
+| 已解密，探针request-url-unmatched | 请求进入引擎，但不匹配目前专用广告端点，需核对当前App接口 | 不把同主机所有业务请求当广告 |
+| request-url-matched后，正式响应日志body-unavailable/non-json/parse-error | handler进入，但没有可处理的JSON正文/解析失败 | 不自动删未知业务数据 |
+| unsupported-schema | 已匹配URL且解析完成，当前业务结构不在支持范围 | 不能当作“没有广告” |
+| unchanged | 识别了已支持结构，这次无需修改 | 不证明App没有缓存广告或备用广告请求 |
+| changed | 这次JSON产生实际修改 | 不证明所有开屏、倒计时和业务都通过 |
+| exception或Stash原生超时 | 执行发生异常，或被原生终止 | 不输出异常/完整配置寻找凭据，不保证所有层都fail-open |
+
+## 7. HTTP/3、缓存、端口与更新
+
+当前官方调查指出 HTTP/3 不进入改写引擎。本轮没有真实连接证据，**未添加任何UDP阻断**，也不把`h3.open.taou.com`的名字当作QUIC证明。`force-http-engine`不能被宣传为解密HTTP/3。
+
+如果在Stash本机确实观察到某广告主机UDP443，先记录该主机/端口/发生时间，再制作只针对该主机的UDP443对照规则，并验证是否回退TCP和正常业务；本轮没有证据，因此没有发布未经确认语法/协议适用性的默认限制。不能全局禁UDP、通配MITM、泛解密银行支付域名或关闭TLS验证。显式非443端口、IP直连、证书固定、应用层加密均可能超出现有处理，不擅自宣称覆盖。
+
+区分新广告与预加载：先开启模块使用一段时间，再冷启动、后台返回、再次启动进行多轮观察。已下载素材可在没有新网络请求时展示；网络规则不能删除App私有文件。优先用App自己的清缓存入口，保留登录/重要数据，不默认要求卸载重装。
+
+| 层 | 更新操作 | 会不会带入新处理 |
+|---|---|---|
+| 公共主配置 | 在原配置列表刷新同一URL | 本轮真实provider引用及拆出内置HTTP在这里；不承诺后台自动更新整份配置 |
+| App覆写 | 刷新原远程覆写，并确认仍关联选中配置 | 新主机、原生动作、handler、参数/版本在这里；本地编辑副本不会自动跟随远程声明 |
+| 基础/扩展规则集 | provider间隔86400秒请求刷新，必要时手动更新 | 只有最终配置中仍有RULE-SET引用才起效；本轮已修这个引用 |
+| JS provider | interval86400秒、必要时手动刷新 | 仅更新代码，不能独自添加新MITM/handler；日志可识别AD版本 |
+| 本地静态包/私人节点快照 | 重新用当前源构建/导入，保留设备私人信息 | 静态规则/内嵌JS不是远程自动更新；私人节点快照不自动更新机场 |
+| 私人机场 | 原本机provider仍由本人URL更新 | 不继承机场响应中的分流/DNS；没有把私人订阅写进公共项目 |
+
+## 8. 验收、误伤与回退
+
+验证分三层：静态配置/源与生成结果；源代码重建模拟样本；真实iPhone Stash解析、命中及广告效果。本轮完成前两层，**第三层未运行**。官方站403、数字版本缺失、无真实脱敏响应都记录为限制，不用62个模拟测试或38,066条规则替代效果判断。精确运行记录见 [PROGRESS](../PROGRESS.md)。
+
+手机最小验收顺序：先只开淘宝、微博、小红书的所需专项，然后美团、京东，最后逐款原有专项。每款分别检查冷启动、后台返回、正常使用触发预加载后再启动；记录广告是否消失、有无空白页/倒计时/更长加载，并检查登录、搜索、消息、视频、正常领券等业务。广告有频控，至少多次观察并与关闭模块时对照，结合命中记录；单次没有广告不能判成功。
+
+需要反馈时只提供：App名和广告位置、冷启动/后台/预载场景、是否空白/倒计时、对应固定版本/状态日志，以及仅包含主机、端口、协议、路径（**去掉整个查询**）的手工摘录。若更新后仍异常，再记录当时数字版本帮助复现。不要发送私人完整配置、原始日志、Cookie、token、证书私钥或响应正文。用户将全部更新，当前不再重复索取版本。
+
+误伤时先关闭对应App覆写并重建连接。若仍有域名阻断，暂关expanded、用设备精确白名单或将广告组DIRECT作对照；这些不会停止其他HTTP模块。整包模式则关闭整合广告增强。需要整体回退时选手机上原来可用的备份，保留私人覆写并核对关联/地区选择。代码基线`936fe45`可供维护者取历史公共文件，但回退到它会恢复本轮已确认的旧接入缺陷，不应作为长期方案。
+
+<!-- GENERATED-AD-SPEC -->
+
+## 9. 自动核对的当前完整清单
+
+以下内容直接由现有配置和运行脚本生成。数量描述文件结构，不表示广告效果。
+
+| 项目 | 实际值 |
+|---|---|
+| app_modules | 40 |
+| public_main_rules | 5,266 |
+| basic_ad_payload | 38 |
+| expanded_ad_payload | 38,066 |
+| app_domain_rules | 19 |
+| native_url_rewrites | 38 |
+| response_handlers | 11 |
+| request_handlers | 0 |
+| runtime_js_providers | 11 |
+| mitm_exact_hosts | 45 |
+| optional_probe_js | 1 |
+
+公共主配置没有HTTP块、没有JS provider；下方HTTP是**全部40款独立模块同时启用时的审阅合并结果**，不是额外需要导入的一份配置。探针另列、默认关闭。
+
+| App模块 | 路径/真实开关 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
+|---|---|---|---|---|---|
+| 58同城广告专项（可选） | [58tongcheng](../modules/ads/58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 home/advertising 和 appadv；保留职位、联系与发布。独立启停；需设备验收。 |
+| 阿里云盘广告专项（可选） | [alipan](../modules/ads/alipan.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。独立启停；需设备验收。 |
+| 高德地图广告专项（可选） | [amap](../modules/ads/amap.stoverride) | 2 | 2 | 0 | AD-20261020.1；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。独立启停；需设备验收。 |
+| 百度网盘广告专项（可选） | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) | 0 | 1 | 0 | AD-20261020.1；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。独立启停；需设备验收。 |
+| 哔哩哔哩广告处理（可选） | [bilibili](../modules/ads/bilibili.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。默认不导入，需设备验收。 |
+| 菜鸟广告专项（可选） | [cainiao](../modules/ads/cainiao.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。独立启停；需设备验收。 |
+| 中国移动广告专项（可选） | [cmcc](../modules/ads/cmcc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。独立启停；需设备验收。 |
+| 携程旅行广告专项（可选） | [ctrip](../modules/ads/ctrip.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。独立启停；需设备验收。 |
+| 大麦广告专项（可选） | [damai](../modules/ads/damai.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。独立启停；需设备验收。 |
+| 大众点评广告专项（可选） | [dianping](../modules/ads/dianping.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。独立启停；需设备验收。 |
+| 东方财富广告专项（可选） | [eastmoney](../modules/ads/eastmoney.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。独立启停；需设备验收。 |
+| 华住会广告专项（可选） | [huazhu](../modules/ads/huazhu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。独立启停；需设备验收。 |
+| 京东金融广告专项（可选） | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。独立启停；需设备验收。 |
+| 京东广告专项（可选） | [jingdong](../modules/ads/jingdong.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。独立启停；需设备验收。 |
+| 肯德基广告专项（可选） | [kfc](../modules/ads/kfc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。独立启停；需设备验收。 |
+| 猎聘广告专项（可选） | [liepin](../modules/ads/liepin.stoverride) | 0 | 1 | 0 | AD-20261020.1；明确命名的 live.get-ad-cards；不拦职位推荐或投递。独立启停；需设备验收。 |
+| 瑞幸咖啡广告专项（可选） | [luckin](../modules/ads/luckin.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。独立启停；需设备验收。 |
+| 脉脉广告专项（可选） | [maimai](../modules/ads/maimai.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 adshow；保留礼物、消息和普通推荐。独立启停；需设备验收。 |
+| 麦当劳广告专项（可选） | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 portal/home/splash；保留点餐、支付、领券。独立启停；需设备验收。 |
+| 美团广告专项（可选） | [meituan](../modules/ads/meituan.stoverride) | 0 | 3 | 1 | AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。独立启停；需设备验收。 |
+| 米家广告专项（可选） | [mijia](../modules/ads/mijia.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。独立启停；需设备验收。 |
+| 网易邮箱大师广告专项（可选） | [netease-mail](../modules/ads/netease-mail.stoverride) | 0 | 2 | 0 | AD-20261020.1；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。独立启停；需设备验收。 |
+| 网易云音乐广告专项（可选） | [netease-music](../modules/ads/netease-music.stoverride) | 0 | 3 | 0 | AD-20261020.1；仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文。独立启停；需设备验收。 |
+| 拼多多广告专项（可选） | [pinduoduo](../modules/ads/pinduoduo.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 cappuccino/splash；保留首页、买菜、红包和领券。独立启停；需设备验收。 |
+| 铁路12306广告专项（可选） | [railway12306](../modules/ads/railway12306.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。独立启停；需设备验收。 |
+| 淘宝开屏广告处理（可选） | [taobao](../modules/ads/taobao.stoverride) | 0 | 1 | 1 | AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。待真机验收。 |
+| 淘票票广告专项（可选） | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。独立启停；需设备验收。 |
+| 贴吧开屏广告处理（可选） | [tieba](../modules/ads/tieba.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。默认不导入，需设备验收。 |
+| UC浏览器广告专项（可选） | [uc](../modules/ads/uc.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。独立启停；需设备验收。 |
+| 航旅纵横广告专项（可选） | [umetrip](../modules/ads/umetrip.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。独立启停；需设备验收。 |
+| 中国联通广告专项（可选） | [unicom](../modules/ads/unicom.stoverride) | 0 | 2 | 0 | AD-20261020.1；专用启动/广告接口；保留 accountListData、客户端配置和缴费。独立启停；需设备验收。 |
+| 云闪付广告专项（可选） | [unionpay](../modules/ads/unionpay.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。独立启停；需设备验收。 |
+| 微信广告专项（可选） | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。独立启停；需设备验收。 |
+| 微博开屏广告处理（可选） | [weibo](../modules/ads/weibo.stoverride) | 4 | 2 | 1 | AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收。 |
+| WPS Office广告专项（可选） | [wps](../modules/ads/wps.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。独立启停；需设备验收。 |
+| 下厨房广告专项（可选） | [xiachufang](../modules/ads/xiachufang.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。独立启停；需设备验收。 |
+| 闲鱼广告专项（可选） | [xianyu](../modules/ads/xianyu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。独立启停；需设备验收。 |
+| 小红书开屏广告处理（可选） | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | 4 | 0 | 1 | AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。待真机验收。 |
+| 小宇宙广告专项（可选） | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。独立启停；需设备验收。 |
+| 知乎广告专项（可选） | [zhihu](../modules/ads/zhihu.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告。独立启停；需设备验收。 |
+
+## 10. 精确原生声明与基础规则原文
+
+下列原生字段为全量专项的审阅合并片段，缺少完整主配置，不能直接作为主配置导入。主入口实际的LAN/系统例外位于广告RULE-SET之前，后面仍有完整分流与终止MATCH。
 
 <!-- CONFIG:ad-core -->
 ```yaml
-mode: rule
 proxy-groups:
 - name: 广告拦截
   type: select
   proxies:
   - REJECT
   - DIRECT
+rule-providers:
+  基础广告:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ads-basic.yaml
+    interval: 86400
 rules:
-- DOMAIN,ads.95516.com,广告拦截
-- DOMAIN,ads.cup.com.cn,广告拦截
-- DOMAIN,ads.uc.cn,广告拦截
-- DOMAIN,adslot.uc.cn,广告拦截
-- DOMAIN,ad.12306.cn,广告拦截
-- DOMAIN,bdsp-x.jd.com,广告拦截
-- DOMAIN,dsp-x.jd.com,广告拦截
-- DOMAIN,emdcadvertise.eastmoney.com,广告拦截
-- DOMAIN,ma-adx.ctrip.com,广告拦截
 - DOMAIN,optimus-ads.amap.com,广告拦截
 - DOMAIN,optimus-ads.amap.com.w.alikunlun.com,广告拦截
-- DOMAIN-SUFFIX,pangle.io,广告拦截
-- DOMAIN-SUFFIX,pangolin.snssdk.com,广告拦截
-- DOMAIN-SUFFIX,mobads-logs.baidu.cn,广告拦截
-- DOMAIN-SUFFIX,mobads-logs.baidu.com,广告拦截
-- DOMAIN-SUFFIX,mobads.baidu.cn,广告拦截
-- DOMAIN-SUFFIX,c.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,d.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,mi.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,nc.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,s.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,t.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,v.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,win.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,xc.gdt.qq.com,广告拦截
-- DOMAIN,mobads-pre-config.cdn.bcebos.com,广告拦截
-- DOMAIN-SUFFIX,doubleclick.net,广告拦截
-- DOMAIN-SUFFIX,googlesyndication.com,广告拦截
-- DOMAIN-SUFFIX,admob.com,广告拦截
-- DOMAIN-SUFFIX,adsrvr.org,广告拦截
-- DOMAIN-SUFFIX,adnxs.com,广告拦截
-- DOMAIN-SUFFIX,adkwai.com,广告拦截
-- DOMAIN-KEYWORD,pangolin-sdk-toutiao,广告拦截
-- DOMAIN-KEYWORD,pglstatp-toutiao,广告拦截
-- DOMAIN-KEYWORD,mobads.baidu.com,广告拦截
-- DOMAIN,v2.gdt.qq.com,广告拦截
-- DOMAIN,vr.gdt.qq.com,广告拦截
-- DOMAIN,xs.gdt.qq.com,广告拦截
-- DOMAIN,adsmind.gdtimg.com,广告拦截
-- DOMAIN,qzs.gdtimg.com,广告拦截
-- DOMAIN-SUFFIX,canvas.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,pgdt.gtimg.cn,广告拦截
-- DOMAIN-SUFFIX,pgdt.gtimg.com,广告拦截
-- DOMAIN-SUFFIX,q.i.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,rm.gdt.qq.com,广告拦截
-- DOMAIN-SUFFIX,ugdtimg.com,广告拦截
-- DOMAIN-SUFFIX,unityads.unity3d.com,广告拦截
-- DOMAIN,unityads.unitychina.cn,广告拦截
-- DOMAIN,config.unityads.unitychina.cn,广告拦截
+- DOMAIN,ma-adx.ctrip.com,广告拦截
+- DOMAIN,emdcadvertise.eastmoney.com,广告拦截
+- DOMAIN,bdsp-x.jd.com,广告拦截
+- DOMAIN,dsp-x.jd.com,广告拦截
+- DOMAIN,ad.12306.cn,广告拦截
+- DOMAIN,ads.uc.cn,广告拦截
+- DOMAIN,adslot.uc.cn,广告拦截
+- DOMAIN,ads.95516.com,广告拦截
+- DOMAIN,ads.cup.com.cn,广告拦截
+- DOMAIN,sdkapp.uve.weibo.com,广告拦截
+- DOMAIN,wbapp.uve.weibo.com,广告拦截
+- DOMAIN,adimg.uve.weibo.com,广告拦截
+- DOMAIN,adimg.vue.weibo.com,广告拦截
+- DOMAIN,ads-img-qc.xhscdn.com,广告拦截
+- DOMAIN,ads-img-al.xhscdn.com,广告拦截
+- DOMAIN,ads-video-al.xhscdn.com,广告拦截
+- DOMAIN,ads-video-qc.xhscdn.com,广告拦截
+- RULE-SET,基础广告,广告拦截
 http:
   mitm:
-  - api.zhihu.com
-  - api.xiaoyuzhoufm.com
-  - edith.xiaohongshu.com
   - acs.m.goofish.com
-  - api.xiachufang.com
-  - ios.wps.cn
-  - mobile-pic.cache.iciba.com
-  - bootrealtime.uve.weibo.com
-  - bootpreload.uve.weibo.com
-  - mp.weixin.qq.com
-  - m.client.10010.com
-  - oss.umetrip.com
-  - tiebac.baidu.com
   - acs.m.taobao.com
-  - guide-acs.m.taobao.com
+  - amap-aos-info-nogw.amap.com
+  - api-ac.liepin.com
+  - api.m.jd.com
+  - api.mcd.cn
   - api.pinduoduo.com
+  - api.weibo.cn
+  - api.xiachufang.com
+  - api.xiaoyuzhoufm.com
   - api.yangkeduo.com
+  - api.zhihu.com
+  - app.58.com
+  - app.bilibili.com
+  - appapi.huazhu.com
+  - appconf.mail.163.com
+  - bootpreload.uve.weibo.com
+  - bootrealtime.uve.weibo.com
+  - capi.lkcoffee.com
+  - client.app.coc.10086.cn
+  - client.mail.163.com
+  - cn-acs.m.cainiao.com
+  - edith.xiaohongshu.com
+  - flowplus.meituan.net
+  - guide-acs.m.taobao.com
+  - h3.open.taou.com
+  - home.mi.com
+  - img.meituan.net
   - interface.music.163.com
   - interface3.music.163.com
+  - ios.wps.cn
   - ipv4.music.163.com
-  - appconf.mail.163.com
-  - client.mail.163.com
-  - home.mi.com
-  - wmapi.meituan.com
-  - api.mcd.cn
-  - open.taou.com
-  - h3.open.taou.com
-  - capi.lkcoffee.com
-  - api-ac.liepin.com
-  - res.kfc.com.cn
-  - api.m.jd.com
-  - appapi.huazhu.com
-  - mapi.dianping.com
-  - client.app.coc.10086.cn
-  - cn-acs.m.cainiao.com
-  - app.bilibili.com
-  - pan.baidu.com
+  - m.client.10010.com
   - m5.amap.com
-  - amap-aos-info-nogw.amap.com
+  - mapi.dianping.com
   - member.alipan.com
-  - app.58.com
-  rewrite:
+  - mobile-pic.cache.iciba.com
+  - mp.weixin.qq.com
+  - open.taou.com
+  - oss.umetrip.com
+  - pan.baidu.com
+  - res.kfc.com.cn
+  - s3plus.meituan.net
+  - tiebac.baidu.com
+  - wmapi.meituan.com
+  url-rewrite:
+  - ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$) - reject-dict
+  - ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$) - reject-dict
+  - ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$) - reject-dict
+  - ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-dict
   - ^https://api\.xiachufang\.com/v\d+/ad/[^?#]*(?:\?|$) - reject
   - ^https://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$) - reject
-  - ^https://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject
+  - ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$) - reject-200
+  - ^https://bootrealtime\.uve\.weibo\.com/v\d+/ad/realtime/?(?:\?|$) - reject-dict
+  - ^https://bootpreload\.uve\.weibo\.com/v\d+/ad/preload/?(?:\?|$) - reject-dict
+  - ^https://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$)
+    - reject-img
+  - ^https://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject-img
   - ^https://oss\.umetrip\.com/fs/advert/polite(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://acs\.m\.taobao\.com/gw/mtop\.film\.mtopadvertiseapi\.queryloadingbanner(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject
+  - ^https://acs\.m\.taobao\.com/gw/mtop\.film\.mtopadvertiseapi\.queryloadingbanner(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) -
+    reject
+  - ^https://acs\.m\.taobao\.com/gw/mtop\.etao\.noah\.query/(?:[0-9.]+/?)?\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$
+    - reject-dict
   - ^https://api\.pinduoduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
   - ^https://api\.yangkeduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
+  - ^https://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject-200
   - ^https://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
+  - ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$) - reject-dict
+  - ^https://wmapi\.meituan\.com/api/v7/(?:openscreen|startpicture)/?(?:\?|$) - reject-dict
+  - ^https://img\.meituan\.net/bizad/bizad_brandCpt_\d+\.jpg(?:\?|$) - reject-img
+  - ^https://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.(?:gif|jpg)(?:\?|$) - reject-img
+  - ^https://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$) - reject-200
+  - ^https://open\.taou\.com/maimai/adshow/?(?:\?|$) - reject-dict
+  - ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$) - reject-dict
+  - ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject-dict
   - ^https://res\.kfc\.com\.cn/advertisement/[^?#]*(?:\?|$) - reject
   - ^https://appapi\.huazhu\.com(?::\d+)?/client/app/getAppStartPage/(?:\?|$) - reject
   - ^https://mapi\.dianping\.com/mapi/operating/loadsplashconfig/?(?:\?|$) - reject
+  - ^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-200
   - ^https://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject
   - ^https://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$) - reject-dict
   - ^https://amap\-aos\-info\-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt/?(?:\?|$) - reject
   - ^https://app\.58\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\?|$) - reject
   script:
-  - match: ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config(\?|$)
+  - match: ^https://edith\.xiaohongshu\.com/api/sns/(?:v\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\?|$)
     name: jimmy_xiaohongshu_ads
     type: response
     require-body: true
     timeout: 5
-  - match: ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https:\/\/bootrealtime\.uve\.weibo\.com\/v\d+\/ad\/realtime(\?|$)
+    argument: diagnostic=0
+  - match: ^https://api\.weibo\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\?|$)
     name: jimmy_weibo_ads
-    type: request
-    require-body: false
+    type: response
+    require-body: true
     timeout: 5
-  - match: ^https:\/\/bootpreload\.uve\.weibo\.com\/v\d+\/ad\/preload(\?|$)
-    name: jimmy_weibo_ads
-    type: request
-    require-body: false
-    timeout: 5
+    argument: diagnostic=0
   - match: ^https://mp\.weixin\.qq\.com/mp/getappmsgad/?(?:\?|$)
     name: jimmy_wechat_articles_ads
     type: response
     require-body: true
     timeout: 5
+    argument: diagnostic=0
   - match: ^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(\?|$)
     name: jimmy_tieba_ads
     type: response
     require-body: true
     timeout: 5
+    argument: diagnostic=0
   - match: ^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(\/\d+(\.\d+)*\/?)?(\?|$)
     name: jimmy_taobao_ads
     type: response
     require-body: true
     timeout: 5
-  - match: ^https://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
+    argument: diagnostic=0
   - match: ^https://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
     name: jimmy_meituan_ads
     type: response
     require-body: true
     timeout: 5
-  - match: ^https://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://open\.taou\.com/maimai/adshow/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
-  - match: ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
+    argument: diagnostic=0
   - match: ^https://capi\.lkcoffee\.com/resource/m/sys/app/adposNew/?(?:\?|$)
     name: jimmy_luckin_ads
     type: response
     require-body: true
     timeout: 5
-  - match: ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
+    argument: diagnostic=0
   - match: ^https://api\.m\.jd\.com/client\.action\?(?:[^#&]*&)*functionId=start(?:&|$)
     name: jimmy_jingdong_ads
     type: response
     require-body: true
     timeout: 5
-  - match: ^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
+    argument: diagnostic=0
   - match: ^https://cn-acs\.m\.cainiao\.com/gw/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
     name: jimmy_cainiao_ads
     type: response
     require-body: true
     timeout: 5
+    argument: diagnostic=0
   - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/(splash\/(list|show)|feed\/index)(\?|$)
     name: jimmy_bilibili_ads
     type: response
     require-body: true
     timeout: 5
-  - match: ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
+    argument: diagnostic=0
   - match: ^https://member\.alipan\.com/v1/users/onboard_list/?(?:\?|$)
     name: jimmy_alipan_ads
     type: response
     require-body: true
     timeout: 5
+    argument: diagnostic=0
 script-providers:
   jimmy_alipan_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js
-    interval: 86400
-  jimmy_ad_empty_response:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
     interval: 86400
   jimmy_bilibili_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js
@@ -603,734 +438,1028 @@ script-providers:
     interval: 86400
 ```
 
-这些字段声明了“要处理什么”，不证明手机已经成功下载脚本、启用HTTP引擎、完成原生MITM或采用返回值。`http`块在当前源码只包含`mitm`、`rewrite`、`script`；没有配置强制HTTP/3降级、全端口捕获或绕过证书固定。
-
-**12. 调查者需要知道的运行对象假设**
-
-下面逐项描述现有代码的实际判断。右侧是由代码条件可直接推导的结果，不代表已经确认Stash在用户设备上给出的对象就是这种形态。
-
-| 位置 | 当前代码的具体假设 | 哪种输入会导致不修改或分支改变 |
-|---|---|---|
-| 请求URL | 使用`$request.url`，再按写死的HTTPS主机和路径正则判断 | 其他主机、HTTP、端口写法、尾斜杠或路径版本不在正则允许范围时不匹配；多数规则没有显式允许`:443`，华住规则另有端口分支 |
-| HTTP方法 | 大多数脚本只接受大写GET/POST，B站只接受GET；贴吧没有额外方法限制 | 方法缺失、小写或其他方法会使有方法限制的脚本放行 |
-| 响应正文 | 10份JSON脚本需要`$response.body`为字符串，再执行`JSON.parse` | 正文缺失、二进制、非JSON、JSONP或业务加密数据不会按普通JSON修改；网易云方案没有实现EAPI解密 |
-| 响应状态 | 大多数JSON脚本在`resp.status`有值时要求它是裸三位2xx；B站/贴吧接受以2xx开头的字符串 | `HTTP/1.1 200 OK`不符合这些正则，存在该值时会跳过修改；如果只有`statusCode`而没有`status`，当前这层状态判断会跳过，并非必定失败 |
-| JSON业务状态 | 各脚本分别检查`code`、`ret`、`status`、`error`等已知字段，没有通用schema适配器 | 例如小红书`code`只接受数值0；淘宝已存在的`ret`必须是全部SUCCESS；京东要求`images`是二维数组。字段或类型改变可导致原样放行 |
-| 正文长度 | 对字符串`.length`作1,048,576或2,097,152阈值检查 | 超过阈值不修改；该数值是JS字符串码元数，不是HTTP字节数 |
-| 请求期的`$response`：共享脚本 | `empty-response.js`要求`typeof $response === 'undefined'` | 如果请求阶段变量存在但值为null，或是空对象，共享脚本都会直接返回空修改对象；实际Stash请求阶段采用哪种形态尚未验证 |
-| 请求期的`$response`：微博 | `weibo.js`把非null对象视为旧response调用，其余走请求响应构造分支 | 请求期null会走请求分支；空对象会走兼容response分支。它与共享脚本的判断不同，不能假设两者行为一致 |
-| 请求脚本返回值 | 使用`$done({response: {status: 200, headers: ..., body: ...}})`；body为`{}`或空字符串 | 依赖Stash接受当前对象结构和字段类型。已有原生公开模块调用链作为参考，但没有用户手机上的实际回调验证 |
-| 响应脚本返回值 | 有修改时使用`$done({body: 新字符串})`，通常不自行重写响应头 | 正文解压、重新编码及Content-Length/Content-Encoding处理依赖Stash；本项目未实测其当前版本行为 |
-| 不修改时的返回 | 脚本多数用`$done({})`结束 | 依赖原生运行环境把空修改对象理解为保留原处理；模拟测试采用该模型，不代替原生验证 |
-| 超时 | 28个脚本处理项全部声明`timeout: 5` | 超时的具体回退和连接处理由Stash决定，本项目没有自行实现超时重试或保证原请求放行 |
-
-尤其应区分以下两个事实：
-
-```javascript
-// empty-response.js的实际条件：请求阶段也必须完全没有$response变量。
-if (typeof $response !== 'undefined' || !['GET', 'POST'].includes(req.method)) return;
-
-// weibo.js的实际条件：有非null对象时进入兼容的响应式分支。
-if (typeof $response === 'object' && $response !== null) {
-  // 返回响应正文修改
-} else {
-  // 返回请求阶段的response对象
-}
-```
-
-这里只列明源码差异，**没有确认真实Stash会提供null、空对象或未定义变量，也没有把它认定为已经查出的根因**。同理，不能只看到`status`的检查就断言当前Stash返回HTTP状态行。完整脚本在第15部分，可逐行复核。
-
-普通URL拒绝则不经过上述JSON结构保护。请求空响应不等原服务器返回，无法根据原响应判断端点是不是已经改用途；响应修改必须同时匹配URL和所支持的结构。它们对“接口改版”的容忍能力不同。
-
-**13. 手机端的接入方式与手工步骤**
-
-预期组合是：
-
-```text
-GitHub config/stash.yaml：公开规则、策略组、HTTP声明、JS地址
-                ↓ 用户在Stash下载并选中
-手机主配置 ＋ 本机私人覆写：只保存机场URL
-                ↓ Stash按本机顺序合并、运行
-最终配置 ＋ 已下载的12份JS ＋ 设备HTTP/MITM设置与受信任CA
-```
-
-私人覆写的预期形状如下，只有占位符；不是用户实际内容：
+默认基础规则payload（无需MITM；扩展覆写替换同一个provider）：
 
 ```yaml
-name: 本机私人订阅
-proxy-providers:
-  机场:
-    url: https://example.invalid/REPLACE_ON_DEVICE
+payload:
+- DOMAIN-SUFFIX,pangle.io
+- DOMAIN-SUFFIX,pangolin.snssdk.com
+- DOMAIN-SUFFIX,mobads-logs.baidu.cn
+- DOMAIN-SUFFIX,mobads-logs.baidu.com
+- DOMAIN-SUFFIX,mobads.baidu.cn
+- DOMAIN-SUFFIX,c.gdt.qq.com
+- DOMAIN-SUFFIX,d.gdt.qq.com
+- DOMAIN-SUFFIX,mi.gdt.qq.com
+- DOMAIN-SUFFIX,nc.gdt.qq.com
+- DOMAIN-SUFFIX,s.gdt.qq.com
+- DOMAIN-SUFFIX,t.gdt.qq.com
+- DOMAIN-SUFFIX,v.gdt.qq.com
+- DOMAIN-SUFFIX,win.gdt.qq.com
+- DOMAIN-SUFFIX,xc.gdt.qq.com
+- DOMAIN,mobads-pre-config.cdn.bcebos.com
+- DOMAIN-SUFFIX,doubleclick.net
+- DOMAIN-SUFFIX,googlesyndication.com
+- DOMAIN-SUFFIX,admob.com
+- DOMAIN-SUFFIX,adsrvr.org
+- DOMAIN-SUFFIX,adnxs.com
+- DOMAIN-SUFFIX,adkwai.com
+- DOMAIN-KEYWORD,pangolin-sdk-toutiao
+- DOMAIN-KEYWORD,pglstatp-toutiao
+- DOMAIN-KEYWORD,mobads.baidu.com
+- DOMAIN,v2.gdt.qq.com
+- DOMAIN,vr.gdt.qq.com
+- DOMAIN,xs.gdt.qq.com
+- DOMAIN,adsmind.gdtimg.com
+- DOMAIN,qzs.gdtimg.com
+- DOMAIN-SUFFIX,canvas.gdt.qq.com
+- DOMAIN-SUFFIX,pgdt.gtimg.cn
+- DOMAIN-SUFFIX,pgdt.gtimg.com
+- DOMAIN-SUFFIX,q.i.gdt.qq.com
+- DOMAIN-SUFFIX,rm.gdt.qq.com
+- DOMAIN-SUFFIX,ugdtimg.com
+- DOMAIN-SUFFIX,unityads.unity3d.com
+- DOMAIN,unityads.unitychina.cn
+- DOMAIN,config.unityads.unitychina.cn
 ```
 
-`name`是显示名称；`机场`是被公共组的`use`引用的代理集键，不能把它删成根级`url`。该方案意图只覆盖已有provider的URL，保留公共配置中的type、interval和health-check；真实深层合并需以设备最终结果为准。新建覆写开始只有name时，不会自动复制已下载主配置的内容。
+## 11. 关键输入校验值
 
-以下手工动作曾出现在项目接入过程中，但本文不能读取用户手机确认当前状态：
-
-- 将GitHub配置链接复制进Stash，下载并选中。
-- 创建配置副本后，在手机修改代理集URL；或者另建私人覆写保存URL。
-- 在Stash生成CA，在iOS安装和完全信任，再启用HTTP/MITM。
-- 在设备选策略、启用/暂停覆写、刷新配置与资源。
-
-“创建副本”产生的本地修改不会回写GitHub。副本是否保留远程来源、刷新会覆盖哪些本地修改，当前没有原生实测记录，不能凭菜单名称作保证。如果副本没有公共更新关系，仓库发布新handler并不会自动进入它。只在多个配置中看见同一批节点，也不能证明它们拥有同样的新广告规则；节点缓存和共享机制尚未核实。
-
-已有另一种可用载体：工具将机场YAML中的节点嵌入私人主配置。那份文件的节点和广告规则都是生成时的快照；远程JS可能单独更新，规则和处理项不会随之改变。本文不附用户私人输入或输出。
-
-因此，“机场能刷新、有节点、可以上网、地区组看起来正确、证书受信任”分别是不同层的现象，不能单独证明当前44个HTTP匹配项都已运行。手机保存的广告组选择或其他覆写，也可能与文件默认值不同。
-
-**14. 本方案的识别信息、边界和当前已知状态**
-
-- 本文件包含的是当前仓库原方案，不是新提出的替代方案。
-- 公开主配置地址：`https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml`。
-- 配置与脚本以本仓库固定路径维护；上游版本和许可证固定记录，不在手机自动执行未审核的上游最新代码。
-- 广告引擎按域名/IP、URL及JSON结构工作，没有按App的Bundle ID识别全部流量。App自带DNS、直连IP、协议或端口变化可能影响可识别范围。
-- 默认域名包只有38条，另有11条专项主机；扩展包在一体化配置无引用的问题已由结构检查确认。
-- 全部40款专项已在公共主配置内组装；单App开关没有在该一体化文件中实现。
-- 用户报告过HTTP/MITM开启且本人CA完全信任；没有检查其当前手机设置，也没有因此推定全部解密成功。
-- 真实Stash最低版本、当前JS对象形态、原生合并、HTTP/3/固定证书/解压编码等环节尚未完成设备验证。
-- 没有取得可证明当前App版本广告链路的真实样本或逐款成功验收。已有模拟测试只验证预设输入下的逻辑。
-- 当前信息不足以唯一确定“为什么大部分用不了”；默认覆盖、扩展接法、配置版本、URL命中、JS对象/结构、协议和客户端对空响应的接受情况均需分别判断。
-
-以下SHA256只用于标识本次说明所引用的**公开原始文件**。带私人覆写或本机修改的最终配置不会与公开主配置具有相同哈希；不应将包含真实URL的最终配置当作公共文件分享。
+这些哈希用于核对公开源与生成结果，不包含手机私人配置。运行文件及发布提交另看PROGRESS和发布审计。
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `18f633958c3bd52f8442c1a6faaaa6036ed69cc3dcd3b972f751da9776e4240c` |
+| [config/stash.yaml](../config/stash.yaml) | `5a0e982df98e194c8165fe8c63be593b72eb9922f10fc404c46261d206eaa6ac` |
 | [config/core.stoverride](../config/core.stoverride) | `9691f2b4386c0a0978d9d34e05865616a619105a24c127d2fa1a4986ecd88e48` |
-| [tools/build_subscription.py](../tools/build_subscription.py) | `61fb0013f223579d9eec4aaf14a52d1fb4d00162fac84a39cdd1ed3f457fec8f` |
-| [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `c90be8f4fa02ca8d4857229e49a82066305ee53b101a97dcf441d7dbb15fd1fa` |
-| [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `09994000b9d3c5332848f6788dd1948e9f7f961b81aecd4247e39c78792e8cc5` |
-| [scripts/ads/cainiao.js](../scripts/ads/cainiao.js) | `95e56c4c6c787fc85adcaf0be5ac9be8fb68b2f4b4338828e1d1c4d3b36a84d4` |
-| [scripts/ads/empty-response.js](../scripts/ads/empty-response.js) | `6983e6662f453a51b54acd4da429639e63affdbf43a7b9c21349c4674fd9a3be` |
-| [scripts/ads/jingdong.js](../scripts/ads/jingdong.js) | `1586841af3a30ccf246d98730c49d3027323db6b4bfa6fa578067e03676515ab` |
-| [scripts/ads/luckin.js](../scripts/ads/luckin.js) | `ebe583ac0d7c8a6194470787c75ffc5e80cf04539d8798ff2ea01616069aead6` |
-| [scripts/ads/meituan.js](../scripts/ads/meituan.js) | `f9eca13c143039ad7a47320ffb0e056f8cf9e1886f1f5e7996656d35bb18ce53` |
-| [scripts/ads/taobao.js](../scripts/ads/taobao.js) | `134eab65f7443a19f5a4b401fe7784443d4b21cea6b31a18e06527b342a7f19d` |
-| [scripts/ads/tieba.js](../scripts/ads/tieba.js) | `a9a763d2c3b4bb185d1fcc12871d13431860ca20a10fcc1ecf613e1a3464da6e` |
-| [scripts/ads/wechat-articles.js](../scripts/ads/wechat-articles.js) | `7cd38a1b9bc4b66eea6f7295806e35ece420d88676f3b3efa7f0fc5a838b19f5` |
-| [scripts/ads/weibo.js](../scripts/ads/weibo.js) | `33f30a06cc01171d444fc89204578004d979a6da61a01f6cd8343afcddf62cb1` |
-| [scripts/ads/xiaohongshu.js](../scripts/ads/xiaohongshu.js) | `0da66fb2483bce7aad7c17ef06db80fc102380ba2e192c93416976bbdb103e6a` |
+| [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `0af78f79d83532318c23c3a442c31927e16dad43163640178aa8b737b3ae3a79` |
+| [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `729a277242f2bbbe626c34716e4eddff031c161d3011b8f39e7e346799991aa8` |
+| [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `54b416c99de3dd6d401cac10481883bafcebf677e18981383338384a007bc43e` |
+| [scripts/ads/cainiao.js](../scripts/ads/cainiao.js) | `4d0f186e786bb281b6e9e5bff468867a43c0ca05e446fd49f2db07e3f74adae7` |
+| [scripts/ads/jingdong.js](../scripts/ads/jingdong.js) | `432e156d6e7cfc9d720a0a232c8b108fa1cc983640de516bccbe92de26cf32f6` |
+| [scripts/ads/luckin.js](../scripts/ads/luckin.js) | `109b19679e9a43c0d69b5168ad9b05d1494a88df0f7a74f1b041a93c1414997b` |
+| [scripts/ads/meituan.js](../scripts/ads/meituan.js) | `71f1c46a1230f684b5f58b94e8b306325a17eaa964d51dbc870efa8f1f492798` |
+| [scripts/ads/probe.js](../scripts/ads/probe.js) | `a6f98eb006a8fd72be69fa7d068c93e817f318ccc7b61b55ee6d73a3a8e958d2` |
+| [scripts/ads/taobao.js](../scripts/ads/taobao.js) | `05b71cbaa7950ce569b98ddcce59eca448b29db4ec650e99ee6a3f1f2551b57a` |
+| [scripts/ads/tieba.js](../scripts/ads/tieba.js) | `6c39725a2cf24c51bdccc5ee6d470feeea2c637d9714e3b7767632407b7cf6c3` |
+| [scripts/ads/wechat-articles.js](../scripts/ads/wechat-articles.js) | `831411fb29e910a29a288c8fd77b1a4579ecf9074ae4a9e7ee6b29fe52e0c2f0` |
+| [scripts/ads/weibo.js](../scripts/ads/weibo.js) | `db34ab8f1236362feaac08a4bbebdaaab422cb3d60aff5e9f68f20a88b65a7ca` |
+| [scripts/ads/xiaohongshu.js](../scripts/ads/xiaohongshu.js) | `f5f79fdf840a88e6c46e6786386c1243b247721b612699fe133aa9fecd48988d` |
 
-**15. 12份运行JS完整源码**
+完整输入哈希和结构计数见 [ad-architecture-audit.json](../research/ad-architecture-audit.json)。
 
-下面是文件原文，不是伪代码或缩减示例。每段保留原始归属和许可，不以说明文档的原创文字许可重新授权。独立许可全文见 [app2smile MIT](../licenses/app2smile-MIT.txt)、[blackmatrix7 GPL-2.0](../licenses/blackmatrix7-GPL-2.0.txt)、[fmz200 GPL-3.0](../licenses/fmz200-GPL-3.0.txt)、[NobyDa GPL-3.0](../licenses/NobyDa-GPL-3.0.txt)。
+## 12. 当前全部运行JS原文
 
-**15.1 alipan.js**
+其中11份是按需加载的响应处理，另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。
+
+### alipan.js
 
 源文件：[scripts/ads/alipan.js](../scripts/ads/alipan.js)。
 
 <!-- SOURCE:scripts/ads/alipan.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-3.0-only
- * Derived from fmz200/wool_scripts Scripts/adrive/adrive.js; see sources.lock.json.
- * Modified 2026-10-19: only four banner anchors; keep backups, news, sign-in and
- * account features. No logs, storage or network. License: licenses/fmz200-GPL-3.0.txt.
+ * Advertising-only transformation adapted from fmz200/wool_scripts Scripts/adrive/adrive.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    if (!/^https:\/\/member\.alipan\.com\/v1\/users\/onboard_list\/?(?:\?|$)/.test(String(req.url || ''))) return;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-    const obj = JSON.parse(resp.body);
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0', 200, '200', 'Success'].includes(obj.code)) return;
-    if (!Array.isArray(obj.result)) return;
-    const ads = ['backup_top_banner', 'home_top_banner', 'resource_top_banner', 'video_top_banner'];
-    const filtered = obj.result.filter(item => !item || !ads.includes(item.anchor));
-    if (filtered.length !== obj.result.length) {
-      obj.result = filtered;
-      result = {body: JSON.stringify(obj)};
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "alipan";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
     }
+    return false;
+  }
+  try {
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https://member\\.alipan\\.com/v1/users/onboard_list/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj, [0, '0', 200, '200', 'Success']) || !Array.isArray(obj.result)) return false;
+      obj.result = obj.result.filter(item => !item || !['backup_top_banner','home_top_banner','resource_top_banner','video_top_banner'].includes(item.anchor));
+      return true;
+    }
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Keep the original response on unknown/error data.
-  } finally { $done(result); }
+    if (state !== 'parse-error') state = 'exception';
+  } finally {
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
+    $done(result);
+  }
 })();
 ```
 
-**15.2 bilibili.js**
+### bilibili.js
 
 源文件：[scripts/ads/bilibili.js](../scripts/ads/bilibili.js)。
 
 <!-- SOURCE:scripts/ads/bilibili.js -->
 ```javascript
 /* SPDX-License-Identifier: MIT
- * Derived from app2smile/rules js/bilibili-json.js, revision in research/sources.lock.json.
- * Copyright (c) 2023 app2smile. See licenses/app2smile-MIT.txt.
- * Modified 2026-10-18: narrow endpoints, preserve non-ad features, fail open,
- * no URL/body/header logging, no account storage or outbound requests.
+ * Advertising-only transformation adapted from app2smile/rules js/bilibili-json.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Copyright (c) 2023 app2smile.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "bilibili";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
+    }
+    return false;
+  }
   try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    const path = String(req.url || '').match(/^https:\/\/app\.bilibili\.com(\/x\/v2\/(?:splash\/(?:list|show)|feed\/index))(?:\?|$)/);
-    if (!path || req.method !== 'GET' || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d/.test(String(resp.status))) return;
-    const body = JSON.parse(resp.body);
-    if (!body || body.code !== 0 || !body.data || typeof body.data !== 'object' || Array.isArray(body.data)) return;
-    let changed = false;
-    if (path[1].startsWith('/x/v2/splash/')) {
-      if (Object.prototype.hasOwnProperty.call(body.data, 'show')) {
-        delete body.data.show;
-        changed = true;
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https:\\/\\/app\\.bilibili\\.com\\/x\\/v2\\/(splash\\/(list|show)|feed\\/index)(\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj) || obj.code !== 0 || !record(obj.data)) return false;
+      if (/\/splash\//.test(url)) {
+        if (!Object.prototype.hasOwnProperty.call(obj.data,'show')) return false;
+        delete obj.data.show; return true;
       }
-    } else if (Array.isArray(body.data.items)) {
-      const before = body.data.items;
-      const adTypes = ['ad_web_s', 'ad_av', 'ad_web_gif', 'ad_player', 'ad_inline_3d', 'ad_inline_eggs'];
-      const after = before.filter(item => {
-        if (!item || typeof item !== 'object') return true;
+      if (!Array.isArray(obj.data.items)) return false;
+      const adTypes = ['ad_web_s','ad_av','ad_web_gif','ad_player','ad_inline_3d','ad_inline_eggs'];
+      obj.data.items = obj.data.items.filter(item => {
+        if (!record(item)) return true;
         if (item.card_type === 'cm_v2' && adTypes.includes(item.card_goto)) return false;
         if (item.card_type === 'cm_double_v9' && item.card_goto === 'ad_inline_av') return false;
-        if (item.card_type === 'banner_v8' && item.card_goto === 'banner' && Array.isArray(item.banner_item)) {
-          // 不丢弃整个 banner：只删明确标为 ad 的条目。
-          item.banner_item = item.banner_item.filter(v => !v || v.type !== 'ad');
-        }
+        if (item.card_type === 'banner_v8' && item.card_goto === 'banner' && Array.isArray(item.banner_item)) item.banner_item = item.banner_item.filter(v => !v || v.type !== 'ad');
         return true;
       });
-      body.data.items = after;
-      changed = JSON.stringify(body.data.items) !== JSON.stringify(JSON.parse(resp.body).data.items);
+      return true;
     }
-    if (changed) result = {body: JSON.stringify(body)};
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Stash 的空修改对象保留原响应。不输出异常内容，避免泄露响应数据。
+    if (state !== 'parse-error') state = 'exception';
   } finally {
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
     $done(result);
   }
 })();
 ```
 
-**15.3 cainiao.js**
+### cainiao.js
 
 源文件：[scripts/ads/cainiao.js](../scripts/ads/cainiao.js)。
 
 <!-- SOURCE:scripts/ads/cainiao.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-3.0-only
- * Derived from fmz200/wool_scripts Scripts/cainiao/cainiao.js; see sources.lock.json.
- * Modified 2026-10-19: only explicit adItemDetail entries in ads.show. Preserve
- * coupons, points, package import, messages and ordinary cards. No logs/storage/network.
- * License: licenses/fmz200-GPL-3.0.txt.
+ * Advertising-only transformation adapted from fmz200/wool_scripts Scripts/cainiao/cainiao.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    if (!/^https:\/\/cn-acs\.m\.cainiao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:\/[0-9]+(?:\.[0-9]+)*)?\/?(?:\?|$)/.test(String(req.url || ''))) return;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-    const obj = JSON.parse(resp.body);
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'ret') && (!Array.isArray(obj.ret) || !obj.ret.length || !obj.ret.every(value => typeof value === 'string' && /^SUCCESS(?:::|$)/.test(value)))) return;
-    const items = obj.data && obj.data.result;
-    if (!Array.isArray(items)) return;
-    const filtered = items.filter(item => !(item && item.materialContentMapper && item.materialContentMapper.adItemDetail));
-    if (items.length !== filtered.length) {
-      obj.data.result = filtered;
-      result = {body: JSON.stringify(obj)};
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "cainiao";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
     }
-  } catch (_) {
-    // Do not log response bodies or request headers.
-  } finally { $done(result); }
-})();
-```
-
-**15.4 empty-response.js**
-
-源文件：[scripts/ads/empty-response.js](../scripts/ads/empty-response.js)。
-
-<!-- SOURCE:scripts/ads/empty-response.js -->
-```javascript
-/* SPDX-License-Identifier: GPL-3.0-only
- * Dedicated advertising endpoints adapted from fmz200/wool_scripts.
- * Generated from research/ad-catalog.json; edit that catalog, not this file.
- * Native Stash request response API evidence: docs/SOURCES.md.
- * No request body, account data, storage, external requests or notifications.
- */
-(() => {
-  let result = {};
-  let marker = '';
+    return false;
+  }
   try {
     const req = typeof $request === 'object' && $request ? $request : {};
-    // A request script must never modify a response-phase invocation.
-    if (typeof $response !== 'undefined' || !['GET', 'POST'].includes(req.method)) return;
-    const routes = [
-  {
-    "id": "damai",
-    "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
-    "json": false
-  },
-  {
-    "id": "amap",
-    "match": "^https://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "mcdonalds",
-    "match": "^https://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)",
-    "json": false
-  },
-  {
-    "id": "maimai",
-    "match": "^https://open\\.taou\\.com/maimai/adshow/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "maimai",
-    "match": "^https://h3\\.open\\.taou\\.com/maimai/adshow/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "liepin",
-    "match": "^https://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "mijia",
-    "match": "^https://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "netease-mail",
-    "match": "^https://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)",
-    "json": false
-  },
-  {
-    "id": "netease-music",
-    "match": "^https://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "netease-music",
-    "match": "^https://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "netease-music",
-    "match": "^https://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "xianyu",
-    "match": "^https://acs\\.m\\.goofish\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "xiaoyuzhou",
-    "match": "^https://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "wps",
-    "match": "^https://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)",
-    "json": false
-  },
-  {
-    "id": "zhihu",
-    "match": "^https://api\\.zhihu\\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\\?|$)",
-    "json": true
-  },
-  {
-    "id": "zhihu",
-    "match": "^https://api\\.zhihu\\.com/ad-style-service/request/?(?:\\?|$)",
-    "json": true
-  }
-];
-    const hit = routes.find(route => new RegExp(route.match).test(String(req.url || '')));
-    if (!hit) return;
-    result = {response: {
-      status: 200,
-      headers: {'Content-Type': hit.json ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8',
-                'Cache-Control': 'no-store'},
-      body: hit.json ? '{}' : ''
-    }};
-    marker = '[JimmyAds][' + hit.id + '] ' + (hit.json ? 'empty-json' : 'empty-200');
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https://cn-acs\\.m\\.cainiao\\.com/gw/mtop\\.cainiao\\.guoguo\\.nbnetflow\\.ads\\.show\\.cn(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj) || !mtopSuccess(obj) || !obj.data || !Array.isArray(obj.data.result)) return false;
+      obj.data.result = obj.data.result.filter(item => !(item && item.materialContentMapper && item.materialContentMapper.adItemDetail));
+      return true;
+    }
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Unexpected runtime errors pass through; never print the exception.
+    if (state !== 'parse-error') state = 'exception';
   } finally {
-    if (marker) { try { console.log(marker); } catch (_) {} }
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
     $done(result);
   }
 })();
 ```
 
-**15.5 jingdong.js**
+### jingdong.js
 
 源文件：[scripts/ads/jingdong.js](../scripts/ads/jingdong.js)。
 
 <!-- SOURCE:scripts/ads/jingdong.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-2.0
- * Derived from blackmatrix7/ios_rule_script script/startup/startup.js (JD branch).
- * Source revision/checksum: sources.lock.json. License: licenses/blackmatrix7-GPL-2.0.txt.
- * Modified 2026-10-19: strict URL/response guards; only existing display counts
- * and durations; preserve product/order/coupon data. No logging, storage or requests.
+ * Advertising-only transformation adapted from blackmatrix7/ios_rule_script script/startup/startup.js; fmz200 branch reviewed only.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "jingdong";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
+    }
+    return false;
+  }
   try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
     const url = String(req.url || '');
-    if (!/^https:\/\/api\.m\.jd\.com\/client\.action\?[^#]*$/.test(url)) return;
-    const functions = url.split('?')[1].split('&').filter(part => /^functionId=/.test(part));
-    if (functions.length !== 1 || functions[0] !== 'functionId=start') return;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-    const obj = JSON.parse(resp.body);
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
-    if (!Array.isArray(obj.images) || !obj.images.every(Array.isArray)) return;
+    if (!["^https://api\\.m\\.jd\\.com/client\\.action\\?(?:[^#&]*&)*functionId=start(?:&|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
     const before = JSON.stringify(obj);
-    function zero(item, key) {
-      if (typeof item[key] === 'number' && Number.isFinite(item[key])) item[key] = 0;
-      else if (typeof item[key] === 'string' && /^\d+$/.test(item[key])) item[key] = '0';
-    }
-    for (const group of obj.images) {
-      for (const ad of group) {
-        if (ad && typeof ad === 'object' && !Array.isArray(ad) && Object.prototype.hasOwnProperty.call(ad, 'showTimes')) {
-          zero(ad, 'showTimes');
-          zero(ad, 'time');
-        }
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      // Both reviewed sources use functionId=start in the URL. Do not infer an
+      // unseen POST-body function or touch other client.action business functions.
+      const query = url.split('?')[1] || '';
+      const ids = query.split('&').filter(p => p.split('=')[0] === 'functionId');
+      if (ids.length !== 1 || ids[0] !== 'functionId=start' || !successful(obj) || !Array.isArray(obj.images)) return false;
+      if (!obj.images.every(x => Array.isArray(x) || record(x))) return false;
+      const rows = obj.images.flat();
+      // A flat list is an upstream-supported variant. Only known ad control fields
+      // are modified; empty objects and normal product records remain unchanged.
+      let supported = rows.length === 0;
+      function zero(item,key) {
+        if (typeof item[key] === 'number' && Number.isFinite(item[key])) item[key] = 0;
+        else if (typeof item[key] === 'string' && /^\d+$/.test(item[key])) item[key] = '0';
       }
+      for (const ad of rows) {
+        if (!record(ad) || !(typeof ad.showTimes === 'number' && Number.isFinite(ad.showTimes) || typeof ad.showTimes === 'string' && /^\d+$/.test(ad.showTimes))) continue;
+        supported = true; zero(ad,'showTimes'); zero(ad,'time');
+        for (const key of ['onlineTime','referralsTime']) if (typeof ad[key] === 'string' && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(ad[key])) ad[key] = '2090-12-31 00:00:00';
+      }
+      if (supported) zero(obj,'showTimesDaily');
+      return supported;
     }
-    zero(obj, 'showTimesDaily');
+    if (!transform(obj)) return;
     const body = JSON.stringify(obj);
-    if (body !== before) result = {body};
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Unknown formats and errors pass through unchanged.
-  } finally { $done(result); }
+    if (state !== 'parse-error') state = 'exception';
+  } finally {
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
+    $done(result);
+  }
 })();
 ```
 
-**15.6 luckin.js**
+### luckin.js
 
 源文件：[scripts/ads/luckin.js](../scripts/ads/luckin.js)。
 
 <!-- SOURCE:scripts/ads/luckin.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-3.0-only
- * Endpoint and successful empty-ad result from fmz200/wool_scripts rewrite.snippet.
- * Modified 2026-10-19: only a successful dedicated adposNew JSON response; no
- * product, coupon, exchange or order endpoints. No logging/storage/network.
- * License: licenses/fmz200-GPL-3.0.txt. Source: sources.lock.json.
+ * Advertising-only transformation adapted from fmz200/wool_scripts QuantumultX/rewrite/rewrite.snippet.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "luckin";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
+    }
+    return false;
+  }
   try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    if (!/^https:\/\/capi\.lkcoffee\.com\/resource\/m\/sys\/app\/adposNew\/?(?:\?|$)/.test(String(req.url || ''))) return;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-    const obj = JSON.parse(resp.body);
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.status !== 'SUCCESS' || obj.error || obj.error_code || obj.success === false) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0', 200, '200'].includes(obj.code)) return;
-    if (Object.keys(obj).some(key => key !== 'status')) result = {body: JSON.stringify({status: 'SUCCESS'})};
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https://capi\\.lkcoffee\\.com/resource/m/sys/app/adposNew/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj, [0, '0', 200, '200']) || obj.status !== 'SUCCESS') return false;
+      for (const key of Object.keys(obj)) if (key !== 'status') delete obj[key];
+      return true;
+    }
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Original failures remain visible; no fabricated account success.
-  } finally { $done(result); }
+    if (state !== 'parse-error') state = 'exception';
+  } finally {
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
+    $done(result);
+  }
 })();
 ```
 
-**15.7 meituan.js**
+### meituan.js
 
 源文件：[scripts/ads/meituan.js](../scripts/ads/meituan.js)。
 
 <!-- SOURCE:scripts/ads/meituan.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-2.0
- * Derived from blackmatrix7/ios_rule_script script/startup/startup.js (Meituan branch).
- * Modified 2026-10-19: only known ad/mk arrays, preserving other loadInfo fields.
- * No logs/storage/network. License: licenses/blackmatrix7-GPL-2.0.txt; source: sources.lock.json.
+ * Advertising-only transformation adapted from blackmatrix7/ios_rule_script script/startup/startup.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    if (!/^https:\/\/wmapi\.meituan\.com\/api\/v\d+\/loadInfo\/?(?:\?|$)/.test(String(req.url || ''))) return;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-    const obj = JSON.parse(resp.body);
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
-    const splash = obj.data && obj.data.startpicture;
-    if (!splash || typeof splash !== 'object' || Array.isArray(splash)) return;
-    let changed = false;
-    for (const key of ['ad', 'mk']) {
-      if (Array.isArray(splash[key]) && splash[key].length) { splash[key] = []; changed = true; }
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "meituan";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
     }
-    if (changed) result = {body: JSON.stringify(obj)};
+    return false;
+  }
+  try {
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj)) return false;
+      const splash = obj.data && obj.data.startpicture;
+      if (!record(splash)) return false;
+      let supported = false;
+      for (const key of ['ad','mk']) if (Array.isArray(splash[key])) { splash[key] = []; supported = true; }
+      return supported;
+    }
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Do not discard unknown startup/business data.
-  } finally { $done(result); }
+    if (state !== 'parse-error') state = 'exception';
+  } finally {
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
+    $done(result);
+  }
 })();
 ```
 
-**15.8 taobao.js**
+### probe.js
+
+源文件：[scripts/ads/probe.js](../scripts/ads/probe.js)。
+
+<!-- SOURCE:scripts/ads/probe.js -->
+```javascript
+/* SPDX-License-Identifier: MIT
+ * Generated metadata-only observer. Match references retain their source notices
+ * in modules/ads and research/ad-catalog.json. Never logs request values.
+ */
+(() => {
+  try {
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const url = String(req.url || '');
+    const routes = [{"id": "58tongcheng", "match": "^https://app\\.58\\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\\?|$)"}, {"id": "alipan", "match": "^https://member\\.alipan\\.com/v1/users/onboard_list/?(?:\\?|$)"}, {"id": "amap", "match": "^https://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)"}, {"id": "amap", "match": "^https://amap\\-aos\\-info\\-nogw\\.amap\\.com/ws/aos/alimama/splash_screen_rt/?(?:\\?|$)"}, {"id": "baidu-netdisk", "match": "^https://pan\\.baidu\\.com/rest/\\d+\\.\\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\\?|$)"}, {"id": "bilibili", "match": "^https:\\/\\/app\\.bilibili\\.com\\/x\\/v2\\/(splash\\/(list|show)|feed\\/index)(\\?|$)"}, {"id": "cainiao", "match": "^https://cn-acs\\.m\\.cainiao\\.com/gw/mtop\\.cainiao\\.guoguo\\.nbnetflow\\.ads\\.show\\.cn(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "cmcc", "match": "^https://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\\?|$)"}, {"id": "damai", "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "dianping", "match": "^https://mapi\\.dianping\\.com/mapi/operating/loadsplashconfig/?(?:\\?|$)"}, {"id": "huazhu", "match": "^https://appapi\\.huazhu\\.com(?::\\d+)?/client/app/getAppStartPage/(?:\\?|$)"}, {"id": "jingdong", "match": "^https://api\\.m\\.jd\\.com/client\\.action\\?(?:[^#&]*&)*functionId=start(?:&|$)"}, {"id": "kfc", "match": "^https://res\\.kfc\\.com\\.cn/advertisement/[^?#]*(?:\\?|$)"}, {"id": "liepin", "match": "^https://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)"}, {"id": "luckin", "match": "^https://capi\\.lkcoffee\\.com/resource/m/sys/app/adposNew/?(?:\\?|$)"}, {"id": "maimai", "match": "^https://open\\.taou\\.com/maimai/adshow/?(?:\\?|$)"}, {"id": "maimai", "match": "^https://h3\\.open\\.taou\\.com/maimai/adshow/?(?:\\?|$)"}, {"id": "mcdonalds", "match": "^https://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)"}, {"id": "meituan", "match": "^https://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$)"}, {"id": "meituan", "match": "^https://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$)"}, {"id": "meituan", "match": "^https://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$)"}, {"id": "meituan", "match": "^https://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)"}, {"id": "mijia", "match": "^https://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)"}, {"id": "netease-mail", "match": "^https://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)"}, {"id": "netease-mail", "match": "^https://client\\.mail\\.163\\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\\?|$)"}, {"id": "netease-music", "match": "^https://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "netease-music", "match": "^https://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "netease-music", "match": "^https://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "pinduoduo", "match": "^https://api\\.pinduoduo\\.com/api/cappuccino/splash/?(?:\\?|$)"}, {"id": "pinduoduo", "match": "^https://api\\.yangkeduo\\.com/api/cappuccino/splash/?(?:\\?|$)"}, {"id": "taobao", "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query/(?:[0-9.]+/?)?\\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$"}, {"id": "taobao", "match": "^https:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get(\\/\\d+(\\.\\d+)*\\/?)?(\\?|$)"}, {"id": "taopiaopiao", "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "tieba", "match": "^https:\\/\\/tiebac\\.baidu\\.com\\/c\\/f\\/ad\\/getSplashAd(\\?|$)"}, {"id": "umetrip", "match": "^https://oss\\.umetrip\\.com/fs/advert/polite(?:/[^?#]*)?(?:\\?|$)"}, {"id": "unicom", "match": "^https://m\\.client\\.10010\\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\\.htm)?/?(?:\\?|$)"}, {"id": "unicom", "match": "^https://m\\.client\\.10010\\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\\?|$)"}, {"id": "wechat-articles", "match": "^https://mp\\.weixin\\.qq\\.com/mp/getappmsgad/?(?:\\?|$)"}, {"id": "weibo", "match": "^https://bootrealtime\\.uve\\.weibo\\.com/v\\d+/ad/realtime/?(?:\\?|$)"}, {"id": "weibo", "match": "^https://bootpreload\\.uve\\.weibo\\.com/v\\d+/ad/preload/?(?:\\?|$)"}, {"id": "weibo", "match": "^https://api\\.weibo\\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\\?|$)"}, {"id": "wps", "match": "^https://ios\\.wps\\.cn/ad-statistics-service(?:/[^?#]*)?(?:\\?|$)"}, {"id": "wps", "match": "^https://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)"}, {"id": "xiachufang", "match": "^https://api\\.xiachufang\\.com/v\\d+/ad/[^?#]*(?:\\?|$)"}, {"id": "xianyu", "match": "^https://acs\\.m\\.goofish\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "xiaohongshu", "match": "^https://edith\\.xiaohongshu\\.com/api/sns/(?:v\\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\\?|$)"}, {"id": "xiaoyuzhou", "match": "^https://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)"}, {"id": "zhihu", "match": "^https://api\\.zhihu\\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\\?|$)"}, {"id": "zhihu", "match": "^https://api\\.zhihu\\.com/ad-style-service/request/?(?:\\?|$)"}];
+    const hit = routes.find(r => new RegExp(r.match).test(url));
+    console.log('[JimmyAds][' + (hit ? hit.id : 'probe') + '][AD-20261020.1] ' + (hit ? 'request-url-matched' : 'request-url-unmatched'));
+  } catch (_) { try { console.log('[JimmyAds][probe][AD-20261020.1] exception'); } catch (_) {} }
+  finally { $done({}); }
+})();
+```
+
+### taobao.js
 
 源文件：[scripts/ads/taobao.js](../scripts/ads/taobao.js)。
 
 <!-- SOURCE:scripts/ads/taobao.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-3.0-only
- * Adapted from fmz200/wool_scripts Scripts/myBlockAds.js (Taobao splash branch).
- * Source revision/checksum: research/sources.lock.json.
- * Modifications 2026-10-19: only the dedicated splash API and taobao-splash items;
- * preserve MTOP envelope, normal sections, products, coupons and payment paths.
- * Restore upstream's missing control-field defaults; keep known scalar types.
- * Only fixed diagnostic codes; no URLs, headers, payloads or exception logging.
- * No generic cloudvideo/poplayer handling, storage or outbound requests.
- * License text: licenses/fmz200-GPL-3.0.txt.
+ * Advertising-only transformation adapted from fmz200/wool_scripts Scripts/myBlockAds.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  let matched = false;
-  let diagnostic = 'unsupported-body';
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "taobao";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
+    }
+    return false;
+  }
   try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    const api = 'mtop.taobao.wireless.home.splash.awesome.get';
-    if (!/^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(?:\/\d+(?:\.\d+)*\/?)?(?:\?|$)/.test(String(req.url || ''))) return;
-    matched = true;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) { diagnostic = 'http-error'; return; }
-    const obj = JSON.parse(resp.body);
-    diagnostic = 'unsupported-schema';
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
-    if (typeof obj.api === 'string' && obj.api.toLowerCase() !== api) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'ret') && (!Array.isArray(obj.ret) || !obj.ret.length || !obj.ret.every(x => typeof x === 'string' && /^SUCCESS(?:::|$)/.test(x)))) return;
-    const sections = obj.data && obj.data.containers && obj.data.containers.splash_home_base && obj.data.containers.splash_home_base.base && obj.data.containers.splash_home_base.base.sections;
-    if (!Array.isArray(sections)) return;
-    let supported = sections.length === 0;
-    for (const section of sections) {
-      const splash = section && section.bizData && section.bizData['taobao-splash'];
-      if (!splash || !Array.isArray(splash.data)) continue;
-      supported = true;
-      for (const item of splash.data) {
-        if (!item || typeof item !== 'object' || Array.isArray(item) || !Object.keys(item).length) continue;
-        // Only the fields documented by the reviewed upstream splash handler.
-        const changes = {waitTime:'0', times:'0', hotStart:'false', coldStart:'false',
-          startTime:'3818332800000', endTime:'3818419199000',
-          gmtStart:'2090-12-31 00:00:00', gmtEnd:'2090-12-31 23:59:59',
-          gmtStartMs:'3818332800000', gmtEndMs:'3818419199000', imgUrl:'', videoUrl:''};
-        for (const [key, value] of Object.entries(changes)) {
-          const before = item[key];
-          // These controls belong to a confirmed taobao-splash entry. Leaving
-          // absent controls unset lets the app apply its normal display defaults.
-          if (!Object.prototype.hasOwnProperty.call(item, key) || typeof before === 'string') item[key] = value;
-          else if (typeof before === 'number' && Number.isFinite(before) && /^\d+$/.test(value)) item[key] = Number(value);
-          else if (typeof before === 'boolean' && /^(true|false)$/.test(value)) item[key] = value === 'true';
-        }
-      }
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get(\\/\\d+(\\.\\d+)*\\/?)?(\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      if (!successful(obj) || !mtopSuccess(obj)) return false;
+      if (typeof obj.api === 'string' && obj.api.toLowerCase() !== 'mtop.taobao.wireless.home.splash.awesome.get') return false;
+      const sections = obj.data && obj.data.containers && obj.data.containers.splash_home_base && obj.data.containers.splash_home_base.base && obj.data.containers.splash_home_base.base.sections;
+          if (!Array.isArray(sections)) return;
+          let supported = sections.length === 0;
+          for (const section of sections) {
+            const splash = section && section.bizData && section.bizData['taobao-splash'];
+            if (!splash || !Array.isArray(splash.data)) continue;
+            supported = true;
+            for (const item of splash.data) {
+              if (!item || typeof item !== 'object' || Array.isArray(item) || !Object.keys(item).length) continue;
+              // Only the fields documented by the reviewed upstream splash handler.
+              const changes = {waitTime:'0', times:'0', hotStart:'false', coldStart:'false',
+                startTime:'3818332800000', endTime:'3818419199000',
+                gmtStart:'2090-12-31 00:00:00', gmtEnd:'2090-12-31 23:59:59',
+                gmtStartMs:'3818332800000', gmtEndMs:'3818419199000', imgUrl:'', videoUrl:''};
+              for (const [key, value] of Object.entries(changes)) {
+                const before = item[key];
+                // These controls belong to a confirmed taobao-splash entry. Leaving
+                // absent controls unset lets the app apply its normal display defaults.
+                if (!Object.prototype.hasOwnProperty.call(item, key) || typeof before === 'string') item[key] = value;
+                else if (typeof before === 'number' && Number.isFinite(before) && /^\d+$/.test(value)) item[key] = Number(value);
+                else if (typeof before === 'boolean' && /^(true|false)$/.test(value)) item[key] = value === 'true';
+              }
+            }
+          }
+      return supported;
     }
-    const after = JSON.stringify(obj);
-    if (after !== JSON.stringify(JSON.parse(resp.body))) {
-      result = {body: after};
-      diagnostic = 'changed';
-    } else if (supported) diagnostic = 'unchanged';
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Unknown/broken responses stay unchanged. Do not log tokens or MTOP payloads.
+    if (state !== 'parse-error') state = 'exception';
   } finally {
-    // Exactly one fixed marker for a matching endpoint. Logging failures must
-    // never prevent $done, and the exception itself is intentionally discarded.
-    if (matched) {
-      try { console.log('[JimmyAds][taobao] ' + diagnostic); } catch (_) {}
-    }
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
     $done(result);
   }
 })();
 ```
 
-**15.9 tieba.js**
+### tieba.js
 
 源文件：[scripts/ads/tieba.js](../scripts/ads/tieba.js)。
 
 <!-- SOURCE:scripts/ads/tieba.js -->
 ```javascript
 /* SPDX-License-Identifier: MIT
- * Derived from app2smile/rules js/tieba-json.js, revision in research/sources.lock.json.
- * Copyright (c) 2023 app2smile. See licenses/app2smile-MIT.txt.
- * Modified 2026-10-18: only splash JSON; fail open; no logging or outbound requests.
+ * Advertising-only transformation adapted from app2smile/rules js/tieba-json.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Copyright (c) 2023 app2smile.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    if (!/^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(?:\?|$)/.test(String(req.url || ''))) return;
-    if (typeof resp.body !== 'string' || resp.body.length > 1024 * 1024) return;
-    if (resp.status && !/^2\d\d/.test(String(resp.status))) return;
-    const body = JSON.parse(resp.body);
-    if (body && body.error_code === 0 && Object.prototype.hasOwnProperty.call(body, 'data')) {
-      body.error_code = 2230209;
-      body.data = null;
-      result = {body: JSON.stringify(body)};
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "tieba";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
     }
+    return false;
+  }
+  try {
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https:\\/\\/tiebac\\.baidu\\.com\\/c\\/f\\/ad\\/getSplashAd(\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (obj.error_code === 2230209 && obj.data === null) return true;
+      if (obj.error_code !== 0 || !Object.prototype.hasOwnProperty.call(obj,'data')) return false;
+      obj.error_code = 2230209; obj.data = null; return true;
+    }
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // 返回原始内容；不记录请求或响应。
+    if (state !== 'parse-error') state = 'exception';
   } finally {
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
     $done(result);
   }
 })();
 ```
 
-**15.10 wechat-articles.js**
+### wechat-articles.js
 
 源文件：[scripts/ads/wechat-articles.js](../scripts/ads/wechat-articles.js)。
 
 <!-- SOURCE:scripts/ads/wechat-articles.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-3.0-only
- * Derived from NobyDa/Script QuantumultX/File/Wechat.js (see sources.lock.json).
- * Modified 2026-10-19: strict path/schema/error guards; preserve appid and all
- * non-ad fields. Articles only; no chat, Moments or Channels processing.
- * No logging/storage/network. License: licenses/NobyDa-GPL-3.0.txt.
+ * Advertising-only transformation adapted from NobyDa/Script QuantumultX/File/Wechat.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    if (!/^https:\/\/mp\.weixin\.qq\.com\/mp\/getappmsgad\/?(?:\?|$)/.test(String(req.url || ''))) return;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
-    const obj = JSON.parse(resp.body);
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
-    if (obj.base_resp && obj.base_resp.ret !== 0) return;
-    if (!Array.isArray(obj.advertisement_info) || typeof obj.advertisement_num !== 'number') return;
-    if (obj.advertisement_info.length || obj.advertisement_num !== 0) {
-      obj.advertisement_info = [];
-      obj.advertisement_num = 0;
-      result = {body: JSON.stringify(obj)};
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "wechat-articles";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
     }
+    return false;
+  }
+  try {
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https://mp\\.weixin\\.qq\\.com/mp/getappmsgad/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj) || (obj.base_resp && obj.base_resp.ret !== 0) || !Array.isArray(obj.advertisement_info) || typeof obj.advertisement_num !== 'number') return false;
+      obj.advertisement_info = []; obj.advertisement_num = 0;
+      return true;
+    }
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Unknown/error data stays untouched.
-  } finally { $done(result); }
+    if (state !== 'parse-error') state = 'exception';
+  } finally {
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
+    $done(result);
+  }
 })();
 ```
 
-**15.11 weibo.js**
+### weibo.js
 
 源文件：[scripts/ads/weibo.js](../scripts/ads/weibo.js)。
 
 <!-- SOURCE:scripts/ads/weibo.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-3.0-only
- * Endpoint references: fmz200/wool_scripts QuantumultX/rewrite/weibo.snippet.
- * Configuration attribution there: fmz200 / zmqcherish / Keywos.
- * This is a local Stash handler, not a copied remote Weibo cleanup script.
- * Modifications 2026-10-19: only two dedicated splash ad paths; no timeline,
- * messaging, login, notifications, check-in, paid features or storage.
- * Return empty JSON before a network request, matching upstream reject-dict.
- * Keep response mode for existing configs whose remote script updates first.
- * Diagnostics contain fixed codes only; no URL/header/body/exception data.
- * License text: licenses/fmz200-GPL-3.0.txt; source pin: research/sources.lock.json.
+ * Advertising-only transformation adapted from fmz200/wool_scripts Scripts/weibo/weibo_ads.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  let matched = false;
-  let diagnostic = 'unsupported-method';
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "weibo";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
+    }
+    return false;
+  }
   try {
-    const req = typeof $request === 'object' ? $request : {};
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
     const url = String(req.url || '');
-    const realtime = /^https:\/\/bootrealtime\.uve\.weibo\.com\/v\d+\/ad\/realtime(?:\?|$)/;
-    const preload = /^https:\/\/bootpreload\.uve\.weibo\.com\/v\d+\/ad\/preload(?:\?|$)/;
-    if (!realtime.test(url) && !preload.test(url)) return;
-    matched = true;
-    if (!['GET', 'POST'].includes(req.method)) return;
-    if (typeof $response === 'object' && $response !== null) {
-      // Legacy response handlers must receive a response modification, not the
-      // synthetic-response envelope used by request scripts.
-      if ($response.status && !/^2\d\d$/.test(String($response.status))) { diagnostic = 'http-error'; return; }
-      if ($response.body === '{}') { diagnostic = 'unchanged'; return; }
-      result = {body: '{}'};
-    } else {
-      result = {response: {status: 200, headers: {'Content-Type': 'application/json'}, body: '{}'}};
+    if (!["^https://api\\.weibo\\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj) || !Array.isArray(obj.items)) return false;
+      // fmz200 weibo_ads.js: only explicit advertising markers in known topic/search
+      // lists. Keep recommendations, navigation, profile and comment semantics.
+      const ad = item => record(item) && record(item.data) && (item.data.mblogtypename === '广告' || item.data.ad_state === 1 || item.data.is_ad === 1);
+      obj.items = obj.items.filter(item => !ad(item));
+      if (/\/searchall\/?(?:\?|$)/.test(url)) for (const item of obj.items) if (record(item) && Array.isArray(item.items)) item.items = item.items.filter(v => !ad(v));
+      return true;
     }
-    diagnostic = 'changed';
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Never log a request, body or exception.
+    if (state !== 'parse-error') state = 'exception';
   } finally {
-    if (matched) {
-      try { console.log('[JimmyAds][weibo] ' + diagnostic); } catch (_) {}
-    }
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
     $done(result);
   }
 })();
 ```
 
-**15.12 xiaohongshu.js**
+### xiaohongshu.js
 
 源文件：[scripts/ads/xiaohongshu.js](../scripts/ads/xiaohongshu.js)。
 
 <!-- SOURCE:scripts/ads/xiaohongshu.js -->
 ```javascript
 /* SPDX-License-Identifier: GPL-3.0-only
- * Adapted from fmz200/wool_scripts Scripts/xiaohongshu/xiaohongshu.js.
- * Original author: fmz200. Source revision and checksum: research/sources.lock.json.
- * Modifications 2026-10-19: splash only; no feed, download, watermark or account
- * changes; no storage or outbound requests; fail open.
- * Diagnostics use fixed codes only, never URL/header/body/exception data.
- * Restore upstream's missing start/end fields for recognized ad records.
- * License text: licenses/fmz200-GPL-3.0.txt.
+ * Advertising-only transformation adapted from fmz200/wool_scripts Scripts/xiaohongshu/xiaohongshu.js.
+ * Source revisions, hashes and modifications: research/sources.lock.json and
+ * research/ad-repair-evidence.json; license texts: licenses/.
+ * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
+// Generated by tools/build_ad_scripts.py; version AD-20261020.1
+
 (() => {
-  let result = {};
-  let matched = false;
-  let diagnostic = 'unsupported-body';
+  let result = {}, state = 'url-unmatched';
+  const version = "AD-20261020.1", id = "xiaohongshu";
+  const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+  function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+  function successful(x, codes = [0, '0']) {
+    return record(x) && x.success !== false && !x.error && !x.error_code &&
+      (!Object.prototype.hasOwnProperty.call(x,'code') || codes.includes(x.code));
+  }
+  function mtopSuccess(x) {
+    return !Object.prototype.hasOwnProperty.call(x,'ret') || (Array.isArray(x.ret) && x.ret.length > 0 && x.ret.every(v => typeof v === 'string' && /^SUCCESS(?:::|$)/.test(v)));
+  }
+  // Count UTF-8 bytes, not UTF-16 code units; no binary decoder assumptions.
+  function oversized(s) {
+    let n = 0;
+    for (let i=0; i<s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c < 128) n++; else if (c < 2048) n += 2;
+      else if (c >= 0xd800 && c <= 0xdbff && i+1 < s.length && s.charCodeAt(i+1) >= 0xdc00 && s.charCodeAt(i+1) <= 0xdfff) { n += 4; i++; }
+      else n += 3;
+      if (n > 2*1024*1024) return true;
+    }
+    return false;
+  }
   try {
-    const req = typeof $request === 'object' ? $request : {};
-    const resp = typeof $response === 'object' ? $response : {};
-    if (!/^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config(?:\?|$)/.test(String(req.url || ''))) return;
-    matched = true;
-    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
-    if (resp.status && !/^2\d\d$/.test(String(resp.status))) { diagnostic = 'http-error'; return; }
-    const obj = JSON.parse(resp.body);
-    diagnostic = 'unsupported-schema';
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false) return;
-    if (Object.prototype.hasOwnProperty.call(obj, 'code') && obj.code !== 0) return;
-    const groups = obj.data && obj.data.ads_groups;
-    if (!Array.isArray(groups)) return;
-    let supported = groups.length === 0;
-    // Keep all non-ad fields. Change only the upstream-recognized ad time windows.
-    function postpone(item) {
-      if (!item || typeof item !== 'object' || Array.isArray(item) || !Object.keys(item).length) return;
-      // A structured/non-numeric time field signals an unknown schema. Keep
-      // that record unchanged instead of inventing a conversion.
-      for (const key of ['start_time', 'end_time']) {
-        if (!Object.prototype.hasOwnProperty.call(item, key)) continue;
-        if (!(typeof item[key] === 'number' && Number.isFinite(item[key])) &&
-            !(typeof item[key] === 'string' && /^\d+$/.test(item[key]))) return;
+    const req = typeof $request === 'object' && $request ? $request : {};
+    const resp = typeof $response === 'object' && $response ? $response : {};
+    const url = String(req.url || '');
+    if (!["^https://edith\\.xiaohongshu\\.com/api/sns/(?:v\\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    state = 'unsupported-method';
+    if (!["GET", "POST"].includes(req.method)) return;
+    state = 'body-unavailable';
+    if (typeof resp.body !== 'string' || !resp.body.length) return;
+    state = 'body-too-large'; if (oversized(resp.body)) return;
+    state = 'http-error';
+    // Stash native examples use status. Do not silently accept malformed status
+    // or guess that a response with statusCode alone is a successful response.
+    if (resp.status !== undefined && !/^2\d\d$/.test(String(resp.status))) return;
+    if (resp.status === undefined && resp.statusCode !== undefined) { state = 'unsupported-status'; return; }
+    state = 'non-json';
+    if (!/^[\s]*[\[{]/.test(resp.body)) return;
+    state = 'parse-error'; const obj = JSON.parse(resp.body);
+    state = 'unsupported-schema'; if (!record(obj)) return;
+    const before = JSON.stringify(obj);
+    function transform(obj) {
+      // Maintained transformation fragment; runtime and diagnostics are generated.
+      if (!successful(obj) || !record(obj.data) && !Array.isArray(obj.data)) return false;
+      if (/\/system_service\/config\/?(?:\?|$)/.test(url)) {
+        if (!record(obj.data)) return false;
+        // Only splash is unambiguously advertising. Keep app_theme/store/loading_img.
+        if (!Object.prototype.hasOwnProperty.call(obj.data,'splash')) return false;
+        delete obj.data.splash; return true;
       }
-      supported = true;
-      for (const [key, value] of [['start_time', 3818332800], ['end_time', 3818419199]]) {
-        const before = item[key];
-        if (!Object.prototype.hasOwnProperty.call(item, key) || typeof before === 'number') item[key] = value;
-        else if (typeof before === 'string' && /^\d+$/.test(before)) item[key] = String(value);
+      if (/\/v6\/homefeed\/?(?:\?|$)/.test(url)) {
+        if (!Array.isArray(obj.data)) return false;
+        // Do not remove live streams, shopping notes, card icons or related questions.
+        obj.data = obj.data.filter(item => !(record(item) && record(item.ads_info) && Object.keys(item.ads_info).length));
+        return true;
       }
+      const groups = obj.data.ads_groups;
+      if (!Array.isArray(groups)) return false;
+      let supported = groups.length === 0;
+      function postpone(item) {
+        if (!record(item) || !Object.keys(item).length) return;
+        for (const key of ['start_time','end_time']) {
+          if (!Object.prototype.hasOwnProperty.call(item,key)) continue;
+          if (!(typeof item[key] === 'number' && Number.isFinite(item[key])) && !(typeof item[key] === 'string' && /^\d+$/.test(item[key]))) return;
+        }
+        supported = true;
+        for (const [key,value] of [['start_time',3818332800],['end_time',3818419199]]) item[key] = typeof item[key] === 'string' ? String(value) : value;
+      }
+      for (const group of groups) { postpone(group); if (group && Array.isArray(group.ads)) group.ads.forEach(postpone); }
+      return supported;
     }
-    for (const group of groups) {
-      postpone(group);
-      if (group && Array.isArray(group.ads)) group.ads.forEach(postpone);
-    }
-    const after = JSON.stringify(obj);
-    if (after !== JSON.stringify(JSON.parse(resp.body))) {
-      result = {body: after};
-      diagnostic = 'changed';
-    } else if (supported) diagnostic = 'unchanged';
+    if (!transform(obj)) return;
+    const body = JSON.stringify(obj);
+    state = body === before ? 'unchanged' : 'changed';
+    if (state === 'changed') result = {body};
   } catch (_) {
-    // Unknown/broken responses stay unchanged. Never log response/account data.
+    if (state !== 'parse-error') state = 'exception';
   } finally {
-    if (matched) {
-      try { console.log('[JimmyAds][xiaohongshu] ' + diagnostic); } catch (_) {}
-    }
+    if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
     $done(result);
   }
 })();

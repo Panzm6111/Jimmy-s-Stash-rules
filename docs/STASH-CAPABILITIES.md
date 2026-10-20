@@ -1,12 +1,12 @@
 # Stash 能力、证据等级与版本门槛
 
-核实日期：2026-10-19。客户端限定 iPhone Stash，未使用其他内核代替验收。
+核实日期：2026-10-20。客户端限定 iPhone Stash，未使用其他内核代替验收。
 
 ## 当前重要阻塞
 
 **当前云网络策略拒绝访问 Stash 官方文档站 [stash.wiki](https://stash.wiki/)**：HTTPS CONNECT 返回 403，页面内容未下载。所保存的域名放行草稿尚未应用到本机（运行配置 revision=1，custom allowed_hosts 为空）。这不是 Stash 网站返回的业务错误，也不是已获官方支持的证明。
 
-需要环境所有者在环境设置审核并保存网络新增域名 `stash.wiki`、`www.stash.wiki`（以及为后续元数据研究申请的 `api.github.com`），按界面要求发布。随后重试官方文档，补全本文件与配置。草稿保存不等于权限已生效，不会假称已读到官方最新正文。
+本轮再次尝试官方HTTP文档，仍为403，未读到正文。没有通过代理/镜像规避策略。按用户给出的当前官方调查，改用`http.url-rewrite`和原生空响应动作；旧`rewrite`别名是否仍兼容未知，不把它直接认定为全部广告失效的原因。继续完成其他可用源码和本地检查，不要求用户为此暂停全部修复。
 
 因此，这轮配置是**已有原生格式参考与离线验证的候选交付**，未声称官方最低版本、真实合并、url-test 的空池细节已经核实。用户已反馈原配置节点正常、HTTP/MITM已开启且自建证书完全信任；这不等于本次自动测速修改或广告效果通过设备验收。更新后仍需完成 [手机验收](PHONE-CHECKLIST.md)。
 
@@ -21,9 +21,12 @@
 | 自动测速 | 7池采用原生 `url-test`，HTTPS 204地址、1800秒检查间隔，选择测试延迟最低的可用候选；没有添加未经证实的tolerance/lazy字段 | [历史原生示例](https://github.com/jinzaizhichi/stash-example/blob/c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml#L434) 实际注释说明url-test选择最短URL测试延迟，fallback按顺序选可用候选。示例停止维护，仅参考字段，不复制无许可代码。当前默认容差、缓存、测试和切换时机未实测；不将其他内核行为当作Stash证明 |
 | 规则集 | HTTP classical payload；只留下 DOMAIN/SUFFIX/KEYWORD/IP-CIDR/IP-CIDR6；每日检查公共快照 | 规则数据与完整来源已实际读取；native 格式参考与普通结构测试不等于真实 Stash 核心校验。IP-ASN/PROCESS-NAME 等未核实项已剔除 |
 | MITM | 仅 `http.mitm` 中的精确域名，设备生成证书，不含 CA 私钥 | app2smile Stash 原生覆写直接使用 `http.mitm`；当前证书菜单与最低版本待官方和设备确认；不设置泛域名或关闭 TLS 校验 |
-| HTTP拒绝重写 | `http.rewrite` 的 `正则 - reject`；仅独立广告路径 | 已读取 blackmatrix7 固定SHA的原生 `rewrite/Stash/Advertising/Advertising.stoverride`；该文件头2025-08-26。不是直接套用QX重写；不假设reject等于reject-dict/img/200，具体返回、合并和版本仍待官方/手机核对 |
-| 响应脚本 | `http.script` + `script-providers`，response、require-body、timeout；只用 `$request/$response/$done`；推荐公开入口使用与已读原生模块相同的url/interval声明 | 源码原生覆写已读；上游模块标 iOS≥15。**这不是 Stash 最低版本的官方证明**，本项目不凭此编造版本号；也不能把URL替代content说成用户本次DNS/节点错误的根因修复 |
-| 请求空响应 | `http.script`的request、require-body:false；`$done({response:{status:200,headers,body}})`，只用于严格匹配的广告路径 | NobyDa固定SHA的原生Stash模块与对应JS调用链已读并校验，链接见[SOURCES](SOURCES.md#广告失效复审与原生请求响应证据2026-10-19)。不是复制QX动作名；最低版本及设备执行待确认 |
+| HTTP原生URL重写 | `http.url-rewrite`；保留reject/reject-200/reject-dict/reject-img语义，校验器也接受reject-array | 依据用户本轮提供的当前官方文档调查。旧blackmatrix7原生文件使用rewrite，别名兼容仍未证实；当前官文正文下载失败，最低Stash版本未知。用户将全部更新到最新版；没有编造版本号 |
+| 响应脚本 | `http.script` + `script-providers`；response、require-body:true、timeout:5；默认`argument: diagnostic=0`，临时1开启固定诊断 | app2smile原生覆写、blackmatrix7锁定`AdvertisingScript.stoverride`中的argument声明已实际读取并哈希锁定；不是当前官方或手机执行证明。`$response.status`的实际类型、自动长度/压缩处理需真机验收 |
+| 固定空响应与Mock | 已移除原共享请求JS；原生URL动作直接处理固定空结果。需要先识别真实成功结构的业务仍用响应JS | 用户提供当前官方列出五种reject和Mock；本轮固定结果不需自定义Mock。没有把普通拒绝与合法无广告结果视为相同，没有声称验证了原生返回字节/头部 |
+| 逐App开关 | 原主入口只含分流/通用域名，40个原专项按独立覆写启停；关闭不会留下主入口重复的HTTP处理 | 本地逐款移除测试通过；Stash实际数组合并需最终预览。旧整合广告增强是另一种总开关模式，不可混装 |
+| 临时诊断探针 | 仅已审阅45个精确主机的request handler，require-body:false；只记录URL是否命中预期，不改请求 | 字段形态有既有原生request参考；诊断覆写默认关闭，应与正式App专项隔离对照。没日志不能单独证明没进MITM |
+| HTTP/3 | 当前HTTP/3不进改写引擎，不能靠force-http-engine宣称解密 | 依据用户提供官方调查；本轮无真实QUIC证据，未添加UDP阻断。不根据h3域名猜传输协议 |
 | 本地包的内嵌脚本 | `script-providers.<name>.content` 保存原JS正文，不加自造type字段；rule-providers按原优先级展开为普通规则 | 历史 `jinzaizhichi/stash-example@c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml` 实际存在content模式，原注释“仅推荐作为开发使用”，文件亦已停止维护。只参考原生字段，不复制无许可示例代码；当前官方/最低版本和iPhone导入仍未验证 |
 | 脚本更新 | `script-providers.interval: 86400`，稳定脚本 URL；源脚本已窄化并固定本仓库路径 | interval 字段来自原生覆写；何时刷新/离线缓存失效行为仍待文档与手机验证，不保证断网更新 |
 | 策略选择保留 | 固定配置名称、策略组名、provider 名；不写未经核实的 profile.store-selected | native 持久化行为未验证。普通 YAML 合并不能保存 UI 的运行时选择；更新前记下选择，更新后核对，必要时重选 |
@@ -44,4 +47,4 @@
 
 [research/projects.json](../research/projects.json) 与 [sources.lock.json](../research/sources.lock.json) 可以复查已读原生模块和脚本，而不是用另一个代理客户端代替 Stash。
 
-2026-10-19 补充：淘宝、小红书保留响应handler并修正字段兼容；微博改请求handler、脚本兼容旧响应式配置，详情见 [APP-SPLASH.md](APP-SPLASH.md)。新增固定console诊断仅含模块和状态，不含请求数据。精确域名不构成全域解密；不把原QX配置直接导入，不使用外部转换网站。当前官方文档访问阻塞仍未解除，设备验收仍独立进行。
+AD-20261020.1：真实实现、官方访问限制、脚本约定与待真机项统一见[详细规格](AD-ARCHITECTURE.md)。本轮未修改地区策略或私人订阅机制，自动签到暂停。

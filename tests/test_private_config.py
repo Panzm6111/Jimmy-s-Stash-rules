@@ -39,7 +39,7 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertEqual(config['dns'], self.template['dns'])
         self.assertNotIn('external-controller', config)
         self.assertNotIn('proxy-providers', config)
-        self.assertEqual(config['http'], self.template['http'])
+        self.assertEqual(config.get('http'), self.template.get('http'))
 
     def test_region_and_complement_and_neutral_defaults(self):
         config, report = compose(self.source)

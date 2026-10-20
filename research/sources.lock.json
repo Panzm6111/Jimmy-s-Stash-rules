@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-19",
+  "checked_at": "2026-10-20",
   "repository": "Panzm6111/Jimmy-s-Stash-rules",
   "branch": "main",
   "upstream": {
@@ -128,7 +128,7 @@
       "output": "scripts/ads/bilibili.js",
       "license": "MIT",
       "native_reference": "module/bilibili.stoverride",
-      "output_sha256": "09994000b9d3c5332848f6788dd1948e9f7f961b81aecd4247e39c78792e8cc5"
+      "output_sha256": "54b416c99de3dd6d401cac10481883bafcebf677e18981383338384a007bc43e"
     },
     {
       "repository": "app2smile/rules",
@@ -139,7 +139,7 @@
       "output": "scripts/ads/tieba.js",
       "license": "MIT",
       "native_reference": "module/tieba.stoverride",
-      "output_sha256": "a9a763d2c3b4bb185d1fcc12871d13431860ca20a10fcc1ecf613e1a3464da6e"
+      "output_sha256": "6c39725a2cf24c51bdccc5ee6d470feeea2c637d9714e3b7767632407b7cf6c3"
     },
     {
       "repository": "fmz200/wool_scripts",
@@ -148,11 +148,11 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/xiaohongshu/xiaohongshu.js",
       "source_sha256": "318d89bce1117edb26a93b383804e195649ec4674a04efa9e3ddb4ef7f34b498",
       "output": "scripts/ads/xiaohongshu.js",
-      "output_sha256": "0da66fb2483bce7aad7c17ef06db80fc102380ba2e192c93416976bbdb103e6a",
+      "output_sha256": "f5f79fdf840a88e6c46e6786386c1243b247721b612699fe133aa9fecd48988d",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
-      "adaptation": "原来源为其他客户端的响应处理/端点规则；仅提取明确开屏范围，重新制作 Stash 原生覆写和本地响应处理，不使用外部转换站。"
+      "adaptation": "仅splash_config时间、config.splash、v6 homefeed中非空ads_info赞助项；保留普通带货/直播和全部水印、下载、画质、用户字段；无正文日志、存储和外联。"
     },
     {
       "repository": "fmz200/wool_scripts",
@@ -161,7 +161,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/myBlockAds.js",
       "source_sha256": "4cf62100424886068a5470daecec319e93ccd034c647d79a9daaa72bbbc341bb",
       "output": "scripts/ads/taobao.js",
-      "output_sha256": "134eab65f7443a19f5a4b401fe7784443d4b21cea6b31a18e06527b342a7f19d",
+      "output_sha256": "05b71cbaa7950ce569b98ddcce59eca448b29db4ec650e99ee6a3f1f2551b57a",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -170,15 +170,15 @@
     {
       "repository": "fmz200/wool_scripts",
       "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
-      "source_path": "QuantumultX/rewrite/weibo.snippet",
-      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/weibo.snippet",
-      "source_sha256": "c8b47d5f2e990f065d98cac2d70d5866c97443d23d96a8393607b13a464e9b29",
+      "source_path": "Scripts/weibo/weibo_ads.js",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/weibo/weibo_ads.js",
+      "source_sha256": "0f1f3eba5b2c96f4f089525ad033b578b6a18a2fd99eb95409e5b0816f4a4b34",
       "output": "scripts/ads/weibo.js",
-      "output_sha256": "33f30a06cc01171d444fc89204578004d979a6da61a01f6cd8343afcddf62cb1",
+      "output_sha256": "db34ab8f1236362feaac08a4bbebdaaab422cb3d60aff5e9f68f20a88b65a7ca",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
-      "adaptation": "Two dedicated splash endpoints; native request empty JSON; compatible with older response handlers. Fixed non-sensitive diagnostic only."
+      "adaptation": "仅话题/搜索中明确广告标记；开屏改用原生reject-dict，广告SDK/素材单独域名路由；不复制其日志、导航/推荐/账号修改。"
     },
     {
       "repository": "fmz200/wool_scripts",
@@ -187,7 +187,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js",
       "source_sha256": "9d31582028a31ea605e69d09aa9e33949e57050006a8e0f3deb79b1c89933acd",
       "output": "scripts/ads/alipan.js",
-      "output_sha256": "c90be8f4fa02ca8d4857229e49a82066305ee53b101a97dcf441d7dbb15fd1fa",
+      "output_sha256": "729a277242f2bbbe626c34716e4eddff031c161d3011b8f39e7e346799991aa8",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -200,7 +200,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js",
       "source_sha256": "76fe899db1e045aaff2d71d6ff3c58cb665bac52a5996ff20e56079a02a6451c",
       "output": "scripts/ads/cainiao.js",
-      "output_sha256": "95e56c4c6c787fc85adcaf0be5ac9be8fb68b2f4b4338828e1d1c4d3b36a84d4",
+      "output_sha256": "4d0f186e786bb281b6e9e5bff468867a43c0ca05e446fd49f2db07e3f74adae7",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -213,11 +213,11 @@
       "source_url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
       "source_sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
       "output": "scripts/ads/jingdong.js",
-      "output_sha256": "1586841af3a30ccf246d98730c49d3027323db6b4bfa6fa578067e03676515ab",
+      "output_sha256": "432e156d6e7cfc9d720a0a232c8b108fa1cc983640de516bccbe92de26cf32f6",
       "license": "GPL-2.0",
       "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
       "native_reference": "script/startup/startup.stoverride",
-      "adaptation": "仅 functionId=start 中展示次数/时长字段；保留订单/商品/京豆/优惠"
+      "adaptation": "仅URL唯一functionId=start的二维/平铺已知广告展示控制；正常订单、券、倒计时保留，POST正文函数和未知结构不猜测。"
     },
     {
       "repository": "blackmatrix7/ios_rule_script",
@@ -226,7 +226,7 @@
       "source_url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
       "source_sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
       "output": "scripts/ads/meituan.js",
-      "output_sha256": "f9eca13c143039ad7a47320ffb0e056f8cf9e1886f1f5e7996656d35bb18ce53",
+      "output_sha256": "71f1c46a1230f684b5f58b94e8b306325a17eaa964d51dbc870efa8f1f492798",
       "license": "GPL-2.0",
       "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
       "native_reference": "script/startup/startup.stoverride",
@@ -239,7 +239,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
       "source_sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d",
       "output": "scripts/ads/luckin.js",
-      "output_sha256": "ebe583ac0d7c8a6194470787c75ffc5e80cf04539d8798ff2ea01616069aead6",
+      "output_sha256": "109b19679e9a43c0d69b5168ad9b05d1494a88df0f7a74f1b041a93c1414997b",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -252,22 +252,11 @@
       "source_url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js",
       "source_sha256": "f661257b7bdedf5de63c6a9272f4e646829d8b95607f60faecd9ced39afa2c24",
       "output": "scripts/ads/wechat-articles.js",
-      "output_sha256": "7cd38a1b9bc4b66eea6f7295806e35ece420d88676f3b3efa7f0fc5a838b19f5",
+      "output_sha256": "831411fb29e910a29a288c8fd77b1a4579ecf9074ae4a9e7ee6b29fe52e0c2f0",
       "license": "GPL-3.0-only",
       "license_file": "licenses/NobyDa-GPL-3.0.txt",
       "native_reference": null,
       "adaptation": "仅公众号 getappmsgad 的广告数组/数量；不改朋友圈、视频号、好友聊天或安全链接"
-    },
-    {
-      "repository": "fmz200/wool_scripts",
-      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
-      "source_path": "QuantumultX/rewrite/rewrite.snippet",
-      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
-      "source_sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d",
-      "output": "scripts/ads/empty-response.js",
-      "license": "GPL-3.0-only",
-      "adaptation": "16 dedicated ad paths; native Stash request synthetic empty JSON/200; no response inspection, credentials or outbound requests. Generated from reviewed ad-catalog.json.",
-      "output_sha256": "6983e6662f453a51b54acd4da429639e63affdbf43a7b9c21349c4674fd9a3be"
     }
   ],
   "ad_supporting_sources": [
@@ -360,6 +349,11 @@
       "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/IPA-Installer/IPA-Installer.js",
       "sha256": "c7b2887cafcbe563f022488e04a7fafed9160465fc939f5d0cfa048232216499",
       "purpose": "Read-only native Stash request-handler response-envelope evidence; no IPA installer code included or executed."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+      "sha256": "eeed89b368eceaed7cd85d20c1f6b7cceeaa6becd8a62a59a758aca1af942ff7",
+      "purpose": "native http.script.argument declaration reference; historical upstream, not official version evidence"
     }
   ],
   "ad_catalog_checked_at": "2026-10-19"

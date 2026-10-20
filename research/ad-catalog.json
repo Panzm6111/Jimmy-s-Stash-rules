@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-19",
+  "checked_at": "2026-10-20",
   "purpose": "图片135款App调查对应的人工审核候选专项；用户反馈整体去广告效果不足，尚无逐款设备命中证据，不能按模块数量宣称有效覆盖。",
   "native_rewrite_reference": "bm-native",
-  "rewrite_adaptation": "不导入其他客户端动作名。16条reject-dict/reject-200由Stash原生request脚本返回200与空JSON/空正文；14条来源reject保持普通拒绝。联通2条来源reject-img仍普通拒绝，未实现等价图片响应。仅广告专用路径，真实效果待设备验收。",
+  "rewrite_adaptation": "使用当前官方文档列出的 http.url-rewrite 动作；保留 reject/reject-200/reject-dict/reject-img/reject-array 的不同语义。官方站本轮网络403，最低版本和旧rewrite别名待原生核实。固定空响应不再使用请求脚本。",
   "sources": {
     "fmz-rewrite": {
       "repository": "fmz200/wool_scripts",
@@ -1193,7 +1193,8 @@
         "negative": [
           "https://api.alipan.com/adrive/v1/file/get",
           "https://member.alipan.com/v2/activity/sign_in_luckyBottle"
-        ]
+        ],
+        "argument": "diagnostic=0"
       },
       "notes": "这是推广横幅处理，不是完整开屏控制；保留备份、功能入口、新闻、签到和权益。不应把四种横幅候选扩大成整App有效覆盖。",
       "device_tested": false,
@@ -1241,7 +1242,8 @@
         "negative": [
           "https://cn-acs.m.cainiao.com/gw/mtop.cainiao.guoguo.nbnetflow.ads.mshow.cn/1.0/",
           "https://cn-acs.m.cainiao.com/gw/mtop.nbfriend.message.conversation.list.cn/1.0/"
-        ]
+        ],
+        "argument": "diagnostic=0"
       },
       "notes": "上游同时处理 ads.show 与 mshow，且删除部分券、裹酱积分、寄件和消息入口；本模块不采用这些业务删改，不能据此称菜鸟全广告已覆盖。",
       "device_tested": false,
@@ -1277,7 +1279,8 @@
         "negative": [
           "https://api.m.jd.com/client.action?functionId=startExtra",
           "https://api.m.jd.com/client.action?functionId=myOrderInfo"
-        ]
+        ],
+        "argument": "diagnostic=0"
       },
       "notes": "已核对源码实际 images/showTimes/showTimesDaily 分支；原证据摘录曾错误指向其他App，现已更正。POST正文中的 functionId 不捕获；未知结构放行，不拦整个 client.action，也不处理订单、京豆和券。",
       "device_tested": false,
@@ -1321,13 +1324,44 @@
       "id": "meituan",
       "app": "美团",
       "file": "modules/ads/meituan.stoverride",
-      "scope": "仅美团外卖 wmapi 的 loadInfo.startpicture.ad/mk；不代表美团主App开屏",
-      "license": "GPL-2.0",
-      "source": "bm-startup",
+      "scope": "外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
       "mitm": [
-        "wmapi.meituan.com"
+        "wmapi.meituan.com",
+        "img.meituan.net",
+        "s3plus.meituan.net",
+        "flowplus.meituan.net"
       ],
-      "rewrite": [],
+      "rewrite": [
+        {
+          "match": "^https://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$)",
+          "positive": "https://wmapi.meituan.com/api/v7/openscreen?x=1",
+          "negative": [
+            "https://wmapi.meituan.com/api/v7/openscreenExtra",
+            "https://wmapi.meituan.com/api/v7/coupon/list"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$)",
+          "positive": "https://img.meituan.net/bizad/bizad_brandCpt_123.jpg",
+          "negative": [
+            "https://img.meituan.net/product/123.jpg",
+            "https://img.meituan.net/goodsawardpic/abc.png.webp"
+          ],
+          "upstream_action": "reject-img"
+        },
+        {
+          "match": "^https://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$)",
+          "positive": "https://s3plus.meituan.net/v1/test/linglong/ad.jpg",
+          "negative": [
+            "https://s3plus.meituan.net/v1/test/product/ad.jpg",
+            "https://s3plus.meituan.net/v1/test/linglong/ad.mp4"
+          ],
+          "upstream_action": "reject-img"
+        }
+      ],
       "domains": [],
       "script": {
         "name": "jimmy_meituan_ads",
@@ -1337,35 +1371,57 @@
         "negative": [
           "https://wmapi.meituan.com/api/v7/loadInfoExtra",
           "https://wmapi.meituan.com/api/v7/coupon/list"
-        ]
+        ],
+        "argument": "diagnostic=0"
       },
-      "notes": "源码分支明确是美团外卖，不能把它标成美团主App全部广告支持。当前主App/外卖频道是否仍使用该端点未知；保留其他启动数据和领券。",
+      "notes": "覆写新增原生路径取自fmz200（GPL-3.0-only）；独立meituan.js响应资源仍源于blackmatrix7并保持GPL-2.0，只通过provider引用，不拼接代码。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
         {
           "line": 76,
-          "text": "      // 美团外卖"
+          "text": "      // 美团外卖",
+          "source": "bm-startup"
         },
         {
           "line": 77,
-          "text": "      case /^https?:\\/\\/wmapi\\.meituan\\.com\\/api\\/v\\d+\\/loadInfo?/.test($.request.url):"
+          "text": "      case /^https?:\\/\\/wmapi\\.meituan\\.com\\/api\\/v\\d+\\/loadInfo?/.test($.request.url):",
+          "source": "bm-startup"
         },
         {
           "line": 80,
-          "text": "          if (obj.data.startpicture.hasOwnProperty(\"ad\")) {"
+          "text": "          if (obj.data.startpicture.hasOwnProperty(\"ad\")) {",
+          "source": "bm-startup"
         },
         {
           "line": 81,
-          "text": "            obj.data.startpicture.ad = [];"
+          "text": "            obj.data.startpicture.ad = [];",
+          "source": "bm-startup"
         },
         {
           "line": 82,
-          "text": "          } else if (obj.data.startpicture.hasOwnProperty(\"mk\")) {"
+          "text": "          } else if (obj.data.startpicture.hasOwnProperty(\"mk\")) {",
+          "source": "bm-startup"
         },
         {
           "line": 83,
-          "text": "            obj.data.startpicture.mk = [];"
+          "text": "            obj.data.startpicture.mk = [];",
+          "source": "bm-startup"
+        },
+        {
+          "line": 3179,
+          "text": "^https?:\\/\\/wmapi\\.meituan\\.com\\/api\\/v7\\/(loadInfo|openscreen|startpicture)\\? url reject-dict",
+          "source": "fmz-rewrite"
+        },
+        {
+          "line": 3180,
+          "text": "^https?:\\/\\/(s3plus|flowplus)\\.meituan\\.net\\/v\\d\\/\\w+\\/linglong\\/\\w+\\.(gif|jpg|mp4) url reject-img",
+          "source": "fmz-rewrite"
+        },
+        {
+          "line": 3181,
+          "text": "^https?:\\/\\/img\\.meituan\\.net\\/bizad\\/bizad_brandCpt_\\d+\\.jpg url reject-img",
+          "source": "fmz-rewrite"
         }
       ]
     },
@@ -1389,7 +1445,8 @@
         "negative": [
           "https://capi.lkcoffee.com/resource/m/eorder/product/popAppTagProductList",
           "https://capi.lkcoffee.com/resource/m/sys/app/adposNewExtra"
-        ]
+        ],
+        "argument": "diagnostic=0"
       },
       "notes": "只在已成功 status=SUCCESS 的JSON上返回同源参考的空广告结果；不采用兑换页/商品弹窗过滤。",
       "device_tested": false,
@@ -1422,7 +1479,8 @@
           "https://mp.weixin.qq.com/s/article",
           "https://mp.weixin.qq.com/mp/getappmsgadExtra",
           "https://mp.weixin.qq.com/mp/cps_product_info?action=1"
-        ]
+        ],
+        "argument": "diagnostic=0"
       },
       "notes": "公开源仍保留这个历史端点，但没有当前微信版本调用证据；只能作为公众号候选，不称微信整体去广告。保留原 appid 与其他文章字段。",
       "device_tested": false,

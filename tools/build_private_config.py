@@ -19,7 +19,7 @@ import uuid
 
 import yaml
 
-from build_local_bundle import dump
+from build_local_bundle import dump, flatten
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
@@ -150,7 +150,7 @@ def verify(config, template, expected_nodes):
 
 
 def compose(source, template=None):
-    template = copy.deepcopy(template if template is not None else load('config/stash.yaml'))
+    template = flatten(template if template is not None else load('config/stash.yaml'))
     require(isinstance(source, dict), '来源不是 YAML 配置映射。')
     require(not source.get('proxy-providers'), '来源含远程代理集；请提供已包含实际节点的导出。')
     group_names = {g['name'] for g in template['proxy-groups']}
@@ -228,7 +228,7 @@ def render(config):
             '# 海外AI 默认美国，Apple 默认直连；测速不代表解锁，不跨地区兜底。\n'
             '# 不含机场旧DNS/分流/控制端口；连接字段原样保留，重名节点仅加显示前缀。\n'
             '# 本地节点和内嵌规则不会自动跟随机场/公共配置更新，需要重新合成。\n'
-            '# 12份广告脚本由Stash从本项目下载；开屏专项仍需设备自建证书。\n'
+            '# App专项沿用独立覆写开关；本快照不内置HTTP专项，按模块教程按需添加。\n'
             '# 原生解析、Reality/Vision支持、连接、解锁和广告效果仍须手机测试。\n'
             '# 来源与许可证：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
             + dump(config))

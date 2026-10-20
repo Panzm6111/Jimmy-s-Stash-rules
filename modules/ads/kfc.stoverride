@@ -3,9 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 肯德基广告专项（可选）
-desc: 仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。默认不导入；需设备验收。
+desc: AD-20261020.1；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。独立启停；需设备验收。
 http:
   mitm:
   - res.kfc.com.cn
-  rewrite:
+  url-rewrite:
   - ^https://res\.kfc\.com\.cn/advertisement/[^?#]*(?:\?|$) - reject

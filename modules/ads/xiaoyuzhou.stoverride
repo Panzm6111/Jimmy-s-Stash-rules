@@ -3,17 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 小宇宙广告专项（可选）
-desc: 仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。默认不导入；需设备验收。
-script-providers:
-  jimmy_ad_empty_response:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
-    interval: 86400
+desc: AD-20261020.1；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。独立启停；需设备验收。
 http:
   mitm:
   - api.xiaoyuzhoufm.com
-  script:
-  - match: ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$)
-    name: jimmy_ad_empty_response
-    type: request
-    require-body: false
-    timeout: 5
+  url-rewrite:
+  - ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$) - reject-dict

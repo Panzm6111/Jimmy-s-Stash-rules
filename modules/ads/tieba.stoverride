@@ -1,14 +1,17 @@
+# SPDX-License-Identifier: MIT
+# Source pins and independent licenses: docs/SOURCES.md
 name: 贴吧开屏广告处理（可选）
-desc: 仅 JSON 开屏广告；不改帖子、登录、支付或券接口。默认不导入，需设备验收。
+desc: AD-20261020.1；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。默认不导入，需设备验收。
 http:
   mitm:
-    - tiebac.baidu.com
+  - tiebac.baidu.com
   script:
-    - match: ^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(\?|$)
-      name: jimmy_tieba_ads
-      type: response
-      require-body: true
-      timeout: 5
+  - match: ^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(\?|$)
+    name: jimmy_tieba_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
 script-providers:
   jimmy_tieba_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js

@@ -10,6 +10,7 @@ function execute(moduleName, url, body, method = 'GET', status = 200, logCapture
   let calls = 0, output;
   const logs = [];
   const context = {
+    $argument: logCapture ? 'diagnostic=1' : 'diagnostic=0',
     $request: {url, method, headers: {Cookie: 'TEST_ONLY_NEVER_LOG'}},
     $response: {body: typeof body === 'string' ? body : JSON.stringify(body), status, headers: {'Set-Cookie': 'TEST_RESPONSE_COOKIE_NEVER_LOG'}},
     $done: value => { calls++; output = JSON.parse(JSON.stringify(value)); },
@@ -21,13 +22,10 @@ function execute(moduleName, url, body, method = 'GET', status = 200, logCapture
   if (requestOnly) delete context.$response;
   vm.runInNewContext(code, context, {timeout: 1000});
   assert.equal(calls, 1);
-  if (['taobao','xiaohongshu','weibo'].includes(moduleName)) {
-    assert.ok(logs.length <= 1, 'at most one fixed diagnostic per matching request');
-    for (const values of logs) {
-      assert.equal(values.length,1);
-      assert.match(values[0],new RegExp('^\\[JimmyAds\\]\\['+moduleName+'\\] (changed|unchanged|unsupported-body|unsupported-schema|unsupported-method|http-error)$'));
-    }
-  } else assert.deepEqual(logs,[], 'other modules must not log');
+  for (const values of logs) {
+    assert.equal(values.length, 1);
+    assert.match(values[0], /^\[JimmyAds\]\[[a-z0-9-]+\]\[AD-20261020\.1\] [a-z-]+$/);
+  }
   if (logCapture) logCapture.push(...logs.map(values=>values[0]));
   return output;
 }
@@ -167,45 +165,23 @@ test('淘宝：过期、失败、混合失败、JSONP和未知结构不改', () 
   const mismatch=taobaoPayload();mismatch.api='mtop.taobao.other.get';
   assert.deepEqual(execute('taobao',tb,mismatch),{});
 });
-test('微博：兼容旧response配置，两个专用开屏接口返回空对象', () => {
-  for(const url of [wb,'https://bootpreload.uve.weibo.com/v1/ad/preload?x=1']) {
-    assert.deepEqual(execute('weibo',url,{code:200,ads:[{id:'test-ad'}]}),{body:'{}'});
-  }
-});
-test('微博：消息、正文、登录、签到、会员及HTTP错误不触碰', () => {
-  for(const url of ['https://api.weibo.cn/2/account/login','https://api.weibo.cn/2/messageflow','https://api.weibo.cn/2/statuses/friends_timeline','https://api.weibo.cn/2/checkin/show','https://new.vip.weibo.cn/littleskin/preview',wb+'Fake',wb.replace('bootrealtime.uve.weibo.com','bootrealtime.uve.weibo.com.evil.example'),'https://bootrealtime.uve.weibo.com/v1/ad/preload']) {
-    assert.deepEqual(execute('weibo',url,{ads:[1]}),{});
-  }
-  assert.deepEqual(execute('weibo',wb,{ads:[1]},'GET',503),{});
-  assert.deepEqual(execute('weibo',wb,{ads:[1]},'GET',401),{});
-});
-test('微博：旧response配置不再依赖上游JSON格式', () => {
-  for(const body of [{code:401,ads:[1]},{error:'ad endpoint error'},[], 'non-json ad response']) {
-    assert.deepEqual(execute('weibo',wb,body),{body:'{}'});
-  }
-  assert.deepEqual(execute('weibo',wb,'{}'),{});
-});
-test('微博：request配置直接生成原生空JSON响应，不访问上游', () => {
-  for(const url of [wb,'https://bootpreload.uve.weibo.com/v1/ad/preload?x=1']) {
-    const logs=[];
-    const out=execute('weibo',url,null,'POST',200,logs,true);
-    assert.deepEqual(out,{response:{status:200,headers:{'Content-Type':'application/json'},body:'{}'}});
-    assert.deepEqual(logs,['[JimmyAds][weibo] changed']);
-  }
-  assert.deepEqual(execute('weibo',wb,null,'DELETE',200,[],true),{});
-  const logs=[];
-  assert.deepEqual(execute('weibo','https://api.weibo.cn/2/account/login',null,'POST',200,logs,true),{});
-  assert.deepEqual(logs,[]);
+test('微博：旧请求JS不再参与开屏，原生重写独立处理；脚本只改明确广告项', () => {
+  assert.deepEqual(execute('weibo',wb,{ads:[1]}),{});
+  const u='https://api.weibo.cn/2/statuses/container_timeline_topicpage?x=1';
+  const keep={data:{mblogtypename:'normal',id:7}};
+  const out=execute('weibo',u,{items:[{data:{mblogtypename:'广告'}},keep]});
+  assert.deepEqual(JSON.parse(out.body),{items:[keep]});
+  for(const path of ['messageflow','account/login','statuses/friends_timeline','checkin/show']) assert.deepEqual(execute('weibo','https://api.weibo.cn/2/'+path,{items:[{data:{is_ad:1}}]}),{});
 });
 test('新增三模块：处理幂等，不在每次重载继续改变数据', () => {
-  const cases=[['xiaohongshu',xhs,{code:0,data:{ads_groups:[{start_time:1,end_time:2}]}}],['taobao',tb,taobaoPayload()],['weibo',wb,{ads:[1]}]];
+  const cases=[['xiaohongshu',xhs,{code:0,data:{ads_groups:[{start_time:1,end_time:2}]}}],['taobao',tb,taobaoPayload()],['weibo','https://api.weibo.cn/2/searchall',{items:[{data:{is_ad:1}}]}]];
   for(const [name,url,body] of cases) {
     const out=execute(name,url,body);assert.equal(typeof out.body,'string');
     assert.deepEqual(execute(name,url,out.body),{});
   }
 });
 test('新增三模块：非成功HTTP、非GET/POST与缺失环境安全结束', () => {
-  for(const [name,url,body] of [['xiaohongshu',xhs,{code:0,data:{ads_groups:[{start_time:1}]}}],['taobao',tb,taobaoPayload()],['weibo',wb,{ads:[1]}]]) {
+  for(const [name,url,body] of [['xiaohongshu',xhs,{code:0,data:{ads_groups:[{start_time:1}]}}],['taobao',tb,taobaoPayload()],['weibo','https://api.weibo.cn/2/searchall',{items:[{data:{is_ad:1}}]}]]) {
     assert.deepEqual(execute(name,url,body,'GET',503),{});
     if(name!=='weibo') assert.deepEqual(execute(name,url,'x'.repeat(2*1024*1024+1)),{});
     assert.deepEqual(execute(name,url,body,'HEAD'),{});
@@ -222,36 +198,33 @@ test('淘宝/小红书诊断：固定状态区分处理、空广告、未知结�
   for(const [name,url,body,empty] of cases) {
     const logs=[];
     const out=execute(name,url+'?token=EXAMPLE_NOT_A_SECRET',{...body,private:'TEST_BODY_NEVER_LOG'},'GET','200',logs);
-    assert.deepEqual(logs,[`[JimmyAds][${name}] changed`]);
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] changed`]);
     logs.length=0;
     assert.deepEqual(execute(name,url,out.body,'GET',200,logs),{});
-    assert.deepEqual(logs,[`[JimmyAds][${name}] unchanged`]);
-    for(const [payload,status,expected] of [[empty,200,'unchanged'],[{unknown:'TEST_SCHEMA_NEVER_LOG'},200,'unsupported-schema'],['TEST_PARSE_EXCEPTION_NEVER_LOG',200,'unsupported-body'],[body,503,'http-error']]) {
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] unchanged`]);
+    for(const [payload,status,expected] of [[empty,200,'unchanged'],[{unknown:'TEST_SCHEMA_NEVER_LOG'},200,'unsupported-schema'],['TEST_PARSE_EXCEPTION_NEVER_LOG',200,'non-json'],[body,503,'http-error']]) {
       logs.length=0;
       assert.deepEqual(execute(name,url,payload,'GET',status,logs),{});
-      assert.deepEqual(logs,[`[JimmyAds][${name}] ${expected}`]);
+      assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] ${expected}`]);
     }
   }
 });
 test('三模块诊断：未知路径不记录，URL/请求头/响应头/响应体内容不出现在日志', () => {
-  for(const [name,url,body] of [['taobao',tb,taobaoPayload()],['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'TEST_BODY_NEVER_LOG'}]}}],['weibo',wb,'TEST_BODY_NEVER_LOG']]) {
+  for(const [name,url,body] of [['taobao',tb,taobaoPayload()],['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'TEST_BODY_NEVER_LOG'}]}}],['weibo','https://api.weibo.cn/2/searchall','TEST_BODY_NEVER_LOG']]) {
     const logs=[];
     execute(name,url+'?token=EXAMPLE_NOT_A_SECRET',{...body,account:'TEST_ACCOUNT_NEVER_LOG'},'GET',200,logs);
     assert.equal(logs.length,1);
     assert.doesNotMatch(logs.join('\n'),/TEST_|EXAMPLE_NOT_A_SECRET|https:|Cookie|token|account/);
     logs.length=0;
     execute(name,'https://unrelated.example/login?token=EXAMPLE_NOT_A_SECRET',body,'GET',200,logs);
-    assert.deepEqual(logs,[]);
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] url-unmatched`]);
   }
-  const logs=[];
-  execute('weibo',wb+'?token=EXAMPLE_NOT_A_SECRET',null,'GET',200,logs,true);
-  assert.deepEqual(logs,['[JimmyAds][weibo] changed']);
 });
 test('三模块诊断：日志设施异常不影响完成一次，也不猜测完整HTTP状态行', () => {
-  for(const [name,url,body] of [['taobao',tb,taobaoPayload()],['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'ad'}]}}],['weibo',wb,'non-JSON']]) {
+  for(const [name,url,body] of [['taobao',tb,taobaoPayload()],['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'ad'}]}}],['weibo','https://api.weibo.cn/2/searchall',{items:[{data:{is_ad:1}}]}]]) {
     const logs=[];
     assert.deepEqual(execute(name,url,body,'GET','HTTP/1.1 200 OK',logs),{});
-    assert.deepEqual(logs,[`[JimmyAds][${name}] http-error`]);
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] http-error`]);
     for(const logger of [undefined,{log:()=>{throw new Error('TEST_LOG_EXCEPTION_NEVER_LOG');}}]) {
       let calls=0,output;
       vm.runInNewContext(fs.readFileSync(path.join(root,'scripts/ads',name+'.js'),'utf8'),{
@@ -318,7 +291,7 @@ for (const item of added) {
 test('新增响应：保留平台原生失败状态和未知schema',()=>{
   assert.deepEqual(execute('cainiao',added[1].url,{...added[1].body,ret:['FAIL_SYS_SESSION_EXPIRED::expired']}),{});
   assert.deepEqual(execute('jingdong',added[2].url,{...added[2].body,code:'3'}),{});
-  assert.deepEqual(execute('jingdong',added[2].url,{...added[2].body,images:[{showTimes:1}]}),{});
+  assert.deepEqual(execute('jingdong',added[2].url,{...added[2].body,images:{unknown:1}}),{});
   assert.deepEqual(execute('meituan',added[3].url,{code:0,data:{startpicture:{ad:{newSchema:1},other:'keep'}}}),{});
   assert.deepEqual(execute('luckin',added[4].url,{status:'FAIL',message:'expired'}),{});
   assert.deepEqual(execute('wechat-articles',added[5].url,{...added[5].body,base_resp:{ret:-1}}),{});

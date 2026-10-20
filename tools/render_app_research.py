@@ -48,11 +48,11 @@ def render():
     mods = sorted((ROOT / 'modules/ads').glob('*.stoverride'))
     parsed = [yaml.safe_load(p.read_text()) for p in mods]
     scripts = sum(len(m.get('http', {}).get('script', [])) for m in parsed)
-    rewrites = sum(len(m.get('http', {}).get('rewrite', [])) for m in parsed)
+    rewrites = sum(len(m.get('http', {}).get('url-rewrite', [])) for m in parsed)
     hosts = sorted({h for m in parsed for h in m.get('http', {}).get('mitm', [])})
     out2 = ['# 广告专项模块目录与开关', '',
             f'当前共{len(mods)}个独立覆写：{len(mods)-1}个App专项（含前轮贴吧，不在本次图片内），另有1个扩展域名包。图中{len(rows)}款中{implemented}款有专项文件。全部是**候选实现、待设备实测**。本页逐款文件用于按需模式，默认不额外导入。', '',
-            '推荐的[一体化订阅入口](SUBSCRIBE.md)已经组装40款专项，不要再叠加本页同款handler。需要逐款开关时改用core分层或本地包基础主配置；原文件和稳定名称持续维护，实际发布检查见[PROGRESS](../PROGRESS.md)。', '',
+            'AD-20261020.1起，原[公共订阅入口](SUBSCRIBE.md)只承载分流与基础域名规则，不再内置HTTP专项。下面40款文件保留，按需导入即为真实逐App开关。已装用户须同时刷新原主配置和所选模块，停用旧整合“广告增强”，避免重复挂载。', '',
             '## 添加和关闭', '',
             '1. 先按[README](../README.md)完成主配置、私人订阅和公共分流。',
             '2. 在下表找App，复制“远程覆写地址”，在Stash覆写管理中添加并关联主配置。先只启用一款。',
@@ -60,12 +60,12 @@ def render():
             '4. 重启目标App，分别检查广告和登录/支付/消息/播放/普通领券；原有缓存不会被脚本删除。广告无效、空白等待或业务异常就关闭该覆写并重建连接。',
             '5. “广告拦截→DIRECT”只放行域名规则。要停止HTTP重写或响应脚本，必须关闭对应覆写；域名白名单不能停止它们。关闭域名专项后若扩展包仍含同一主机，也会继续被扩展包阻断。', '',
             f'## 本次新增{len(catalog["modules"])}款', '',
-            '2026-10-19修订：16条原本要求空JSON/空200的端点改用Stash请求脚本，分别返回200与`{}`或空正文；微博另有2条。仅匹配来源已明确的广告路径，不伪造订单/权益等业务成功。原生普通拒绝保留14条；联通2条来源为reject-img，仍用普通拒绝，图片返回语义未实现，不声称等价。响应修改脚本仍只改已知结构，异常放行。', '',
+            '2026-10-20修订：固定响应使用`http.url-rewrite`原生动作，区分reject、reject-200、reject-dict、reject-img；联通图片语义恢复。共享空响应JS及请求handler已移除。11个响应handler只处理已知广告结构，默认不记录日志；临时在对应handler设置`argument: diagnostic=1`可输出版本和固定状态，排查后恢复0。', '',
             '| App | 仅处理的范围 | 需MITM / 精确主机 | 远程覆写地址 |', '|---|---|---|---|']
     for item in catalog['modules']:
         host_text = '是：' + '、'.join(f'`{h}`' for h in item['mitm']) if item['mitm'] else '否；仅独立广告域名'
         out2.append(f'| {item["app"]} | {item["scope"]} | {host_text} | [{item["id"]}]({RAW+item["file"]}) |')
-    out2 += ['', '既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，仅在保留基础广告RULE-SET的core分层中替换provider；直接叠加到已展开规则的一体化主配置不能启用扩展包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。', '',
+    out2 += ['', '既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，在core和更新后的公共主配置中均替换实际被引用的基础广告provider；开启后不再同时使用38条基础包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。', '',
              '## 与原通用包是否重叠', '',
              '以下按**目标主机**实际匹配现有基本域名/关键词规则；不推断该App全部流量，IP规则没有在此推演。通用包已命中时，专项可能只是提供较小范围/独立入口，并不额外增加一次拦截。基础和扩展二选一；同一请求按首条规则处理。', '',
              '| App | 目标主机 | 基础规则 | 扩展规则 |', '|---|---|---|---|']
@@ -80,11 +80,11 @@ def render():
             out2.append(f'| {item["app"]} | `{host}` | '+('有命中' if a else '未命中')+' | '+('有命中：`'+b[0]+'`' if b else '未命中')+' |')
     out2 += ['', '这张表也解释了为什么通用包不能代替所有App专项：共享业务网关若整域拦截会伤到正常功能，而路径处理只选广告端点。反过来，已被扩展包阻断的独立广告域名不必再叠加同一作用模块。', '',
              '## 合并、优先级与验收', '',
-             f'基础{len(basic)}条、扩展{len(expanded):,}条。全部模块合并预期有 **{scripts}条脚本handler（18请求/10响应）、{rewrites}条HTTP拒绝重写、{len(hosts)}个去重后的精确MITM主机**。这些计数不代表实测有效；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。当前官方数组合并语义仍待复核，必须确认没有只保留最后一款。', '',
+             f'基础{len(basic)}条、扩展{len(expanded):,}条。全部模块合并预期有 **{scripts}条脚本handler（全部响应阶段）、{rewrites}条原生URL重写、{len(hosts)}个去重后的精确MITM主机**。这些计数不代表实测有效；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。原生数组合并及动作最低版本仍待设备核对，必须确认没有只保留最后一款。', '',
              '离线验证覆盖每个单模块、全部模块的正序/反序、每个有序模块对和所有端点的正反例；检查没有跨App业务URL误匹配。它不能证明HTTP/3、证书固定、私有协议、原生合并或当前App版本可用。', '',
              '模块内部规则已去重；跨模块共享MITM域名是独立启停带来的重复声明，不重复运行同一路径handler。不要安装另一整包重写与这些端点竞争；未知第三方模块优先级不在项目验证范围。', '',
              '## 更新和维护', '',
-             '新增模块从人工审核的 `research/ad-catalog.json` 生成；修改原条目后运行 `python tools/generate_ad_modules.py --write`，再运行 `python tools/validate.py`。不要直接编辑生成文件造成下次回写丢失。清单文字由 `python tools/render_app_research.py --write` 同步。旧5款保持原路径维护。', '',
+             '新增模块从人工审核的 `research/ad-catalog.json` 生成；修改原条目后运行 `python tools/generate_ad_modules.py --write`，再运行 `python tools/validate.py`。不要直接编辑生成文件造成下次回写丢失。清单文字由 `python tools/render_app_research.py --write` 同步。旧5款保持原模块路径维护；所有JS由`tools/ad_transforms/`和`tools/build_ad_scripts.py`生成，再构建入口与本地包。', '',
              '新增/调整端点前重读源代码、许可、正常权益影响和设备反馈；固定SHA更新，保留脚本失败放行和无外联约束。公共更新不改设备私人订阅；覆写手动刷新、provider间隔更新等区别见[更新教程](UPDATES.md)。', '']
     return {'docs/APP-INVENTORY.md':'\n'.join(out), 'docs/AD-MODULES.md':'\n'.join(out2)}
 

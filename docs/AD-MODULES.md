@@ -2,7 +2,7 @@
 
 当前共41个独立覆写：40个App专项（含前轮贴吧，不在本次图片内），另有1个扩展域名包。图中135款中39款有专项文件。全部是**候选实现、待设备实测**。本页逐款文件用于按需模式，默认不额外导入。
 
-推荐的[一体化订阅入口](SUBSCRIBE.md)已经组装40款专项，不要再叠加本页同款handler。需要逐款开关时改用core分层或本地包基础主配置；原文件和稳定名称持续维护，实际发布检查见[PROGRESS](../PROGRESS.md)。
+AD-20261020.1起，原[公共订阅入口](SUBSCRIBE.md)只承载分流与基础域名规则，不再内置HTTP专项。下面40款文件保留，按需导入即为真实逐App开关。已装用户须同时刷新原主配置和所选模块，停用旧整合“广告增强”，避免重复挂载。
 
 ## 添加和关闭
 
@@ -14,7 +14,7 @@
 
 ## 本次新增35款
 
-2026-10-19修订：16条原本要求空JSON/空200的端点改用Stash请求脚本，分别返回200与`{}`或空正文；微博另有2条。仅匹配来源已明确的广告路径，不伪造订单/权益等业务成功。原生普通拒绝保留14条；联通2条来源为reject-img，仍用普通拒绝，图片返回语义未实现，不声称等价。响应修改脚本仍只改已知结构，异常放行。
+2026-10-20修订：固定响应使用`http.url-rewrite`原生动作，区分reject、reject-200、reject-dict、reject-img；联通图片语义恢复。共享空响应JS及请求handler已移除。11个响应handler只处理已知广告结构，默认不记录日志；临时在对应handler设置`argument: diagnostic=1`可输出版本和固定状态，排查后恢复0。
 
 | App | 仅处理的范围 | 需MITM / 精确主机 | 远程覆写地址 |
 |---|---|---|---|
@@ -50,11 +50,11 @@
 | 阿里云盘 | 仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告 | 是：`member.alipan.com` | [alipan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/alipan.stoverride) |
 | 菜鸟 | 仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化 | 是：`cn-acs.m.cainiao.com` | [cainiao](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cainiao.stoverride) |
 | 京东 | 仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告 | 是：`api.m.jd.com` | [jingdong](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong.stoverride) |
-| 美团 | 仅美团外卖 wmapi 的 loadInfo.startpicture.ad/mk；不代表美团主App开屏 | 是：`wmapi.meituan.com` | [meituan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride) |
+| 美团 | 外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖 | 是：`wmapi.meituan.com`、`img.meituan.net`、`s3plus.meituan.net`、`flowplus.meituan.net` | [meituan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride) |
 | 瑞幸咖啡 | 仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券 | 是：`capi.lkcoffee.com` | [luckin](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/luckin.stoverride) |
 | 微信 | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天 | 是：`mp.weixin.qq.com` | [wechat-articles](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride) |
 
-既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，仅在保留基础广告RULE-SET的core分层中替换provider；直接叠加到已展开规则的一体化主配置不能启用扩展包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。
+既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，在core和更新后的公共主配置中均替换实际被引用的基础广告provider；开启后不再同时使用38条基础包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。
 
 ## 与原通用包是否重叠
 
@@ -106,6 +106,9 @@
 | 阿里云盘 | `member.alipan.com` | 未命中 | 未命中 |
 | 菜鸟 | `cn-acs.m.cainiao.com` | 未命中 | 未命中 |
 | 京东 | `api.m.jd.com` | 未命中 | 未命中 |
+| 美团 | `flowplus.meituan.net` | 未命中 | 有命中：`DOMAIN,flowplus.meituan.net` |
+| 美团 | `img.meituan.net` | 未命中 | 未命中 |
+| 美团 | `s3plus.meituan.net` | 未命中 | 未命中 |
 | 美团 | `wmapi.meituan.com` | 未命中 | 未命中 |
 | 瑞幸咖啡 | `capi.lkcoffee.com` | 未命中 | 未命中 |
 | 微信 | `mp.weixin.qq.com` | 未命中 | 未命中 |
@@ -114,7 +117,7 @@
 
 ## 合并、优先级与验收
 
-基础38条、扩展38,066条。全部模块合并预期有 **28条脚本handler（18请求/10响应）、16条HTTP拒绝重写、41个去重后的精确MITM主机**。这些计数不代表实测有效；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。当前官方数组合并语义仍待复核，必须确认没有只保留最后一款。
+基础38条、扩展38,066条。全部模块合并预期有 **11条脚本handler（全部响应阶段）、38条原生URL重写、45个去重后的精确MITM主机**。这些计数不代表实测有效；不同模块共享主机可能在原生预览重复出现，不同路径互不重叠。原生数组合并及动作最低版本仍待设备核对，必须确认没有只保留最后一款。
 
 离线验证覆盖每个单模块、全部模块的正序/反序、每个有序模块对和所有端点的正反例；检查没有跨App业务URL误匹配。它不能证明HTTP/3、证书固定、私有协议、原生合并或当前App版本可用。
 
@@ -122,6 +125,6 @@
 
 ## 更新和维护
 
-新增模块从人工审核的 `research/ad-catalog.json` 生成；修改原条目后运行 `python tools/generate_ad_modules.py --write`，再运行 `python tools/validate.py`。不要直接编辑生成文件造成下次回写丢失。清单文字由 `python tools/render_app_research.py --write` 同步。旧5款保持原路径维护。
+新增模块从人工审核的 `research/ad-catalog.json` 生成；修改原条目后运行 `python tools/generate_ad_modules.py --write`，再运行 `python tools/validate.py`。不要直接编辑生成文件造成下次回写丢失。清单文字由 `python tools/render_app_research.py --write` 同步。旧5款保持原模块路径维护；所有JS由`tools/ad_transforms/`和`tools/build_ad_scripts.py`生成，再构建入口与本地包。
 
 新增/调整端点前重读源代码、许可、正常权益影响和设备反馈；固定SHA更新，保留脚本失败放行和无外联约束。公共更新不改设备私人订阅；覆写手动刷新、provider间隔更新等区别见[更新教程](UPDATES.md)。

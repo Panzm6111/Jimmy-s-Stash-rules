@@ -43,6 +43,8 @@ def main():
     else:
         paths={'config/main.yaml','config/core.stoverride','config/stash.yaml'}
         paths.update(str(p.relative_to(ROOT)) for p in (ROOT/'modules/ads').glob('*.stoverride'))
+        paths.update(str(p.relative_to(ROOT)) for p in (ROOT/'modules/diagnostics').glob('*.stoverride'))
+        paths.update(str(p.relative_to(ROOT)) for p in (ROOT/'scripts/ads').glob('*.js'))
         for r in lock['resources']: paths.add(r['output'])
         for r in lock['ad_scripts']: paths.add(r['output'])
         for p in ['rules/openai.yaml','rules/apple.yaml','rules/microsoft.yaml']: paths.add(p)

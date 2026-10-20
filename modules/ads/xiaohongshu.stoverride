@@ -1,17 +1,23 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# Adapted from fmz200/wool_scripts endpoint references; see research/sources.lock.json.
+# Source pins and independent licenses: docs/SOURCES.md
 name: 小红书开屏广告处理（可选）
-desc: 只调整开屏广告时间；不改笔记、下载权限、水印或账号。 默认不导入，需设备验收。
+desc: AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。待真机验收。
 http:
   mitm:
   - edith.xiaohongshu.com
   script:
-  - match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config(\?|$)
+  - match: ^https://edith\.xiaohongshu\.com/api/sns/(?:v\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\?|$)
     name: jimmy_xiaohongshu_ads
     type: response
     require-body: true
     timeout: 5
+    argument: diagnostic=0
 script-providers:
   jimmy_xiaohongshu_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js
     interval: 86400
+rules:
+- DOMAIN,ads-img-qc.xhscdn.com,广告拦截
+- DOMAIN,ads-img-al.xhscdn.com,广告拦截
+- DOMAIN,ads-video-al.xhscdn.com,广告拦截
+- DOMAIN,ads-video-qc.xhscdn.com,广告拦截
