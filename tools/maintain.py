@@ -636,7 +636,7 @@ def update(root, report=None):
         run_step(candidate, [sys.executable, 'tools/build_ads.py', '--write'], 'build')
         run_step(candidate, [sys.executable, 'tools/build_ads.py'], 'generated_consistency')
         run_step(candidate, [sys.executable, 'tools/validate.py'], 'project_and_scripts', timeout=360)
-        run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_private_config.py'], 'private_builder')
+        run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_private_config.py'], 'private_builder', timeout=600)
         if (candidate / 'tests/test_maintenance.py').is_file():
             run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_maintenance.py'], 'maintenance_tests')
         backup_id = apply_verified_changes(root, candidate, allowed, base_head)
