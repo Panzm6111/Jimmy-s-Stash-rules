@@ -851,5 +851,49 @@
     "changed_file_secret_findings": 0,
     "new_iphone_tests": false,
     "full_ad_test_suite_rerun": false
+  },
+  "publication": {
+    "checked_at": "2026-10-20T12:39:36.609597+08:00",
+    "documentation_release_commit": "8e6a68636496f1431740bb48492cff468495e941",
+    "published_document": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/AD-ARCHITECTURE.md",
+    "passed": 5,
+    "total": 5,
+    "results": [
+      {
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/README.md",
+        "status": 200,
+        "sha256_matches": true,
+        "bytes": 17522,
+        "ok": true
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
+        "status": 200,
+        "sha256_matches": true,
+        "bytes": 27430,
+        "ok": true
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/ADBLOCKING.md",
+        "status": 200,
+        "sha256_matches": true,
+        "bytes": 14216,
+        "ok": true
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-MODULES.md",
+        "status": 200,
+        "sha256_matches": true,
+        "bytes": 16484,
+        "ok": true
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/APP-SPLASH.md",
+        "status": 200,
+        "sha256_matches": true,
+        "bytes": 6679,
+        "ok": true
+      }
+    ]
   }
 }
