@@ -31,12 +31,14 @@ def rendered():
               'native_url_rewrites':len(config['http']['url-rewrite']),
               'response_handlers':len(config['http']['script']), 'request_handlers':0,
               'runtime_js_providers':len(config['script-providers']),
+              'remote_script_providers':sum('url' in p for p in main['script-providers'].values()),
+              'inline_script_providers':sum('content' in p or 'payload' in p for p in main['script-providers'].values()),
               'mitm_exact_hosts':len(config['http']['mitm']), 'optional_probe_js':1}
     out = ['','## 9. 自动核对的当前完整清单','',
            '以下内容直接由现有配置和运行脚本生成。数量描述文件结构，不表示广告效果。','',
            '| 项目 | 实际值 |','|---|---|']
     for k,v in counts.items(): out.append(f'| {k} | {v:,} |')
-    out += ['','公共主配置已整合以下全部40款专项，11份响应JS通过content内嵌。此表列出构建来源与处理范围，用户不需逐款导入；模块原路径保留作维护和旧安装兼容。逐App开关已取消需求，探针另列、默认关闭。','',
+    out += ['','公共主配置已整合以下全部40款专项，11份响应JS通过原稳定URL获取。此表列出构建来源与处理范围，用户不需逐款导入；模块原路径保留作维护和旧安装兼容。逐App开关已取消需求，探针另列、默认关闭。','',
             '| App专项 | 维护源路径 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |',
             '|---|---|---|---|---|---|']
     for p,m in parsed:
@@ -45,9 +47,9 @@ def rendered():
     declaration={'proxy-groups':[g for g in main['proxy-groups'] if g['name']=='广告拦截'],
                  'rule-providers':main['rule-providers'],
                  'rules':[r for r in main['rules'] if r.split(',')[-1]=='广告拦截' or r in {'DOMAIN,flowplus.meituan.net,DIRECT','DOMAIN,bootpreload.uve.weibo.com,DIRECT'}],
-                 'http':main['http']}
+                 'http':main['http'], 'script-providers':main['script-providers']}
     out += ['','## 10. 精确原生声明与基础规则原文','',
-            '下列原生字段直接摘自主配置，省略完整分流与script-providers正文，不能直接作为主配置导入。11份provider的content与第12节同名JS逐字对应。LAN/系统例外优先，然后精确路径接管例外、专项域名与广告RULE-SET，后面仍有完整分流与终止MATCH。','',
+            '下列原生字段直接摘自主配置，省略完整分流，不能直接作为主配置导入。11份provider用url指向第12节的同名JS，均有非空来源。LAN/系统例外优先，然后精确路径接管例外、专项域名与广告RULE-SET，后面仍有完整分流与终止MATCH。','',
             '<!-- CONFIG:ad-core -->','```yaml',yaml.safe_dump(declaration,allow_unicode=True,sort_keys=False,width=120).rstrip(),'```','',
             '旧分层安装保留的基础payload（无需MITM）；当前整合入口默认使用上方provider指向的扩展快照，以下38条仅供维护对照，不同时叠加：','','```yaml',
             yaml.safe_dump(load('rules/ads-basic.yaml'),allow_unicode=True,sort_keys=False).rstrip(),'```','',
@@ -69,7 +71,7 @@ def rendered():
         out.append(f'| [{p}](../{p}) | `{hashes[p]}` |')
     out += ['','完整输入哈希和结构计数见 [ad-architecture-audit.json](../research/ad-architecture-audit.json)。','',
             '## 12. 当前全部运行JS原文','',
-            '其中11份是整合入口内嵌的响应处理；模块中的远程加载声明仅保留作旧安装兼容。另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。','']
+            '其中11份是整合入口按URL加载的响应处理；这里展示完整源代码供审查，不是可粘贴进content字段的配置。另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。','']
     scripts = sorted((ROOT/'scripts/ads').glob('*.js'))
     for p in scripts:
         rel=str(p.relative_to(ROOT))

@@ -16,7 +16,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--write',action='store_true')
-    p.add_argument('--bundle',action='store_true',help='also render ignored dist/ with inline scripts')
+    p.add_argument('--bundle',action='store_true',help='also render ignored dist/ with remote script references')
     args=p.parse_args()
     def run(name):
         command=[sys.executable,str(ROOT/'tools'/name)]

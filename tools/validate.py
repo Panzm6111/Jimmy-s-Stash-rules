@@ -106,7 +106,20 @@ def route(config, domain='', address='', country=''):
             return parts[2]
     raise ValueError('no terminal route')
 
+def validate_provider_sources(config):
+    """Check the reported native source requirement, not a replacement Stash parser."""
+    for section in ('proxy-providers', 'rule-providers', 'script-providers'):
+        for provider in config.get(section, {}).values():
+            assert isinstance(provider, dict), 'provider must be a mapping'
+            assert 'content' not in provider, 'unsupported content provider field'
+            def populated(value):
+                return bool(value.strip()) if isinstance(value, str) else isinstance(value, (list, dict)) and bool(value)
+            assert any(populated(provider.get(key)) for key in ('url', 'payload', 'path')), \
+                'provider source missing: url, payload and path are empty'
+
+
 def validate_structure(config):
+    validate_provider_sources(config)
     groups = config['proxy-groups']
     names = [g['name'] for g in groups]
     assert len(names) == len(set(names)), 'duplicate groups'
@@ -148,11 +161,10 @@ def validate_structure(config):
         assert item['require-body'] is (item['type'] == 'response')
         assert item['timeout'] <= 10
         provider = scripts[item['name']]
-        assert ('url' in provider) != ('content' in provider), 'choose exactly one script source'
-        if 'url' in provider:
-            assert (ROOT / provider['url'].removeprefix(RAW)).is_file()
-        else:
-            assert isinstance(provider['content'], str) and provider['content'].strip(), 'empty inline script'
+        assert set(provider) == {'url', 'interval'}, 'unreviewed script provider format'
+        assert isinstance(provider['url'], str) and provider['url'].strip(), 'empty script URL'
+        assert provider['interval'] == 86400, 'unexpected script refresh interval'
+        assert (ROOT / provider['url'].removeprefix(RAW)).is_file()
     for url in [x['url'] for x in config.get('rule-providers', {}).values()] + [x['url'] for x in scripts.values() if 'url' in x]:
         assert url.startswith(RAW) and '..' not in url[len(RAW):]
         assert (ROOT / url[len(RAW):]).is_file(), 'broken local public URL'
@@ -167,6 +179,20 @@ class ProjectChecks(unittest.TestCase):
         for ext in ('*.yaml', '*.yml', '*.stoverride'):
             for file in ROOT.rglob(ext):
                 if '.git' not in file.parts: self.assertIsNotNone(load(file.relative_to(ROOT)))
+
+    def test_all_provider_sources_reject_empty_and_content_only_declarations(self):
+        # Reproduce the user's failure shape, including unreferenced providers.
+        for section in ('proxy-providers', 'rule-providers', 'script-providers'):
+            for provider in ({}, {'interval': 86400}, {'url': '', 'path': '', 'payload': []},
+                             {'url': '   '}, {'content': '// historical inline source'}):
+                with self.subTest(section=section, provider=provider), self.assertRaises(AssertionError):
+                    validate_provider_sources({section: {'example': provider}})
+        valid = merged('modules/ads/taobao.stoverride')
+        validate_provider_sources(valid)
+        broken = copy.deepcopy(valid)
+        broken['script-providers']['unused'] = {'content': '// not a recognized source'}
+        with self.assertRaisesRegex(AssertionError, 'content'):
+            validate_structure(broken)
 
     def test_layer_combinations(self):
         options = sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'modules/ads').glob('*.stoverride'))
@@ -403,7 +429,9 @@ class ProjectChecks(unittest.TestCase):
         self.assertNotIn('dot.pub', json.dumps(config['dns']))
         self.assertTrue({'Google', 'NCloud'}.isdisjoint(g['name'] for g in config['proxy-groups']))
         for provider in config.get('script-providers', {}).values():
-            self.assertEqual(set(provider), {'content'})
+            self.assertEqual(set(provider), {'url', 'interval'})
+            self.assertTrue(provider['url'].startswith(RAW + 'scripts/ads/'))
+            self.assertEqual(provider['interval'], 86400)
 
     def test_integrated_entry_has_all_modules_and_preserves_non_ad_priority(self):
         from build_subscription import integrated, verify

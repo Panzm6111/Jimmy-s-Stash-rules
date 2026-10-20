@@ -141,8 +141,9 @@ def verify(config, template, expected_nodes):
         require(item['type'] in {'request', 'response'} and item['timeout'] <= 10, '脚本处理或超时异常。')
         require(item['require-body'] is (item['type'] == 'response'), '脚本正文读取方式异常。')
     for provider in scripts.values():
-        require(set(provider) == {'content'} and isinstance(provider['content'], str)
-                and bool(provider['content'].strip()), '脚本声明格式异常。')
+        require(set(provider) == {'url', 'interval'} and isinstance(provider['url'], str)
+                and provider['url'].startswith(RAW + 'scripts/ads/')
+                and provider['interval'] == 86400, '脚本声明格式异常。')
     for case in json.loads((ROOT / 'tests/fixtures/routes.json').read_text()):
         args = (case.get('domain', ''), case.get('ip', ''), case.get('country', ''))
         require(route(config, *args) == route(template, *args), '代表性域名路由改变。')
@@ -212,8 +213,8 @@ def compose(source, template=None):
         'protocol_counts': dict(Counter(n['type'] for n in eligible)),
         'region_counts': {name: len(v) for name, v in region_nodes.items()},
         'other_region_count': len(other_nodes), 'groups': len(result['proxy-groups']),
-        'rules': len(result['rules']), 'remote_scripts': 0,
-        'inline_scripts': len(result.get('script-providers', {})),
+        'rules': len(result['rules']), 'remote_scripts': len(result.get('script-providers', {})),
+        'inline_scripts': 0,
         'native_stash_tested': False, 'connectivity_tested': False,
         'subscription_auto_update': False,
     }
@@ -228,7 +229,7 @@ def render(config):
             '# 海外AI 默认美国，Apple 默认直连；测速不代表解锁，不跨地区兜底。\n'
             '# 不含机场旧DNS/分流/控制端口；连接字段原样保留，重名节点仅加显示前缀。\n'
             '# 本地节点和内嵌规则不会自动跟随机场/公共配置更新，需要重新合成。\n'
-            '# 已内嵌全部现有广告专项和JS；无逐App开关，不再叠加广告覆写。\n'
+            '# 已包含全部现有广告专项；JS通过原生URL联网加载，不再叠加广告覆写。\n'
             '# 原生解析、Reality/Vision支持、连接、解锁和广告效果仍须手机测试。\n'
             '# 来源与许可证：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
             + dump(config))

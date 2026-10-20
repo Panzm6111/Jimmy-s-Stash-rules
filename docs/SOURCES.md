@@ -17,7 +17,7 @@
 
 ## 更新策略
 
-设备上的广告规则集按现有86400秒，即24小时间隔尝试刷新**本仓库已发布快照**；不会直接执行上游最新未知代码。整合主配置建议每周手动刷新一次，发布修复后立即刷新，11份内嵌JS随之更新。机场节点同样保持24小时间隔；节点测速30分钟不属于规则更新。时间间隔不保证离线或iOS后台下准点执行，统一操作见[更新教程](UPDATES.md)。
+设备上的广告规则集按现有86400秒，即24小时间隔尝试刷新**本仓库已发布快照**；不会直接执行上游最新未知代码。整合主配置建议每周手动刷新一次，发布修复后立即刷新；11份JS由主配置中的URL引用，单独配置24小时尝试更新。新增主机或handler仍须刷新主配置。机场节点同样保持24小时间隔；节点测速30分钟不属于规则更新。时间间隔不保证离线或iOS后台下准点执行，统一操作见[更新教程](UPDATES.md)。
 
 上游提交改变不会自行进入本仓库。现在可在电脑运行 `python tools/maintain.py check`，检查所引用公开文件的变化，建议每天一次；需要更新普通规则时运行 `python tools/maintain.py update`。工具先在临时副本生成和验证，通过后才写入本地公开文件。脚本、重写、MITM和人工选取的AI域名变动只进入审查报告，不直接覆盖。完整安装、保护条件与回退见[本地维护教程](MAINTENANCE.md)。
 
@@ -47,7 +47,7 @@ TLS 与已有源内容校验保持开启。刷新同一 SHA 必须匹配原校�
 
 Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNECT 403 阻塞；没有假称读过最新正文，也不编造最低版本号。已有原生公开模块仅作为辅助证据。具体未核实清单见 [STASH-CAPABILITIES.md](STASH-CAPABILITIES.md)。
 
-## 当前广告来源与修改（配置AD-20261020.2／脚本AD-20261020.1）
+## 当前广告来源与修改（配置AD-20261020.3／脚本AD-20261020.1）
 
 | 来源与固定版本 | 许可、实际读取与取用 | 当前边界 |
 |---|---|---|
@@ -57,7 +57,7 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 | app2smile/rules，版本见上表 | MIT；B站/贴吧原分支继续保留，使用本项目共同运行保护模板 | B站protobuf未实现；不因存在Stash模块便认定当前广告全部有效 |
 | 项目原创运行模板、诊断工具 | MIT原创部分；派生运行JS仍按各自MIT/GPL2/GPL3归属，完整可读转换源在`tools/ad_transforms` | 11个响应JS各自独立构建，另有默认关闭的只读probe。不捕获Cookie、不外联、不写账号存储 |
 
-基础38条与扩展38,066条仍来自同一固定AdvertisingLite Classical快照，不增加数量冒充效果。AD-20261020.2按用户要求把原主入口恢复为整合订阅：全部40款已有专项及11份响应JS随主配置提供，唯一广告RULE-SET默认引用扩展快照；局域网、关键系统服务与私人精确白名单优先。旧main.yaml＋core保留38条基础包及expanded兼容机制；当前用户无需导入这些文件。扩展接入另加flowplus.meituan.net与bootpreload.uve.weibo.com精确DIRECT例外，避免上游整域拒绝与已审阅路径处理竞争；未改上游规则快照，实际原生顺序仍待设备确认。逐App开关需求已取消，整合入口无需另开expanded或App覆写；来源内容与处理范围未因此增加，具体见[模块目录](AD-MODULES.md)。
+基础38条与扩展38,066条仍来自同一固定AdvertisingLite Classical快照，不增加数量冒充效果。在AD-20261020.2时，按用户要求把原主入口恢复为整合订阅，纳入全部40款已有专项和11份响应JS。当前AD-20261020.3由同一入口声明脚本URL，唯一广告RULE-SET仍默认引用扩展快照；局域网、关键系统服务与私人精确白名单优先。旧main.yaml＋core保留38条基础包及expanded兼容机制；当前用户无需导入这些文件。扩展接入另加flowplus.meituan.net与bootpreload.uve.weibo.com精确DIRECT例外，避免上游整域拒绝与已审阅路径处理竞争；未改上游规则快照，实际原生顺序仍待设备确认。逐App开关需求已取消，整合入口无需另开expanded或App覆写；来源内容与处理范围未因此增加，具体见[模块目录](AD-MODULES.md)。
 
 2026-10-20已有HEAD核对记录：fmz200和app2smile仍等于所用固定提交；blackmatrix7推进至`f9e403a75bbc4bee939c6d8dd766cf78f1b512f3`，但采用的startup.js、AdvertisingScript原生声明、AdvertisingLite Classical三个文件与固定版本逐字相同，保留原已审查快照。维护状态证据在ad-repair-evidence.json。
 
@@ -65,7 +65,7 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 
 原固定空JSON/空正文的共享request脚本已删除，微博两条开屏也用原生reject-dict，联通两条恢复reject-img；不再把QX动作未经核实挪入旧rewrite字段。Mock评估后当前不需要：已有原生固定空结果可表达，条件性响应处理仍保留JS。原生字段采用用户提供的当前官方能力清单，手机返回类型/业务回退仍需验收。
 
-AD-20261020.2的整合主入口及本地包都用`script-providers.content`保存11份独立广告JS，各自保留许可证和归属；主配置刷新即携带脚本版本，不需要另外下载JS。probe仍为独立临时诊断，不默认加入。content历史原生参考已停止维护且注释仅推荐开发使用；本项目没有复制其中无许可代码，也不把它当当前官方、最低版本或iPhone执行证明。ZIP包含来源、许可证和可读源，保留作离线维护与旧安装兼容；不能把包内广告覆写叠加到当前整合入口。
+AD-20261020.2曾在整合入口和本地包使用`script-providers.content`；用户随后反馈`provider: url,payload, path are all empty`，11个仅含content的脚本声明与该缺失字段条件直接对应。AD-20261020.3恢复`url`与`interval`声明，沿用项目既有原生Stash来源与原脚本地址，脚本逻辑及各自许可证不变。历史content示例已停止维护，不能继续作为当前兼容性的依据；本次不猜测payload类型或最低版本，也不把离线验证当手机导入通过。probe仍默认关闭。ZIP保留原路径、来源与源码，但脚本需联网取得；不能把包内广告覆写叠加到当前整合入口。
 
 调查但未复用：[Maasea/sgmodule](https://github.com/Maasea/sgmodule) @ `65075cdb388fc5e3094afd7e7314c67b243f3525`（Apache-2.0）的YouTube方案含二进制、请求/响应配套及其他功能，当前没有复制。Spotify等修改会员权限的方案不纳入。`Muldec/stash-wiki`实际是另一媒体库产品，不作为iPhone Stash官方资料。没有许可、混淆且未审清或影响正常权益的代码不盲目复制。
 

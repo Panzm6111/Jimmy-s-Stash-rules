@@ -40,6 +40,11 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertNotIn('external-controller', config)
         self.assertNotIn('proxy-providers', config)
         self.assertEqual(config.get('http'), self.template.get('http'))
+        self.assertEqual(report['inline_scripts'], 0)
+        self.assertEqual(report['remote_scripts'], 11)
+        for provider in config['script-providers'].values():
+            self.assertEqual(set(provider), {'url', 'interval'})
+            self.assertTrue(provider['url'])
 
     def test_region_and_complement_and_neutral_defaults(self):
         config, report = compose(self.source)

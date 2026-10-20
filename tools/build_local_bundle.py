@@ -18,9 +18,7 @@ ADS = '广告增强.stoverride'
 EXPANDED = '扩展域名.stoverride'
 AUDIT = 'research/local-bundle-audit.json'
 
-class Literal(str): pass
 class BundleDumper(yaml.SafeDumper): pass
-BundleDumper.add_representer(Literal, lambda dumper, value: dumper.represent_scalar('tag:yaml.org,2002:str', value, style='|'))
 
 def dump(data):
     return yaml.dump(data, Dumper=BundleDumper, allow_unicode=True, sort_keys=False, width=120)
@@ -50,14 +48,17 @@ def flatten(config, keep_providers=()):
     result['rules'] = list(dict.fromkeys(rules))
     return result
 
-def inline_scripts(config):
+def script_references(config):
+    """Keep native URL providers; content-only lacks the sources named by the reported core error."""
     result = copy.deepcopy(config)
     for name, provider in result.get('script-providers', {}).items():
         url = provider.get('url', '')
         if not url.startswith(RAW): raise ValueError('non-project script source')
         path = ROOT / url[len(RAW):]
         if path.parent != ROOT / 'scripts/ads' or path.suffix != '.js': raise ValueError('unexpected script path')
-        result['script-providers'][name] = {'content': Literal(path.read_text())}
+        if not path.is_file(): raise ValueError('missing script source')
+        if set(provider) != {'url', 'interval'} or provider['interval'] != 86400:
+            raise ValueError('unexpected script provider declaration')
     if 'mitm' in result.get('http', {}):
         result['http']['mitm'] = list(dict.fromkeys(result['http']['mitm']))
     return result
@@ -78,7 +79,7 @@ def documents():
     for path in sorted((ROOT / 'modules/ads').glob('*.stoverride')):
         if path.stem == 'expanded': continue
         original = load(path.relative_to(ROOT))
-        local = inline_scripts(original)
+        local = script_references(original)
         # Retain the original archive path for existing offline installations.
         files['按App单独开关/' + path.name] = ('# 旧目录名为兼容保留；当前整合入口无需导入此文件。\n'
                                             '# 独立资源保持各自许可，见包内源码/licenses与docs/SOURCES.md。\n' + dump(local))
@@ -86,14 +87,14 @@ def documents():
     combined['http']['mitm'] = list(dict.fromkeys(combined['http']['mitm']))
     enhanced = {'name': 'Jimmy 广告增强（本地整合）',
                 'desc': '旧离线包兼容的专项合包；当前整合订阅已包含这些动作，不要重复导入。仅精确主机使用设备自建CA，效果待设备验收。', **combined}
-    files[ADS] = ('# 由原40个独立模块组装，内嵌11份独立JS资源；不下载远程脚本。\n'
+    files[ADS] = ('# 由原40个独立模块组装；11份JS沿用公开远程URL，首次加载需要联网。\n'
                   '# 不与“按App单独开关”中的同款重复启用；各独立资源按原许可分发。\n' + dump(enhanced))
     expanded = flatten(merged('modules/ads/expanded.stoverride'))
     files[EXPANDED] = ('# 旧离线包兼容；完整规则顺序含局域网/系统例外，不能把扩展规则全部前插。\n'
                        '# 只适用于旧离线主配置；当前整合订阅已引用扩展包，无需导入。\n' + dump({'name': 'Jimmy 扩展域名（本地快照）',
                                           'desc': '更多广告域名，可能误拦；不需要MITM。广告增强应在更高优先级。',
                                           'rules': expanded['rules']}))
-    files['诊断（临时）.stoverride'] = dump(inline_scripts(load('modules/diagnostics/ads.stoverride')))
+    files['诊断（临时）.stoverride'] = dump(script_references(load('modules/diagnostics/ads.stoverride')))
     files['先看这里.txt'] = (ROOT / 'docs/LOCAL-IMPORT.md').read_text()
     return files
 
@@ -110,9 +111,9 @@ def verify(files):
         if path.stem == 'expanded': continue
         addon_paths.append(str(path.relative_to(ROOT)))
         for name, provider in load(path.relative_to(ROOT)).get('script-providers', {}).items():
-            source_by_name[name] = (ROOT / provider['url'][len(RAW):]).read_text()
+            source_by_name[name] = provider
     for name, script in enhanced['script-providers'].items():
-        assert script == {'content': source_by_name[name]}, 'inline script changed'
+        assert script == source_by_name[name], 'script URL provider changed'
     assert len(source_by_name) == 11
     assert len(enhanced['http']['script']) == 11
     assert len(enhanced['http']['url-rewrite']) == 38
@@ -120,7 +121,8 @@ def verify(files):
     for config in configs.values():
         assert not config.get('rule-providers')
         for script in config.get('script-providers', {}).values():
-            assert set(script) == {'content'}
+            assert set(script) == {'url', 'interval'} and script['interval'] == 86400
+            assert script['url'].startswith(RAW + 'scripts/ads/')
         for rule in config.get('rules', []): assert not rule.startswith('RULE-SET,')
         for host in config.get('http', {}).get('mitm', []): assert '*' not in host
     # Routing equivalence includes critical direct exceptions, extra ad hosts,
@@ -136,7 +138,8 @@ def verify(files):
             args = (case.get('domain', ''), case.get('ip', ''), case.get('country', ''))
             assert route(original, *args) == route(local, *args), 'flattened route changed'
     return {'main_rules': len(main['rules']), 'expanded_rules': len(expanded['rules']),
-            'per_app_overrides': len(addon_paths), 'inline_scripts': len(source_by_name),
+            'per_app_overrides': len(addon_paths), 'inline_scripts': 0,
+            'remote_scripts': len(source_by_name),
             'script_handlers': 11, 'rewrite_rules': 38, 'mitm_unique': 45,
             'route_comparisons': len(fixtures) * len(scenarios)}
 
@@ -188,7 +191,7 @@ def main():
     (args.output / 'Jimmy-Stash.zip').write_bytes(zipped)
     report.update({'archive_members': members, 'zip_bytes': len(zipped), 'zip_sha256': hashlib.sha256(zipped).hexdigest(),
                    'archive_secret_findings': 0, 'native_stash_tested': False, 'iphone_tested': False,
-                   'script_inline_reference': 'jinzaizhichi/stash-example@c0f273b8539b0aa648e0cab90cae7e5b4922a098 config.yaml script-providers.content（历史原生例；非当前文档/最低版本证明）',
+                   'script_provider_reference': '沿用已审查Stash原生模块的url/interval；已移除导致当前设备解析失败的content-only声明。脚本首次加载仍需要联网。',
                    'files_sha256': {name: hashlib.sha256(body.encode()).hexdigest() for name, body in files.items()}})
     (ROOT / AUDIT).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     print(json.dumps({**{k: v for k, v in report.items() if k != 'files_sha256'}, 'output': str(args.output)}, ensure_ascii=False, indent=2))

@@ -1,6 +1,6 @@
 # Stash 去广告：当前实现、修复证据与排查规格
 
-当前配置：**AD-20261020.2**；脚本：**AD-20261020.1**。用户已明确采用整合入口，并取消逐App独立开关要求。日常只使用原 `config/stash.yaml` 链接，刷新主配置即可取得全部已审阅专项和内嵌脚本，无需逐款安装。本次统一说明文字，不改变广告逻辑、分流、私人接入或上述版本。此前修复保留了路由/HKG改动，原生URL字段与脚本保护继续有效。**文件已发布，真实 iPhone 去广告效果仍未完成验收。** 用户已确认 HTTP/MITM 开启、自建 CA 完全信任，并表示会将 Stash、App 更新到最新版；不把未装证书当作统一解释。自动签到继续暂停。
+当前配置：**AD-20261020.3**；脚本：**AD-20261020.1**。沿用原 `config/stash.yaml` 单一整合入口，无需逐款安装。本轮修复用户实际遇到的 `provider: url,payload, path are all empty`：旧版11个脚本来源仅有 `content`，现恢复为 `url` 与86400秒更新间隔。全部专项声明、分流、地区组、私人接入和JS逻辑保留。此前仅依据历史示例接受content的校验不足，现明确拦截此声明。修复后的真实iPhone导入与去广告效果仍待用户复核；用户已信任的自建CA与私人机场覆写继续使用，自动签到继续暂停。
 
 ## 1. 已修复问题与证据边界
 
@@ -23,11 +23,11 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.2默认整合全部40款已有App专项、11份内嵌响应JS、扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
+主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.3整合全部40款已有App专项、11份响应JS的URL声明、扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
 
-11份JS通过`script-providers.<name>.content`内嵌，刷新主配置时同时取得脚本正文、主机、原生动作和handler，不再要求整合模式单独刷新JS。content只有历史原生示例作为参考，原注释仅推荐开发使用且示例已停止维护；当前官方正文不可访问，未核实当前原生执行或最低版本，完整证据见[能力记录](STASH-CAPABILITIES.md)。脚本逻辑未改，诊断仍显示AD-20261020.1；配置头部AD-20261020.2标识的是新的承载方式。
+11份JS通过`script-providers.<name>.url`引用本仓库原稳定路径，`interval: 86400`。刷新主配置取得脚本地址、主机、原生动作和handler，脚本正文由Stash联网获取。本轮JS字节未改，不要求为修复解析错误单独安装或编辑脚本；以后的纯JS修复可通过脚本刷新取得，新增主机/handler仍必须刷新主配置。URL声明有app2smile与NobyDa原生示例依据，见[能力记录](STASH-CAPABILITIES.md)。不再采用仅有content的声明，也不根据报错猜测payload的类型。脚本仍显示AD-20261020.1，配置头部AD-20261020.3用于识别本次解析修复。
 
-首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部AD-20261020.2，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
+首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部AD-20261020.3，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
 
 **当前需求是整合入口，不设置逐App开关，也不另装expanded。** 主配置内的专项随主配置共同启用；额外覆写的启停不能撤销内置处理。“广告拦截→DIRECT”只控制域名路由，暂停HTTPS改写需关闭HTTP/MITM并重建连接。单App模块文件不是手机上的待安装清单。
 
@@ -77,7 +77,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 ## 5. 脚本 API、失败保护和日志
 
-11个响应脚本各自独立执行，保留原许可，运行模板构建时内嵌，不要求手机加载模块。只读 `$request.url/method`、`$response.body/status` 和临时 `$argument`；不读取Cookie/Authorization、不保存正文、不联网、不写存储、不通知。探针只读URL用于内存匹配，**不读取请求或响应正文、头部**。
+11个响应脚本各自独立执行，保留原许可，共同运行模板构建到各JS源文件，Stash按URL加载；用户不需要另加App覆写。只读 `$request.url/method`、`$response.body/status` 和临时 `$argument`；不读取Cookie/Authorization、不保存正文、不联网、不写存储、不通知。探针只读URL用于内存匹配，**不读取请求或响应正文、头部**。
 
 - 响应handler统一 `type: response`、`require-body: true`、`timeout: 5`。B站限GET，其他限GET/POST。缺失/null/空响应对象、正文非字符串或空正文均放行。没有把空对象响应当成功业务结构。
 - 正文限 **2 MiB UTF-8编码长度**，不再把JS字符串码元数当网络字节数。二进制不猜测解码；不开启 binary-mode 或处理protobuf。
@@ -106,7 +106,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 
 | 观察到的证据 | 可以判断的方向 | 不能直接下的结论 |
 |---|---|---|
-| 整合主配置头部不是AD-20261020.2，或响应JS日志不是AD-20261020.1 | 检查当前选中配置及更新；整合模式只刷新原主配置后重建连接 | 配置和脚本版本不同是本次设计；脚本.1不代表配置未更新 |
+| 整合主配置头部不是AD-20261020.3，或响应JS日志不是AD-20261020.1 | 检查当前选中配置及更新；整合模式只刷新原主配置后重建连接 | 配置和脚本版本不同是本次设计；脚本.1不代表配置未更新 |
 | TCP443连接存在，但没有解密HTTP记录 | 检查实际主机/端口、HTTP/MITM适用范围、证书固定或其他加密；既有CA信任记录保留 | 不先要求重装证书；不关闭TLS验证 |
 | 已解密，探针request-url-unmatched | 请求进入引擎，但不匹配目前专用广告端点，需核对当前App接口 | 不把同主机所有业务请求当广告 |
 | request-url-matched后，正式响应日志body-unavailable/non-json/parse-error | handler进入，但没有可处理的JSON正文/解析失败 | 不自动删未知业务数据 |
@@ -125,11 +125,11 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 
 | 层 | 更新操作 | 会不会带入新处理 |
 |---|---|---|
-| 公共主配置 | 建议每周手动刷新原URL一次；发布修复后立即刷新 | 主机、原生动作、handler和11份内嵌JS一并更新；扩展provider默认引用也在这里。不承诺后台自动更新整份配置 |
+| 公共主配置 | 建议每周手动刷新原URL一次；发布修复后立即刷新 | 主机、原生动作、handler和11份JS的来源声明一并更新；扩展provider默认引用也在这里。不承诺后台自动更新整份配置 |
 | 旧App覆写（仅历史兼容） | 仅已有旧分层安装仍分别更新覆写 | 当前整合入口已包含这些声明，不新增或叠加；本地副本不会自动跟随远程声明 |
 | 远程广告规则集 | 建议保持现有86400秒，即24小时自动尝试刷新；下载错误时手动刷新 | 整合入口默认引用扩展快照，存在真实RULE-SET；这是刷新间隔，不是每日北京时间零点执行保证 |
-| 广告JS | 随整合主配置一起更新，无需独立刷新 | 内嵌JS不会独立后台更新；旧分层远程JS的86400秒刷新机制仅用于历史兼容 |
-| 本地静态包/私人节点快照 | 重新用当前源构建/导入，保留设备私人信息 | 静态规则/内嵌JS不是远程自动更新；私人节点快照不自动更新机场 |
+| 广告JS | 通过原URL读取，86400秒间隔尝试更新；需要立即取得JS修复时刷新脚本资源 | JS正文与主配置分开下载；新增主机/handler时仅刷新JS不够，不保证断网或iOS后台准点更新 |
+| 本地静态包/私人节点快照 | 重新用当前源构建/导入，保留设备私人信息 | 静态规则和HTTP声明需重新构建；JS仍通过原URL获取，首次使用需联网；私人节点快照不自动更新机场 |
 | 私人机场 | 建议保持现有86400秒，即24小时自动尝试刷新；节点异常或机场通知变更时手动刷新 | 不继承机场响应中的分流/DNS；机场更换URL时仍须本人在设备修改，不能自动发现新URL |
 
 以上频率统一见[更新教程](UPDATES.md)。7个节点池的1800秒检查是30分钟测速，不是更新规则。规则集只下载本仓库已发布快照；建议电脑每天运行一次[本地维护工具](MAINTENANCE.md)检查上游。普通规则可在隔离生成和验证后更新本地文件，专项脚本、重写与MITM变化仍需审查适配；发布到原分支后手机才能取得更新。没有部署GitHub定时同步，也没有自动修复App接口或替代真机验收。
@@ -161,10 +161,12 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 | response_handlers | 11 |
 | request_handlers | 0 |
 | runtime_js_providers | 11 |
+| remote_script_providers | 11 |
+| inline_script_providers | 0 |
 | mitm_exact_hosts | 45 |
 | optional_probe_js | 1 |
 
-公共主配置已整合以下全部40款专项，11份响应JS通过content内嵌。此表列出构建来源与处理范围，用户不需逐款导入；模块原路径保留作维护和旧安装兼容。逐App开关已取消需求，探针另列、默认关闭。
+公共主配置已整合以下全部40款专项，11份响应JS通过原稳定URL获取。此表列出构建来源与处理范围，用户不需逐款导入；模块原路径保留作维护和旧安装兼容。逐App开关已取消需求，探针另列、默认关闭。
 
 | App专项 | 维护源路径 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
 |---|---|---|---|---|---|
@@ -211,7 +213,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 
 ## 10. 精确原生声明与基础规则原文
 
-下列原生字段直接摘自主配置，省略完整分流与script-providers正文，不能直接作为主配置导入。11份provider的content与第12节同名JS逐字对应。LAN/系统例外优先，然后精确路径接管例外、专项域名与广告RULE-SET，后面仍有完整分流与终止MATCH。
+下列原生字段直接摘自主配置，省略完整分流，不能直接作为主配置导入。11份provider用url指向第12节的同名JS，均有非空来源。LAN/系统例外优先，然后精确路径接管例外、专项域名与广告RULE-SET，后面仍有完整分流与终止MATCH。
 
 <!-- CONFIG:ad-core -->
 ```yaml
@@ -406,6 +408,40 @@ http:
     require-body: true
     timeout: 5
     argument: diagnostic=0
+script-providers:
+  jimmy_alipan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js
+    interval: 86400
+  jimmy_bilibili_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js
+    interval: 86400
+  jimmy_cainiao_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js
+    interval: 86400
+  jimmy_jingdong_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js
+    interval: 86400
+  jimmy_luckin_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js
+    interval: 86400
+  jimmy_meituan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js
+    interval: 86400
+  jimmy_taobao_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js
+    interval: 86400
+  jimmy_tieba_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js
+    interval: 86400
+  jimmy_wechat_articles_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js
+    interval: 86400
+  jimmy_weibo_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js
+    interval: 86400
+  jimmy_xiaohongshu_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js
+    interval: 86400
 ```
 
 旧分层安装保留的基础payload（无需MITM）；当前整合入口默认使用上方provider指向的扩展快照，以下38条仅供维护对照，不同时叠加：
@@ -458,7 +494,7 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `6a57834a0512f3b89a3644980568f4708920664ae464456f3147514e7ac99afc` |
+| [config/stash.yaml](../config/stash.yaml) | `50d0ef39cfbbe76223092a5ab4b6b7dc3121c6dee9924b2bfd39b09468917a5e` |
 | [config/core.stoverride](../config/core.stoverride) | `e64bfa01488b4579e03accb239e5688f004bcfab8c2ccd40d12a21fa6a715b94` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `b066a2616df918c620e0409815ffe6f71b535b2c2d6ed64ddf1819cbbb4e19ce` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `729a277242f2bbbe626c34716e4eddff031c161d3011b8f39e7e346799991aa8` |
@@ -478,7 +514,7 @@ payload:
 
 ## 12. 当前全部运行JS原文
 
-其中11份是整合入口内嵌的响应处理；模块中的远程加载声明仅保留作旧安装兼容。另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。
+其中11份是整合入口按URL加载的响应处理；这里展示完整源代码供审查，不是可粘贴进content字段的配置。另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。
 
 ### alipan.js
 

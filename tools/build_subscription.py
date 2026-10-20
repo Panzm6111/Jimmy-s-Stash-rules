@@ -4,13 +4,13 @@ import argparse
 import json
 from pathlib import Path
 import yaml
-from build_local_bundle import flatten, dump, inline_scripts
+from build_local_bundle import flatten, dump, script_references
 from validate import ROOT, RAW, load, merged, merge_model, route, validate_structure
 from scan_secrets import inspect
 
 OUTPUT = 'config/stash.yaml'
 URL = RAW + OUTPUT
-VERSION = 'AD-20261020.2'
+VERSION = 'AD-20261020.3'
 
 def integrated():
     """The user-facing integrated entry; module files remain maintained sources."""
@@ -30,14 +30,15 @@ def integrated():
     return config
 
 def render():
-    config = inline_scripts(flatten(integrated(), keep_providers={'基础广告'}))
-    # Embed the reviewed scripts so refreshing this file updates declarations
-    # and code together, without a second script cache to refresh on the phone.
+    config = script_references(flatten(integrated(), keep_providers={'基础广告'}))
+    # Keep one user-facing config, using Stash's native URL script providers.
+    # A historical content-only example was rejected by the user's current core.
     config = {'proxy-providers': config.pop('proxy-providers'), **config}
     return ('# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；18个原策略组、DNS、私人订阅接入保留。\n'
-            '# 已整合40款现有专项与11份响应JS，扩展域名规则默认启用；诊断默认关闭。\n'
+            '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
+            '# 修复content-only provider解析失败；脚本首次加载需要联网，诊断默认关闭。\n'
             '# 建议每周手动刷新本配置，修复发布后立即刷新；规则集与机场每24小时尝试刷新。\n'
             '# 不需另加App或expanded覆写；停用已额外添加的广告覆写，保留私人订阅/白名单。\n'
             '# 当前需求统一为整合入口，不再要求逐App开关；原模块保留作维护来源与旧安装兼容。\n'
@@ -57,7 +58,8 @@ def verify(text):
     assert len(config['http']['mitm']) == 45
     assert len(config['script-providers']) == 11
     for name, provider in integrated()['script-providers'].items():
-        assert config['script-providers'][name] == {'content': (ROOT / provider['url'][len(RAW):]).read_text()}
+        assert config['script-providers'][name] == provider
+        assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
     assert len(config['proxy-groups']) == 18
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()

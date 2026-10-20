@@ -1,18 +1,18 @@
 # 去广告使用、迁移和排查
 
-当前需求已统一为整合入口，逐App独立开关不再是交付要求。主配置修订 **AD-20261020.2** 通过刷新原配置链接更新；广告处理脚本仍为 **AD-20261020.1**，并内嵌在主配置中。已审查的原40款专项范围保留，具体处理链、来源与未覆盖部分见[详细规格](AD-ARCHITECTURE.md)。没有iPhone效果验收，不能说淘宝/微博开屏已经实测去掉。自动签到继续暂停。
+当前需求已统一为整合入口，逐App独立开关不再是交付要求。主配置修订 **AD-20261020.3** 通过刷新原配置链接更新；广告处理脚本仍为 **AD-20261020.1**，通过主配置中的原仓库URL加载。已审查的原40款专项范围保留，具体处理链、来源与未覆盖部分见[详细规格](AD-ARCHITECTURE.md)。没有iPhone效果验收，不能说淘宝/微博开屏已经实测去掉。自动签到继续暂停。
 
 ## 已安装用户怎么更新
 
 1. 保留已能用的配置备份、原本机私人订阅覆写和地区选择，**不重填机场URL、不重建私人覆写、不重装证书**。
 2. 如果另装过“广告增强”、单独App广告覆写、expanded或临时诊断覆写，先停用这些额外广告条目，避免重复挂载。没装过就跳过；保留私人订阅覆写。
-3. 在配置列表刷新原`config/stash.yaml`链接，选中它。配置文本开头应有`AD-20261020.2`；原18个策略组、DNS和私人“机场”provider保留，App专项和响应脚本现已整合在主配置里。
+3. 在配置列表刷新原`config/stash.yaml`链接，选中它。配置文本开头应有`AD-20261020.3`；原18个策略组、DNS和私人“机场”provider保留，App专项及脚本URL声明已整合在主配置里。
 4. HTTP/MITM保持开启，沿用已有完全信任的自建CA，断开并重新连接Stash。核对节点、地区选择和私人覆写关联。
 5. 按[手机验收](PHONE-CHECKLIST.md)多轮测试冷启动、后台返回、触发预加载后再启动，同时检查登录、搜索、消息、视频和正常领券。
 
-**日常只维护同一个公共主配置。** 无需逐款添加广告覆写或导入expanded。新增主机、原生动作、handler和11份内嵌脚本随主配置一起更新。建议扩展广告规则集每24小时自动尝试刷新，公共主配置每周手动刷新一次，修复发布后立即刷新；具体机制与机场更新统一见[更新教程](UPDATES.md)。
+**日常只维护同一个公共主配置。** 无需逐款添加广告覆写或导入expanded。新增主机、原生动作、handler和脚本URL声明随主配置一起更新。11份远程脚本由Stash联网加载，配置24小时尝试刷新；仅刷新JS不能取得新主机或handler。建议扩展广告规则集每24小时自动尝试刷新，公共主配置每周手动刷新一次，修复发布后立即刷新；具体机制与机场更新统一见[更新教程](UPDATES.md)。
 
-开发检查：最终配置应有一次`RULE-SET,基础广告,广告拦截`，provider URL指向`rules/vendor/ads-expanded.yaml`；保留局域网/系统例外优先级。主配置包含`http.url-rewrite`、响应handler及内嵌脚本，没有旧`http.rewrite`或共享空响应provider。结构正确仍不等于Stash真机执行通过。
+开发检查：最终配置应有一次`RULE-SET,基础广告,广告拦截`，provider URL指向`rules/vendor/ads-expanded.yaml`；保留局域网/系统例外优先级。主配置包含`http.url-rewrite`、响应handler及非空`script-providers.url`，没有旧`http.rewrite`或共享空响应provider。结构正确仍不等于Stash真机执行通过。
 
 ## 基础与扩展域名
 
@@ -45,7 +45,7 @@ rules:
 
 默认不记录脚本日志。推荐整合模式需诊断时，在设备创建临时本地副本，仅将目标App响应handler的`argument: diagnostic=0`改成`argument: diagnostic=1`，保留私人覆写关联。排查后切回原远程配置、删除临时副本；不要把含私人内容的副本上传。临时副本只用于排障，不改变日常整合订阅的更新方式。
 
-日志形如`[JimmyAds][taobao][AD-20261020.1] changed`，仅模块、脚本版本、固定状态。主配置为AD-20261020.2而脚本为AD-20261020.1是本次正常组合，未另改脚本逻辑。`body-unavailable`、`non-json`、`parse-error`、`unsupported-schema`、`unchanged`、`changed`和`exception`分别有不同意义，详见[决策表](AD-ARCHITECTURE.md#6-临时只读诊断先确定请求有没有进入引擎)。不打印完整URL、查询、Cookie、Authorization、账号值或正文。
+日志形如`[JimmyAds][taobao][AD-20261020.1] changed`，仅模块、脚本版本、固定状态。主配置为AD-20261020.3而脚本为AD-20261020.1是本次正常组合，未另改脚本逻辑。`body-unavailable`、`non-json`、`parse-error`、`unsupported-schema`、`unchanged`、`changed`和`exception`分别有不同意义，详见[决策表](AD-ARCHITECTURE.md#6-临时只读诊断先确定请求有没有进入引擎)。不打印完整URL、查询、Cookie、Authorization、账号值或正文。
 
 [只读探针](../modules/diagnostics/ads.stoverride)必须在正式HTTP动作停止后单独使用。整合入口已内置动作，仅停用额外覆写不够；需要在临时本地副本把`http.url-rewrite`和`http.script`清空，保留精确MITM设置，并将广告组切DIRECT后再启用探针。仅在需要定位时操作，日常无需导入；观察后关闭探针并切回原远程配置、恢复广告组选择。不能拿无日志直接判定没进MITM，也不把probe命中当作广告已去除。原生拒绝动作没有响应JS日志，要看Stash本机重写命中；原生超时看Stash自身执行记录。
 
