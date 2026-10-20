@@ -1,18 +1,18 @@
 {
-  "checked_at": "2026-10-20T17:26:19.252665+08:00",
+  "checked_at": "2026-10-20T17:57:39.160670+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 238520,
-  "sha256": "50d0ef39cfbbe76223092a5ab4b6b7dc3121c6dee9924b2bfd39b09468917a5e",
+  "bytes": 239218,
+  "sha256": "abd7c0f211a7e2dd358acf4c5909430f36b5919bdecceca98c437120ba890a0b",
   "matches_local_bytes": true,
   "proxy_groups": 18,
   "rules": 5287,
   "inline_scripts": 0,
-  "remote_scripts": 11,
-  "request_handlers": 0,
+  "remote_scripts": 12,
+  "request_handlers": 1,
   "response_handlers": 11,
   "rewrite_rules": 38,
-  "mitm_hosts": 45,
+  "mitm_hosts": 46,
   "private_url_is_placeholder": true,
   "automatic_pools": [
     "自动节点",
@@ -37,13 +37,13 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "23829ec79403c0596a4b040fc4bfdd3db3abf08b",
+  "code_release_commit": "b244b9af3659669764030cbdaf73e9eca1bfab44",
   "hong_kong_name_aliases": [
     "HK",
     "HKG"
   ],
   "hong_kong_name_case_insensitive": true,
-  "ad_revision": "AD-20261020.3",
+  "ad_revision": "AD-20261020.4",
   "rule_providers": 1,
   "ad_rule_set_referenced": true,
   "base_http_embedded": true,
@@ -58,19 +58,21 @@
   "optional_probe_default_enabled": false,
   "source_credentials_read": false,
   "runtime_public_resources": {
-    "passed": 68,
-    "total": 68
+    "passed": 82,
+    "total": 82,
+    "exact_versioned_script_urls_included": 12
   },
   "offline_checks": {
-    "project": 36,
-    "javascript_simulated": 62,
+    "project": 37,
+    "javascript_simulated": 81,
     "private_builder": 12,
-    "current_files_scanned": 149,
-    "history_blobs_scanned": 504,
+    "current_files_scanned": 154,
+    "history_blobs_scanned": 532,
     "secret_pattern_findings": 0,
-    "local_document_links": 265
+    "local_document_links": 272,
+    "legacy_bundle_route_comparisons": 222
   },
-  "script_revision": "AD-20261020.1",
+  "script_revision": "AD-20261020.4",
   "expanded_default_enabled": true,
   "current_requirements": {
     "daily_entry": "config/stash.yaml",
@@ -84,9 +86,10 @@
     "main_config": "manual weekly; immediately after a relevant published fix",
     "node_probe_seconds": 1800,
     "upstream_review": "daily local maintain.py check recommended; guarded ordinary-rule updates, manual review of script changes; no scheduler deployed",
-    "remote_script_provider_seconds": 86400
+    "remote_script_provider_seconds": 86400,
+    "script_url_revision": "Stable paths with a public v parameter to distinguish resource caches; not an immutable commit pin."
   },
-  "offline_checks_scope": "Provider source fix AD-20261020.3: project, JS simulation and private-builder checks rerun; no Stash native or iPhone test.",
+  "offline_checks_scope": "AD-20261020.4 integrated manual self-check and observation: full project/JS/private-builder checks rerun. Simulated execution only; no new native Stash or iPhone ad effect test.",
   "editorial_verification": {
     "baseline": "f494a85",
     "yaml_runtime_unchanged": 45,
@@ -141,6 +144,42 @@
     "generation_drift": 0,
     "legacy_bundle_route_comparisons": 222,
     "native_stash_tested": false,
-    "iphone_tested": false
+    "iphone_tested": false,
+    "revision": "AD-20261020.3",
+    "scope": "Historical source declaration fix retained; its comparison counts describe .3 only.",
+    "user_reported_import_recovered": true
+  },
+  "manual_self_check": {
+    "device_generated_url": "https://example.com/jimmy-stash-check",
+    "config_module": "modules/diagnostics/self-check.stoverride",
+    "script": "scripts/ads/self-check.js",
+    "integrated_by_default": true,
+    "recording_default_enabled": false,
+    "explicit_start_required": true,
+    "maximum_session_seconds": 900,
+    "stop_supported": true,
+    "session_write_readback_verified": true,
+    "stored_fields": [
+      "fixed module IDs",
+      "script version",
+      "session ID/timestamps",
+      "fixed state counters"
+    ],
+    "credential_url_or_body_storage": false,
+    "external_requests_or_notifications": false,
+    "added_mitm_hosts": [
+      "example.com"
+    ],
+    "app_mitm_hosts_unchanged": 45,
+    "native_ad_actions_unchanged": 38,
+    "ad_response_handlers_unchanged": 11,
+    "routing_groups_dns_private_provider_unchanged": true,
+    "ad_business_transforms_unchanged": true,
+    "old_probe_mounted": false,
+    "native_tested": false,
+    "iphone_ad_effect_passed": false,
+    "user_feedback_before_release": "AD-20261020.3 loads, splash ads remain; rule mode and REJECT confirmed.",
+    "confirmed_global_failure_cause": null,
+    "limitation": "Manual self-check confirms only its test request; missing records do not identify a cause. Native ad actions do not produce response-script records. App execution/effects remain for the device to verify."
   }
 }
