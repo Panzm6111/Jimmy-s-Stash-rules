@@ -100,5 +100,28 @@
     "archive_route_comparisons": 222,
     "current_files_secret_scanned": 145,
     "secret_pattern_findings": 0
+  },
+  "local_maintenance_tool": {
+    "path": "tools/maintain.py",
+    "guide": "docs/MAINTENANCE.md",
+    "code_release_commit": "b13c9aa41a39e95905261122a33f7ce9371bed00",
+    "public_files_verified": 22,
+    "live_upstream_files_checked": 50,
+    "live_upstream_files_changed": 0,
+    "actual_update_result": "no_rule_changes; formal source pins and runtime files unchanged",
+    "maintenance_tests": 30,
+    "isolated_project_checks": 35,
+    "isolated_js_simulations": 62,
+    "isolated_private_builder_tests": 12,
+    "isolated_public_regeneration_and_apply_rollback_passed": true,
+    "linux_tested": true,
+    "windows_tested": false,
+    "macos_tested": false,
+    "iphone_tested": false,
+    "auto_commit": false,
+    "auto_push": false,
+    "scheduler_deployed": false,
+    "app_script_changes": "report for manual adaptation; never execute fetched upstream scripts",
+    "notes": "Full temporary-clone regeneration/validation used 28a75ca; final 600-second private-builder timeout adjustment passed all 30 maintenance tests again. Upstream bytes were unchanged; temporary source-pin regeneration was an integration exercise only."
   }
 }
