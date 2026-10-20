@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-20T17:57:39.160670+08:00",
+  "checked_at": "2026-10-20T18:38:57.112531+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 239218,
-  "sha256": "abd7c0f211a7e2dd358acf4c5909430f36b5919bdecceca98c437120ba890a0b",
+  "bytes": 240206,
+  "sha256": "68a54757c4c73faa5ecbd7121bce2a510a4a79db31208882194a82fc417b41ef",
   "matches_local_bytes": true,
   "proxy_groups": 18,
   "rules": 5287,
@@ -11,8 +11,8 @@
   "remote_scripts": 12,
   "request_handlers": 1,
   "response_handlers": 11,
-  "rewrite_rules": 38,
-  "mitm_hosts": 46,
+  "rewrite_rules": 43,
+  "mitm_hosts": 59,
   "private_url_is_placeholder": true,
   "automatic_pools": [
     "自动节点",
@@ -37,23 +37,23 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "b244b9af3659669764030cbdaf73e9eca1bfab44",
+  "code_release_commit": "2fa649b50ba1779ac901c15274ed186a502cbf45",
   "hong_kong_name_aliases": [
     "HK",
     "HKG"
   ],
   "hong_kong_name_case_insensitive": true,
-  "ad_revision": "AD-20261020.4",
+  "ad_revision": "AD-20261020.5",
   "rule_providers": 1,
   "ad_rule_set_referenced": true,
   "base_http_embedded": true,
   "per_app_overrides_retained": 40,
   "per_app_http_switches": "not required by current user requirement; integrated entry only; separate modules retained as maintained sources and legacy compatibility",
   "all_app_overrides_combined": {
-    "native_url_rewrites": 38,
+    "native_url_rewrites": 43,
     "response_handlers": 11,
     "remote_js": 11,
-    "mitm_exact_hosts": 45
+    "mitm_exact_hosts": 58
   },
   "optional_probe_default_enabled": false,
   "source_credentials_read": false,
@@ -63,16 +63,16 @@
     "exact_versioned_script_urls_included": 12
   },
   "offline_checks": {
-    "project": 37,
-    "javascript_simulated": 81,
+    "project": 39,
+    "javascript_simulated": 88,
     "private_builder": 12,
-    "current_files_scanned": 154,
-    "history_blobs_scanned": 532,
+    "current_files_scanned": 157,
+    "history_blobs_scanned": 582,
     "secret_pattern_findings": 0,
-    "local_document_links": 272,
+    "local_document_links": 284,
     "legacy_bundle_route_comparisons": 222
   },
-  "script_revision": "AD-20261020.4",
+  "script_revision": "AD-20261020.5",
   "expanded_default_enabled": true,
   "current_requirements": {
     "daily_entry": "config/stash.yaml",
@@ -89,7 +89,7 @@
     "remote_script_provider_seconds": 86400,
     "script_url_revision": "Stable paths with a public v parameter to distinguish resource caches; not an immutable commit pin."
   },
-  "offline_checks_scope": "AD-20261020.4 integrated manual self-check and observation: full project/JS/private-builder checks rerun. Simulated execution only; no new native Stash or iPhone ad effect test.",
+  "offline_checks_scope": "AD-20261020.5: project/JS/private-builder checks passed before publication; source-reconstructed samples only. Source and staged public changes reviewed. 157/582 secret scan counts describe pre-publication state; no native .5 or ad-effect test.",
   "editorial_verification": {
     "baseline": "f494a85",
     "yaml_runtime_unchanged": 45,
@@ -180,6 +180,21 @@
     "iphone_ad_effect_passed": false,
     "user_feedback_before_release": "AD-20261020.3 loads, splash ads remain; rule mode and REJECT confirmed.",
     "confirmed_global_failure_cause": null,
-    "limitation": "Manual self-check confirms only its test request; missing records do not identify a cause. Native ad actions do not produce response-script records. App execution/effects remain for the device to verify."
+    "limitation": "Manual self-check confirms only its test request; missing records do not identify a cause. Native ad actions do not produce response-script records. App execution/effects remain for the device to verify.",
+    "scope": "Historical .4 implementation evidence; its unchanged counts describe .4, not current .5 inventory."
+  },
+  "fmz_integration": {
+    "source_revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+    "guide": "docs/FMZ-INTEGRATION.md",
+    "audit": "research/fmz-integration.json",
+    "reviewed_source_files": 10,
+    "source_license_verified": true,
+    "added_native_actions": 5,
+    "http_compatibility_extended": true,
+    "all_non_http_configuration_equal_to": "8951c44cd60be6ac0b44e801327ad85d4e4a5a88",
+    "direct_upstream_runtime_load": false,
+    "whole_upstream_pack_imported": false,
+    "iphone_ad_effect_tested": false,
+    "prior_user_evidence": "User .4 screenshot confirms some scripts execute; no-record Apps still showed ads; does not identify protocol/MITM/cache cause."
   }
 }
