@@ -54,7 +54,7 @@
 | 瑞幸咖啡 | 仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券 | 是：`capi.lkcoffee.com` | [luckin](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/luckin.stoverride) |
 | 微信 | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天 | 是：`mp.weixin.qq.com` | [wechat-articles](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride) |
 
-既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[扩展域名包](../modules/ads/expanded.stoverride)不需证书，替换基础广告provider而不叠加整包。
+既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，仅在保留基础广告RULE-SET的core分层中替换provider；直接叠加到已展开规则的一体化主配置不能启用扩展包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。
 
 ## 与原通用包是否重叠
 

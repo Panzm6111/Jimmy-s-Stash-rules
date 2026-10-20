@@ -39,7 +39,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/weibo.stoverride
 ```
 
-这些模块默认不导入、不开启。需要 MITM，新增精确域名为：
+在逐款按需模式中，这些独立覆写默认不额外导入；推荐一体化`config/stash.yaml`已经包含相同处理，不能据此理解为内置专项关闭，也不要重复叠加。处理HTTPS需要MITM，新增精确域名为：
 
 - 淘宝：`guide-acs.m.taobao.com`
 - 小红书：`edith.xiaohongshu.com`

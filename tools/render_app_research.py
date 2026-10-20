@@ -65,7 +65,7 @@ def render():
     for item in catalog['modules']:
         host_text = '是：' + '、'.join(f'`{h}`' for h in item['mitm']) if item['mitm'] else '否；仅独立广告域名'
         out2.append(f'| {item["app"]} | {item["scope"]} | {host_text} | [{item["id"]}]({RAW+item["file"]}) |')
-    out2 += ['', '既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[扩展域名包](../modules/ads/expanded.stoverride)不需证书，替换基础广告provider而不叠加整包。', '',
+    out2 += ['', '既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，仅在保留基础广告RULE-SET的core分层中替换provider；直接叠加到已展开规则的一体化主配置不能启用扩展包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。', '',
              '## 与原通用包是否重叠', '',
              '以下按**目标主机**实际匹配现有基本域名/关键词规则；不推断该App全部流量，IP规则没有在此推演。通用包已命中时，专项可能只是提供较小范围/独立入口，并不额外增加一次拦截。基础和扩展二选一；同一请求按首条规则处理。', '',
              '| App | 目标主机 | 基础规则 | 扩展规则 |', '|---|---|---|---|']
