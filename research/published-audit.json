@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-20T16:27:18.177152+08:00",
+  "checked_at": "2026-10-20T17:26:38.813753+08:00",
   "target": "published",
   "passed": 68,
   "total": 68,
@@ -22,7 +22,7 @@
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 286925,
+      "bytes": 238520,
       "ok": true
     },
     {
@@ -480,139 +480,5 @@
       "bytes": 4972,
       "ok": true
     }
-  ],
-  "initial_failures": [
-    {
-      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js",
-      "status": 502,
-      "ok": false
-    }
-  ],
-  "code_release_commit": "9462d4900ba090a06d9c4600efa4b625f0b849ed",
-  "documentation_at_code_commit": {
-    "code_commit": "9462d4900ba090a06d9c4600efa4b625f0b849ed",
-    "passed": 17,
-    "total": 17,
-    "results": [
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/PROGRESS.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 37112,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/README.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 10296,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 100296,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-MODULES.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 16946,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/ADBLOCKING.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 6861,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AI-COVERAGE.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 5996,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/APP-INVENTORY.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 43332,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/APP-SPLASH.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 3455,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/LOCAL-IMPORT.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 3009,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/PHONE-CHECKLIST.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 7355,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/QUICKSTART.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 4230,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/ROUTING.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 9417,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/SOURCES.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 12014,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/STASH-CAPABILITIES.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 9613,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/SUBSCRIBE.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 13355,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/SUBSCRIPTION.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 7537,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/UPDATES.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 8250,
-        "ok": true
-      }
-    ]
-  }
+  ]
 }

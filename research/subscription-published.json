@@ -1,14 +1,14 @@
 {
-  "checked_at": "2026-10-20T16:27:52.460229+08:00",
+  "checked_at": "2026-10-20T17:26:19.252665+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 286925,
-  "sha256": "6a57834a0512f3b89a3644980568f4708920664ae464456f3147514e7ac99afc",
+  "bytes": 238520,
+  "sha256": "50d0ef39cfbbe76223092a5ab4b6b7dc3121c6dee9924b2bfd39b09468917a5e",
   "matches_local_bytes": true,
   "proxy_groups": 18,
   "rules": 5287,
-  "inline_scripts": 11,
-  "remote_scripts": 0,
+  "inline_scripts": 0,
+  "remote_scripts": 11,
   "request_handlers": 0,
   "response_handlers": 11,
   "rewrite_rules": 38,
@@ -37,13 +37,13 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "9462d4900ba090a06d9c4600efa4b625f0b849ed",
+  "code_release_commit": "23829ec79403c0596a4b040fc4bfdd3db3abf08b",
   "hong_kong_name_aliases": [
     "HK",
     "HKG"
   ],
   "hong_kong_name_case_insensitive": true,
-  "ad_revision": "AD-20261020.2",
+  "ad_revision": "AD-20261020.3",
   "rule_providers": 1,
   "ad_rule_set_referenced": true,
   "base_http_embedded": true,
@@ -62,13 +62,13 @@
     "total": 68
   },
   "offline_checks": {
-    "project": 35,
+    "project": 36,
     "javascript_simulated": 62,
     "private_builder": 12,
-    "current_files_scanned": 145,
-    "history_blobs_scanned": 375,
+    "current_files_scanned": 149,
+    "history_blobs_scanned": 504,
     "secret_pattern_findings": 0,
-    "local_document_links": 241
+    "local_document_links": 265
   },
   "script_revision": "AD-20261020.1",
   "expanded_default_enabled": true,
@@ -82,11 +82,11 @@
     "ad_rule_provider_seconds": 86400,
     "airport_provider_seconds": 86400,
     "main_config": "manual weekly; immediately after a relevant published fix",
-    "inline_scripts": "with main config",
     "node_probe_seconds": 1800,
-    "upstream_review": "daily local maintain.py check recommended; guarded ordinary-rule updates, manual review of script changes; no scheduler deployed"
+    "upstream_review": "daily local maintain.py check recommended; guarded ordinary-rule updates, manual review of script changes; no scheduler deployed",
+    "remote_script_provider_seconds": 86400
   },
-  "offline_checks_scope": "The existing full functional check counts are from the prior implementation release 21e2783; this wording-only release did not rerun the full suite or iPhone tests.",
+  "offline_checks_scope": "Provider source fix AD-20261020.3: project, JS simulation and private-builder checks rerun; no Stash native or iPhone test.",
   "editorial_verification": {
     "baseline": "f494a85",
     "yaml_runtime_unchanged": 45,
@@ -123,5 +123,24 @@
     "scheduler_deployed": false,
     "app_script_changes": "report for manual adaptation; never execute fetched upstream scripts",
     "notes": "Full temporary-clone regeneration/validation used 28a75ca; final 600-second private-builder timeout adjustment passed all 30 maintenance tests again. Upstream bytes were unchanged; temporary source-pin regeneration was an integration exercise only."
+  },
+  "provider_parse_fix": {
+    "reported_error": "stash core config parse failed:provider: url,payload, path are all empty",
+    "baseline_commit": "a29bab983b0af774862727b97a7a446e1e3d7ae3",
+    "before_missing_sources": 11,
+    "after_missing_sources": 0,
+    "provider_total": 13,
+    "change": "Replace content-only script providers with original project URL and interval declarations; preserve one integrated entry.",
+    "all_other_parsed_config_identical": true,
+    "javascript_files_byte_identical": 12,
+    "private_provider_changed": false,
+    "script_revision_changed": false,
+    "main_generator_updated": true,
+    "legacy_bundle_generator_updated": true,
+    "private_generator_updated": true,
+    "generation_drift": 0,
+    "legacy_bundle_route_comparisons": 222,
+    "native_stash_tested": false,
+    "iphone_tested": false
   }
 }
