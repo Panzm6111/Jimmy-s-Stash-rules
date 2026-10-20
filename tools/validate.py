@@ -237,8 +237,8 @@ class ProjectChecks(unittest.TestCase):
 
     def test_public_expanded_provider_is_reachable_and_ordered(self):
         base = load('config/stash.yaml')
-        expanded = merge_model(base, load('modules/ads/expanded.stoverride'))
-        self.assertNotEqual(route(base, 'ad.12306.cn'), '广告拦截')
+        expanded = base  # integrated public entry includes the expanded package
+        self.assertNotEqual(route(merged(), 'ad.12306.cn'), '广告拦截')
         self.assertEqual(route(expanded, 'ad.12306.cn'), '广告拦截')
         for host in ['api.push.apple.com', 'login.microsoftonline.com']:
             self.assertEqual(route(expanded, host), 'DIRECT')
@@ -249,7 +249,8 @@ class ProjectChecks(unittest.TestCase):
         self.assertEqual(set(base['rule-providers']), {r.split(',')[1] for r in base['rules'] if r.startswith('RULE-SET,')})
 
     def test_each_app_switch_removes_its_actions_without_touching_routing(self):
-        base = load('config/stash.yaml')
+        # Per-App switches belong to the existing layered installation only.
+        base = merged()
         paths = sorted(p for p in (ROOT / 'modules/ads').glob('*.stoverride') if p.stem != 'expanded')
         self.assertNotIn('http', base)
         self.assertNotIn('script-providers', base)
@@ -402,7 +403,30 @@ class ProjectChecks(unittest.TestCase):
         self.assertNotIn('dot.pub', json.dumps(config['dns']))
         self.assertTrue({'Google', 'NCloud'}.isdisjoint(g['name'] for g in config['proxy-groups']))
         for provider in config.get('script-providers', {}).values():
-            self.assertEqual(set(provider), {'url', 'interval'})
+            self.assertEqual(set(provider), {'content'})
+
+    def test_integrated_entry_has_all_modules_and_preserves_non_ad_priority(self):
+        from build_subscription import integrated, verify
+        config = verify((ROOT / 'config/stash.yaml').read_text())
+        expected = integrated()
+        self.assertEqual(config['http'], {
+            **expected['http'], 'mitm': list(dict.fromkeys(expected['http']['mitm']))})
+        self.assertEqual(len(config['script-providers']), 11)
+        # A LAN destination keeps the earlier direct exception even with an ad
+        # hostname; private whitelist prepends and can override public ads.
+        self.assertEqual(route(config, 'ads-img-al.xhscdn.com', '192.168.17.1'), 'DIRECT')
+        self.assertEqual(route(config, 'ads-img-al.xhscdn.com'), '广告拦截')
+        before = merge_model(config, {'rules': ['DOMAIN,ads-img-al.xhscdn.com,DIRECT']})
+        self.assertEqual(route(before, 'ads-img-al.xhscdn.com'), 'DIRECT')
+        # Expanded domains must not short-circuit reviewed HTTP responses or
+        # whole-block shared media hosts used by path-specific rewrites.
+        for host in config['http']['mitm']:
+            self.assertNotEqual(route(config, host), '广告拦截', host)
+        for host in ['flowplus.meituan.net', 'bootpreload.uve.weibo.com']:
+            self.assertEqual(route(config, host), 'DIRECT')
+        self.assertTrue(any(re.search(item.rsplit(' - ', 1)[0],
+            'https://flowplus.meituan.net/v1/normal/linglong/advert.jpg')
+            for item in config['http']['url-rewrite']))
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
@@ -472,8 +496,12 @@ class ProjectChecks(unittest.TestCase):
     def test_expanded_preserves_lan_and_service_exceptions(self):
         from unittest.mock import patch
         config = merged('modules/ads/expanded.stoverride')
-        self.assertEqual(config['rules'], self.config['rules'])
-        self.assertNotIn('rules', load('modules/ads/expanded.stoverride'))
+        exceptions = ['DOMAIN,flowplus.meituan.net,DIRECT',
+                      'DOMAIN,bootpreload.uve.weibo.com,DIRECT']
+        self.assertEqual(config['rules'], exceptions + self.config['rules'])
+        self.assertEqual(load('modules/ads/expanded.stoverride')['rules'], exceptions)
+        for host in ['flowplus.meituan.net', 'bootpreload.uve.weibo.com']:
+            self.assertEqual(route(config, host), 'DIRECT')
         sets = provider_rules(config)
         self.assertTrue(set(provider_rules(self.config)['基础广告']) <= set(sets['基础广告']))
         # A future over-broad upstream entry must not outrank built-in safety exceptions.

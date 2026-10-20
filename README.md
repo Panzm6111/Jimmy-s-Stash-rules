@@ -4,7 +4,7 @@
 
 > 公共订阅沿用`main`的原入口，最新提交与HTTP/哈希校验结果见[PROGRESS.md](PROGRESS.md)。配置只有占位符，私人订阅和证书始终留在设备。官方文档站受云网络策略限制，部分原生语义和最低版本仍待复核；尚未完成iPhone验收，不能把发布成功当作真实连接/去广告通过。自动签到继续暂停。
 
-> **AD-20261020.1 去广告修复：** 固定响应改用原生 URL 重写；补齐部分启动/预载/素材/广告字段处理，修复扩展包接入。为实现真正的逐App开关，原主入口现只带分流和通用域名规则，App专项按需启用；原40款范围保留。已安装用户按[一次迁移](docs/ADBLOCKING.md#已安装用户怎么更新)同时刷新原配置与模块，停用旧整合广告增强。**尚无iPhone效果验收，不保证所有开屏消失。**
+> **AD-20261020.2 使用方式统一：** 原配置链接现在整合已审查的40款专项、11份响应脚本和扩展广告规则集引用。已经能用的用户刷新原主配置即可取得这些处理，不需要另找App开关或添加expanded覆写。保留原私人订阅和已信任证书；若之前额外装过广告覆写，先停用以免重复。详见[更新步骤](docs/ADBLOCKING.md#已安装用户怎么更新)。**整合入口没有逐App开关；尚无iPhone效果验收，不保证所有开屏消失。**
 
 ## 推荐：粘贴一条链接导入
 
@@ -16,7 +16,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 1. 按[订阅导入教程](docs/SUBSCRIBE.md)在**设备本地私人覆写**填一次机场URL，并关联这份配置；不要在GitHub填写。
 2. 刷新“机场”，将“总代理”从 `REJECT` 改为“自动节点”或所需地区，使用规则模式连接。“海外AI”默认美国，Apple/Microsoft默认直连；各软件仍可独立选择。
-3. 本入口包含原分流和38条基础广告的真实规则集引用。需要开屏处理时，从[40款原模块目录](docs/AD-MODULES.md)导入并启用所需App覆写；关闭该覆写就撤销其专项。沿用设备已完全信任的自建CA，HTTP/MITM保持开启，避免重复添加同款。
+3. 本入口已经包含原分流、扩展广告规则集引用和已审查App专项；脚本随主配置一同下载。**无需另装App覆写或expanded**。沿用设备已完全信任的自建CA，HTTP/MITM保持开启；没有装过额外广告覆写就直接跳过停用步骤。
 
 若日志显示`dot.pub / NotValidForName`，或出现本项目没有的`Google/NCloud`策略组，先按[运行中排障](docs/SUBSCRIBE.md#已启动但打不开网页或出现dns证书错误)核对选中配置、覆写与DNS设置。确认选中“Jimmy 本机配置”，在“手动节点”手选真节点；流量提示不是节点。日志显示启动成功不等于这份配置已经导入成功。
 
@@ -29,7 +29,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 - “自动节点”、美国、日本、香港、新加坡、台湾和“其他地区”共7个自动测速池，按最近成功的HTTPS探测延迟选最低者；30分钟检测一次，不保证任意时刻最快。“自动节点”可跨国家切换，“其他地区”可在其中多个国家间切换；需要手选全部节点时使用保留的“手动节点”。
 - “海外AI”取代原OpenAI组，涵盖常用海外AI服务，默认选美国；可另选地区、跟随总代理或手选具体节点。Netflix、YouTube、Telegram默认跟随总代理；各软件选择互不影响。Apple/Microsoft 默认直连，并对通知、登录和更新做更具体的处理。AI覆盖范围与遗漏边界见[说明](docs/AI-COVERAGE.md)。
 - 局域网直连、国内常用域名规则、国内 GeoIP 兜底、广告开关和未匹配流量组。
-- 较窄的基础广告域名包；可选扩展包现在可实际接入原公共入口；40款App的独立广告专项。你提供的图片已提取135个名称，其中39款有专项文件，其余逐款记录原因。**实际广告效果均待手机测试**，不处理会员解锁。
+- 推荐入口默认引用扩展广告域名包，整合40款App的已审查广告专项；需要逐App启停时，另选下文的原分层方式。你提供的图片已提取135个名称，其中39款有专项文件，其余逐款记录原因。**实际广告效果均待手机测试**，不处理会员解锁。
 - 自动签到已暂停；含拼多多、云闪付的 [24 平台调查备忘](docs/CHECKIN-RESEARCH.md) 保留供日后参考。
 - 固定主路径、来源与许可证记录、离线验证、上游快照更新工具、排障和回退教程。
 
@@ -43,7 +43,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 ## 可选：原分层方式安装
 
-使用上面的公共订阅入口时，跳过下面main+core的分层安装，不重复添加core。App专项仍按需添加，每款只启用一份。
+**使用上面的公共订阅入口时，整节跳过，不添加core、App覆写或expanded。** 下文仅供明确需要逐App开关的人选择另一种安装方式；它与推荐整合入口互斥。所谓“App开关”是自己导入后在覆写列表启停该条目，不是Stash自动出现的一排软件按钮。expanded同样是覆写文件名。
 
 ### 0. 确认前提
 
@@ -105,11 +105,11 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core
 | 扩展广告 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/expanded.stoverride` | 可选，默认不导入；替换基础规则集，不需 MITM，保留系统直连例外 |
 | B 站广告 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/bilibili.stoverride` | 可选，默认不导入；需 MITM，只改开屏/推荐流 JSON |
 | 贴吧开屏 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/tieba.stoverride` | 可选，默认不导入；需 MITM，只改开屏 JSON |
-| 淘宝开屏 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taobao.stoverride` | 可选，默认不导入；只改专用 splash API 中的广告条目 |
-| 小红书开屏 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaohongshu.stoverride` | 可选，默认不导入；只调整开屏广告展示窗口 |
-| 微博开屏 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/weibo.stoverride` | 可选，默认不导入；两个实时/预加载开屏接口 |
+| 淘宝开屏 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taobao.stoverride` | 分层模式可选；专用 splash API 与明确 tao_splash 场景 |
+| 小红书开屏 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaohongshu.stoverride` | 分层模式可选；开屏配置、指定素材与明确标识的首页广告 |
+| 微博开屏 | `https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/weibo.stoverride` | 分层模式可选；实时/预加载、指定广告主机及有限信息流 |
 
-本轮另新增35款：包含京东、拼多多、菜鸟、闲鱼、高德、美团、大众点评、知乎、网易云音乐等。**完整远程链接、精确解密域名、仅处理的广告范围和关闭步骤见[模块目录](docs/AD-MODULES.md)**。云闪付、京东金融等采用独立广告域名规则，不解密支付业务。微信仅处理公众号文章广告，不声称去除朋友圈/视频号广告。
+另外35款包括：包含京东、拼多多、菜鸟、闲鱼、高德、美团、大众点评、知乎、网易云音乐等。**完整远程链接、精确解密域名、仅处理的广告范围和关闭步骤见[模块目录](docs/AD-MODULES.md)**。云闪付、京东金融等采用独立广告域名规则，不解密支付业务。微信仅处理公众号文章广告，不声称去除朋友圈/视频号广告。
 
 广告策略组的 `DIRECT` 只关闭**域名拦截**；HTTP重写和响应脚本必须在覆写页面分别关闭。先逐个启用、逐个测试，不整包开启。多个模块同时启用时，合并预览必须保留各自 handler、rewrite 与精确 MITM 域名，不能只剩最后一个。全量仅供结构检查的预期计数见模块目录。目标主机与原通用包的实际重叠也在该目录列出，不将重叠规则当作新增去广告效果。
 
@@ -125,11 +125,11 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core
 
 按需连接适合不需要持续去广告的情况：在 Stash 里手动连接/断开。系统按需连接入口如可用，必须以当前版本真实选项为准，不能承诺识别每个 App/网站后精准启停。本项目不制作虚假的快捷指令导入文件。
 
-7个自动池使用 `url-test`，测速地址为 `https://www.gstatic.com/generate_204`，`interval: 1800`。这是HTTPS探测延迟，不是ICMP ping、下载带宽或服务解锁测试；具体切换阈值、缓存和时机仍待Stash实测。测速检查为 30 分钟，公共规则/脚本/机场请求刷新间隔为 24 小时；覆写的获取与这些 interval **不是同一机制**，见 [更新机制表](docs/UPDATES.md)。不承诺耗电百分比、不做高频轮询。当前没有签到调度，也没有需要保持运行的额外后台任务。
+7个自动池使用 `url-test`，测速地址为 `https://www.gstatic.com/generate_204`，`interval: 1800`。这是HTTPS探测延迟，不是ICMP ping、下载带宽或服务解锁测试；具体切换阈值、缓存和时机仍待Stash实测。测速检查为30分钟；远程规则集和机场请求刷新间隔为24小时。推荐入口的内嵌脚本随主配置刷新；只有分层模式的远程脚本另按24小时请求刷新。覆写的获取与这些interval **不是同一机制**，见 [更新机制表](docs/UPDATES.md)。不承诺耗电百分比、不做高频轮询。当前没有签到调度，也没有需要保持运行的额外后台任务。
 
 本次将“全部节点”改名为“自动节点”、OpenAI组改名为“海外AI”。已能上网的用户直接刷新原公共主配置；使用core分层模式的刷新原core，不重填订阅或新建私人覆写。旧组名消失后必须核对选择，总代理若回到REJECT要重选；海外AI=美国、Apple=DIRECT是配置默认，旧UI选择可能保留，更新后手动确认。手改的本地副本没有公共配置自动更新关系，更新前先在设备备份私人URL。详见[一次性迁移](docs/UPDATES.md#本次测速与海外ai调整的迁移)。
 
-平时更新保留原配置、组名与 provider 名，优先刷新原覆写/资源，不反复删配置重建。私人 URL 存在设备本地层，公共更新不应改它；原生 UI 选择保留仍需手机核对，必要时手动重选。每次更改前记下地区选择并在设备本地保留上一份已工作的公共覆写。完整操作看 [更新、排障与回退](docs/UPDATES.md)。
+平时更新保留原配置、组名与provider名。推荐入口刷新原公共主配置，不反复删配置重建；分层模式才分别刷新原覆写/资源。私人 URL 存在设备本地层，公共更新不应改它；原生 UI 选择保留仍需手机核对，必要时手动重选。每次更改前记下地区选择并在设备本地保留上一份已工作的公共覆写。完整操作看 [更新、排障与回退](docs/UPDATES.md)。
 
 ## 文档导航
 

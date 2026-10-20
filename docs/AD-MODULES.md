@@ -2,15 +2,15 @@
 
 当前共41个独立覆写：40个App专项（含前轮贴吧，不在本次图片内），另有1个扩展域名包。图中135款中39款有专项文件。全部是**候选实现、待设备实测**。本页逐款文件用于按需模式，默认不额外导入。
 
-AD-20261020.1起，原[公共订阅入口](SUBSCRIBE.md)只承载分流与基础域名规则，不再内置HTTP专项。下面40款文件保留，按需导入即为真实逐App开关。已装用户须同时刷新原主配置和所选模块，停用旧整合“广告增强”，避免重复挂载。
+AD-20261020.2起，原[公共订阅入口](SUBSCRIBE.md)已整合全部40款已有专项、11份内嵌响应JS和默认扩展域名包；刷新主配置即可取得当前处理，不需要再导入本表文件。**整合入口没有逐App开关**，关闭额外同名覆写不能撤销内置处理；已有额外App/广告增强/expanded覆写应停用以免重复。下表文件只供main.yaml＋core的高级分层模式按需启停。
 
-## 添加和关闭
+## 高级分层模式：添加和关闭
 
-1. 先按[README](../README.md)完成主配置、私人订阅和公共分流。
+1. 仅当需要逐App开关时，按[README](../README.md)的高级分层方式使用main.yaml＋core与私人订阅。使用整合stash.yaml时跳过本节，不能叠加同款。
 2. 在下表找App，复制“远程覆写地址”，在Stash覆写管理中添加并关联主配置。先只启用一款。
 3. “需MITM=是”时，按[证书教程](ADBLOCKING.md)在自己设备生成并信任CA；只使用该行列出的精确主机。域名级解密能看到同主机其他请求，广告处理本身仍限于表内路径；不愿接受此范围则保持关闭。
 4. 重启目标App，分别检查广告和登录/支付/消息/播放/普通领券；原有缓存不会被脚本删除。广告无效、空白等待或业务异常就关闭该覆写并重建连接。
-5. “广告拦截→DIRECT”只放行域名规则。要停止HTTP重写或响应脚本，必须关闭对应覆写；域名白名单不能停止它们。关闭域名专项后若扩展包仍含同一主机，也会继续被扩展包阻断。
+5. 本分层模式中，“广告拦截→DIRECT”只放行域名规则。要停止HTTP重写或响应脚本，必须关闭对应覆写；域名白名单不能停止它们。关闭域名专项后若通用包仍含同一主机，也会继续阻断。整合入口需按[恢复教程](ADBLOCKING.md)处理，不能用不存在的单App开关。
 
 ## 本次新增35款
 
@@ -54,7 +54,7 @@ AD-20261020.1起，原[公共订阅入口](SUBSCRIBE.md)只承载分流与基础
 | 瑞幸咖啡 | 仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券 | 是：`capi.lkcoffee.com` | [luckin](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/luckin.stoverride) |
 | 微信 | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天 | 是：`mp.weixin.qq.com` | [wechat-articles](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride) |
 
-既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，在core和更新后的公共主配置中均替换实际被引用的基础广告provider；开启后不再同时使用38条基础包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。
+既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，仅高级core分层模式需另行导入：它把基础provider切换为扩展快照。整合公共主配置已默认引用扩展快照，无需额外开启expanded。基础和扩展不同时叠加，本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。
 
 ## 与原通用包是否重叠
 

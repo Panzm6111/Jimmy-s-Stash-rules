@@ -43,7 +43,7 @@ def render():
         out.append(f'| {row["index"]} | {row["name"]} | {links} | {text.replace(chr(124), "／")} |')
     out += ['', '## 如何使用这些结果', '',
             '不用继续从零报一遍名称。已有这份清单，后续沿用原模块路径更新；如有漏广告，只需说明App名、广告位置、App版本和现象。不要发送抓包、登录信息或带私人参数的完整URL。', '',
-            '先按[模块目录](AD-MODULES.md)逐个导入自己需要的专项；不是把135款App都进行MITM。不需要专项的系统工具不添加空模块。自动签到继续暂停，这份图片清单不会扩大签到范围。', '']
+            '推荐更新原[公共订阅入口](SUBSCRIBE.md)，已整合所有已有专项，无需逐个导入。仅已审阅的精确主机进入MITM，不是把135款App都进行MITM。需要逐App开关时才选择[模块目录](AD-MODULES.md)的高级分层方式。自动签到继续暂停。', '']
 
     mods = sorted((ROOT / 'modules/ads').glob('*.stoverride'))
     parsed = [yaml.safe_load(p.read_text()) for p in mods]
@@ -52,20 +52,20 @@ def render():
     hosts = sorted({h for m in parsed for h in m.get('http', {}).get('mitm', [])})
     out2 = ['# 广告专项模块目录与开关', '',
             f'当前共{len(mods)}个独立覆写：{len(mods)-1}个App专项（含前轮贴吧，不在本次图片内），另有1个扩展域名包。图中{len(rows)}款中{implemented}款有专项文件。全部是**候选实现、待设备实测**。本页逐款文件用于按需模式，默认不额外导入。', '',
-            'AD-20261020.1起，原[公共订阅入口](SUBSCRIBE.md)只承载分流与基础域名规则，不再内置HTTP专项。下面40款文件保留，按需导入即为真实逐App开关。已装用户须同时刷新原主配置和所选模块，停用旧整合“广告增强”，避免重复挂载。', '',
-            '## 添加和关闭', '',
-            '1. 先按[README](../README.md)完成主配置、私人订阅和公共分流。',
+            'AD-20261020.2起，原[公共订阅入口](SUBSCRIBE.md)已整合全部40款已有专项、11份内嵌响应JS和默认扩展域名包；刷新主配置即可取得当前处理，不需要再导入本表文件。**整合入口没有逐App开关**，关闭额外同名覆写不能撤销内置处理；已有额外App/广告增强/expanded覆写应停用以免重复。下表文件只供main.yaml＋core的高级分层模式按需启停。', '',
+            '## 高级分层模式：添加和关闭', '',
+            '1. 仅当需要逐App开关时，按[README](../README.md)的高级分层方式使用main.yaml＋core与私人订阅。使用整合stash.yaml时跳过本节，不能叠加同款。',
             '2. 在下表找App，复制“远程覆写地址”，在Stash覆写管理中添加并关联主配置。先只启用一款。',
             '3. “需MITM=是”时，按[证书教程](ADBLOCKING.md)在自己设备生成并信任CA；只使用该行列出的精确主机。域名级解密能看到同主机其他请求，广告处理本身仍限于表内路径；不愿接受此范围则保持关闭。',
             '4. 重启目标App，分别检查广告和登录/支付/消息/播放/普通领券；原有缓存不会被脚本删除。广告无效、空白等待或业务异常就关闭该覆写并重建连接。',
-            '5. “广告拦截→DIRECT”只放行域名规则。要停止HTTP重写或响应脚本，必须关闭对应覆写；域名白名单不能停止它们。关闭域名专项后若扩展包仍含同一主机，也会继续被扩展包阻断。', '',
+            '5. 本分层模式中，“广告拦截→DIRECT”只放行域名规则。要停止HTTP重写或响应脚本，必须关闭对应覆写；域名白名单不能停止它们。关闭域名专项后若通用包仍含同一主机，也会继续阻断。整合入口需按[恢复教程](ADBLOCKING.md)处理，不能用不存在的单App开关。', '',
             f'## 本次新增{len(catalog["modules"])}款', '',
             '2026-10-20修订：固定响应使用`http.url-rewrite`原生动作，区分reject、reject-200、reject-dict、reject-img；联通图片语义恢复。共享空响应JS及请求handler已移除。11个响应handler只处理已知广告结构，默认不记录日志；临时在对应handler设置`argument: diagnostic=1`可输出版本和固定状态，排查后恢复0。', '',
             '| App | 仅处理的范围 | 需MITM / 精确主机 | 远程覆写地址 |', '|---|---|---|---|']
     for item in catalog['modules']:
         host_text = '是：' + '、'.join(f'`{h}`' for h in item['mitm']) if item['mitm'] else '否；仅独立广告域名'
         out2.append(f'| {item["app"]} | {item["scope"]} | {host_text} | [{item["id"]}]({RAW+item["file"]}) |')
-    out2 += ['', '既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，在core和更新后的公共主配置中均替换实际被引用的基础广告provider；开启后不再同时使用38条基础包。本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。', '',
+    out2 += ['', '既有5款：[B站](../modules/ads/bilibili.stoverride)、[贴吧](../modules/ads/tieba.stoverride)、[淘宝](../modules/ads/taobao.stoverride)、[小红书](../modules/ads/xiaohongshu.stoverride)、[微博](../modules/ads/weibo.stoverride)。淘宝/小红书/微博的细节见[原专项说明](APP-SPLASH.md)。[远程扩展域名包](../modules/ads/expanded.stoverride)不需证书，仅高级core分层模式需另行导入：它把基础provider切换为扩展快照。整合公共主配置已默认引用扩展快照，无需额外开启expanded。基础和扩展不同时叠加，本地包另有整套有序规则的扩展域名静态覆写。完整关系见[去广告技术总览](AD-ARCHITECTURE.md)。', '',
              '## 与原通用包是否重叠', '',
              '以下按**目标主机**实际匹配现有基本域名/关键词规则；不推断该App全部流量，IP规则没有在此推演。通用包已命中时，专项可能只是提供较小范围/独立入口，并不额外增加一次拦截。基础和扩展二选一；同一请求按首条规则处理。', '',
              '| App | 目标主机 | 基础规则 | 扩展规则 |', '|---|---|---|---|']

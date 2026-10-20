@@ -1,6 +1,9 @@
 name: 扩展域名广告（可选）
-desc: 替换基础广告规则集的来源，沿用核心规则优先级；关闭后恢复基础包。不需要 MITM。
+desc: 高级分层模式替换基础规则集；整合主入口已默认包含，不需另加。两条精确直连例外保留专项HTTP处理与普通素材。
 rule-providers:
   基础广告:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml
     interval: 86400
+rules:
+  - DOMAIN,flowplus.meituan.net,DIRECT
+  - DOMAIN,bootpreload.uve.weibo.com,DIRECT

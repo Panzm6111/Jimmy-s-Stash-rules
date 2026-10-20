@@ -1,10 +1,11 @@
 {
-  "revision": "AD-20261020.1",
+  "revision": "AD-20261020.2",
+  "script_revision": "AD-20261020.1",
   "baseline": "d8ea21e",
   "before_repair_commit": "936fe457b0362d0dc439d769e9fa7faa29d56b5b",
   "counts": {
     "app_modules": 40,
-    "public_main_rules": 5266,
+    "public_main_rules": 5287,
     "basic_ad_payload": 38,
     "expanded_ad_payload": 38066,
     "app_domain_rules": 19,
@@ -16,7 +17,7 @@
     "optional_probe_js": 1
   },
   "input_sha256": {
-    "config/stash.yaml": "5a0e982df98e194c8165fe8c63be593b72eb9922f10fc404c46261d206eaa6ac",
+    "config/stash.yaml": "72f361b5d1a83ce0b1dcf3607c9bd1109c90a823be9598fd16f82434325a662d",
     "config/main.yaml": "17c62f4dd6d71ee048d37fd85b8479136bdf89e39101a019a417ea2265f77651",
     "config/core.stoverride": "9691f2b4386c0a0978d9d34e05865616a619105a24c127d2fa1a4986ecd88e48",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
@@ -27,12 +28,13 @@
     "tools/generate_ad_modules.py": "834c9928191b504abdf56349349ad8b4df01ed42906214b5658eec5864a36960",
     "tools/build_ad_scripts.py": "0af78f79d83532318c23c3a442c31927e16dad43163640178aa8b737b3ae3a79",
     "tools/build_ad_diagnostics.py": "91b314865ff29c604dca4c29239650a05caed7236b9cfd732787e75146a18342",
-    "tools/build_subscription.py": "bbf48ff36c2f7390415616daecd9913840c8b3c17c857b16b0fe104e08261829",
+    "tools/build_subscription.py": "0f92288641051048f1c46cd8021c6b75c3b11a6bfeb536be73cbd061f65847eb",
     "tools/build_local_bundle.py": "0c96ed535ed2e15c24bfdccd283494da6610fd9bf0d7bf040c4a18cf82be6fc8",
-    "tools/build_private_config.py": "c7da729707ea50e55e49ec46d57d8549a4698602eef22ec29fc0d7d4a9a54cf7",
-    "tools/render_ad_architecture.py": "575dd18580ff9fb2b29064afaaebbd91b59b60f32c69e26fe6f429e916b3f51a",
+    "tools/build_private_config.py": "ca233b336389b3503d40c2c1267e989bb3c9754e0819a286d28f978fe69b0624",
+    "tools/render_ad_architecture.py": "519b7f35c1d13ba028452b0106083d55d5483e357455507fdff12031cf0b64b8",
     "tools/build_ads.py": "8ad51b9e11c96f806747c787c8f8bed1a9d1caf2ad6603a233aa547ca3bf3266",
     "modules/diagnostics/ads.stoverride": "b043de4d33b822af6edf865b93205f9c813aea609ebfb7e45799bff69ae7615c",
+    "modules/ads/expanded.stoverride": "03ce6a3f08baeddf5b95a92f353757d6d233df549b1201c0849fdfbe6796d3a3",
     "modules/ads/58tongcheng.stoverride": "318aa4b4f2cfc4e38a021223f13619fb2b2afd6201079aefddcc710596cfcb6f",
     "modules/ads/alipan.stoverride": "7bf1cbb1244362c3324a140c867cbc085afb59bc70ac4f6afee0e9bc3db9a83c",
     "modules/ads/amap.stoverride": "1cdf57ee1ad101bbb5a06e31ac796b9c528dc6613e4d301d8e4251897e12ba51",
@@ -97,11 +99,11 @@
     "tools/ad_transforms/weibo.js": "c21863ed898f2e96fca1d587029bf260c6b2648e99def54b8c9fabd682253edc",
     "tools/ad_transforms/xiaohongshu.js": "12a25f1e2c658851683bc8eed2d1955e3cd38033b3f037ca43512968eafce671"
   },
-  "prose_prefix_sha256": "645c9e462731c4c3b640455d0e9296c6ec574bef685a31622a7b24f706737a60",
+  "prose_prefix_sha256": "5c37bd10c3a7b1a5ced2bb532aaaebaa8548b5c631f27f96aba8156ad57ef64b",
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
-    "bytes": 97563,
-    "sha256": "dfb625d361c5694ff461f936d371d7e4a0a460011140d7a46154c4f5c94d9e2b",
+    "bytes": 98497,
+    "sha256": "e95160a2f0d45b1646f5afa98975b3fc078e378a6c91f37152bfe6c9f0068a1e",
     "source_scripts_embedded": 12
   },
   "native_stash_tested": false,

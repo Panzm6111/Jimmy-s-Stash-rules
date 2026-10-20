@@ -42,7 +42,7 @@ TLS 与已有源内容校验保持开启。刷新同一 SHA 必须匹配原校�
 
 Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNECT 403 阻塞；没有假称读过最新正文，也不编造最低版本号。已有原生公开模块仅作为辅助证据。具体未核实清单见 [STASH-CAPABILITIES.md](STASH-CAPABILITIES.md)。
 
-## 当前广告来源与修改（AD-20261020.1）
+## 当前广告来源与修改（配置AD-20261020.2／脚本AD-20261020.1）
 
 | 来源与固定版本 | 许可、实际读取与取用 | 当前边界 |
 |---|---|---|
@@ -52,7 +52,7 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 | app2smile/rules，版本见上表 | MIT；B站/贴吧原分支继续保留，使用本项目共同运行保护模板 | B站protobuf未实现；不因存在Stash模块便认定当前广告全部有效 |
 | 项目原创运行模板、诊断工具 | MIT原创部分；派生运行JS仍按各自MIT/GPL2/GPL3归属，完整可读转换源在`tools/ad_transforms` | 11个响应JS各自独立构建，另有默认关闭的只读probe。不捕获Cookie、不外联、不写账号存储 |
 
-基础38条与扩展38,066条仍来自同一固定AdvertisingLite Classical快照，不增加数量冒充效果。原主入口保留广告RULE-SET，expanded现在有实际引用；局域网、关键系统服务与私人精确白名单优先。所有原40款范围保留，具体匹配和通用规则重叠见[模块目录](AD-MODULES.md)。
+基础38条与扩展38,066条仍来自同一固定AdvertisingLite Classical快照，不增加数量冒充效果。AD-20261020.2按用户要求把原主入口恢复为整合订阅：全部40款已有专项及11份响应JS随主配置提供，唯一广告RULE-SET默认引用扩展快照；局域网、关键系统服务与私人精确白名单优先。高级main.yaml＋core仍默认38条，可选expanded。扩展接入另加flowplus.meituan.net与bootpreload.uve.weibo.com精确DIRECT例外，避免上游整域拒绝与已审阅路径处理竞争；未改上游规则快照，实际原生顺序仍待设备确认。整合模式无需另开expanded或App覆写，也没有逐App开关；来源内容与处理范围未因此增加，具体见[模块目录](AD-MODULES.md)。
 
 2026-10-20另查HEAD：fmz200和app2smile仍等于所用固定提交；blackmatrix7推进至`f9e403a75bbc4bee939c6d8dd766cf78f1b512f3`，但本轮用到的startup.js、AdvertisingScript原生声明、AdvertisingLite Classical三个文件与固定版本逐字相同，保留原已审查快照。维护状态证据在ad-repair-evidence.json。
 
@@ -60,7 +60,7 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 
 原固定空JSON/空正文的共享request脚本已删除，微博两条开屏也用原生reject-dict，联通两条恢复reject-img；不再把QX动作未经核实挪入旧rewrite字段。Mock评估后本轮不需要：已有原生固定空结果可表达，条件性响应处理仍保留JS。原生字段采用用户提供的当前官方能力清单，手机返回类型/业务回退仍需验收。
 
-本地包只改变承载：分流保留优先级展开，11份独立广告JS用`script-providers.content`内嵌，probe在独立临时诊断文件中。content历史原生参考已停止维护，本项目没有复制其中无许可代码，也不把它当最低版本证明。ZIP包含来源、许可证和可读源；整包广告增强仅总开关，与单App模式互斥。
+AD-20261020.2的整合主入口及本地包都用`script-providers.content`保存11份独立广告JS，各自保留许可证和归属；主配置刷新即携带脚本版本，不需要另外下载JS。probe仍为独立临时诊断，不默认加入。content历史原生参考已停止维护且注释仅推荐开发使用；本项目没有复制其中无许可代码，也不把它当当前官方、最低版本或iPhone执行证明。ZIP包含来源、许可证和可读源；本地整包广告增强仅总开关，与单App模式互斥。
 
 调查但未复用：[Maasea/sgmodule](https://github.com/Maasea/sgmodule) @ `65075cdb388fc5e3094afd7e7314c67b243f3525`（Apache-2.0）的YouTube方案含二进制、请求/响应配套及其他功能，本轮没有复制。Spotify等修改会员权限的方案不纳入。`Muldec/stash-wiki`实际是另一媒体库产品，不作为iPhone Stash官方资料。没有许可、混淆且未审清或影响正常权益的代码不盲目复制。
 

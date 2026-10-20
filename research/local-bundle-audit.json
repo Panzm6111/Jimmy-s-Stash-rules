@@ -1,6 +1,6 @@
 {
   "main_rules": 5303,
-  "expanded_rules": 43331,
+  "expanded_rules": 43333,
   "per_app_overrides": 40,
   "inline_scripts": 11,
   "script_handlers": 11,
@@ -8,8 +8,8 @@
   "mitm_unique": 45,
   "route_comparisons": 222,
   "archive_members": 189,
-  "zip_bytes": 1045860,
-  "zip_sha256": "0d79e3ef87de047aa43926ea062a5348dc8df1fda4a464ce74b1842cf925b297",
+  "zip_bytes": 1056105,
+  "zip_sha256": "f0b108c2b64a0262fa18313cfa5fd66d84c2f98f17e592c63199834f9babd02f",
   "archive_secret_findings": 0,
   "native_stash_tested": false,
   "iphone_tested": false,
@@ -57,8 +57,8 @@
     "按App单独开关/xiaoyuzhou.stoverride": "e6a9df5db8b7d5d58181f48dcac4dc628de0a09be1df852b0115f633fc12c83e",
     "按App单独开关/zhihu.stoverride": "9930ea8f4b08c87029a102b83d612eb5585e9937e744b79eb305705caf66c747",
     "广告增强.stoverride": "a1b6db33dd537514f13634ee70a11bd90987c24dd201f70b20d0f0d51014927c",
-    "扩展域名.stoverride": "bb4212bc36b296fa5034d2cfd1a2044746053a5d6dabe072457c169c8a3cf75c",
+    "扩展域名.stoverride": "cfbe174d6df099d03cc30af091cd978058a84fc0d5663f89584c0d4d23b4020d",
     "诊断（临时）.stoverride": "d4caa7096e102413c784c3ead09483b2cf1e214676486dc2259ced2fa7f13371",
-    "先看这里.txt": "2bd4697462d71a185dd93ec226c8f300e7b9169b96a6a1e43e5281c5c3bdfa90"
+    "先看这里.txt": "0ed63cd28c0ba08adae8853fb6971b085ea295dbc9ca7f86a3bcc0aff7a3b40d"
   }
 }

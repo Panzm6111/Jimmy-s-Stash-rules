@@ -14,7 +14,7 @@
 
 | 能力 | 本项目采用的方式与证据 | 官方来源/版本要求状态 |
 |---|---|---|
-| 主配置 | `config/main.yaml` 为本地启动模板；不放真实 URL，不假设任意 YAML 环境变量展开 | 官方入口 https://stash.wiki/；下载/编辑/更新行为仍待读取当前正文；不编造最低版本 |
+| 主配置 | 推荐 `config/stash.yaml` 为整合订阅入口；`config/main.yaml` 仅作高级分层启动模板。不放真实 URL，不假设任意 YAML 环境变量展开 | 官方入口 https://stash.wiki/；下载/编辑/更新行为仍待读取当前正文；不编造最低版本 |
 | 覆写与深层映射 | 公共 `.stoverride` + 仅设备保存的私人 provider URL；广告模块有 app2smile 原生 Stash 源码参考 | 原生参考 `module/bilibili.stoverride`、`module/tieba.stoverride` 在锁定版本中实际存在。真实 map/list/rules 合并与覆写顺序需官方文档和合并预览复核 |
 | 代理集 | `proxy-providers`，固定名称“机场”，更新间隔 86400 秒；真实订阅仅设备填写 | `proxies:` 节点文件为本项目明确采用的目标结构；全配置/Base64/URI/不同 VLESS 传输的原生支持不能在本云机断言；须看当前官方代理集/协议文档 |
 | 软件选择地区池 | 软件 `select` 引用美国、日本、香港、新加坡、台湾5个 `url-test` 组；“自动节点”“其他地区”同样自动测速，“手动节点”保留select，共18组。海外AI默认美国，Apple默认DIRECT | select/use/filter/url-test 的当前官方语义和最低版本待复核。未使用未证实的exclude-filter或负向前瞻；公共“其他地区”是常见国家正向匹配，非严格补集。地区组的REJECT哨兵及正则已做结构检查，**真实空池/全失效行为仍需手机测试** |
@@ -24,11 +24,11 @@
 | HTTP原生URL重写 | `http.url-rewrite`；保留reject/reject-200/reject-dict/reject-img语义，校验器也接受reject-array | 依据用户本轮提供的当前官方文档调查。旧blackmatrix7原生文件使用rewrite，别名兼容仍未证实；当前官文正文下载失败，最低Stash版本未知。用户将全部更新到最新版；没有编造版本号 |
 | 响应脚本 | `http.script` + `script-providers`；response、require-body:true、timeout:5；默认`argument: diagnostic=0`，临时1开启固定诊断 | app2smile原生覆写、blackmatrix7锁定`AdvertisingScript.stoverride`中的argument声明已实际读取并哈希锁定；不是当前官方或手机执行证明。`$response.status`的实际类型、自动长度/压缩处理需真机验收 |
 | 固定空响应与Mock | 已移除原共享请求JS；原生URL动作直接处理固定空结果。需要先识别真实成功结构的业务仍用响应JS | 用户提供当前官方列出五种reject和Mock；本轮固定结果不需自定义Mock。没有把普通拒绝与合法无广告结果视为相同，没有声称验证了原生返回字节/头部 |
-| 逐App开关 | 原主入口只含分流/通用域名，40个原专项按独立覆写启停；关闭不会留下主入口重复的HTTP处理 | 本地逐款移除测试通过；Stash实际数组合并需最终预览。旧整合广告增强是另一种总开关模式，不可混装 |
+| 逐App开关 | 推荐整合入口内置40个原专项，无逐App开关；需要独立控制时选择main.yaml＋core高级分层，才由App覆写启停 | 分层逐款移除有模型检查；Stash实际数组合并需最终预览。关闭整合主配置之外的同名覆写不能撤销内置动作，不可混装 |
 | 临时诊断探针 | 仅已审阅45个精确主机的request handler，require-body:false；只记录URL是否命中预期，不改请求 | 字段形态有既有原生request参考；诊断覆写默认关闭，应与正式App专项隔离对照。没日志不能单独证明没进MITM |
 | HTTP/3 | 当前HTTP/3不进改写引擎，不能靠force-http-engine宣称解密 | 依据用户提供官方调查；本轮无真实QUIC证据，未添加UDP阻断。不根据h3域名猜传输协议 |
-| 本地包的内嵌脚本 | `script-providers.<name>.content` 保存原JS正文，不加自造type字段；rule-providers按原优先级展开为普通规则 | 历史 `jinzaizhichi/stash-example@c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml` 实际存在content模式，原注释“仅推荐作为开发使用”，文件亦已停止维护。只参考原生字段，不复制无许可示例代码；当前官方/最低版本和iPhone导入仍未验证 |
-| 脚本更新 | `script-providers.interval: 86400`，稳定脚本 URL；源脚本已窄化并固定本仓库路径 | interval 字段来自原生覆写；何时刷新/离线缓存失效行为仍待文档与手机验证，不保证断网更新 |
+| 整合入口与本地包的内嵌脚本 | `script-providers.<name>.content` 保存11份原JS正文，不加自造type字段；整合入口随主配置更新，本地静态包需重建 | 历史 `jinzaizhichi/stash-example@c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml` 实际存在content模式，原注释“仅推荐作为开发使用”，文件亦已停止维护。只参考原生字段，不复制无许可示例代码；当前官方/最低版本和iPhone导入仍未验证 |
+| 脚本更新 | 整合主入口内嵌JS，刷新主配置即携带当前脚本；高级App覆写继续用稳定脚本URL及interval:86400 | content证据见上行；远程interval来自原生覆写，实际刷新/缓存行为待手机验证，不保证断网更新。主配置AD-20261020.2与脚本AD-20261020.1分开标识 |
 | 策略选择保留 | 固定配置名称、策略组名、provider 名；不写未经核实的 profile.store-selected | native 持久化行为未验证。普通 YAML 合并不能保存 UI 的运行时选择；更新前记下选择，更新后核对，必要时重选 |
 | 定时签到（已暂停，仅备忘） | **不生成 cron**，用户已暂停此项 | 官方当前 cron 字段、时区、前后台语义、错过补跑及最低版本尚未查实；不能把 Surge cron 原样复制，也不承诺后台准点 |
 | 原生持久化/通知（签到备忘） | 日后用户明确恢复才继续，不作为本轮交付前提 | N 携程脚本源码列出 Stash，但兼容声明不是本项目实机证明；当前未创建凭据存储脚本 |
@@ -47,4 +47,4 @@
 
 [research/projects.json](../research/projects.json) 与 [sources.lock.json](../research/sources.lock.json) 可以复查已读原生模块和脚本，而不是用另一个代理客户端代替 Stash。
 
-AD-20261020.1：真实实现、官方访问限制、脚本约定与待真机项统一见[详细规格](AD-ARCHITECTURE.md)。本轮未修改地区策略或私人订阅机制，自动签到暂停。
+配置AD-20261020.2／脚本AD-20261020.1：真实实现、官方访问限制、脚本约定与待真机项统一见[详细规格](AD-ARCHITECTURE.md)。本轮未修改地区策略或私人订阅机制，自动签到暂停。

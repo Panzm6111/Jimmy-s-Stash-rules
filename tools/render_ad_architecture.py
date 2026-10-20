@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import yaml
 from build_ad_scripts import VERSION
+from build_subscription import VERSION as CONFIG_VERSION
 from validate import ROOT, load, merged
 
 DOC = 'docs/AD-ARCHITECTURE.md'
@@ -35,20 +36,20 @@ def rendered():
            '以下内容直接由现有配置和运行脚本生成。数量描述文件结构，不表示广告效果。','',
            '| 项目 | 实际值 |','|---|---|']
     for k,v in counts.items(): out.append(f'| {k} | {v:,} |')
-    out += ['','公共主配置没有HTTP块、没有JS provider；下方HTTP是**全部40款独立模块同时启用时的审阅合并结果**，不是额外需要导入的一份配置。探针另列、默认关闭。','',
-            '| App模块 | 路径/真实开关 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |',
+    out += ['','公共主配置已整合以下全部40款专项，11份响应JS通过content内嵌。此表是来源与范围目录，不是整合入口的逐App开关；独立覆写仅用于main.yaml＋core高级分层。探针另列、默认关闭。','',
+            '| App模块 | 源路径/高级分层覆写 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |',
             '|---|---|---|---|---|---|']
     for p,m in parsed:
         h=m.get('http',{})
         out.append(f'| {m["name"]} | [{p.stem}](../{p}) | {len(m.get("rules",[]))} | {len(h.get("url-rewrite",[]))} | {len(h.get("script",[]))} | {m["desc"].replace("|","／")} |')
     declaration={'proxy-groups':[g for g in main['proxy-groups'] if g['name']=='广告拦截'],
                  'rule-providers':main['rule-providers'],
-                 'rules':[r for _,m in parsed for r in m.get('rules',[])]+['RULE-SET,基础广告,广告拦截'],
-                 'http':config['http'],'script-providers':config['script-providers']}
+                 'rules':[r for r in main['rules'] if r.split(',')[-1]=='广告拦截' or r in {'DOMAIN,flowplus.meituan.net,DIRECT','DOMAIN,bootpreload.uve.weibo.com,DIRECT'}],
+                 'http':main['http']}
     out += ['','## 10. 精确原生声明与基础规则原文','',
-            '下列原生字段为全量专项的审阅合并片段，缺少完整主配置，不能直接作为主配置导入。主入口实际的LAN/系统例外位于广告RULE-SET之前，后面仍有完整分流与终止MATCH。','',
+            '下列原生字段直接摘自主配置，省略完整分流与script-providers正文，不能直接作为主配置导入。11份provider的content与第12节同名JS逐字对应。LAN/系统例外优先，然后精确路径接管例外、专项域名与广告RULE-SET，后面仍有完整分流与终止MATCH。','',
             '<!-- CONFIG:ad-core -->','```yaml',yaml.safe_dump(declaration,allow_unicode=True,sort_keys=False,width=120).rstrip(),'```','',
-            '默认基础规则payload（无需MITM；扩展覆写替换同一个provider）：','','```yaml',
+            '高级分层默认基础payload（无需MITM）；整合入口默认使用上方provider指向的扩展快照，以下38条不同时叠加：','','```yaml',
             yaml.safe_dump(load('rules/ads-basic.yaml'),allow_unicode=True,sort_keys=False).rstrip(),'```','',
             '## 11. 关键输入校验值','',
             '这些哈希用于核对公开源与生成结果，不包含手机私人配置。运行文件及发布提交另看PROGRESS和发布审计。','',
@@ -58,7 +59,8 @@ def rendered():
                'research/ad-catalog.json','research/sources.lock.json','research/ad-repair-evidence.json',
                'tools/generate_ad_modules.py','tools/build_ad_scripts.py','tools/build_ad_diagnostics.py',
                'tools/build_subscription.py','tools/build_local_bundle.py','tools/build_private_config.py',
-               'tools/render_ad_architecture.py','tools/build_ads.py','modules/diagnostics/ads.stoverride']
+               'tools/render_ad_architecture.py','tools/build_ads.py','modules/diagnostics/ads.stoverride',
+               'modules/ads/expanded.stoverride']
     sources += [str(p) for p in modules]
     sources += [str(p.relative_to(ROOT)) for p in sorted((ROOT/'scripts/ads').glob('*.js'))]
     sources += [str(p.relative_to(ROOT)) for p in sorted((ROOT/'tools/ad_transforms').glob('*.js'))]
@@ -67,13 +69,13 @@ def rendered():
         out.append(f'| [{p}](../{p}) | `{hashes[p]}` |')
     out += ['','完整输入哈希和结构计数见 [ad-architecture-audit.json](../research/ad-architecture-audit.json)。','',
             '## 12. 当前全部运行JS原文','',
-            '其中11份是按需加载的响应处理，另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。','']
+            '其中11份是整合入口内嵌的响应处理，高级App覆写则远程加载；另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。','']
     scripts = sorted((ROOT/'scripts/ads').glob('*.js'))
     for p in scripts:
         rel=str(p.relative_to(ROOT))
         out += [f'### {p.name}','',f'源文件：[{rel}](../{rel})。','',f'<!-- SOURCE:{rel} -->','```javascript',p.read_text().rstrip(),'```','']
     doc=prefix+'\n'.join(out)
-    audit={'revision':VERSION,'baseline':'d8ea21e','before_repair_commit':'936fe457b0362d0dc439d769e9fa7faa29d56b5b',
+    audit={'revision':CONFIG_VERSION,'script_revision':VERSION,'baseline':'d8ea21e','before_repair_commit':'936fe457b0362d0dc439d769e9fa7faa29d56b5b',
            'counts':counts,'input_sha256':hashes,'prose_prefix_sha256':hashlib.sha256(prefix.encode()).hexdigest(),
            'documentation':{'path':DOC,'bytes':len(doc.encode()),'sha256':hashlib.sha256(doc.encode()).hexdigest(),
                             'source_scripts_embedded':len(scripts)},

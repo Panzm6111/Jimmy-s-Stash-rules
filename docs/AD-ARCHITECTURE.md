@@ -1,16 +1,16 @@
 # Stash 去广告：当前实现、修复证据与排查规格
 
-修订：**AD-20261020.1**。本轮从 `936fe45` 检查，确认审阅基线 `d8ea21e` 之后只有说明补全等变化，没有把已做的路由/HKG修复退回。本文和全部生成结果沿用原路径。**已修改运行配置、生成器与脚本；没有完成真实 iPhone 去广告验收。** 用户已确认 HTTP/MITM 开启、自建 CA 完全信任，并将 Stash、App 更新到最新版；本轮不再把未装证书当作统一解释。自动签到继续暂停。
+配置修订：**AD-20261020.2**；脚本逻辑仍为 **AD-20261020.1**。本次按用户要求将原订阅链接恢复为整合入口，刷新主配置即可携带全部已审阅专项，无需另行逐款安装。前轮修复从 `936fe45` 检查并保留基线之后的路由/HKG改动；本轮在已发布修复上调整入口承载方式，没有退回旧HTTP字段或脚本。本文和全部生成结果沿用原路径。**已修改运行配置、生成器与脚本；没有完成真实 iPhone 去广告验收。** 用户已确认 HTTP/MITM 开启、自建 CA 完全信任，并将 Stash、App 更新到最新版；本轮不再把未装证书当作统一解释。自动签到继续暂停。
 
 ## 1. 已确认的问题、修复及证据边界
 
 | 问题 | 这次实际修改 | 能确认到哪一层 |
 |---|---|---|
-| 主配置没有广告 RULE-SET，expanded 只换了不存在的 provider | `build_subscription.py` 保留并引用唯一“基础广告”provider，其他分流继续按原顺序展开 | 模型证明开启 expanded 后 `ad.12306.cn` 从原路由改为广告组；局域网、Apple 推送、Microsoft 登录例外与手动放行仍优先 |
+| 主配置没有广告 RULE-SET，expanded 只换了不存在的 provider | `build_subscription.py` 保留并引用唯一“基础广告”provider；AD-20261020.2默认指向扩展快照，其他分流继续按原顺序展开 | 扩展包有实际引用；局域网、Apple推送、Microsoft登录例外与手动放行仍优先。规则集数量不等于开屏效果 |
 | 配置用旧 `http.rewrite`，与用户核对的当前官方 `http.url-rewrite` 不同 | 修改真正的目录生成器与旧5款模块，统一生成 `url-rewrite` | 字段现与用户提供的当前官方调查一致；**旧 rewrite 是否仍为别名未验证，不能据此断言所有失败的根因** |
 | 固定空响应绕到 JS；联通图片改成普通拒绝 | 原生 reject、reject-200、reject-dict、reject-img 分别保留；删除共享空响应脚本及对应 provider/request handler | 静态动作、端点正反例和无重复处理通过；真实状态码、头部与 App 回退须 Stash 验收 |
 | 请求脚本依赖 `$response` 未定义；null/空对象会放行 | 固定响应不再经过请求 JS | 消除了该代码路径；**没有证明旧 Stash 真会传入 null/空对象** |
-| 关闭同名覆写，主配置里的专项仍运行 | 原入口不内置任何 HTTP 专项；保留40款独立覆写 | 模型检查逐款加入/移除可撤销其动作，保留另一款与原代理/DNS。原生 UI 合并还要预览确认 |
+| 关闭同名覆写，主配置里的专项仍运行 | AD-20261020.1曾拆出全部专项；本次按用户要求恢复整合，并明确整合入口没有逐App开关。40款独立覆写只用于main.yaml＋core高级分层 | 分层逐款移除模型用于高级模式，不能推广为整合入口有开关。整合入口应停用额外同名覆写以免重复 |
 | 脚本无版本、解析/结构问题难区分 | 统一自包含运行模板，临时参数诊断和独立只读探针 | 默认无日志；所有返回只调用一次 `$done`，固定状态不包含私人值。不是“没日志=没广告” |
 
 官方能力核对的实际限制：本轮常规和额外权限下请求官方站均得到云网络 403，**没有下载到当前正文**。`url-rewrite`、五种 reject 动作、Mock 和 HTTP/3 限制依据是本次用户提供的官方调查结论。`argument` 另有锁定版本 blackmatrix7 原生 Stash 模块声明作为参考。不能把这些说成已独立核实最低版本；目标为用户将更新的最新版，数字版本未提供。来源和未核实点见 [能力记录](STASH-CAPABILITIES.md)、[访问记录](../research/official-doc-access.json)。
@@ -23,19 +23,19 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-主配置保留18个策略组、7个测速池、私人“机场”provider、原 DNS 与分流。**主配置默认是38条通用广告规则，不包含 App HTTP 专项。** 它保留“基础广告”规则集真实引用；[expanded.stoverride](../modules/ads/expanded.stoverride)现在对这个入口和 core 都有效，开启时把同一个 provider 换成38,066条快照，不同时叠加两套。扩展包会增加误拦风险，也不能代替开屏接口处理，默认仍不启用。
+主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.2默认整合全部40款已有App专项、11份内嵌响应JS、扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向38,066条已审阅扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包保留给高级分层模式。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
 
-App 专项改为真正的独立覆写。原40个文件全部保留，地址见下方完整表或 [模块目录](AD-MODULES.md)。例如淘宝仍是：
+11份JS通过`script-providers.<name>.content`内嵌，刷新主配置时同时取得脚本正文、主机、原生动作和handler，不再要求整合模式单独刷新JS。content只有历史原生示例作为参考，原注释仅推荐开发使用且示例已停止维护；当前官方正文不可访问，未核实当前原生执行或最低版本，完整证据见[能力记录](STASH-CAPABILITIES.md)。脚本逻辑未改，诊断仍显示AD-20261020.1；配置头部AD-20261020.2标识的是新的承载方式。
 
-```text
-https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taobao.stoverride
-```
+首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部AD-20261020.2，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
 
-首次迁移需要：刷新**原主配置**；停止旧的整合“广告增强”与旧同款副本；按原稳定地址添加/刷新所需 App 覆写并关联当前主配置。一款只启用一份。在最终预览中确认每个匹配只有一个处理项。不能只刷新 JS：新主机、原生动作、handler 或开关结构都在配置/覆写里。
+**整合入口没有逐App开关，也没有要另行开启的expanded按钮。** Stash界面的覆写启用项只控制额外导入的文件；关闭它不能撤销主配置的内置处理。“广告拦截→DIRECT”只控制域名路由，不能停止HTTP改写。需要独立控制时才选择原有main.yaml＋core高级分层方式；在该模式下导入40款原App覆写中的所需项，一款一份，才由覆写启停对应专项。
 
-关闭某 App 覆写并重建连接，就撤销它声明的脚本、重写、MITM 与专项路由。通用广告包或别的覆写可能仍阻断同一域名；这不是该开关没有关闭。必要时在设备私人白名单中把**确认误拦的精确主机**放 DIRECT，优先于广告 RULE-SET。共享主机仍被另一款需要时，MITM 声明也可能保留。“广告拦截→DIRECT”只控制域名路由，不能停止 HTTP 改写。
+高级分层中，关闭某App覆写并重建连接会移除它声明的脚本、重写、MITM和专项路由；通用域名包或其他覆写仍可能影响同一主机。设备私人精确白名单可优先放行确认误拦的主机，但不会停止HTTP。共享主机被另一款使用时，MITM声明也可能保留。
 
-本地 ZIP 的基础主配置同样不含 HTTP；单 App 文件内嵌相同 JS。保留“广告增强”合包用于用户明确接受整包总开关时使用，**不能与逐款模式同时启用，也不宣称合包有逐款开关**。离线 expanded 是含终止 MATCH 的整套有序路由快照，按本地教程使用，不能随意前插当普通广告列表。
+整合生成时，专项域名规则放在LAN/关键直连例外之后、通用广告RULE-SET之前。扩展快照包含`flowplus.meituan.net`与`bootpreload.uve.weibo.com`的整域阻断，与本项目已有路径级处理冲突；主入口在广告位之前为两主机增加精确DIRECT例外，让已审阅URL处理接管，避免共享flowplus普通素材被整域拒绝。没有改上游快照、泛化白名单或声称已验证Stash原生执行顺序；这只是消除静态声明冲突。
+
+本地ZIP保留基础主配置和可选广告增强合包、单App文件，各文件使用相同源逻辑。它属于备选分层安装，不能重复叠加到整合订阅。离线expanded是含终止MATCH的整套有序路由快照，不能随意前插当普通广告列表。
 
 ## 3. 优先五款的广告链逐项核查
 
@@ -84,7 +84,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads
 - 实际原生参考使用 `$response.status`。数字200和字符串"200"接受；错误、完整HTTP状态行或非预期形态不猜测放行修改。只有statusCode的形态输出unsupported-status；两者都不存在时沿用旧无状态字段保护分支，仍要求JSON与已知业务结构。具体原生对象形态待真机记录。
 - 保留业务错误/MTOP错误，空修改对象 `$done({})` 保留原响应；产生修改只返回 `{body: JSON字符串}`，不手动伪造压缩/长度头。Stash自动重编码和头部处理仍是原生验收项。
 - try/finally确保本地执行恰好调用一次`$done`。没有异步请求/重试。**原生5秒超时由Stash记录，JS被终止后不能自己补发timeout日志或保证回退**。
-- 临时诊断：在目标覆写的 HTTP 脚本条目把 `argument: diagnostic=0` 改成 `argument: diagnostic=1`。如果编辑远程覆写需要副本，就建**临时诊断副本**，暂停原件，只启用这个副本。诊断后删/停副本并恢复原远程覆写；这不是长期维护第二版配置。
+- 临时诊断：整合模式在设备创建主配置的**临时诊断副本**，仅将目标HTTP脚本条目的`argument: diagnostic=0`改为1，选中副本并保持私人层关联。高级分层模式则临时复制目标App覆写、停用原件，只启用副本。完成后删除/停用临时副本，切回原远程配置/覆写；不要把副本当长期更新入口。
 
 日志示例：`[JimmyAds][taobao][AD-20261020.1] changed`。状态仅为固定枚举：url-unmatched、unsupported-method、body-unavailable、body-too-large、http-error、unsupported-status、non-json、parse-error、unsupported-schema、unchanged、changed、exception。没有异常详情、账号值、完整URL/查询或正文。默认参数0完全不记录，开启时每次调用最多一条；测试包含注入私人哨兵及故障日志设施。
 
@@ -98,15 +98,15 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/diagnostics/ads.stoverride
 ```
 
-1. 记下哪些App专项已开，**暂时关闭这些专项及旧整合广告增强**；保留分流、私人订阅和HTTP/MITM。诊断覆写只观察当前已审阅的45个精确MITM主机，不解密全域名。
+1. 整合入口需在设备创建临时本地诊断副本，清空其`http.url-rewrite`和`http.script`数组，广告组暂选DIRECT，并停用额外广告覆写；保留分流、私人接入和HTTP/MITM。仅关闭同名覆写不能隔离内置处理。高级分层模式可直接暂关App专项/整合广告增强并将广告组DIRECT。探针只观察已审阅45个精确主机，不解密全域名。
 2. 启用诊断覆写，刷新其`jimmy_ads_probe`脚本，重建连接，冷启动目标App；诊断会输出固定 `request-url-matched` 或 `request-url-unmatched`，不改变请求。记录广告位置、时间及模块/版本/状态。
 3. 在Stash本机连接/HTTP记录中查看目标主机、端口、TCP或UDP、是否已解密；**不要分享完整记录**。没有探针日志可能是资源未下载、脚本未挂载、没发新请求、未进HTTP、缓存或不在当前主机列表，不能单凭无日志判定原因。
-4. 关闭探针，恢复目标App专项，只给对应响应handler临时开`diagnostic=1`，再次观察。探针不与正式改写竞争；不能假定Stash的不同改写步骤都必定按同一顺序执行。
+4. 关闭探针，恢复原配置中的正式处理与广告组选择；如需响应日志，按上节另做仅目标handler参数为1的临时副本。高级分层则恢复目标App覆写。探针不与正式改写竞争；不能假定Stash不同改写步骤必定按同一顺序执行。
 5. 原生固定动作不运行响应JS，在Stash本机看其重写命中；响应handler看下面决策表。排查完成关闭探针和临时诊断。
 
 | 观察到的证据 | 可以判断的方向 | 不能直接下的结论 |
 |---|---|---|
-| 主配置/覆写不是AD-20261020.1，或日志是旧标记 | 至少有一层未更新；刷新主配置、覆写、JS后重建连接 | 单刷新JS不能补新MITM主机/handler |
+| 整合主配置头部不是AD-20261020.2，或响应JS日志不是AD-20261020.1 | 检查当前选中配置及更新；整合模式只刷新原主配置后重建连接 | 配置和脚本版本不同是本次设计；脚本.1不代表配置未更新 |
 | TCP443连接存在，但没有解密HTTP记录 | 检查实际主机/端口、HTTP/MITM适用范围、证书固定或其他加密；既有CA信任记录保留 | 不先要求重装证书；不关闭TLS验证 |
 | 已解密，探针request-url-unmatched | 请求进入引擎，但不匹配目前专用广告端点，需核对当前App接口 | 不把同主机所有业务请求当广告 |
 | request-url-matched后，正式响应日志body-unavailable/non-json/parse-error | handler进入，但没有可处理的JSON正文/解析失败 | 不自动删未知业务数据 |
@@ -125,10 +125,10 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 
 | 层 | 更新操作 | 会不会带入新处理 |
 |---|---|---|
-| 公共主配置 | 在原配置列表刷新同一URL | 本轮真实provider引用及拆出内置HTTP在这里；不承诺后台自动更新整份配置 |
-| App覆写 | 刷新原远程覆写，并确认仍关联选中配置 | 新主机、原生动作、handler、参数/版本在这里；本地编辑副本不会自动跟随远程声明 |
+| 公共主配置 | 在原配置列表刷新同一URL | 主机、原生动作、handler和11份内嵌JS一并更新；扩展provider默认引用也在这里。不承诺后台自动更新整份配置 |
+| App覆写（仅高级分层） | 刷新原远程覆写，并确认关联main.yaml＋core | 新主机、原生动作、handler、参数/版本在这里；整合入口不要另加。本地编辑副本不会自动跟随远程声明 |
 | 基础/扩展规则集 | provider间隔86400秒请求刷新，必要时手动更新 | 只有最终配置中仍有RULE-SET引用才起效；本轮已修这个引用 |
-| JS provider | interval86400秒、必要时手动刷新 | 仅更新代码，不能独自添加新MITM/handler；日志可识别AD版本 |
+| JS provider | 整合入口内嵌，随主配置更新；高级分层远程JS间隔86400秒，必要时手动刷新 | 分层单刷新JS不能添加新MITM/handler；内嵌JS不会独立后台更新 |
 | 本地静态包/私人节点快照 | 重新用当前源构建/导入，保留设备私人信息 | 静态规则/内嵌JS不是远程自动更新；私人节点快照不自动更新机场 |
 | 私人机场 | 原本机provider仍由本人URL更新 | 不继承机场响应中的分流/DNS；没有把私人订阅写进公共项目 |
 
@@ -136,11 +136,11 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 
 验证分三层：静态配置/源与生成结果；源代码重建模拟样本；真实iPhone Stash解析、命中及广告效果。本轮完成前两层，**第三层未运行**。官方站403、数字版本缺失、无真实脱敏响应都记录为限制，不用62个模拟测试或38,066条规则替代效果判断。精确运行记录见 [PROGRESS](../PROGRESS.md)。
 
-手机最小验收顺序：先只开淘宝、微博、小红书的所需专项，然后美团、京东，最后逐款原有专项。每款分别检查冷启动、后台返回、正常使用触发预加载后再启动；记录广告是否消失、有无空白页/倒计时/更长加载，并检查登录、搜索、消息、视频、正常领券等业务。广告有频控，至少多次观察并与关闭模块时对照，结合命中记录；单次没有广告不能判成功。
+手机最小验收顺序：整合入口已载入全部已有专项，先依次观察淘宝、微博、小红书，然后美团、京东及其他App；高级分层才逐个启用模块。每款分别检查冷启动、后台返回、正常使用触发预加载后再启动；记录广告是否消失、有无空白页/倒计时/更长加载，并检查登录、搜索、消息、视频、正常领券等业务。广告有频控，至少多次观察并结合命中记录；分层模式可关模块作对照，整合模式需用已隔离处理的临时诊断副本或原来可用的备份配置对照。单次没有广告不能判成功。
 
 需要反馈时只提供：App名和广告位置、冷启动/后台/预载场景、是否空白/倒计时、对应固定版本/状态日志，以及仅包含主机、端口、协议、路径（**去掉整个查询**）的手工摘录。若更新后仍异常，再记录当时数字版本帮助复现。不要发送私人完整配置、原始日志、Cookie、token、证书私钥或响应正文。用户将全部更新，当前不再重复索取版本。
 
-误伤时先关闭对应App覆写并重建连接。若仍有域名阻断，暂关expanded、用设备精确白名单或将广告组DIRECT作对照；这些不会停止其他HTTP模块。整包模式则关闭整合广告增强。需要整体回退时选手机上原来可用的备份，保留私人覆写并核对关联/地区选择。代码基线`936fe45`可供维护者取历史公共文件，但回退到它会恢复本轮已确认的旧接入缺陷，不应作为长期方案。
+整合入口误伤时，先将广告组DIRECT判断域名拦截是否相关；它不会停止HTTP。需快速恢复时切换手机上原来可用的配置备份，保留私人覆写并核对关联/地区选择。没有备份且急需用该App时，可暂关Stash作对照，但会同时停止本项目代理分流和去广告。需要长期仅停某App时改用高级分层；该模式才可关闭对应App覆写或expanded，本地广告增强合包也仅支持总开关。代码基线`936fe45`可供维护者取历史公共文件，但回退到它会恢复本轮已确认的旧接入缺陷，不应作为长期方案。
 
 <!-- GENERATED-AD-SPEC -->
 
@@ -151,7 +151,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 5,266 |
+| public_main_rules | 5,287 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -162,9 +162,9 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 | mitm_exact_hosts | 45 |
 | optional_probe_js | 1 |
 
-公共主配置没有HTTP块、没有JS provider；下方HTTP是**全部40款独立模块同时启用时的审阅合并结果**，不是额外需要导入的一份配置。探针另列、默认关闭。
+公共主配置已整合以下全部40款专项，11份响应JS通过content内嵌。此表是来源与范围目录，不是整合入口的逐App开关；独立覆写仅用于main.yaml＋core高级分层。探针另列、默认关闭。
 
-| App模块 | 路径/真实开关 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
+| App模块 | 源路径/高级分层覆写 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
 |---|---|---|---|---|---|
 | 58同城广告专项（可选） | [58tongcheng](../modules/ads/58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 home/advertising 和 appadv；保留职位、联系与发布。独立启停；需设备验收。 |
 | 阿里云盘广告专项（可选） | [alipan](../modules/ads/alipan.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。独立启停；需设备验收。 |
@@ -209,7 +209,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 
 ## 10. 精确原生声明与基础规则原文
 
-下列原生字段为全量专项的审阅合并片段，缺少完整主配置，不能直接作为主配置导入。主入口实际的LAN/系统例外位于广告RULE-SET之前，后面仍有完整分流与终止MATCH。
+下列原生字段直接摘自主配置，省略完整分流与script-providers正文，不能直接作为主配置导入。11份provider的content与第12节同名JS逐字对应。LAN/系统例外优先，然后精确路径接管例外、专项域名与广告RULE-SET，后面仍有完整分流与终止MATCH。
 
 <!-- CONFIG:ad-core -->
 ```yaml
@@ -223,9 +223,11 @@ rule-providers:
   基础广告:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ads-basic.yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml
     interval: 86400
 rules:
+- DOMAIN,flowplus.meituan.net,DIRECT
+- DOMAIN,bootpreload.uve.weibo.com,DIRECT
 - DOMAIN,optimus-ads.amap.com,广告拦截
 - DOMAIN,optimus-ads.amap.com.w.alikunlun.com,广告拦截
 - DOMAIN,ma-adx.ctrip.com,广告拦截
@@ -248,51 +250,51 @@ rules:
 - RULE-SET,基础广告,广告拦截
 http:
   mitm:
-  - acs.m.goofish.com
-  - acs.m.taobao.com
-  - amap-aos-info-nogw.amap.com
-  - api-ac.liepin.com
-  - api.m.jd.com
-  - api.mcd.cn
-  - api.pinduoduo.com
-  - api.weibo.cn
-  - api.xiachufang.com
-  - api.xiaoyuzhoufm.com
-  - api.yangkeduo.com
   - api.zhihu.com
-  - app.58.com
-  - app.bilibili.com
-  - appapi.huazhu.com
-  - appconf.mail.163.com
-  - bootpreload.uve.weibo.com
-  - bootrealtime.uve.weibo.com
-  - capi.lkcoffee.com
-  - client.app.coc.10086.cn
-  - client.mail.163.com
-  - cn-acs.m.cainiao.com
+  - api.xiaoyuzhoufm.com
   - edith.xiaohongshu.com
-  - flowplus.meituan.net
+  - acs.m.goofish.com
+  - api.xiachufang.com
+  - ios.wps.cn
+  - mobile-pic.cache.iciba.com
+  - bootrealtime.uve.weibo.com
+  - bootpreload.uve.weibo.com
+  - api.weibo.cn
+  - mp.weixin.qq.com
+  - m.client.10010.com
+  - oss.umetrip.com
+  - tiebac.baidu.com
+  - acs.m.taobao.com
   - guide-acs.m.taobao.com
-  - h3.open.taou.com
-  - home.mi.com
-  - img.meituan.net
+  - api.pinduoduo.com
+  - api.yangkeduo.com
   - interface.music.163.com
   - interface3.music.163.com
-  - ios.wps.cn
   - ipv4.music.163.com
-  - m.client.10010.com
-  - m5.amap.com
-  - mapi.dianping.com
-  - member.alipan.com
-  - mobile-pic.cache.iciba.com
-  - mp.weixin.qq.com
-  - open.taou.com
-  - oss.umetrip.com
-  - pan.baidu.com
-  - res.kfc.com.cn
-  - s3plus.meituan.net
-  - tiebac.baidu.com
+  - appconf.mail.163.com
+  - client.mail.163.com
+  - home.mi.com
   - wmapi.meituan.com
+  - img.meituan.net
+  - s3plus.meituan.net
+  - flowplus.meituan.net
+  - api.mcd.cn
+  - open.taou.com
+  - h3.open.taou.com
+  - capi.lkcoffee.com
+  - api-ac.liepin.com
+  - res.kfc.com.cn
+  - api.m.jd.com
+  - appapi.huazhu.com
+  - mapi.dianping.com
+  - client.app.coc.10086.cn
+  - cn-acs.m.cainiao.com
+  - app.bilibili.com
+  - pan.baidu.com
+  - m5.amap.com
+  - amap-aos-info-nogw.amap.com
+  - member.alipan.com
+  - app.58.com
   url-rewrite:
   - ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$) - reject-dict
   - ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$) - reject-dict
@@ -402,43 +404,9 @@ http:
     require-body: true
     timeout: 5
     argument: diagnostic=0
-script-providers:
-  jimmy_alipan_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js
-    interval: 86400
-  jimmy_bilibili_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js
-    interval: 86400
-  jimmy_cainiao_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js
-    interval: 86400
-  jimmy_jingdong_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js
-    interval: 86400
-  jimmy_luckin_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js
-    interval: 86400
-  jimmy_meituan_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js
-    interval: 86400
-  jimmy_taobao_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js
-    interval: 86400
-  jimmy_tieba_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js
-    interval: 86400
-  jimmy_wechat_articles_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js
-    interval: 86400
-  jimmy_weibo_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js
-    interval: 86400
-  jimmy_xiaohongshu_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js
-    interval: 86400
 ```
 
-默认基础规则payload（无需MITM；扩展覆写替换同一个provider）：
+高级分层默认基础payload（无需MITM）；整合入口默认使用上方provider指向的扩展快照，以下38条不同时叠加：
 
 ```yaml
 payload:
@@ -488,7 +456,7 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `5a0e982df98e194c8165fe8c63be593b72eb9922f10fc404c46261d206eaa6ac` |
+| [config/stash.yaml](../config/stash.yaml) | `72f361b5d1a83ce0b1dcf3607c9bd1109c90a823be9598fd16f82434325a662d` |
 | [config/core.stoverride](../config/core.stoverride) | `9691f2b4386c0a0978d9d34e05865616a619105a24c127d2fa1a4986ecd88e48` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `0af78f79d83532318c23c3a442c31927e16dad43163640178aa8b737b3ae3a79` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `729a277242f2bbbe626c34716e4eddff031c161d3011b8f39e7e346799991aa8` |
@@ -508,7 +476,7 @@ payload:
 
 ## 12. 当前全部运行JS原文
 
-其中11份是按需加载的响应处理，另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。
+其中11份是整合入口内嵌的响应处理，高级App覆写则远程加载；另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。
 
 ### alipan.js
 
