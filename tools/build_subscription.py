@@ -10,13 +10,13 @@ from scan_secrets import inspect
 
 OUTPUT = 'config/stash.yaml'
 URL = RAW + OUTPUT
-VERSION = 'AD-20261020.3'
+VERSION = 'AD-20261020.4'
 
 def integrated():
     """The user-facing integrated entry; module files remain maintained sources."""
     modules = sorted(p.relative_to(ROOT) for p in (ROOT / 'modules/ads').glob('*.stoverride')
                      if p.stem != 'expanded')
-    config = merged(*modules, 'modules/ads/expanded.stoverride')
+    config = merged(*modules, 'modules/ads/expanded.stoverride', 'modules/diagnostics/self-check.stoverride')
     # Keep LAN/system exceptions ahead of all ad routes. The module merge model
     # prepends routes; place those reviewed ad-only domains at the core ad slot.
     special = list(dict.fromkeys(r for p in modules for r in load(p).get('rules', [])))
@@ -38,7 +38,9 @@ def render():
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；18个原策略组、DNS、私人订阅接入保留。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
-            '# 修复content-only provider解析失败；脚本首次加载需要联网，诊断默认关闭。\n'
+            '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
+            '# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。\n'
+            '# 脚本URL带公开版本参数以区分旧缓存，首次加载仍需联网。\n'
             '# 建议每周手动刷新本配置，修复发布后立即刷新；规则集与机场每24小时尝试刷新。\n'
             '# 不需另加App或expanded覆写；停用已额外添加的广告覆写，保留私人订阅/白名单。\n'
             '# 当前需求统一为整合入口，不再要求逐App开关；原模块保留作维护来源与旧安装兼容。\n'
@@ -54,10 +56,11 @@ def verify(text):
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
     assert config['rule-providers']['基础广告']['url'] == RAW + 'rules/vendor/ads-expanded.yaml'
     assert len(config['http']['url-rewrite']) == 38
-    assert len(config['http']['script']) == 11
-    assert len(config['http']['mitm']) == 45
-    assert len(config['script-providers']) == 11
-    for name, provider in integrated()['script-providers'].items():
+    assert len(config['http']['script']) == 12
+    assert sum(h['type'] == 'response' for h in config['http']['script']) == 11
+    assert len(config['http']['mitm']) == 46
+    assert len(config['script-providers']) == 12
+    for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider
         assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
     assert len(config['proxy-groups']) == 18

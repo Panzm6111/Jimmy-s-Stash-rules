@@ -20,6 +20,16 @@ RAW = 'https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/'
 BUILTINS = {'DIRECT', 'REJECT'}
 RULE_KINDS = {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'IP-CIDR', 'IP-CIDR6'}
 
+def local_public_path(url):
+    """Resolve only this project's public files and reviewed JS revision queries."""
+    assert isinstance(url, str) and url.startswith(RAW), 'unexpected public URL'
+    path, separator, query = url[len(RAW):].partition('?')
+    assert path and '..' not in path and '#' not in path and '\\' not in path and not path.startswith('/'), 'unsafe public path'
+    if separator:
+        assert path.startswith('scripts/ads/') and path.endswith('.js')
+        assert re.fullmatch(r'v=AD-\d{8}\.\d+', query), 'unreviewed public query'
+    return path
+
 class UniqueLoader(getattr(yaml, "CSafeLoader", yaml.SafeLoader)):
     pass
 
@@ -164,10 +174,9 @@ def validate_structure(config):
         assert set(provider) == {'url', 'interval'}, 'unreviewed script provider format'
         assert isinstance(provider['url'], str) and provider['url'].strip(), 'empty script URL'
         assert provider['interval'] == 86400, 'unexpected script refresh interval'
-        assert (ROOT / provider['url'].removeprefix(RAW)).is_file()
+        assert (ROOT / local_public_path(provider['url'])).is_file()
     for url in [x['url'] for x in config.get('rule-providers', {}).values()] + [x['url'] for x in scripts.values() if 'url' in x]:
-        assert url.startswith(RAW) and '..' not in url[len(RAW):]
-        assert (ROOT / url[len(RAW):]).is_file(), 'broken local public URL'
+        assert (ROOT / local_public_path(url)).is_file(), 'broken local public URL'
 
 class ProjectChecks(unittest.TestCase):
     @classmethod
@@ -439,7 +448,7 @@ class ProjectChecks(unittest.TestCase):
         expected = integrated()
         self.assertEqual(config['http'], {
             **expected['http'], 'mitm': list(dict.fromkeys(expected['http']['mitm']))})
-        self.assertEqual(len(config['script-providers']), 11)
+        self.assertEqual(len(config['script-providers']), 12)
         # A LAN destination keeps the earlier direct exception even with an ad
         # hostname; private whitelist prepends and can override public ads.
         self.assertEqual(route(config, 'ads-img-al.xhscdn.com', '192.168.17.1'), 'DIRECT')
@@ -455,6 +464,29 @@ class ProjectChecks(unittest.TestCase):
         self.assertTrue(any(re.search(item.rsplit(' - ', 1)[0],
             'https://flowplus.meituan.net/v1/normal/linglong/advert.jpg')
             for item in config['http']['url-rewrite']))
+
+    def test_self_check_is_exact_and_scripts_use_public_revision_queries(self):
+        from build_ad_scripts import VERSION
+        config = load('config/stash.yaml')
+        requests = [h for h in config['http']['script'] if h['type'] == 'request']
+        self.assertEqual(len(requests), 1)
+        check = requests[0]
+        self.assertEqual(check['name'], 'jimmy_ads_self_check')
+        self.assertFalse(check['require-body'])
+        self.assertIn('example.com', config['http']['mitm'])
+        for url in ['https://example.com/jimmy-stash-check', 'http://example.com/jimmy-stash-check?start=1']:
+            self.assertRegex(url, check['match'])
+        for url in ['https://example.com/', 'https://example.com.evil.invalid/jimmy-stash-check',
+                    'https://example.com/jimmy-stash-check-extra', 'https://example.com:8443/jimmy-stash-check']:
+            self.assertNotRegex(url, check['match'])
+        for provider in config['script-providers'].values():
+            self.assertTrue(provider['url'].endswith('?v=' + VERSION))
+            self.assertTrue((ROOT / local_public_path(provider['url'])).is_file())
+        for url in [RAW + 'scripts/ads/taobao.js?token=EXAMPLE_NOT_A_SECRET',
+                    RAW + '../private.yaml', RAW + '/private.yaml',
+                    RAW + 'rules/ads-basic.yaml?v=' + VERSION]:
+            with self.assertRaises(AssertionError):
+                local_public_path(url)
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
@@ -644,6 +676,9 @@ class ProjectChecks(unittest.TestCase):
         catalog = json.loads((ROOT / 'research/ad-catalog.json').read_text())
         reviewed_hosts = {h for item in catalog['modules'] for h in item['mitm']}
         reviewed_hosts.update({'app.bilibili.com', 'tiebac.baidu.com', 'edith.xiaohongshu.com', 'guide-acs.m.taobao.com', 'bootrealtime.uve.weibo.com', 'bootpreload.uve.weibo.com', 'api.weibo.cn'})
+        # One separately reviewed manual self-check host, never an App wildcard.
+        self.assertEqual(load('modules/diagnostics/self-check.stoverride')['http']['mitm'], ['example.com'])
+        reviewed_hosts.add('example.com')
         for file in [*ROOT.rglob('*.yaml'), *ROOT.rglob('*.stoverride')]:
             data = load(file.relative_to(ROOT))
             self.assertNotIn('skip-cert-verify: true', file.read_text())

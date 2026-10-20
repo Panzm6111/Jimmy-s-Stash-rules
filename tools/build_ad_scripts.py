@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Generate stable standalone Stash JS from licensed transforms and one runtime.
 
-No module loader/network/storage is needed on the phone. Diagnostics are enabled
-temporarily by the native handler argument diagnostic=1; default is silent.
+No module loader or network requests are needed on the phone. Diagnostic logging
+uses argument diagnostic=1; the optional observation session stores fixed states
+only while explicitly enabled on the device. Both are silent by default.
 """
 import argparse
 import json
@@ -10,13 +11,14 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = 'AD-20261020.1'
+VERSION = 'AD-20261020.4'
 
 RUNTIME = r'''
 (() => {
   let result = {}, state = 'url-unmatched';
   const version = __VERSION__, id = __ID__;
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
+__OBSERVATION__
   function record(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
   function successful(x, codes = [0, '0']) {
     return record(x) && x.success !== false && !x.error && !x.error_code &&
@@ -67,6 +69,7 @@ __TRANSFORM__
   } catch (_) {
     if (state !== 'parse-error') state = 'exception';
   } finally {
+    observeAdState(id, version, state);
     if (debug) { try { console.log('[JimmyAds][' + id + '][' + version + '] ' + state); } catch (_) {} }
     $done(result);
   }
@@ -75,6 +78,7 @@ __TRANSFORM__
 
 def rendered():
     result = {}
+    observation = (ROOT / 'tools/ad_observation_runtime.js').read_text()
     for source in sorted((ROOT / 'tools/ad_transforms').glob('*.js')):
         name = source.stem
         module = yaml.safe_load((ROOT / f'modules/ads/{name}.stoverride').read_text())
@@ -88,6 +92,7 @@ def rendered():
         header = '\n'.join(l for l in header.splitlines() if not any(w in l for w in ['Modified ', 'Modifications ', 'No logs', 'no logs', 'Diagnostics ', 'No generic', 'Restore upstream', 'changes;', 'no URL/', 'and durations;', 'and durations', 'response/header']))
         transform = text[end:].strip()
         body = RUNTIME.replace('__VERSION__', json.dumps(VERSION)).replace('__ID__', json.dumps(name))
+        body = body.replace('__OBSERVATION__', '\n'.join('  ' + line for line in observation.splitlines()))
         body = body.replace('__PATTERNS__', json.dumps([h['match'] for h in handlers]))
         body = body.replace('__METHODS__', json.dumps(['GET'] if name == 'bilibili' else ['GET', 'POST']))
         body = body.replace('__TRANSFORM__', '\n'.join('      ' + l for l in transform.splitlines()))

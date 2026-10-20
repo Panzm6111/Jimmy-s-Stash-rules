@@ -29,7 +29,7 @@ test('XHS config removes only splash; theme/store/loading and coupon fields surv
   const keep={app_theme:{name:'normal'},store:{coupon:7},loading_img:'normal-image'};
   const a=run('xiaohongshu',xhs+'v1/system_service/config/?token=EXAMPLE_NOT_A_SECRET',{code:'0',data:{splash:{ads:[1]},...keep}});
   assert.deepEqual(JSON.parse(a.out.body).data,keep);
-  assert.match(a.logs[0],/AD-20261020\.1\] changed$/);
+  assert.match(a.logs[0],/AD-20261020\.4\] changed$/);
 });
 test('XHS v6 sponsored items only; shopping notes, live, icons, null and empty markers stay',()=>{
   const keep=[{model_type:'live_v2'},{note_attributes:['goods']},{card_icon:'normal'},{ads_info:null},{ads_info:{}},null];

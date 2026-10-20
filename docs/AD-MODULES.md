@@ -14,7 +14,7 @@
 
 ## 目录生成的35项实现
 
-2026-10-20修订：固定响应使用`http.url-rewrite`原生动作，区分reject、reject-200、reject-dict、reject-img；联通图片语义恢复。共享空响应JS及请求handler已移除。11个响应handler只处理已知广告结构，默认不记录日志；临时在对应handler设置`argument: diagnostic=1`可输出版本和固定状态，排查后恢复0。
+2026-10-20修订：固定响应使用`http.url-rewrite`原生动作，区分reject、reject-200、reject-dict、reject-img；联通图片语义恢复。共享空响应JS已移除。11个响应handler只处理已知广告结构，默认无日志；在Safari打开整合入口内置的`https://example.com/jimmy-stash-check`并开始15分钟排查后，仅在本机保存版本、时间与固定状态计数。自检请求handler不处理App广告；当前用户无需复制配置或另装探针。详见[排查教程](ADBLOCKING.md)。
 
 | App | 仅处理的范围 | 需MITM / 精确主机 | 维护源链接 |
 |---|---|---|---|

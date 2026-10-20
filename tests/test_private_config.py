@@ -41,7 +41,7 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertNotIn('proxy-providers', config)
         self.assertEqual(config.get('http'), self.template.get('http'))
         self.assertEqual(report['inline_scripts'], 0)
-        self.assertEqual(report['remote_scripts'], 11)
+        self.assertEqual(report['remote_scripts'], 12)
         for provider in config['script-providers'].values():
             self.assertEqual(set(provider), {'url', 'interval'})
             self.assertTrue(provider['url'])

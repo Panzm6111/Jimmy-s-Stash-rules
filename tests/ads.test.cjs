@@ -24,7 +24,7 @@ function execute(moduleName, url, body, method = 'GET', status = 200, logCapture
   assert.equal(calls, 1);
   for (const values of logs) {
     assert.equal(values.length, 1);
-    assert.match(values[0], /^\[JimmyAds\]\[[a-z0-9-]+\]\[AD-20261020\.1\] [a-z-]+$/);
+    assert.match(values[0], /^\[JimmyAds\]\[[a-z0-9-]+\]\[AD-20261020\.4\] [a-z-]+$/);
   }
   if (logCapture) logCapture.push(...logs.map(values=>values[0]));
   return output;
@@ -198,14 +198,14 @@ test('淘宝/小红书诊断：固定状态区分处理、空广告、未知结�
   for(const [name,url,body,empty] of cases) {
     const logs=[];
     const out=execute(name,url+'?token=EXAMPLE_NOT_A_SECRET',{...body,private:'TEST_BODY_NEVER_LOG'},'GET','200',logs);
-    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] changed`]);
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.4] changed`]);
     logs.length=0;
     assert.deepEqual(execute(name,url,out.body,'GET',200,logs),{});
-    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] unchanged`]);
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.4] unchanged`]);
     for(const [payload,status,expected] of [[empty,200,'unchanged'],[{unknown:'TEST_SCHEMA_NEVER_LOG'},200,'unsupported-schema'],['TEST_PARSE_EXCEPTION_NEVER_LOG',200,'non-json'],[body,503,'http-error']]) {
       logs.length=0;
       assert.deepEqual(execute(name,url,payload,'GET',status,logs),{});
-      assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] ${expected}`]);
+      assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.4] ${expected}`]);
     }
   }
 });
@@ -217,14 +217,14 @@ test('三模块诊断：未知路径不记录，URL/请求头/响应头/响应�
     assert.doesNotMatch(logs.join('\n'),/TEST_|EXAMPLE_NOT_A_SECRET|https:|Cookie|token|account/);
     logs.length=0;
     execute(name,'https://unrelated.example/login?token=EXAMPLE_NOT_A_SECRET',body,'GET',200,logs);
-    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] url-unmatched`]);
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.4] url-unmatched`]);
   }
 });
 test('三模块诊断：日志设施异常不影响完成一次，也不猜测完整HTTP状态行', () => {
   for(const [name,url,body] of [['taobao',tb,taobaoPayload()],['xiaohongshu',xhs,{code:0,data:{ads_groups:[{id:'ad'}]}}],['weibo','https://api.weibo.cn/2/searchall',{items:[{data:{is_ad:1}}]}]]) {
     const logs=[];
     assert.deepEqual(execute(name,url,body,'GET','HTTP/1.1 200 OK',logs),{});
-    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.1] http-error`]);
+    assert.deepEqual(logs,[`[JimmyAds][${name}][AD-20261020.4] http-error`]);
     for(const logger of [undefined,{log:()=>{throw new Error('TEST_LOG_EXCEPTION_NEVER_LOG');}}]) {
       let calls=0,output;
       vm.runInNewContext(fs.readFileSync(path.join(root,'scripts/ads',name+'.js'),'utf8'),{

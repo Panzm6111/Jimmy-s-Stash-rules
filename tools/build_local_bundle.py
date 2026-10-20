@@ -10,7 +10,8 @@ from pathlib import Path
 import subprocess
 import zipfile
 import yaml
-from validate import ROOT, RAW, RULE_KINDS, load, merged, merge_model, route, validate_structure
+from validate import ROOT, RAW, RULE_KINDS, load, merged, merge_model, route, validate_structure, local_public_path
+from build_ad_scripts import VERSION as SCRIPT_VERSION
 from scan_secrets import inspect
 
 MAIN = 'Jimmy-Stash.yaml'
@@ -54,11 +55,12 @@ def script_references(config):
     for name, provider in result.get('script-providers', {}).items():
         url = provider.get('url', '')
         if not url.startswith(RAW): raise ValueError('non-project script source')
-        path = ROOT / url[len(RAW):]
+        path = ROOT / local_public_path(url)
         if path.parent != ROOT / 'scripts/ads' or path.suffix != '.js': raise ValueError('unexpected script path')
         if not path.is_file(): raise ValueError('missing script source')
         if set(provider) != {'url', 'interval'} or provider['interval'] != 86400:
             raise ValueError('unexpected script provider declaration')
+        provider['url'] = RAW + path.relative_to(ROOT).as_posix() + '?v=' + SCRIPT_VERSION
     if 'mitm' in result.get('http', {}):
         result['http']['mitm'] = list(dict.fromkeys(result['http']['mitm']))
     return result
@@ -84,10 +86,11 @@ def documents():
         files['按App单独开关/' + path.name] = ('# 旧目录名为兼容保留；当前整合入口无需导入此文件。\n'
                                             '# 独立资源保持各自许可，见包内源码/licenses与docs/SOURCES.md。\n' + dump(local))
         combined = merge_model(combined, local)
+    combined = merge_model(combined, script_references(load('modules/diagnostics/self-check.stoverride')))
     combined['http']['mitm'] = list(dict.fromkeys(combined['http']['mitm']))
     enhanced = {'name': 'Jimmy 广告增强（本地整合）',
                 'desc': '旧离线包兼容的专项合包；当前整合订阅已包含这些动作，不要重复导入。仅精确主机使用设备自建CA，效果待设备验收。', **combined}
-    files[ADS] = ('# 由原40个独立模块组装；11份JS沿用公开远程URL，首次加载需要联网。\n'
+    files[ADS] = ('# 原40个专项与手动自检页；11份响应JS和1份自检JS通过公开URL联网加载。\n'
                   '# 不与“按App单独开关”中的同款重复启用；各独立资源按原许可分发。\n' + dump(enhanced))
     expanded = flatten(merged('modules/ads/expanded.stoverride'))
     files[EXPANDED] = ('# 旧离线包兼容；完整规则顺序含局域网/系统例外，不能把扩展规则全部前插。\n'
@@ -112,12 +115,13 @@ def verify(files):
         addon_paths.append(str(path.relative_to(ROOT)))
         for name, provider in load(path.relative_to(ROOT)).get('script-providers', {}).items():
             source_by_name[name] = provider
-    for name, script in enhanced['script-providers'].items():
-        assert script == source_by_name[name], 'script URL provider changed'
+    expected = {**source_by_name, **load('modules/diagnostics/self-check.stoverride')['script-providers']}
+    expected = script_references({'script-providers': expected})['script-providers']
+    assert enhanced['script-providers'] == expected, 'script URL provider changed'
     assert len(source_by_name) == 11
-    assert len(enhanced['http']['script']) == 11
+    assert len(enhanced['http']['script']) == 12
     assert len(enhanced['http']['url-rewrite']) == 38
-    assert len(enhanced['http']['mitm']) == len(set(enhanced['http']['mitm'])) == 45
+    assert len(enhanced['http']['mitm']) == len(set(enhanced['http']['mitm'])) == 46
     for config in configs.values():
         assert not config.get('rule-providers')
         for script in config.get('script-providers', {}).values():
@@ -139,8 +143,9 @@ def verify(files):
             assert route(original, *args) == route(local, *args), 'flattened route changed'
     return {'main_rules': len(main['rules']), 'expanded_rules': len(expanded['rules']),
             'per_app_overrides': len(addon_paths), 'inline_scripts': 0,
-            'remote_scripts': len(source_by_name),
-            'script_handlers': 11, 'rewrite_rules': 38, 'mitm_unique': 45,
+            'remote_scripts': len(enhanced['script-providers']),
+            'response_handlers': 11, 'self_check_handlers': 1,
+            'script_handlers': 12, 'rewrite_rules': 38, 'mitm_unique': 46,
             'route_comparisons': len(fixtures) * len(scenarios)}
 
 def public_sources():

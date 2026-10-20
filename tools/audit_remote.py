@@ -10,7 +10,7 @@ from pathlib import Path
 import sys
 import urllib.error
 import urllib.request
-from validate import ROOT, RAW, load
+from validate import ROOT, RAW, load, local_public_path
 
 def fetch(item):
     url, expected = item
@@ -50,6 +50,11 @@ def main():
         for p in ['rules/openai.yaml','rules/apple.yaml','rules/microsoft.yaml']: paths.add(p)
         paths.update({'research/ai-sources.json',ai['upstream']['license_file']})
         resources=[(RAW+p,hashlib.sha256((ROOT/p).read_bytes()).hexdigest()) for p in sorted(paths)]
+        # Check the exact version-qualified URLs the current main config loads,
+        # in addition to stable source paths. No private subscription is read.
+        for provider in load('config/stash.yaml').get('script-providers', {}).values():
+            url = provider['url']
+            resources.append((url, hashlib.sha256((ROOT / local_public_path(url)).read_bytes()).hexdigest()))
     # Shared sources referenced by several apps are fetched/count once; reject conflicting hashes.
     expected_by_url = {}
     for url, expected in resources:
@@ -57,7 +62,11 @@ def main():
         expected_by_url[url] = expected
     resources = sorted(expected_by_url.items())
     # All URLs are manifest-controlled HTTPS public resources, with no user input or auth.
-    assert all(url.startswith('https://raw.githubusercontent.com/') and '?' not in url for url,_ in resources)
+    assert all(url.startswith('https://raw.githubusercontent.com/') for url,_ in resources)
+    for url, _ in resources:
+        if '?' in url:
+            assert args.target == 'published'
+            local_public_path(url)
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         results=list(executor.map(fetch,resources))
     for r in results:

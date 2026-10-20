@@ -1920,5 +1920,58 @@
     "pinned_public_sources_total": 45,
     "native_validation_run": false,
     "real_response_samples": 0
+  },
+  "execution_observation": {
+    "revision": "AD-20261020.4",
+    "checked_date": "2026-10-20",
+    "user_report": {
+      "previous_revision": "AD-20261020.3",
+      "configuration_import_recovered": true,
+      "splash_ads_still_present": true,
+      "mode": "rule",
+      "ad_policy": "REJECT",
+      "previous_ca_trust_confirmed": true
+    },
+    "confirmed_common_ad_failure_cause": null,
+    "confirmed_problem": "Default silent scripts and a copy/edit/override diagnostic process left the user without usable execution evidence.",
+    "implemented": "Integrated manual self-check plus an explicit 15-minute device-only session of fixed script states; no ad business logic changes.",
+    "self_check_url": "https://example.com/jimmy-stash-check",
+    "added_mitm_host": "example.com",
+    "scope": "The exact host is decrypted; only the fixed self-check path is handled. Existing 45 App hosts and 38 native ad actions unchanged.",
+    "native_api_source": {
+      "repository": "NobyDa/Script",
+      "commit": "0b8d083d444f4476700cb9d5d059c07b42da85eb",
+      "module": "Stash/IPA-Installer.stoverride",
+      "script": "IPA-Installer/IPA-Installer.js",
+      "sha256": "c7b2887cafcbe563f022488e04a7fafed9160465fc939f5d0cfa048232216499",
+      "lines": [
+        70,
+        76,
+        103,
+        112,
+        116,
+        142,
+        146
+      ],
+      "copied_business_code": false
+    },
+    "storage_contents": [
+      "fixed module IDs",
+      "script version",
+      "session ID and timestamps",
+      "fixed state counts bounded at 9999"
+    ],
+    "records_credentials_or_url_or_body": false,
+    "sends_network_requests": false,
+    "scheduler_added": false,
+    "native_execution_tested": false,
+    "iphone_ad_effect_passed": false,
+    "limits": [
+      "self-check success only proves its own host execution",
+      "no records do not identify the cause",
+      "native URL/domain actions have no response-script counter",
+      "concurrent counters are best-effort clues, not traffic totals",
+      "new scripts still require successful client download"
+    ]
   }
 }
