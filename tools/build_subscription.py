@@ -87,7 +87,7 @@ def main():
     path = ROOT / OUTPUT
     same = path.is_file() and path.read_text() == text
     if args.write:
-        path.write_text(text)
+        path.write_text(text, encoding='utf-8', newline='\n')
         print('WROTE ' + OUTPUT)
     else:
         print(('PASS ' if same else 'DRIFT ') + OUTPUT)

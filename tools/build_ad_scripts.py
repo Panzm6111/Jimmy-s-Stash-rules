@@ -103,7 +103,7 @@ def main():
         p = ROOT / name
         if not p.exists() or p.read_text() != body:
             drift.append(name)
-            if args.write: p.write_text(body)
+            if args.write: p.write_text(body, encoding='utf-8', newline='\n')
     print(f'{len(drift)} script files ' + ('written' if args.write else 'differ'))
     return 0 if args.write or not drift else 1
 

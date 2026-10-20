@@ -19,18 +19,21 @@
 
 设备上的广告规则集按现有86400秒，即24小时间隔尝试刷新**本仓库已发布快照**；不会直接执行上游最新未知代码。整合主配置建议每周手动刷新一次，发布修复后立即刷新，11份内嵌JS随之更新。机场节点同样保持24小时间隔；节点测速30分钟不属于规则更新。时间间隔不保证离线或iOS后台下准点执行，统一操作见[更新教程](UPDATES.md)。
 
-上游提交改变不会自动进入本仓库。建议维护者每周人工检查上游一次，遇到明确失效或重要修复及时检查；审查许可、代码与正常业务影响后再更新固定SHA并发布。这是维护建议，当前没有自动审查或同步上游的定时工作流。
+上游提交改变不会自行进入本仓库。现在可在电脑运行 `python tools/maintain.py check`，检查所引用公开文件的变化，建议每天一次；需要更新普通规则时运行 `python tools/maintain.py update`。工具先在临时副本生成和验证，通过后才写入本地公开文件。脚本、重写、MITM和人工选取的AI域名变动只进入审查报告，不直接覆盖。完整安装、保护条件与回退见[本地维护教程](MAINTENANCE.md)。
+
+本地维护工具不自动提交、推送或运行用户电脑的定时任务。只有将经过检查的变更发布到原GitHub分支，手机才能从原链接取得新内容；当前GitHub Actions仍只做验证，没有定时同步。下面的显式版本刷新命令保留供维护者审查指定提交，日常优先使用上面的维护入口。
 
 ```sh
 # 将 FULL_REVIEWED_COMMIT 换成已审查的上游完整 40 位 commit：
 python tools/refresh_rules.py --revision FULL_REVIEWED_COMMIT
 # 预览通过并审核差异后才加 --write：
 python tools/refresh_rules.py --revision FULL_REVIEWED_COMMIT --write
+python tools/build_ads.py --write
 python tools/validate.py
 python tools/audit_remote.py upstream
 ```
 
-TLS 与已有源内容校验保持开启。刷新同一 SHA 必须匹配原校验值；新 SHA 的许可变化必须先人工审查，不能关闭 TLS 或改预期 checksum 让不匹配的数据通过。刷新只改公共快照/锁文件，不接触私人设备配置；更新后需同步本页核实日期、设备行为与 PROGRESS。
+TLS 与已有源内容校验保持开启。刷新同一 SHA 必须匹配原校验值；新 SHA 的许可变化必须先人工审查，不能关闭 TLS 或改预期 checksum 让不匹配的数据通过。刷新只改公共快照/锁文件及其生成结果，不接触私人设备配置。最新实际采用的普通规则提交和文件哈希以 `research/sources.lock.json` 为准；本页历史审查日期不代表后来自动检查了广告效果。发布时在 PROGRESS 记录变更及验证范围。
 
 广告脚本不自动拉取上游最新源码：上游广泛修改和日志可能影响隐私/正常功能，须重新阅读代码、更新归属和测试后再替换本项目原路径。
 

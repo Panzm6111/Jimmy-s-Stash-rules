@@ -45,7 +45,7 @@ def main():
             drift.append(name)
             if args.write:
                 destination.parent.mkdir(parents=True, exist_ok=True)
-                destination.write_text(body)
+                destination.write_text(body, encoding='utf-8', newline='\n')
     print(f'{len(catalog["modules"])} reviewed modules; {len(drift)} ' + ('written' if args.write else 'differ'))
     return 0 if args.write or not drift else 1
 

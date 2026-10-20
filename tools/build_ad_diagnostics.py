@@ -55,7 +55,7 @@ def main():
         path=ROOT/name
         if not path.exists() or path.read_text()!=body:
             drift.append(name)
-            if args.write: path.parent.mkdir(parents=True,exist_ok=True);path.write_text(body)
+            if args.write: path.parent.mkdir(parents=True,exist_ok=True);path.write_text(body, encoding='utf-8', newline='\n')
     print(f'{len(drift)} probe files '+('written' if args.write else 'differ'))
     return 0 if args.write or not drift else 1
 

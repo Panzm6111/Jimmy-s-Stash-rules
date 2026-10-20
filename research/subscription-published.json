@@ -84,7 +84,7 @@
     "main_config": "manual weekly; immediately after a relevant published fix",
     "inline_scripts": "with main config",
     "node_probe_seconds": 1800,
-    "upstream_review": "weekly manual review recommended; no scheduled workflow"
+    "upstream_review": "daily local maintain.py check recommended; guarded ordinary-rule updates, manual review of script changes; no scheduler deployed"
   },
   "offline_checks_scope": "The existing full functional check counts are from the prior implementation release 21e2783; this wording-only release did not rerun the full suite or iPhone tests.",
   "editorial_verification": {

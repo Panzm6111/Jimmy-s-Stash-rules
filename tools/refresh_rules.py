@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Refresh reviewed rule snapshots at an explicit full commit, without touching credentials."""
 import argparse
-from datetime import datetime
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import re
@@ -56,8 +55,8 @@ def main():
     if args.write:
         for entry,data in pending:(ROOT/entry['output']).write_bytes(data)
         lock['resources']=[e for e,_ in pending];lock['upstream']['revision']=args.revision
-        lock['checked_at']=datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
-        (ROOT/'research/sources.lock.json').write_text(json.dumps(lock,ensure_ascii=False,indent=2)+'\n')
+        lock['checked_at']=datetime.now(timezone(timedelta(hours=8))).date().isoformat()
+        (ROOT/'research/sources.lock.json').write_text(json.dumps(lock,ensure_ascii=False,indent=2)+'\n', encoding='utf-8', newline='\n')
         print('Snapshots updated. Review diff, update verification date, run tools/validate.py before commit.')
     else:print('Preview only. No files changed.')
     return 0

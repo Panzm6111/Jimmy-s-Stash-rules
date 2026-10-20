@@ -19,5 +19,6 @@ jobs:
         with:
           node-version: '22'
       - run: python -m pip install -r requirements-dev.txt
+      - run: python -m unittest discover -s tests -p test_maintenance.py -v
       - run: python -m unittest discover -s tests -p test_private_config.py -v
       - run: python tools/validate.py

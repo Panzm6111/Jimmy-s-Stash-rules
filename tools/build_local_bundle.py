@@ -89,7 +89,7 @@ def documents():
     files[ADS] = ('# 由原40个独立模块组装，内嵌11份独立JS资源；不下载远程脚本。\n'
                   '# 不与“按App单独开关”中的同款重复启用；各独立资源按原许可分发。\n' + dump(enhanced))
     expanded = flatten(merged('modules/ads/expanded.stoverride'))
-    files[EXPANDED] = ('# 旧离线包兼容；完整规则顺序含局域网/系统例外，不能只把38,066条前插。\n'
+    files[EXPANDED] = ('# 旧离线包兼容；完整规则顺序含局域网/系统例外，不能把扩展规则全部前插。\n'
                        '# 只适用于旧离线主配置；当前整合订阅已引用扩展包，无需导入。\n' + dump({'name': 'Jimmy 扩展域名（本地快照）',
                                           'desc': '更多广告域名，可能误拦；不需要MITM。广告增强应在更高优先级。',
                                           'rules': expanded['rules']}))
@@ -184,13 +184,13 @@ def main():
     for name, body in files.items():
         destination = args.output / name
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(body)
+        destination.write_text(body, encoding='utf-8', newline='\n')
     (args.output / 'Jimmy-Stash.zip').write_bytes(zipped)
     report.update({'archive_members': members, 'zip_bytes': len(zipped), 'zip_sha256': hashlib.sha256(zipped).hexdigest(),
                    'archive_secret_findings': 0, 'native_stash_tested': False, 'iphone_tested': False,
                    'script_inline_reference': 'jinzaizhichi/stash-example@c0f273b8539b0aa648e0cab90cae7e5b4922a098 config.yaml script-providers.content（历史原生例；非当前文档/最低版本证明）',
                    'files_sha256': {name: hashlib.sha256(body.encode()).hexdigest() for name, body in files.items()}})
-    (ROOT / AUDIT).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+    (ROOT / AUDIT).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     print(json.dumps({**{k: v for k, v in report.items() if k != 'files_sha256'}, 'output': str(args.output)}, ensure_ascii=False, indent=2))
 
 if __name__ == '__main__': main()

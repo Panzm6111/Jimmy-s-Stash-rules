@@ -23,7 +23,7 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.2默认整合全部40款已有App专项、11份内嵌响应JS、扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向38,066条已审阅扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
+主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.2默认整合全部40款已有App专项、11份内嵌响应JS、扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
 
 11份JS通过`script-providers.<name>.content`内嵌，刷新主配置时同时取得脚本正文、主机、原生动作和handler，不再要求整合模式单独刷新JS。content只有历史原生示例作为参考，原注释仅推荐开发使用且示例已停止维护；当前官方正文不可访问，未核实当前原生执行或最低版本，完整证据见[能力记录](STASH-CAPABILITIES.md)。脚本逻辑未改，诊断仍显示AD-20261020.1；配置头部AD-20261020.2标识的是新的承载方式。
 
@@ -132,7 +132,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 | 本地静态包/私人节点快照 | 重新用当前源构建/导入，保留设备私人信息 | 静态规则/内嵌JS不是远程自动更新；私人节点快照不自动更新机场 |
 | 私人机场 | 建议保持现有86400秒，即24小时自动尝试刷新；节点异常或机场通知变更时手动刷新 | 不继承机场响应中的分流/DNS；机场更换URL时仍须本人在设备修改，不能自动发现新URL |
 
-以上频率统一见[更新教程](UPDATES.md)。7个节点池的1800秒检查是30分钟测速，不是更新规则。规则集只下载本仓库已发布快照；建议维护者每周人工检查上游一次，有已确认失效时及时检查，审核许可与代码后再发布。当前没有自动审查并同步上游的定时任务。
+以上频率统一见[更新教程](UPDATES.md)。7个节点池的1800秒检查是30分钟测速，不是更新规则。规则集只下载本仓库已发布快照；建议电脑每天运行一次[本地维护工具](MAINTENANCE.md)检查上游。普通规则可在隔离生成和验证后更新本地文件，专项脚本、重写与MITM变化仍需审查适配；发布到原分支后手机才能取得更新。没有部署GitHub定时同步，也没有自动修复App接口或替代真机验收。
 
 ## 8. 验收、误伤与回退
 
@@ -460,7 +460,7 @@ payload:
 |---|---|
 | [config/stash.yaml](../config/stash.yaml) | `6a57834a0512f3b89a3644980568f4708920664ae464456f3147514e7ac99afc` |
 | [config/core.stoverride](../config/core.stoverride) | `e64bfa01488b4579e03accb239e5688f004bcfab8c2ccd40d12a21fa6a715b94` |
-| [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `0af78f79d83532318c23c3a442c31927e16dad43163640178aa8b737b3ae3a79` |
+| [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `b066a2616df918c620e0409815ffe6f71b535b2c2d6ed64ddf1819cbbb4e19ce` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `729a277242f2bbbe626c34716e4eddff031c161d3011b8f39e7e346799991aa8` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `54b416c99de3dd6d401cac10481883bafcebf677e18981383338384a007bc43e` |
 | [scripts/ads/cainiao.js](../scripts/ads/cainiao.js) | `4d0f186e786bb281b6e9e5bff468867a43c0ca05e446fd49f2db07e3f74adae7` |
