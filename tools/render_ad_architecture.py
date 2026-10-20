@@ -60,6 +60,7 @@ def rendered():
     sources = ['config/stash.yaml','config/main.yaml','config/core.stoverride',
                'rules/ads-basic.yaml','rules/vendor/ads-expanded.yaml',
                'research/ad-catalog.json','research/sources.lock.json','research/ad-repair-evidence.json',
+               'research/fmz-integration.json',
                'tools/generate_ad_modules.py','tools/build_ad_scripts.py','tools/build_ad_diagnostics.py','tools/ad_observation_runtime.js',
                'tools/build_subscription.py','tools/build_local_bundle.py','tools/build_private_config.py',
                'tools/render_ad_architecture.py','tools/build_ads.py','modules/diagnostics/ads.stoverride','modules/diagnostics/self-check.stoverride',

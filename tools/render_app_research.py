@@ -20,7 +20,7 @@ def render():
            f'核对日期：{inv["checked_at"]}（北京时间）。共 **{len(rows)} 个可见名称**；其中 **{implemented} 款有专项实现并已纳入整合入口**，{deferred}款找到方案但暂缓，其余{generic}款保留通用规则。这里记录实现范围，实际去广告效果仍待设备验收。', '',
            inv['extraction'], '', '“隐藏的 App”是系统入口，未推测其中内容。点点、Fantopia、换机助手、鼾声分析器、钱迹、遥控器等名称不足以唯一定位开发者，未强行套用近似名称规则。', '',
            '## 调查依据与边界', '', inv['limits'], '',
-           '调查时已直接读取固定版本的公开源码、模块与许可，并核对主要仓库HEAD；不是只读项目介绍。本次表述整理没有重新调查接口或扩大实现范围。原检索范围：', '']
+           '调查时已直接读取固定版本的公开源码、模块与许可，并核对主要仓库HEAD；不是只读项目介绍。后续fmz200接入差异见[接入明细](FMZ-INTEGRATION.md)，本表沿用完整App范围。原检索范围：', '']
     out += ['- ' + item for item in inv['search_scope']]
     out += ['', '来源与文件哈希见 [ad-catalog.json](../research/ad-catalog.json) 和 [sources.lock.json](../research/sources.lock.json)。源文件2024/2025年的日期不因仓库2026年仍有提交就变成已验证有效。原生Stash格式参考能支持实现选择，仍不替代当前官方文档和手机实测。', '',
             '## 完整清单', '',

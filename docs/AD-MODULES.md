@@ -32,7 +32,7 @@
 | 拼多多 | 仅 cappuccino/splash；保留首页、买菜、红包和领券 | 是：`api.pinduoduo.com`、`api.yangkeduo.com` | [pinduoduo](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/pinduoduo.stoverride) |
 | 淘票票 | 仅 queryloadingbanner 启动广告；保留普通活动、选座和购票 | 是：`acs.m.taobao.com` | [taopiaopiao](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/taopiaopiao.stoverride) |
 | 网易邮箱大师 | mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步 | 是：`appconf.mail.163.com`、`client.mail.163.com` | [netease-mail](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-mail.stoverride) |
-| 网易云音乐 | 仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文 | 是：`interface.music.163.com`、`interface3.music.163.com`、`ipv4.music.163.com` | [netease-music](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-music.stoverride) |
+| 网易云音乐 | interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文 | 是：`interface.music.163.com`、`interface3.music.163.com`、`ipv4.music.163.com`、`interface1.music.163.com`、`interface2.music.163.com`、`interface4.music.163.com`、`interface5.music.163.com`、`interface6.music.163.com`、`interface7.music.163.com`、`interface8.music.163.com`、`interface9.music.163.com` | [netease-music](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/netease-music.stoverride) |
 | 下厨房 | 仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片 | 是：`api.xiachufang.com` | [xiachufang](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiachufang.stoverride) |
 | 闲鱼 | 仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索 | 是：`acs.m.goofish.com` | [xianyu](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xianyu.stoverride) |
 | 小宇宙 | 仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频 | 是：`api.xiaoyuzhoufm.com` | [xiaoyuzhou](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/xiaoyuzhou.stoverride) |
@@ -46,11 +46,11 @@
 | 云闪付 | 仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告 | 否；仅独立广告域名 | [unionpay](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/unionpay.stoverride) |
 | UC浏览器 | 仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告 | 否；仅独立广告域名 | [uc](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/uc.stoverride) |
 | 京东金融 | 仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏 | 否；仅独立广告域名 | [jingdong-finance](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong-finance.stoverride) |
-| 知乎 | 仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告 | 是：`api.zhihu.com` | [zhihu](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/zhihu.stoverride) |
+| 知乎 | 开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告 | 是：`api.zhihu.com` | [zhihu](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/zhihu.stoverride) |
 | 阿里云盘 | 仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告 | 是：`member.alipan.com` | [alipan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/alipan.stoverride) |
 | 菜鸟 | 仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化 | 是：`cn-acs.m.cainiao.com` | [cainiao](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/cainiao.stoverride) |
 | 京东 | 仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告 | 是：`api.m.jd.com` | [jingdong](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/jingdong.stoverride) |
-| 美团 | 外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖 | 是：`wmapi.meituan.com`、`img.meituan.net`、`s3plus.meituan.net`、`flowplus.meituan.net` | [meituan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride) |
+| 美团 | 外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文 | 是：`wmapi.meituan.com`、`img.meituan.net`、`s3plus.meituan.net`、`flowplus.meituan.net` | [meituan](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/meituan.stoverride) |
 | 瑞幸咖啡 | 仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券 | 是：`capi.lkcoffee.com` | [luckin](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/luckin.stoverride) |
 | 微信 | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天 | 是：`mp.weixin.qq.com` | [wechat-articles](https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/wechat-articles.stoverride) |
 
@@ -83,7 +83,15 @@
 | 网易邮箱大师 | `appconf.mail.163.com` | 未命中 | 未命中 |
 | 网易邮箱大师 | `client.mail.163.com` | 未命中 | 未命中 |
 | 网易云音乐 | `interface.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface1.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface2.music.163.com` | 未命中 | 未命中 |
 | 网易云音乐 | `interface3.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface4.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface5.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface6.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface7.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface8.music.163.com` | 未命中 | 未命中 |
+| 网易云音乐 | `interface9.music.163.com` | 未命中 | 未命中 |
 | 网易云音乐 | `ipv4.music.163.com` | 未命中 | 未命中 |
 | 下厨房 | `api.xiachufang.com` | 未命中 | 未命中 |
 | 闲鱼 | `acs.m.goofish.com` | 未命中 | 未命中 |
@@ -117,7 +125,7 @@
 
 ## 合并、优先级与验收
 
-基础维护快照38条，整合入口默认引用的扩展快照38,066条。全部专项在构建时合并为 **11条脚本handler（全部响应阶段）、38条原生URL重写、45个去重后的精确MITM主机**。这些计数不代表实测有效。整合入口已在生成时去重MITM主机，原生解析、动作最低版本和实际处理仍待设备验收。
+基础维护快照38条，整合入口默认引用的扩展快照38,066条。全部专项在构建时合并为 **11条脚本handler（全部响应阶段）、43条原生URL重写、58个去重后的精确MITM主机**。这些计数不代表实测有效。整合入口已在生成时去重MITM主机，原生解析、动作最低版本和实际处理仍待设备验收。
 
 离线验证覆盖每个单模块、全部模块的正序/反序、每个有序模块对和所有端点的正反例；检查没有跨App业务URL误匹配。它不能证明HTTP/3、证书固定、私有协议、原生合并或当前App版本可用。
 

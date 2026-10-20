@@ -3,11 +3,11 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 中国联通广告专项（维护源）
-desc: AD-20261020.1；专用启动/广告接口；保留 accountListData、客户端配置和缴费。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；专用启动/广告接口；保留 accountListData、客户端配置和缴费。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - m.client.10010.com
   url-rewrite:
-  - ^https://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$)
+  - ^https?://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$)
     - reject-img
-  - ^https://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject-img
+  - ^https?://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject-img

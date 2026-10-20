@@ -3,7 +3,7 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 脉脉广告专项（维护源）
-desc: AD-20261020.1；仅 adshow；保留礼物、消息和普通推荐。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；仅 adshow；保留礼物、消息和普通推荐。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - open.taou.com

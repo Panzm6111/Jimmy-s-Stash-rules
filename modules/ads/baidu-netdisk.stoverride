@@ -3,9 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 百度网盘广告专项（维护源）
-desc: AD-20261020.1；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - pan.baidu.com
   url-rewrite:
-  - ^https://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https?://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject

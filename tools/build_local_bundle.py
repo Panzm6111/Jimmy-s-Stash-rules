@@ -120,8 +120,8 @@ def verify(files):
     assert enhanced['script-providers'] == expected, 'script URL provider changed'
     assert len(source_by_name) == 11
     assert len(enhanced['http']['script']) == 12
-    assert len(enhanced['http']['url-rewrite']) == 38
-    assert len(enhanced['http']['mitm']) == len(set(enhanced['http']['mitm'])) == 46
+    assert len(enhanced['http']['url-rewrite']) == 43
+    assert len(enhanced['http']['mitm']) == len(set(enhanced['http']['mitm'])) == 59
     for config in configs.values():
         assert not config.get('rule-providers')
         for script in config.get('script-providers', {}).values():
@@ -145,7 +145,7 @@ def verify(files):
             'per_app_overrides': len(addon_paths), 'inline_scripts': 0,
             'remote_scripts': len(enhanced['script-providers']),
             'response_handlers': 11, 'self_check_handlers': 1,
-            'script_handlers': 12, 'rewrite_rules': 38, 'mitm_unique': 46,
+            'script_handlers': 12, 'rewrite_rules': 43, 'mitm_unique': 59,
             'route_comparisons': len(fixtures) * len(scenarios)}
 
 def public_sources():

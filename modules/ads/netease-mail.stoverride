@@ -3,11 +3,11 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 网易邮箱大师广告专项（维护源）
-desc: AD-20261020.1；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - appconf.mail.163.com
   - client.mail.163.com
   url-rewrite:
-  - ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject-200
-  - ^https://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
+  - ^https?://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject-200
+  - ^https?://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject

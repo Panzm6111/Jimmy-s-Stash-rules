@@ -3,9 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 大麦广告专项（维护源）
-desc: AD-20261020.1；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - acs.m.taobao.com
   url-rewrite:
-  - ^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-200
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-200

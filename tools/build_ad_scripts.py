@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = 'AD-20261020.4'
+VERSION = 'AD-20261020.5'
 
 RUNTIME = r'''
 (() => {

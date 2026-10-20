@@ -17,6 +17,6 @@ test('native fixed responses preserve source action semantics; no empty-response
 });
 test('fixed rules never depend on a response object or JS invocation', () => {
   const count = cases.reduce((n,c)=>n+c.rules.length,0);
-  assert.equal(count,38);
+  assert.equal(count,43);
   for(const c of cases) for(const r of c.rules) assert.doesNotMatch(r,/empty-response|\$response|\$done/);
 });

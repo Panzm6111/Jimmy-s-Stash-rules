@@ -3,9 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 中国移动广告专项（维护源）
-desc: AD-20261020.1；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - client.app.coc.10086.cn
   url-rewrite:
-  - ^https://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject
+  - ^https?://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject

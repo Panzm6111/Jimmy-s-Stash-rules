@@ -118,7 +118,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://pan\\.baidu\\.com/rest/\\d+\\.\\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\\?|$)",
+          "match": "^https?://pan\\.baidu\\.com/rest/\\d+\\.\\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\\?|$)",
           "positive": "https://pan.baidu.com/rest/2.0/pcs/adx?x=1",
           "negative": [
             "https://pan.baidu.com/rest/2.0/pcs/file?method=download",
@@ -130,7 +130,7 @@
       ],
       "domains": [],
       "script": null,
-      "notes": "",
+      "notes": "fmz另列issuecdn广告素材目录，但现有扩展域名包已覆盖该主机，不重复加入MITM与路径拒绝。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -141,6 +141,10 @@
         {
           "line": 871,
           "text": "^https?:\\/\\/pan\\.baidu\\.com\\/rest\\/2\\.0\\/pcs\\/ad url reject"
+        },
+        {
+          "line": 883,
+          "text": "^https?:\\/\\/issuecdn\\.baidupcs\\.com\\/issue\\/netdisk\\/guanggao url reject"
         }
       ]
     },
@@ -156,7 +160,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+          "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
           "positive": "https://acs.m.taobao.com/gw/mtop.damai.wireless.home.welcome/1.0/?x=1",
           "negative": [
             "https://acs.m.taobao.com/gw/mtop.damai.trade.order.create/1.0/",
@@ -189,7 +193,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://mapi\\.dianping\\.com/mapi/operating/loadsplashconfig/?(?:\\?|$)",
+          "match": "^https?://mapi\\.dianping\\.com/mapi/operating/loadsplashconfig/?(?:\\?|$)",
           "positive": "https://mapi.dianping.com/mapi/operating/loadsplashconfig?x=1",
           "negative": [
             "https://mapi.dianping.com/mapi/operating/indexopsmodules",
@@ -224,7 +228,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)",
+          "match": "^https?://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)",
           "positive": "https://m5.amap.com/ws/shield/dsp/app/startup/init?x=1",
           "negative": [
             "https://m5.amap.com/ws/shield/search/poi",
@@ -233,7 +237,7 @@
           "upstream_action": "reject-dict"
         },
         {
-          "match": "^https://amap\\-aos\\-info\\-nogw\\.amap\\.com/ws/aos/alimama/splash_screen_rt/?(?:\\?|$)",
+          "match": "^https?://amap\\-aos\\-info\\-nogw\\.amap\\.com/ws/aos/alimama/splash_screen_rt/?(?:\\?|$)",
           "positive": "https://amap-aos-info-nogw.amap.com/ws/aos/alimama/splash_screen_rt?x=1",
           "negative": [
             "https://amap-aos-info-nogw.amap.com/ws/aos/route",
@@ -314,7 +318,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://appapi\\.huazhu\\.com(?::\\d+)?/client/app/getAppStartPage/(?:\\?|$)",
+          "match": "^https?://appapi\\.huazhu\\.com(?::\\d+)?/client/app/getAppStartPage/(?:\\?|$)",
           "positive": "https://appapi.huazhu.com:443/client/app/getAppStartPage/?x=1",
           "negative": [
             "https://appapi.huazhu.com/client/app/hotel/search",
@@ -347,7 +351,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://res\\.kfc\\.com\\.cn/advertisement/[^?#]*(?:\\?|$)",
+          "match": "^https?://res\\.kfc\\.com\\.cn/advertisement/[^?#]*(?:\\?|$)",
           "positive": "https://res.kfc.com.cn/advertisement/splash.jpg",
           "negative": [
             "https://res.kfc.com.cn/CRM/kfcad/apphome6/config.json",
@@ -380,7 +384,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)",
+          "match": "^https?://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)",
           "positive": "https://api.mcd.cn/bff/portal/home/splash?x=1",
           "negative": [
             "https://api.mcd.cn/bff/portal/home/coupons",
@@ -459,7 +463,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)",
+          "match": "^https?://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)",
           "positive": "https://api-ac.liepin.com/api/com.liepin.cyclops.live.get-ad-cards?x=1",
           "negative": [
             "https://api-ac.liepin.com/api/job/search",
@@ -493,7 +497,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)",
+          "match": "^https?://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)",
           "positive": "https://home.mi.com/cgi-op/api/v1/resource/realtime/openingBanner?x=1",
           "negative": [
             "https://home.mi.com/cgi-op/api/v1/recommendation/myTab",
@@ -532,7 +536,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://api\\.pinduoduo\\.com/api/cappuccino/splash/?(?:\\?|$)",
+          "match": "^https?://api\\.pinduoduo\\.com/api/cappuccino/splash/?(?:\\?|$)",
           "positive": "https://api.pinduoduo.com/api/cappuccino/splash?x=1",
           "negative": [
             "https://api.pinduoduo.com/api/aquarius/hungary/global/homepage",
@@ -542,7 +546,7 @@
           "upstream_action": "reject"
         },
         {
-          "match": "^https://api\\.yangkeduo\\.com/api/cappuccino/splash/?(?:\\?|$)",
+          "match": "^https?://api\\.yangkeduo\\.com/api/cappuccino/splash/?(?:\\?|$)",
           "positive": "https://api.yangkeduo.com/api/cappuccino/splash?x=1",
           "negative": [
             "https://api.yangkeduo.com/api/aquarius/hungary/global/homepage",
@@ -576,7 +580,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+          "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
           "positive": "https://acs.m.taobao.com/gw/mtop.film.mtopadvertiseapi.queryloadingbanner/1.0/?x=1",
           "negative": [
             "https://acs.m.taobao.com/gw/mtop.film.mtopadvertiseapi.queryadvertise/1.0/",
@@ -610,7 +614,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)",
+          "match": "^https?://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)",
           "positive": "https://appconf.mail.163.com/mmad/splash.json",
           "negative": [
             "https://appconf.mail.163.com/mail/inbox",
@@ -619,7 +623,7 @@
           "upstream_action": "reject-200"
         },
         {
-          "match": "^https://client\\.mail\\.163\\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\\?|$)",
+          "match": "^https?://client\\.mail\\.163\\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\\?|$)",
           "positive": "https://client.mail.163.com/apptrack/confinfo/showAds?x=1",
           "negative": [
             "https://client.mail.163.com/apptrack/confinfo/search",
@@ -648,17 +652,25 @@
       "id": "netease-music",
       "app": "网易云音乐",
       "file": "modules/ads/netease-music.stoverride",
-      "scope": "仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文",
+      "scope": "interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
         "interface.music.163.com",
         "interface3.music.163.com",
-        "ipv4.music.163.com"
+        "ipv4.music.163.com",
+        "interface1.music.163.com",
+        "interface2.music.163.com",
+        "interface4.music.163.com",
+        "interface5.music.163.com",
+        "interface6.music.163.com",
+        "interface7.music.163.com",
+        "interface8.music.163.com",
+        "interface9.music.163.com"
       ],
       "rewrite": [
         {
-          "match": "^https://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "match": "^https?://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
           "positive": "https://interface.music.163.com/eapi/ad/get?x=1",
           "negative": [
             "https://interface.music.163.com/eapi/song/enhance/player/url",
@@ -668,7 +680,7 @@
           "upstream_action": "reject-dict"
         },
         {
-          "match": "^https://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "match": "^https?://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
           "positive": "https://interface3.music.163.com/eapi/ad/get?x=1",
           "negative": [
             "https://interface3.music.163.com/eapi/song/enhance/player/url",
@@ -678,7 +690,7 @@
           "upstream_action": "reject-dict"
         },
         {
-          "match": "^https://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "match": "^https?://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
           "positive": "https://ipv4.music.163.com/eapi/ad/get?x=1",
           "negative": [
             "https://ipv4.music.163.com/eapi/song/enhance/player/url",
@@ -686,14 +698,28 @@
             "https://ipv4.music.163.com/eapi/address"
           ],
           "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https?://interface[124-9]\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://interface2.music.163.com/eapi/ad/get?x=1",
+          "negative": [
+            "https://interface2.music.163.com/eapi/address",
+            "https://interface2.music.163.com/eapi/song/enhance/player/url",
+            "https://interface10.music.163.com/eapi/ad/get"
+          ],
+          "upstream_action": "reject-dict"
         }
       ],
       "domains": [],
       "script": null,
-      "notes": "上游匹配 interface 加可选数字，本模块只列 interface、interface3、ipv4，其他编号主机不在范围。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。",
+      "notes": "按上游interface加一位数字补齐1–9，使用精确MITM主机。EAPI加密正文不能假定接受空JSON；效果待设备确认。不改音乐权限、云贝或会员状态。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
+        {
+          "line": 5188,
+          "text": "https?:\\/\\/(ipv4|interface\\d?)\\.music\\.163.com\\/e?api\\/ad url reject-dict"
+        },
         {
           "line": 5188,
           "text": "https?:\\/\\/(ipv4|interface\\d?)\\.music\\.163.com\\/e?api\\/ad url reject-dict"
@@ -712,7 +738,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://api\\.xiachufang\\.com/v\\d+/ad/[^?#]*(?:\\?|$)",
+          "match": "^https?://api\\.xiachufang\\.com/v\\d+/ad/[^?#]*(?:\\?|$)",
           "positive": "https://api.xiachufang.com/v2/ad/splash?x=1",
           "negative": [
             "https://api.xiachufang.com/v2/recipes/1",
@@ -780,7 +806,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)",
+          "match": "^https?://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)",
           "positive": "https://api.xiaoyuzhoufm.com/v1/flash?x=1",
           "negative": [
             "https://api.xiaoyuzhoufm.com/v1/discovery-feed/list",
@@ -815,7 +841,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://ios\\.wps\\.cn/ad-statistics-service(?:/[^?#]*)?(?:\\?|$)",
+          "match": "^https?://ios\\.wps\\.cn/ad-statistics-service(?:/[^?#]*)?(?:\\?|$)",
           "positive": "https://ios.wps.cn/ad-statistics-service/report?x=1",
           "negative": [
             "https://ios.wps.cn/document/sync",
@@ -824,7 +850,7 @@
           "upstream_action": "reject"
         },
         {
-          "match": "^https://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)",
+          "match": "^https?://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)",
           "positive": "https://mobile-pic.cache.iciba.com/feeds_ad/banner.jpg",
           "negative": [
             "https://mobile-pic.cache.iciba.com/dictionary/word.jpg"
@@ -860,7 +886,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://app\\.58\\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\\?|$)",
+          "match": "^https?://app\\.58\\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\\?|$)",
           "positive": "https://app.58.com/api/home/advertising/splash?x=1",
           "negative": [
             "https://app.58.com/api/home/jobs",
@@ -894,7 +920,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\\?|$)",
+          "match": "^https?://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\\?|$)",
           "positive": "https://client.app.coc.10086.cn/biz-orange/DN/explorePage/getAdverList?x=1",
           "negative": [
             "https://client.app.coc.10086.cn/biz-orange/DN/init/startInit",
@@ -928,7 +954,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://m\\.client\\.10010\\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\\.htm)?/?(?:\\?|$)",
+          "match": "^https?://m\\.client\\.10010\\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\\.htm)?/?(?:\\?|$)",
           "positive": "https://m.client.10010.com/mobileService/customer/get_startadv.htm?x=1",
           "negative": [
             "https://m.client.10010.com/mobileService/customer/accountListData.htm",
@@ -938,7 +964,7 @@
           "upstream_action": "reject-img"
         },
         {
-          "match": "^https://m\\.client\\.10010\\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\\?|$)",
+          "match": "^https?://m\\.client\\.10010\\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\\?|$)",
           "positive": "https://m.client.10010.com/uniAdmsInterface/getWelcomeAd?x=1",
           "negative": [
             "https://m.client.10010.com/uniAdmsInterface/getWelcomeAdExtra"
@@ -1131,7 +1157,7 @@
       "id": "zhihu",
       "app": "知乎",
       "file": "modules/ads/zhihu.stoverride",
-      "scope": "仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告",
+      "scope": "开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -1155,11 +1181,20 @@
             "https://api.zhihu.com/ad-style-service/requestExtra"
           ],
           "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https://api\\.zhihu\\.com/commercial_api/(?:answer|article)/\\d+/bottom-v2/?(?:\\?|$)",
+          "positive": "https://api.zhihu.com/commercial_api/answer/123/bottom-v2?x=1",
+          "negative": [
+            "https://api.zhihu.com/answers/123",
+            "https://api.zhihu.com/commercial_api/article/123/bottom-v2Extra"
+          ],
+          "upstream_action": "reject-dict"
         }
       ],
       "domains": [],
       "script": null,
-      "notes": "上游其他脚本还处理回答与推荐流，但未整体引入。本模块只匹配明确广告端点，不把有限路径等同于知乎全界面去广告；普通回答、搜索与推荐保留。",
+      "notes": "新增回答/文章底部商业广告专用接口；不拦正常answers/articles内容与推荐流。上游其他界面净化及会员相关修改不导入。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1170,6 +1205,10 @@
         {
           "line": 6591,
           "text": "^https:\\/\\/api\\.zhihu\\.com\\/ad-style-service\\/request url reject-dict"
+        },
+        {
+          "line": 6565,
+          "text": "^https:\\/\\/api\\.zhihu\\.com\\/commercial_api\\/(answer\\/\\d+\\/bottom-v2|article\\/\\d+\\/bottom-v2|banners_v3\\/app_topstory_banner|launch_v2|real_time_launch_v2) url reject-dict"
         }
       ]
     },
@@ -1324,7 +1363,7 @@
       "id": "meituan",
       "app": "美团",
       "file": "modules/ads/meituan.stoverride",
-      "scope": "外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖",
+      "scope": "外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文",
       "license": "GPL-3.0-only",
       "source": "fmz-rewrite",
       "mitm": [
@@ -1335,7 +1374,7 @@
       ],
       "rewrite": [
         {
-          "match": "^https://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$)",
+          "match": "^https?://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$)",
           "positive": "https://wmapi.meituan.com/api/v7/openscreen?x=1",
           "negative": [
             "https://wmapi.meituan.com/api/v7/openscreenExtra",
@@ -1344,7 +1383,7 @@
           "upstream_action": "reject-dict"
         },
         {
-          "match": "^https://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$)",
+          "match": "^https?://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$)",
           "positive": "https://img.meituan.net/bizad/bizad_brandCpt_123.jpg",
           "negative": [
             "https://img.meituan.net/product/123.jpg",
@@ -1353,20 +1392,29 @@
           "upstream_action": "reject-img"
         },
         {
-          "match": "^https://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$)",
+          "match": "^https?://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$)",
           "positive": "https://s3plus.meituan.net/v1/test/linglong/ad.jpg",
           "negative": [
             "https://s3plus.meituan.net/v1/test/product/ad.jpg",
-            "https://s3plus.meituan.net/v1/test/linglong/ad.mp4"
+            "https://s3plus.meituan.net/v1/test/product/ad.mp4"
           ],
           "upstream_action": "reject-img"
+        },
+        {
+          "match": "^https?://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.mp4(?:\\?|$)",
+          "positive": "https://flowplus.meituan.net/v1/test/linglong/ad.mp4",
+          "negative": [
+            "https://flowplus.meituan.net/v1/test/product/ad.mp4",
+            "https://flowplus.meituan.net/v1/test/linglong/ad.mp4extra"
+          ],
+          "upstream_action": "reject-200"
         }
       ],
       "domains": [],
       "script": {
         "name": "jimmy_meituan_ads",
         "path": "scripts/ads/meituan.js",
-        "match": "^https://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)",
+        "match": "^https?://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)",
         "positive": "https://wmapi.meituan.com/api/v7/loadInfo?x=1",
         "negative": [
           "https://wmapi.meituan.com/api/v7/loadInfoExtra",
@@ -1374,7 +1422,7 @@
         ],
         "argument": "diagnostic=0"
       },
-      "notes": "覆写新增原生路径取自fmz200（GPL-3.0-only）；独立meituan.js响应资源仍源于blackmatrix7并保持GPL-2.0，只通过provider引用，不拼接代码。",
+      "notes": "覆写新增原生路径取自fmz200（GPL-3.0-only）；独立meituan.js响应资源仍源于blackmatrix7并保持GPL-2.0，只通过provider引用，不拼接代码。 AD-20261020.5另将上游linglong MP4从reject-img改为reject-200，避免视频收到GIF；是否回退重试待设备验证，不扩到商品视频或goodsawardpic领券素材。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
@@ -1422,6 +1470,10 @@
           "line": 3181,
           "text": "^https?:\\/\\/img\\.meituan\\.net\\/bizad\\/bizad_brandCpt_\\d+\\.jpg url reject-img",
           "source": "fmz-rewrite"
+        },
+        {
+          "line": 3180,
+          "text": "^https?:\\/\\/(s3plus|flowplus)\\.meituan\\.net\\/v\\d\\/\\w+\\/linglong\\/\\w+\\.(gif|jpg|mp4) url reject-img"
         }
       ]
     },

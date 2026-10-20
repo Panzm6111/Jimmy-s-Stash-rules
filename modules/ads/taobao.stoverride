@@ -1,20 +1,21 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Source pins and independent licenses: docs/SOURCES.md
 name: 淘宝开屏广告处理（维护源）
-desc: AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。
+desc: AD-20261020.5；专用开屏展示控制、明确tao_splash场景；补充advertisementservice.getadv；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。
 http:
   mitm:
   - guide-acs.m.taobao.com
   - acs.m.taobao.com
   script:
-  - match: ^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(\/\d+(\.\d+)*\/?)?(\?|$)
+  - match: ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(\/\d+(\.\d+)*\/?)?(\?|$)
     name: jimmy_taobao_ads
     type: response
     require-body: true
     timeout: 5
     argument: diagnostic=0
   url-rewrite:
-  - ^https://acs\.m\.taobao\.com/gw/mtop\.etao\.noah\.query/(?:[0-9.]+/?)?\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.alibaba\.advertisementservice\.getadv(?:/\d+(?:\.\d+)*/?)?(?:\?|$) - reject-dict
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.etao\.noah\.query/(?:[0-9.]+/?)?\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$
     - reject-dict
 script-providers:
   jimmy_taobao_ads:

@@ -1,6 +1,8 @@
 # Stash 去广告：当前实现、修复证据与排查规格
 
-当前配置与脚本：**AD-20261020.4**，仍用原 `config/stash.yaml` 整合入口。用户已确认AD-20261020.3恢复导入，但开屏广告仍出现，并确认规则模式、广告组REJECT；此前自建CA已完全信任。本轮共同字段与脚本保护审查没有找到可证实的全局失效根因，没有盲目删除保护、扩展拦截或声称广告已去除。修复的是排障必须复制配置且缺少执行证据的问题：在同一入口提供手动自检页和15分钟本机固定状态记录。原去广告转换、38条原生动作、分流、地区组、私人订阅接法与现有App解密主机保留；自动签到继续暂停。
+当前配置与脚本：**AD-20261020.5**，继续使用原 `config/stash.yaml` 整合入口。本轮按用户指定的fmz200仓库补齐广告分支，43条原生动作、11份响应JS、1份自检JS，59个精确MITM主机（含自检example.com）。原分流、私人接入和签到暂停状态保留。来源逐项取舍见[fmz200接入明细](FMZ-INTEGRATION.md)，固定源码与哈希见[接入审计](../research/fmz-integration.json)。
+
+`.4`手机截图显示阿里云盘结构不支持16次、HTTP失败1次，B站正文超限2次/无需修改4次/产生修改1次，菜鸟无需修改11次，京东产生修改1次；其他响应模块无记录。用户表示除贴吧外均打开过，无记录的App仍有广告。这排除了所有JS均未运行的假设；不能区分未命中、未解密、协议和缓存，原生拒绝也不进入响应计数。`.5`没有真机效果通过记录。
 
 ## 1. 已修复问题与证据边界
 
@@ -23,11 +25,11 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.4整合全部40款已有App专项、11份响应JS、1份手动自检JS及扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
+主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.5整合全部40款已有App专项、11份响应JS、1份手动自检JS及扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
 
-12份JS通过`script-providers.<name>.url`引用本仓库原路径，并带公开`?v=AD-20261020.4`版本参数以与旧资源缓存区分，`interval: 86400`。刷新主配置取得新URL、主机和handler，脚本正文仍由Stash联网加载；自检页及观察行显示实际运行版本，下载成功不能冒充执行成功。新主机/handler必须刷新主配置。恢复的非空URL声明继续保留，不回到content-only；精确版本URL也加入发布后下载和字节校验。本轮11份响应JS只增加限时观察hook，业务转换和已审阅URL范围未改。
+12份JS通过`script-providers.<name>.url`引用本仓库原路径，并带公开`?v=AD-20261020.5`版本参数以与旧资源缓存区分，`interval: 86400`。刷新主配置取得新URL、主机和handler，脚本正文仍由Stash联网加载；自检页及观察行显示实际运行版本，下载成功不能冒充执行成功。新主机/handler必须刷新主配置。恢复的非空URL声明继续保留，不回到content-only；精确版本URL也加入发布后下载和字节校验。本轮补齐微博广告字段、相关主机与HTTP匹配；逐项范围见接入明细。
 
-首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部AD-20261020.4，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
+首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部AD-20261020.5，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
 
 **当前需求是整合入口，不设置逐App开关，也不另装expanded。** 主配置内的专项随主配置共同启用；额外覆写的启停不能撤销内置处理。“广告拦截→DIRECT”只控制域名路由，暂停HTTPS改写需关闭HTTP/MITM并重建连接。单App模块文件不是手机上的待安装清单。
 
@@ -44,7 +46,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 | App/环节 | 当前实现与匹配范围 | 来源、正常业务影响与验证 |
 |---|---|---|
 | 淘宝：实时开屏、预加载展示数据 | 保留 `guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get` 的已有响应分支；只改 `splash_home_base` 内 `taobao-splash` 条目的次数、等待、冷热启动、时间窗和图片/视频 URL | fmz200 `myBlockAds.js` 85–115行。MTOP失败不改；不删除普通首页、券、订单；兼容数字/布尔/字符串、补缺省字段、幂等与未知结构测试 |
-| 淘宝：明确广告场景的补充请求 | 新增 `acs.m.taobao.com/gw/mtop.etao.noah.query/...` 且查询含独立 `tao_splash` 标记时原生空 JSON | fmz200合集4431行。没有这个广告标记的相同共享 API 不匹配；正例、普通场景、近似路径、伪域名测试 |
+| 淘宝：明确广告场景的补充请求 | 新增 `acs.m.taobao.com/gw/mtop.etao.noah.query/...` 且查询含独立 `tao_splash` 标记时原生空 JSON；另补广告专用advertisementservice.getadv | fmz200合集4431行。没有这个广告标记的相同共享 API 不匹配；正例、普通场景、近似路径、伪域名测试 |
 | 淘宝：cloudvideo 视频 | 已读 `cloudvideo.video.query` 上游63–83行，**未泛化启用** | 上游对整个响应清资源/时长，接口可能也用于商品视频；缺少当前开屏场景判别证据。当前不能证明视频开屏完整覆盖，不能改为整个视频 API 拒绝 |
 | 淘宝：活动弹层/素材 | 已读 `poplayer.template.alibaba.com` 分支126–146行，**未泛化启用**；开屏主分支会清已识别广告条目的素材 URL | 上游只看通用活动结构，也可能清正常促销/领券；缺少广告专用判别。不封整域或整个活动 JSON |
 | 微博：实时与预载 | `bootrealtime.../v*/ad/realtime`、`bootpreload.../v*/ad/preload` 改原生 reject-dict，支持结尾 `/` | fmz200 `weibo.snippet` 128–129行。不再等 JS 返回或依赖请求 `$response` 形态；近似路径不匹配 |
@@ -86,7 +88,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 - try/finally确保本地执行恰好调用一次`$done`。没有异步请求/重试。**原生5秒超时由Stash记录，JS被终止后不能自己补发timeout日志或保证回退**。
 - 当前推荐诊断：使用下节内置自检页开始15分钟观察，无需副本、覆写或修改YAML。原`diagnostic=1`参数日志仅为维护兼容保留；主入口继续为0，避免日常控制台输出。
 
-日志示例：`[JimmyAds][taobao][AD-20261020.4] changed`。状态仅为固定枚举：url-unmatched、unsupported-method、body-unavailable、body-too-large、http-error、unsupported-status、non-json、parse-error、unsupported-schema、unchanged、changed、exception。没有异常详情、账号值、完整URL/查询或正文。默认参数0不输出控制台日志；参数日志开启时每次调用最多一条。页面开启的观察独立于参数日志，最多持续15分钟，失效后不再写入；测试包含私人哨兵、损坏记录和故障存储。并发写入可能覆盖计数，因此只用于命中线索，不是精确流量统计。
+日志示例：`[JimmyAds][taobao][AD-20261020.5] changed`。状态仅为固定枚举：url-unmatched、unsupported-method、body-unavailable、body-too-large、http-error、unsupported-status、non-json、parse-error、unsupported-schema、unchanged、changed、exception。没有异常详情、账号值、完整URL/查询或正文。默认参数0不输出控制台日志；参数日志开启时每次调用最多一条。页面开启的观察独立于参数日志，最多持续15分钟，失效后不再写入；测试包含私人哨兵、损坏记录和故障存储。并发写入可能覆盖计数，因此只用于命中线索，不是精确流量统计。
 
 <a id="6-临时只读诊断先确定请求有没有进入引擎"></a>
 
@@ -94,20 +96,20 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 在Stash运行时，用Safari打开 **https://example.com/jimmy-stash-check**。这个页面由本机请求脚本返回，没有远程后台、外部图片、统计或上传。HTTPS页面显示成功只证明这次example.com的HTTP引擎、请求脚本和MITM链工作；不代表淘宝/微博等App已解密、响应已被修改或广告已去除。页面显示实际http/https枚举，避免把Safari自动升级误当明文HTTP验证。
 
-1. 刷新原公共配置至AD-20261020.4，私人覆写与证书沿用。打开上述地址，看到“Jimmy Stash 自检”与新版标记。
+1. 刷新原公共配置至AD-20261020.5，私人覆写与证书沿用。打开上述地址，看到“Jimmy Stash 自检”与新版标记。
 2. 点开始15分钟诊断，再进入结果页。正常使用淘宝、小红书等关注的App，包含冷启动、后台返回及预载后再次启动；不要求重装App。
 3. 回到无查询参数的结果页刷新，仅反馈App名称与页面中文固定状态。不要再次刷新带start=1的地址，否则会开始新会话；页面提供固定返回链接。
 4. 点停止或等15分钟到期。没有后台任务、定时联网或通知；观察只在已经匹配的响应脚本执行时记录。旧计数保留在设备专用键里、开启新会话后不会混用，不含私人请求内容。
 
 存储契约：会话键`jimmy.ads.diag.session.v1`，值为数字id/until；每个响应模块键`jimmy.ads.diag.<模块ID>.v1`仅包含sessionId、脚本版本、last毫秒时间戳和固定状态计数，计数上限9999。白名单、数值与会话有效期均校验；损坏、未知字段或存储异常不进入页面，也不妨碍广告处理或单次$done。没有会话或会话过期不写入。
 
-新增解密主机只有`example.com`，为精确主机，不是通配；其HTTPS均属于该MITM范围，但自检handler只处理`/jimmy-stash-check`以及固定start/stop参数，不处理普通主页或其他业务路径。原45个App主机不变。Stash原生request返回`$done({response:{status,headers,body}})`和persistentStore用法参考已锁定NobyDa IPA-Installer原生模块及脚本；本项目未复制安装业务。返回HTML设置no-store，不读请求头和正文。
+自检页使用的解密主机只有`example.com`，为精确主机，不是通配；其HTTPS均属于该MITM范围，但自检handler只处理`/jimmy-stash-check`以及固定start/stop参数，不处理普通主页或其他业务路径。当前另有58个App精确主机；本轮新增列表见fmz200接入明细。Stash原生request返回`$done({response:{status,headers,body}})`和persistentStore用法参考已锁定NobyDa IPA-Installer原生模块及脚本；本项目未复制安装业务。返回HTML设置no-store，不读请求头和正文。
 
-空记录不能单独区分没发新请求、URL变更、缓存、HTTP/3、MITM未命中或脚本未取得新版。微博开屏等38条原生拒绝不经过响应JS，因此没有其响应记录也不能判为失败。原生动作仍需查看Stash本机HTTP/重写命中。旧`modules/diagnostics/ads.stoverride`只保留给维护时隔离观察，不作为当前用户的导入步骤，不叠加到正常HTTP动作。
+空记录不能单独区分没发新请求、URL变更、缓存、HTTP/3、MITM未命中或脚本未取得新版。微博开屏等43条原生拒绝不经过响应JS，因此没有其响应记录也不能判为失败。原生动作仍需查看Stash本机HTTP/重写命中。旧`modules/diagnostics/ads.stoverride`只保留给维护时隔离观察，不作为当前用户的导入步骤，不叠加到正常HTTP动作。
 
 | 观察到的证据 | 可以判断的方向 | 不能直接下的结论 |
 |---|---|---|
-| 主配置或自检页面不是AD-20261020.4，或者观察行显示其他脚本版本 | 检查选中配置和远程脚本加载；新主配置为JS URL添加公开v版本参数以区分旧缓存 | 只刷新机场不能更新本项目；HTTP200下载也不证明执行或App效果 |
+| 主配置或自检页面不是AD-20261020.5，或者观察行显示其他脚本版本 | 检查选中配置和远程脚本加载；新主配置为JS URL添加公开v版本参数以区分旧缓存 | 只刷新机场不能更新本项目；HTTP200下载也不证明执行或App效果 |
 | TCP443连接存在，但没有解密HTTP记录 | 检查实际主机/端口、HTTP/MITM适用范围、证书固定或其他加密；既有CA信任记录保留 | 不先要求重装证书；不关闭TLS验证 |
 | 已解密，探针request-url-unmatched | 请求进入引擎，但不匹配目前专用广告端点，需核对当前App接口 | 不把同主机所有业务请求当广告 |
 | request-url-matched后，正式响应日志body-unavailable/non-json/parse-error | handler进入，但没有可处理的JSON正文/解析失败 | 不自动删未知业务数据 |
@@ -145,6 +147,9 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 整合入口误伤时，先将广告组DIRECT判断域名拦截是否相关；它不会停止HTTP。需快速恢复时切换手机上原来可用的配置备份，保留私人覆写并核对关联/地区选择。没有备份且急需用该App时，可暂关Stash作对照，但会同时停止本项目代理分流和去广告。用户已取消逐App开关需求；当前恢复步骤以整体域名拦截、HTTP/MITM和可用配置备份为单位，不要求另建多份App覆写。代码基线`936fe45`可供维护者取历史公共文件，但回退到它会恢复本轮已确认的旧接入缺陷，不应作为长期方案。
 
+
+AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，热搜page/flowpage与评论mix_comments/container_detail_comment/container_detail_mix，仅删除明确广告标记；小红书新增rec/www的v6首页及www的ads/resource；美团linglong目录MP4返回空正文，不返回GIF。其他本轮新增及未采用的原因见[FMZ-INTEGRATION](FMZ-INTEGRATION.md)。下方生成部分为实际完整声明。
+
 <!-- GENERATED-AD-SPEC -->
 
 ## 9. 自动核对的当前完整清单
@@ -158,14 +163,14 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
-| native_url_rewrites | 38 |
+| native_url_rewrites | 43 |
 | response_handlers | 11 |
 | request_handlers | 1 |
 | runtime_js_providers | 12 |
 | remote_script_providers | 12 |
 | inline_script_providers | 0 |
-| mitm_exact_hosts | 46 |
-| app_mitm_exact_hosts | 45 |
+| mitm_exact_hosts | 59 |
+| app_mitm_exact_hosts | 58 |
 | manual_self_check_js | 1 |
 | optional_probe_js | 1 |
 
@@ -173,46 +178,46 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 | App专项 | 维护源路径 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
 |---|---|---|---|---|---|
-| 58同城广告专项（维护源） | [58tongcheng](../modules/ads/58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 home/advertising 和 appadv；保留职位、联系与发布。已纳入整合入口，无需单独导入；需设备验收。 |
-| 阿里云盘广告专项（维护源） | [alipan](../modules/ads/alipan.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 高德地图广告专项（维护源） | [amap](../modules/ads/amap.stoverride) | 2 | 2 | 0 | AD-20261020.1；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。已纳入整合入口，无需单独导入；需设备验收。 |
-| 百度网盘广告专项（维护源） | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) | 0 | 1 | 0 | AD-20261020.1；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。已纳入整合入口，无需单独导入；需设备验收。 |
-| 哔哩哔哩广告处理（维护源） | [bilibili](../modules/ads/bilibili.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 菜鸟广告专项（维护源） | [cainiao](../modules/ads/cainiao.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。已纳入整合入口，无需单独导入；需设备验收。 |
-| 中国移动广告专项（维护源） | [cmcc](../modules/ads/cmcc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
-| 携程旅行广告专项（维护源） | [ctrip](../modules/ads/ctrip.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
-| 大麦广告专项（维护源） | [damai](../modules/ads/damai.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。已纳入整合入口，无需单独导入；需设备验收。 |
-| 大众点评广告专项（维护源） | [dianping](../modules/ads/dianping.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。已纳入整合入口，无需单独导入；需设备验收。 |
-| 东方财富广告专项（维护源） | [eastmoney](../modules/ads/eastmoney.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。已纳入整合入口，无需单独导入；需设备验收。 |
-| 华住会广告专项（维护源） | [huazhu](../modules/ads/huazhu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。已纳入整合入口，无需单独导入；需设备验收。 |
-| 京东金融广告专项（维护源） | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。已纳入整合入口，无需单独导入；需设备验收。 |
-| 京东广告专项（维护源） | [jingdong](../modules/ads/jingdong.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 肯德基广告专项（维护源） | [kfc](../modules/ads/kfc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 猎聘广告专项（维护源） | [liepin](../modules/ads/liepin.stoverride) | 0 | 1 | 0 | AD-20261020.1；明确命名的 live.get-ad-cards；不拦职位推荐或投递。已纳入整合入口，无需单独导入；需设备验收。 |
-| 瑞幸咖啡广告专项（维护源） | [luckin](../modules/ads/luckin.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 脉脉广告专项（维护源） | [maimai](../modules/ads/maimai.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 adshow；保留礼物、消息和普通推荐。已纳入整合入口，无需单独导入；需设备验收。 |
-| 麦当劳广告专项（维护源） | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 portal/home/splash；保留点餐、支付、领券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 美团广告专项（维护源） | [meituan](../modules/ads/meituan.stoverride) | 0 | 3 | 1 | AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。已纳入整合入口，无需单独导入；需设备验收。 |
-| 米家广告专项（维护源） | [mijia](../modules/ads/mijia.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。已纳入整合入口，无需单独导入；需设备验收。 |
-| 网易邮箱大师广告专项（维护源） | [netease-mail](../modules/ads/netease-mail.stoverride) | 0 | 2 | 0 | AD-20261020.1；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。已纳入整合入口，无需单独导入；需设备验收。 |
-| 网易云音乐广告专项（维护源） | [netease-music](../modules/ads/netease-music.stoverride) | 0 | 3 | 0 | AD-20261020.1；仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文。已纳入整合入口，无需单独导入；需设备验收。 |
-| 拼多多广告专项（维护源） | [pinduoduo](../modules/ads/pinduoduo.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 cappuccino/splash；保留首页、买菜、红包和领券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 铁路12306广告专项（维护源） | [railway12306](../modules/ads/railway12306.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。已纳入整合入口，无需单独导入；需设备验收。 |
-| 淘宝开屏广告处理（维护源） | [taobao](../modules/ads/taobao.stoverride) | 0 | 1 | 1 | AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。 |
-| 淘票票广告专项（维护源） | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。已纳入整合入口，无需单独导入；需设备验收。 |
-| 贴吧开屏广告处理（维护源） | [tieba](../modules/ads/tieba.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。已纳入整合入口，无需单独导入；需设备验收。 |
-| UC浏览器广告专项（维护源） | [uc](../modules/ads/uc.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 航旅纵横广告专项（维护源） | [umetrip](../modules/ads/umetrip.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。已纳入整合入口，无需单独导入；需设备验收。 |
-| 中国联通广告专项（维护源） | [unicom](../modules/ads/unicom.stoverride) | 0 | 2 | 0 | AD-20261020.1；专用启动/广告接口；保留 accountListData、客户端配置和缴费。已纳入整合入口，无需单独导入；需设备验收。 |
-| 云闪付广告专项（维护源） | [unionpay](../modules/ads/unionpay.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 微信广告专项（维护源） | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。已纳入整合入口，无需单独导入；需设备验收。 |
-| 微博开屏广告处理（维护源） | [weibo](../modules/ads/weibo.stoverride) | 4 | 2 | 1 | AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。 |
-| WPS Office广告专项（维护源） | [wps](../modules/ads/wps.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
-| 下厨房广告专项（维护源） | [xiachufang](../modules/ads/xiachufang.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。已纳入整合入口，无需单独导入；需设备验收。 |
-| 闲鱼广告专项（维护源） | [xianyu](../modules/ads/xianyu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。已纳入整合入口，无需单独导入；需设备验收。 |
-| 小红书开屏广告处理（维护源） | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | 4 | 0 | 1 | AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。已纳入整合入口，无需单独导入；待真机验收。 |
-| 小宇宙广告专项（维护源） | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。已纳入整合入口，无需单独导入；需设备验收。 |
-| 知乎广告专项（维护源） | [zhihu](../modules/ads/zhihu.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 58同城广告专项（维护源） | [58tongcheng](../modules/ads/58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 home/advertising 和 appadv；保留职位、联系与发布。已纳入整合入口，无需单独导入；需设备验收。 |
+| 阿里云盘广告专项（维护源） | [alipan](../modules/ads/alipan.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 高德地图广告专项（维护源） | [amap](../modules/ads/amap.stoverride) | 2 | 2 | 0 | AD-20261020.5；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。已纳入整合入口，无需单独导入；需设备验收。 |
+| 百度网盘广告专项（维护源） | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) | 0 | 1 | 0 | AD-20261020.5；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。已纳入整合入口，无需单独导入；需设备验收。 |
+| 哔哩哔哩广告处理（维护源） | [bilibili](../modules/ads/bilibili.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 菜鸟广告专项（维护源） | [cainiao](../modules/ads/cainiao.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。已纳入整合入口，无需单独导入；需设备验收。 |
+| 中国移动广告专项（维护源） | [cmcc](../modules/ads/cmcc.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 携程旅行广告专项（维护源） | [ctrip](../modules/ads/ctrip.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 大麦广告专项（维护源） | [damai](../modules/ads/damai.stoverride) | 0 | 1 | 0 | AD-20261020.5；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。已纳入整合入口，无需单独导入；需设备验收。 |
+| 大众点评广告专项（维护源） | [dianping](../modules/ads/dianping.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。已纳入整合入口，无需单独导入；需设备验收。 |
+| 东方财富广告专项（维护源） | [eastmoney](../modules/ads/eastmoney.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。已纳入整合入口，无需单独导入；需设备验收。 |
+| 华住会广告专项（维护源） | [huazhu](../modules/ads/huazhu.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。已纳入整合入口，无需单独导入；需设备验收。 |
+| 京东金融广告专项（维护源） | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。已纳入整合入口，无需单独导入；需设备验收。 |
+| 京东广告专项（维护源） | [jingdong](../modules/ads/jingdong.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 肯德基广告专项（维护源） | [kfc](../modules/ads/kfc.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 猎聘广告专项（维护源） | [liepin](../modules/ads/liepin.stoverride) | 0 | 1 | 0 | AD-20261020.5；明确命名的 live.get-ad-cards；不拦职位推荐或投递。已纳入整合入口，无需单独导入；需设备验收。 |
+| 瑞幸咖啡广告专项（维护源） | [luckin](../modules/ads/luckin.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 脉脉广告专项（维护源） | [maimai](../modules/ads/maimai.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅 adshow；保留礼物、消息和普通推荐。已纳入整合入口，无需单独导入；需设备验收。 |
+| 麦当劳广告专项（维护源） | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 0 | 1 | 0 | AD-20261020.5；专用 portal/home/splash；保留点餐、支付、领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 美团广告专项（维护源） | [meituan](../modules/ads/meituan.stoverride) | 0 | 4 | 1 | AD-20261020.5；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文。已纳入整合入口，无需单独导入；需设备验收。 |
+| 米家广告专项（维护源） | [mijia](../modules/ads/mijia.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。已纳入整合入口，无需单独导入；需设备验收。 |
+| 网易邮箱大师广告专项（维护源） | [netease-mail](../modules/ads/netease-mail.stoverride) | 0 | 2 | 0 | AD-20261020.5；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。已纳入整合入口，无需单独导入；需设备验收。 |
+| 网易云音乐广告专项（维护源） | [netease-music](../modules/ads/netease-music.stoverride) | 0 | 4 | 0 | AD-20261020.5；interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文。已纳入整合入口，无需单独导入；需设备验收。 |
+| 拼多多广告专项（维护源） | [pinduoduo](../modules/ads/pinduoduo.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅 cappuccino/splash；保留首页、买菜、红包和领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 铁路12306广告专项（维护源） | [railway12306](../modules/ads/railway12306.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。已纳入整合入口，无需单独导入；需设备验收。 |
+| 淘宝开屏广告处理（维护源） | [taobao](../modules/ads/taobao.stoverride) | 0 | 2 | 1 | AD-20261020.5；专用开屏展示控制、明确tao_splash场景；补充advertisementservice.getadv；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。 |
+| 淘票票广告专项（维护源） | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。已纳入整合入口，无需单独导入；需设备验收。 |
+| 贴吧开屏广告处理（维护源） | [tieba](../modules/ads/tieba.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。已纳入整合入口，无需单独导入；需设备验收。 |
+| UC浏览器广告专项（维护源） | [uc](../modules/ads/uc.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 航旅纵横广告专项（维护源） | [umetrip](../modules/ads/umetrip.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。已纳入整合入口，无需单独导入；需设备验收。 |
+| 中国联通广告专项（维护源） | [unicom](../modules/ads/unicom.stoverride) | 0 | 2 | 0 | AD-20261020.5；专用启动/广告接口；保留 accountListData、客户端配置和缴费。已纳入整合入口，无需单独导入；需设备验收。 |
+| 云闪付广告专项（维护源） | [unionpay](../modules/ads/unionpay.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 微信广告专项（维护源） | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。已纳入整合入口，无需单独导入；需设备验收。 |
+| 微博开屏广告处理（维护源） | [weibo](../modules/ads/weibo.stoverride) | 4 | 2 | 1 | AD-20261020.5；实时/预载空JSON、专用SDK与素材主机、话题/搜索/热搜/评论明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。 |
+| WPS Office广告专项（维护源） | [wps](../modules/ads/wps.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 下厨房广告专项（维护源） | [xiachufang](../modules/ads/xiachufang.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。已纳入整合入口，无需单独导入；需设备验收。 |
+| 闲鱼广告专项（维护源） | [xianyu](../modules/ads/xianyu.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。已纳入整合入口，无需单独导入；需设备验收。 |
+| 小红书开屏广告处理（维护源） | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | 4 | 1 | 1 | AD-20261020.5；开屏时间、启动配置splash、专用广告素材、edith/rec/www的v6首页明确赞助项及www独立ads/resource；不改下载/水印/画质/用户信息。已纳入整合入口，无需单独导入；待真机验收。 |
+| 小宇宙广告专项（维护源） | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。已纳入整合入口，无需单独导入；需设备验收。 |
+| 知乎广告专项（维护源） | [zhihu](../modules/ads/zhihu.stoverride) | 0 | 3 | 0 | AD-20261020.5；开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告。已纳入整合入口，无需单独导入；需设备验收。 |
 
 ## 10. 精确原生声明与基础规则原文
 
@@ -261,6 +266,8 @@ http:
   - api.zhihu.com
   - api.xiaoyuzhoufm.com
   - edith.xiaohongshu.com
+  - rec.xiaohongshu.com
+  - www.xiaohongshu.com
   - acs.m.goofish.com
   - api.xiachufang.com
   - ios.wps.cn
@@ -268,6 +275,9 @@ http:
   - bootrealtime.uve.weibo.com
   - bootpreload.uve.weibo.com
   - api.weibo.cn
+  - mapi.weibo.cn
+  - api.weibo.com
+  - mapi.weibo.com
   - mp.weixin.qq.com
   - m.client.10010.com
   - oss.umetrip.com
@@ -279,6 +289,14 @@ http:
   - interface.music.163.com
   - interface3.music.163.com
   - ipv4.music.163.com
+  - interface1.music.163.com
+  - interface2.music.163.com
+  - interface4.music.163.com
+  - interface5.music.163.com
+  - interface6.music.163.com
+  - interface7.music.163.com
+  - interface8.music.163.com
+  - interface9.music.163.com
   - appconf.mail.163.com
   - client.mail.163.com
   - home.mi.com
@@ -306,58 +324,63 @@ http:
   url-rewrite:
   - ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$) - reject-dict
   - ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$) - reject-dict
-  - ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$) - reject-dict
+  - ^https://api\.zhihu\.com/commercial_api/(?:answer|article)/\d+/bottom-v2/?(?:\?|$) - reject-dict
+  - ^https?://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$) - reject-dict
+  - ^https?://www\.xiaohongshu\.com/api/sns/v\d+/ads/resource/?(?:\?|$) - reject-dict
   - ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-dict
-  - ^https://api\.xiachufang\.com/v\d+/ad/[^?#]*(?:\?|$) - reject
-  - ^https://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$) - reject-200
-  - ^https://bootrealtime\.uve\.weibo\.com/v\d+/ad/realtime/?(?:\?|$) - reject-dict
-  - ^https://bootpreload\.uve\.weibo\.com/v\d+/ad/preload/?(?:\?|$) - reject-dict
-  - ^https://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$)
+  - ^https?://api\.xiachufang\.com/v\d+/ad/[^?#]*(?:\?|$) - reject
+  - ^https?://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https?://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$) - reject-200
+  - ^https?://bootrealtime\.uve\.weibo\.com/v\d+/ad/realtime/?(?:\?|$) - reject-dict
+  - ^https?://bootpreload\.uve\.weibo\.com/v\d+/ad/preload/?(?:\?|$) - reject-dict
+  - ^https?://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$)
     - reject-img
-  - ^https://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject-img
+  - ^https?://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject-img
   - ^https://oss\.umetrip\.com/fs/advert/polite(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://acs\.m\.taobao\.com/gw/mtop\.film\.mtopadvertiseapi\.queryloadingbanner(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) -
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.film\.mtopadvertiseapi\.queryloadingbanner(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) -
     reject
-  - ^https://acs\.m\.taobao\.com/gw/mtop\.etao\.noah\.query/(?:[0-9.]+/?)?\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.alibaba\.advertisementservice\.getadv(?:/\d+(?:\.\d+)*/?)?(?:\?|$) - reject-dict
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.etao\.noah\.query/(?:[0-9.]+/?)?\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$
     - reject-dict
-  - ^https://api\.pinduoduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
-  - ^https://api\.yangkeduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
-  - ^https://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
-  - ^https://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
-  - ^https://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
-  - ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject-200
-  - ^https://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
-  - ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$) - reject-dict
-  - ^https://wmapi\.meituan\.com/api/v7/(?:openscreen|startpicture)/?(?:\?|$) - reject-dict
-  - ^https://img\.meituan\.net/bizad/bizad_brandCpt_\d+\.jpg(?:\?|$) - reject-img
-  - ^https://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.(?:gif|jpg)(?:\?|$) - reject-img
-  - ^https://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$) - reject-200
+  - ^https?://api\.pinduoduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
+  - ^https?://api\.yangkeduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
+  - ^https?://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://interface[124-9]\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject-200
+  - ^https?://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
+  - ^https?://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$) - reject-dict
+  - ^https?://wmapi\.meituan\.com/api/v7/(?:openscreen|startpicture)/?(?:\?|$) - reject-dict
+  - ^https?://img\.meituan\.net/bizad/bizad_brandCpt_\d+\.jpg(?:\?|$) - reject-img
+  - ^https?://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.(?:gif|jpg)(?:\?|$) - reject-img
+  - ^https?://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.mp4(?:\?|$) - reject-200
+  - ^https?://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$) - reject-200
   - ^https://open\.taou\.com/maimai/adshow/?(?:\?|$) - reject-dict
   - ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$) - reject-dict
-  - ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject-dict
-  - ^https://res\.kfc\.com\.cn/advertisement/[^?#]*(?:\?|$) - reject
-  - ^https://appapi\.huazhu\.com(?::\d+)?/client/app/getAppStartPage/(?:\?|$) - reject
-  - ^https://mapi\.dianping\.com/mapi/operating/loadsplashconfig/?(?:\?|$) - reject
-  - ^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-200
-  - ^https://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject
-  - ^https://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject
-  - ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$) - reject-dict
-  - ^https://amap\-aos\-info\-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt/?(?:\?|$) - reject
-  - ^https://app\.58\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\?|$) - reject
+  - ^https?://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject-dict
+  - ^https?://res\.kfc\.com\.cn/advertisement/[^?#]*(?:\?|$) - reject
+  - ^https?://appapi\.huazhu\.com(?::\d+)?/client/app/getAppStartPage/(?:\?|$) - reject
+  - ^https?://mapi\.dianping\.com/mapi/operating/loadsplashconfig/?(?:\?|$) - reject
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-200
+  - ^https?://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject
+  - ^https?://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https?://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$) - reject-dict
+  - ^https?://amap\-aos\-info\-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt/?(?:\?|$) - reject
+  - ^https?://app\.58\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\?|$) - reject
   script:
   - match: ^https?://example\.com(?::(?:80|443))?/jimmy-stash-check/?(?:\?[^#]*)?$
     name: jimmy_ads_self_check
     type: request
     require-body: false
     timeout: 5
-  - match: ^https://edith\.xiaohongshu\.com/api/sns/(?:v\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\?|$)
+  - match: ^https?://(?:edith\.xiaohongshu\.com/api/sns/v\d+/system_service/(?:splash_config|config)|(?:edith|rec|www)\.xiaohongshu\.com/api/sns/v6/homefeed)/?(?:\?|$)
     name: jimmy_xiaohongshu_ads
     type: response
     require-body: true
     timeout: 5
     argument: diagnostic=0
-  - match: ^https://api\.weibo\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\?|$)
+  - match: ^https?://m?api\.weibo\.c(?:n|om)/2/(?:searchall|page|flowpage|comments/mix_comments|statuses/container_(?:timeline_topic(?:page)?|detail_comment|detail_mix))/?(?:\?|$)
     name: jimmy_weibo_ads
     type: response
     require-body: true
@@ -375,13 +398,13 @@ http:
     require-body: true
     timeout: 5
     argument: diagnostic=0
-  - match: ^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(\/\d+(\.\d+)*\/?)?(\?|$)
+  - match: ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(\/\d+(\.\d+)*\/?)?(\?|$)
     name: jimmy_taobao_ads
     type: response
     require-body: true
     timeout: 5
     argument: diagnostic=0
-  - match: ^https://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
+  - match: ^https?://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
     name: jimmy_meituan_ads
     type: response
     require-body: true
@@ -419,40 +442,40 @@ http:
     argument: diagnostic=0
 script-providers:
   jimmy_alipan_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js?v=AD-20261020.5
     interval: 86400
   jimmy_bilibili_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js?v=AD-20261020.5
     interval: 86400
   jimmy_cainiao_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js?v=AD-20261020.5
     interval: 86400
   jimmy_jingdong_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js?v=AD-20261020.5
     interval: 86400
   jimmy_luckin_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js?v=AD-20261020.5
     interval: 86400
   jimmy_meituan_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js?v=AD-20261020.5
     interval: 86400
   jimmy_taobao_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js?v=AD-20261020.5
     interval: 86400
   jimmy_tieba_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js?v=AD-20261020.5
     interval: 86400
   jimmy_wechat_articles_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js?v=AD-20261020.5
     interval: 86400
   jimmy_weibo_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js?v=AD-20261020.5
     interval: 86400
   jimmy_xiaohongshu_ads:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js?v=AD-20261020.5
     interval: 86400
   jimmy_ads_self_check:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/self-check.js?v=AD-20261020.4
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/self-check.js?v=AD-20261020.5
     interval: 86400
 ```
 
@@ -506,22 +529,22 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `abd7c0f211a7e2dd358acf4c5909430f36b5919bdecceca98c437120ba890a0b` |
+| [config/stash.yaml](../config/stash.yaml) | `68a54757c4c73faa5ecbd7121bce2a510a4a79db31208882194a82fc417b41ef` |
 | [config/core.stoverride](../config/core.stoverride) | `e64bfa01488b4579e03accb239e5688f004bcfab8c2ccd40d12a21fa6a715b94` |
-| [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `0ecfcadd2e11c9d2ed472b5fb8f73a2984d2f22e3dccf82f406584a4a819675a` |
-| [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `eda94445f28f293e4949b7776a6d98e6016c6a8e163015fd6b15d3470f921998` |
-| [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `b5543bbaf454e4b5d73a90338b93267f8ff27cbed9a4f4c9d1fd5147083d92c1` |
-| [scripts/ads/cainiao.js](../scripts/ads/cainiao.js) | `364c5a371c2d7e5cfeb01b3aed6f6e416e3b6582fde726b39ba13036924579ea` |
-| [scripts/ads/jingdong.js](../scripts/ads/jingdong.js) | `16344ef61ba2d4c38d42c22324e57b15ff31554843e81971b58a47cd1a4f85c3` |
-| [scripts/ads/luckin.js](../scripts/ads/luckin.js) | `96a62a0f673040e5b185638a9492a4d236e21a8c9d076c5834a800d8ee7e7a08` |
-| [scripts/ads/meituan.js](../scripts/ads/meituan.js) | `6749b93c9675085c3a7c1c230ce9b97089641158cdb073cb99b514c22925c459` |
-| [scripts/ads/probe.js](../scripts/ads/probe.js) | `2c8563da324513322b5a0612aa113be760daea86e41ebe4c28108002527c14e4` |
-| [scripts/ads/self-check.js](../scripts/ads/self-check.js) | `0147c71d7e026e6d7adddacd60ae9abc8862d4470339230449c39fb3d1845789` |
-| [scripts/ads/taobao.js](../scripts/ads/taobao.js) | `ade17f384d15c5e0d2c1e5d61ba368efd25bae07e359dfdbcbb244972bbdbce6` |
-| [scripts/ads/tieba.js](../scripts/ads/tieba.js) | `ee3d48ca94d71c6171b02c82ad62c2e78855abf81feed1dfbe35540a3728ca3a` |
-| [scripts/ads/wechat-articles.js](../scripts/ads/wechat-articles.js) | `ea41e4eef48babdfec1d4cd6ef4569b84eac8a0872baa87c383e90aa7c00facb` |
-| [scripts/ads/weibo.js](../scripts/ads/weibo.js) | `6bc6ffd19e687c6c4764e4a2f73d082e9656a2367b207e16040f1448275ddfaa` |
-| [scripts/ads/xiaohongshu.js](../scripts/ads/xiaohongshu.js) | `bd1e3f15382950bbbc0abe9c787cfab86e26e56582896e89ca0605aefb8537f1` |
+| [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
+| [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
+| [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |
+| [scripts/ads/cainiao.js](../scripts/ads/cainiao.js) | `08894302f66e98e5b4ff1f48d017dd8727e23c56b2ef139a3d8ccdfc4ed9e9b6` |
+| [scripts/ads/jingdong.js](../scripts/ads/jingdong.js) | `d6ef9c739a5c2abab83d7ae615299452fe8ef96f3db7e7d9a78a52381f245cd3` |
+| [scripts/ads/luckin.js](../scripts/ads/luckin.js) | `3b2f83671bc9b7b0d8c2cb676b6cf99f056757abd7e516cdc9216bd26c2c1d91` |
+| [scripts/ads/meituan.js](../scripts/ads/meituan.js) | `b179202e6813d3d4cdf0768d9e9cf56e6d0b1a7392ddeb3dd4dc3ec76024e40d` |
+| [scripts/ads/probe.js](../scripts/ads/probe.js) | `096c77736d11c7ce8660b59967cc07a0d49212ba349d0fc3b254ac51e114b199` |
+| [scripts/ads/self-check.js](../scripts/ads/self-check.js) | `f2fdf27efda5719e23d00948354c2206674979cdceab693d8047e46fdc61170c` |
+| [scripts/ads/taobao.js](../scripts/ads/taobao.js) | `b42e18518196b86f5f40c2a45fd6e729ffc6dba403e2871ffe2217bd03f7537c` |
+| [scripts/ads/tieba.js](../scripts/ads/tieba.js) | `058007aa16d18f35faf207c6bb22e67e8ea3f1fd31d7c7a400cb6668990dc830` |
+| [scripts/ads/wechat-articles.js](../scripts/ads/wechat-articles.js) | `2002b5684925139744cb89e664e99f79ffa85a0d46a043aea4cd507a2205b8d3` |
+| [scripts/ads/weibo.js](../scripts/ads/weibo.js) | `dff123fedef74faa1487dff0f4653b7b395cf356a00a79a214912928d372ff86` |
+| [scripts/ads/xiaohongshu.js](../scripts/ads/xiaohongshu.js) | `0104308f8d71e4b05201b9b1619ba852b80b4001efa905048f73e7fdffcd8431` |
 
 完整输入哈希和结构计数见 [ad-architecture-audit.json](../research/ad-architecture-audit.json)。
 
@@ -541,11 +564,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "alipan";
+  const version = "AD-20261020.5", id = "alipan";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -670,11 +693,11 @@ payload:
  * Copyright (c) 2023 app2smile.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "bilibili";
+  const version = "AD-20261020.5", id = "bilibili";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -810,11 +833,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "cainiao";
+  const version = "AD-20261020.5", id = "cainiao";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -938,11 +961,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "jingdong";
+  const version = "AD-20261020.5", id = "jingdong";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -1084,11 +1107,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "luckin";
+  const version = "AD-20261020.5", id = "luckin";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -1212,11 +1235,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "meituan";
+  const version = "AD-20261020.5", id = "meituan";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -1292,7 +1315,7 @@ payload:
     const req = typeof $request === 'object' && $request ? $request : {};
     const resp = typeof $response === 'object' && $response ? $response : {};
     const url = String(req.url || '');
-    if (!["^https://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    if (!["^https?://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
     state = 'unsupported-method';
     if (!["GET", "POST"].includes(req.method)) return;
     state = 'body-unavailable';
@@ -1345,10 +1368,10 @@ payload:
   try {
     const req = typeof $request === 'object' && $request ? $request : {};
     const url = String(req.url || '');
-    const routes = [{"id": "58tongcheng", "match": "^https://app\\.58\\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\\?|$)"}, {"id": "alipan", "match": "^https://member\\.alipan\\.com/v1/users/onboard_list/?(?:\\?|$)"}, {"id": "amap", "match": "^https://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)"}, {"id": "amap", "match": "^https://amap\\-aos\\-info\\-nogw\\.amap\\.com/ws/aos/alimama/splash_screen_rt/?(?:\\?|$)"}, {"id": "baidu-netdisk", "match": "^https://pan\\.baidu\\.com/rest/\\d+\\.\\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\\?|$)"}, {"id": "bilibili", "match": "^https:\\/\\/app\\.bilibili\\.com\\/x\\/v2\\/(splash\\/(list|show)|feed\\/index)(\\?|$)"}, {"id": "cainiao", "match": "^https://cn-acs\\.m\\.cainiao\\.com/gw/mtop\\.cainiao\\.guoguo\\.nbnetflow\\.ads\\.show\\.cn(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "cmcc", "match": "^https://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\\?|$)"}, {"id": "damai", "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "dianping", "match": "^https://mapi\\.dianping\\.com/mapi/operating/loadsplashconfig/?(?:\\?|$)"}, {"id": "huazhu", "match": "^https://appapi\\.huazhu\\.com(?::\\d+)?/client/app/getAppStartPage/(?:\\?|$)"}, {"id": "jingdong", "match": "^https://api\\.m\\.jd\\.com/client\\.action\\?(?:[^#&]*&)*functionId=start(?:&|$)"}, {"id": "kfc", "match": "^https://res\\.kfc\\.com\\.cn/advertisement/[^?#]*(?:\\?|$)"}, {"id": "liepin", "match": "^https://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)"}, {"id": "luckin", "match": "^https://capi\\.lkcoffee\\.com/resource/m/sys/app/adposNew/?(?:\\?|$)"}, {"id": "maimai", "match": "^https://open\\.taou\\.com/maimai/adshow/?(?:\\?|$)"}, {"id": "maimai", "match": "^https://h3\\.open\\.taou\\.com/maimai/adshow/?(?:\\?|$)"}, {"id": "mcdonalds", "match": "^https://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)"}, {"id": "meituan", "match": "^https://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$)"}, {"id": "meituan", "match": "^https://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$)"}, {"id": "meituan", "match": "^https://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$)"}, {"id": "meituan", "match": "^https://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)"}, {"id": "mijia", "match": "^https://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)"}, {"id": "netease-mail", "match": "^https://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)"}, {"id": "netease-mail", "match": "^https://client\\.mail\\.163\\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\\?|$)"}, {"id": "netease-music", "match": "^https://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "netease-music", "match": "^https://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "netease-music", "match": "^https://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "pinduoduo", "match": "^https://api\\.pinduoduo\\.com/api/cappuccino/splash/?(?:\\?|$)"}, {"id": "pinduoduo", "match": "^https://api\\.yangkeduo\\.com/api/cappuccino/splash/?(?:\\?|$)"}, {"id": "taobao", "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query/(?:[0-9.]+/?)?\\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$"}, {"id": "taobao", "match": "^https:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get(\\/\\d+(\\.\\d+)*\\/?)?(\\?|$)"}, {"id": "taopiaopiao", "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "tieba", "match": "^https:\\/\\/tiebac\\.baidu\\.com\\/c\\/f\\/ad\\/getSplashAd(\\?|$)"}, {"id": "umetrip", "match": "^https://oss\\.umetrip\\.com/fs/advert/polite(?:/[^?#]*)?(?:\\?|$)"}, {"id": "unicom", "match": "^https://m\\.client\\.10010\\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\\.htm)?/?(?:\\?|$)"}, {"id": "unicom", "match": "^https://m\\.client\\.10010\\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\\?|$)"}, {"id": "wechat-articles", "match": "^https://mp\\.weixin\\.qq\\.com/mp/getappmsgad/?(?:\\?|$)"}, {"id": "weibo", "match": "^https://bootrealtime\\.uve\\.weibo\\.com/v\\d+/ad/realtime/?(?:\\?|$)"}, {"id": "weibo", "match": "^https://bootpreload\\.uve\\.weibo\\.com/v\\d+/ad/preload/?(?:\\?|$)"}, {"id": "weibo", "match": "^https://api\\.weibo\\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\\?|$)"}, {"id": "wps", "match": "^https://ios\\.wps\\.cn/ad-statistics-service(?:/[^?#]*)?(?:\\?|$)"}, {"id": "wps", "match": "^https://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)"}, {"id": "xiachufang", "match": "^https://api\\.xiachufang\\.com/v\\d+/ad/[^?#]*(?:\\?|$)"}, {"id": "xianyu", "match": "^https://acs\\.m\\.goofish\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "xiaohongshu", "match": "^https://edith\\.xiaohongshu\\.com/api/sns/(?:v\\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\\?|$)"}, {"id": "xiaoyuzhou", "match": "^https://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)"}, {"id": "zhihu", "match": "^https://api\\.zhihu\\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\\?|$)"}, {"id": "zhihu", "match": "^https://api\\.zhihu\\.com/ad-style-service/request/?(?:\\?|$)"}];
+    const routes = [{"id": "58tongcheng", "match": "^https?://app\\.58\\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\\?|$)"}, {"id": "alipan", "match": "^https://member\\.alipan\\.com/v1/users/onboard_list/?(?:\\?|$)"}, {"id": "amap", "match": "^https?://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)"}, {"id": "amap", "match": "^https?://amap\\-aos\\-info\\-nogw\\.amap\\.com/ws/aos/alimama/splash_screen_rt/?(?:\\?|$)"}, {"id": "baidu-netdisk", "match": "^https?://pan\\.baidu\\.com/rest/\\d+\\.\\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\\?|$)"}, {"id": "bilibili", "match": "^https:\\/\\/app\\.bilibili\\.com\\/x\\/v2\\/(splash\\/(list|show)|feed\\/index)(\\?|$)"}, {"id": "cainiao", "match": "^https://cn-acs\\.m\\.cainiao\\.com/gw/mtop\\.cainiao\\.guoguo\\.nbnetflow\\.ads\\.show\\.cn(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "cmcc", "match": "^https?://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\\?|$)"}, {"id": "damai", "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "dianping", "match": "^https?://mapi\\.dianping\\.com/mapi/operating/loadsplashconfig/?(?:\\?|$)"}, {"id": "huazhu", "match": "^https?://appapi\\.huazhu\\.com(?::\\d+)?/client/app/getAppStartPage/(?:\\?|$)"}, {"id": "jingdong", "match": "^https://api\\.m\\.jd\\.com/client\\.action\\?(?:[^#&]*&)*functionId=start(?:&|$)"}, {"id": "kfc", "match": "^https?://res\\.kfc\\.com\\.cn/advertisement/[^?#]*(?:\\?|$)"}, {"id": "liepin", "match": "^https?://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)"}, {"id": "luckin", "match": "^https://capi\\.lkcoffee\\.com/resource/m/sys/app/adposNew/?(?:\\?|$)"}, {"id": "maimai", "match": "^https://open\\.taou\\.com/maimai/adshow/?(?:\\?|$)"}, {"id": "maimai", "match": "^https://h3\\.open\\.taou\\.com/maimai/adshow/?(?:\\?|$)"}, {"id": "mcdonalds", "match": "^https?://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)"}, {"id": "meituan", "match": "^https?://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$)"}, {"id": "meituan", "match": "^https?://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$)"}, {"id": "meituan", "match": "^https?://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$)"}, {"id": "meituan", "match": "^https?://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.mp4(?:\\?|$)"}, {"id": "meituan", "match": "^https?://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)"}, {"id": "mijia", "match": "^https?://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)"}, {"id": "netease-mail", "match": "^https?://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)"}, {"id": "netease-mail", "match": "^https?://client\\.mail\\.163\\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\\?|$)"}, {"id": "netease-music", "match": "^https?://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "netease-music", "match": "^https?://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "netease-music", "match": "^https?://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "netease-music", "match": "^https?://interface[124-9]\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)"}, {"id": "pinduoduo", "match": "^https?://api\\.pinduoduo\\.com/api/cappuccino/splash/?(?:\\?|$)"}, {"id": "pinduoduo", "match": "^https?://api\\.yangkeduo\\.com/api/cappuccino/splash/?(?:\\?|$)"}, {"id": "taobao", "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.alibaba\\.advertisementservice\\.getadv(?:/\\d+(?:\\.\\d+)*/?)?(?:\\?|$)"}, {"id": "taobao", "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query/(?:[0-9.]+/?)?\\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$"}, {"id": "taobao", "match": "^https?:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get(\\/\\d+(\\.\\d+)*\\/?)?(\\?|$)"}, {"id": "taopiaopiao", "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "tieba", "match": "^https:\\/\\/tiebac\\.baidu\\.com\\/c\\/f\\/ad\\/getSplashAd(\\?|$)"}, {"id": "umetrip", "match": "^https://oss\\.umetrip\\.com/fs/advert/polite(?:/[^?#]*)?(?:\\?|$)"}, {"id": "unicom", "match": "^https?://m\\.client\\.10010\\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\\.htm)?/?(?:\\?|$)"}, {"id": "unicom", "match": "^https?://m\\.client\\.10010\\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\\?|$)"}, {"id": "wechat-articles", "match": "^https://mp\\.weixin\\.qq\\.com/mp/getappmsgad/?(?:\\?|$)"}, {"id": "weibo", "match": "^https?://bootrealtime\\.uve\\.weibo\\.com/v\\d+/ad/realtime/?(?:\\?|$)"}, {"id": "weibo", "match": "^https?://bootpreload\\.uve\\.weibo\\.com/v\\d+/ad/preload/?(?:\\?|$)"}, {"id": "weibo", "match": "^https?://m?api\\.weibo\\.c(?:n|om)/2/(?:searchall|page|flowpage|comments/mix_comments|statuses/container_(?:timeline_topic(?:page)?|detail_comment|detail_mix))/?(?:\\?|$)"}, {"id": "wps", "match": "^https?://ios\\.wps\\.cn/ad-statistics-service(?:/[^?#]*)?(?:\\?|$)"}, {"id": "wps", "match": "^https?://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)"}, {"id": "xiachufang", "match": "^https?://api\\.xiachufang\\.com/v\\d+/ad/[^?#]*(?:\\?|$)"}, {"id": "xianyu", "match": "^https://acs\\.m\\.goofish\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)"}, {"id": "xiaohongshu", "match": "^https?://www\\.xiaohongshu\\.com/api/sns/v\\d+/ads/resource/?(?:\\?|$)"}, {"id": "xiaohongshu", "match": "^https?://(?:edith\\.xiaohongshu\\.com/api/sns/v\\d+/system_service/(?:splash_config|config)|(?:edith|rec|www)\\.xiaohongshu\\.com/api/sns/v6/homefeed)/?(?:\\?|$)"}, {"id": "xiaoyuzhou", "match": "^https?://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)"}, {"id": "zhihu", "match": "^https://api\\.zhihu\\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\\?|$)"}, {"id": "zhihu", "match": "^https://api\\.zhihu\\.com/ad-style-service/request/?(?:\\?|$)"}, {"id": "zhihu", "match": "^https://api\\.zhihu\\.com/commercial_api/(?:answer|article)/\\d+/bottom-v2/?(?:\\?|$)"}];
     const hit = routes.find(r => new RegExp(r.match).test(url));
-    console.log('[JimmyAds][' + (hit ? hit.id : 'probe') + '][AD-20261020.4] ' + (hit ? 'request-url-matched' : 'request-url-unmatched'));
-  } catch (_) { try { console.log('[JimmyAds][probe][AD-20261020.4] exception'); } catch (_) {} }
+    console.log('[JimmyAds][' + (hit ? hit.id : 'probe') + '][AD-20261020.5] ' + (hit ? 'request-url-matched' : 'request-url-unmatched'));
+  } catch (_) { try { console.log('[JimmyAds][probe][AD-20261020.5] exception'); } catch (_) {} }
   finally { $done({}); }
 })();
 ```
@@ -1370,7 +1393,7 @@ payload:
  */
 (() => {
   let output = {};
-  const version = 'AD-20261020.4', key = 'jimmy.ads.diag.session.v1';
+  const version = 'AD-20261020.5', key = 'jimmy.ads.diag.session.v1';
   const modules = [{"id": "alipan", "name": "阿里云盘广告专项"}, {"id": "bilibili", "name": "哔哩哔哩广告处理"}, {"id": "cainiao", "name": "菜鸟广告专项"}, {"id": "jingdong", "name": "京东广告专项"}, {"id": "luckin", "name": "瑞幸咖啡广告专项"}, {"id": "meituan", "name": "美团广告专项"}, {"id": "taobao", "name": "淘宝开屏广告处理"}, {"id": "tieba", "name": "贴吧开屏广告处理"}, {"id": "wechat-articles", "name": "微信广告专项"}, {"id": "weibo", "name": "微博开屏广告处理"}, {"id": "xiaohongshu", "name": "小红书开屏广告处理"}];
   const labels = {
     'url-unmatched':'脚本已进入，但URL未匹配',
@@ -1529,11 +1552,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "taobao";
+  const version = "AD-20261020.5", id = "taobao";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -1609,7 +1632,7 @@ payload:
     const req = typeof $request === 'object' && $request ? $request : {};
     const resp = typeof $response === 'object' && $response ? $response : {};
     const url = String(req.url || '');
-    if (!["^https:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get(\\/\\d+(\\.\\d+)*\\/?)?(\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    if (!["^https?:\\/\\/guide-acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.taobao\\.wireless\\.home\\.splash\\.awesome\\.get(\\/\\d+(\\.\\d+)*\\/?)?(\\?|$)"].some(p => new RegExp(p).test(url))) return;
     state = 'unsupported-method';
     if (!["GET", "POST"].includes(req.method)) return;
     state = 'body-unavailable';
@@ -1681,11 +1704,11 @@ payload:
  * Copyright (c) 2023 app2smile.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "tieba";
+  const version = "AD-20261020.5", id = "tieba";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -1809,11 +1832,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "wechat-articles";
+  const version = "AD-20261020.5", id = "wechat-articles";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -1937,11 +1960,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "weibo";
+  const version = "AD-20261020.5", id = "weibo";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -2017,7 +2040,7 @@ payload:
     const req = typeof $request === 'object' && $request ? $request : {};
     const resp = typeof $response === 'object' && $response ? $response : {};
     const url = String(req.url || '');
-    if (!["^https://api\\.weibo\\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    if (!["^https?://m?api\\.weibo\\.c(?:n|om)/2/(?:searchall|page|flowpage|comments/mix_comments|statuses/container_(?:timeline_topic(?:page)?|detail_comment|detail_mix))/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
     state = 'unsupported-method';
     if (!["GET", "POST"].includes(req.method)) return;
     state = 'body-unavailable';
@@ -2035,7 +2058,40 @@ payload:
     const before = JSON.stringify(obj);
     function transform(obj) {
       // Maintained transformation fragment; runtime and diagnostics are generated.
-      if (!successful(obj) || !Array.isArray(obj.items)) return false;
+      if (!successful(obj)) return false;
+      // fmz200 weibo_ads.js page/flowpage/comments branches, narrowed to explicit
+      // advertising markers. Do not delete all banners, non-forward rows or tabs.
+      function marked(value) {
+        return record(value) ? Object.keys(value).length > 0 :
+          typeof value === 'string' ? value.length > 0 :
+          value === true || typeof value === 'number' && value > 0;
+      }
+      if (/\/2\/page\/?(?:\?|$)/.test(url)) {
+        if (!Array.isArray(obj.cards) || !record(obj.cards[0]) || !Array.isArray(obj.cards[0].card_group)) return false;
+        obj.cards[0].card_group = obj.cards[0].card_group.filter(v => !(record(v) && marked(v.promotion)));
+        return true;
+      }
+      if (/\/2\/flowpage\/?(?:\?|$)/.test(url)) {
+        if (!Array.isArray(obj.items)) return false;
+        let supported = obj.items.length === 0;
+        for (const item of obj.items) if (record(item) && Array.isArray(item.items)) {
+          supported = true;
+          item.items = item.items.filter(v => !(record(v) && record(v.data) &&
+            (marked(v.data.promotion) || typeof v.data.itemid === 'string' && /(?:^|[|;&,\s])c_type:51(?:$|[|;&,\s])/.test(v.data.itemid))));
+        }
+        return supported;
+      }
+      if (/\/comments\/mix_comments\/?(?:\?|$)/.test(url)) {
+        if (!Array.isArray(obj.datas)) return false;
+        obj.datas = obj.datas.filter(v => !(record(v) && v.adType === '广告'));
+        return true;
+      }
+      if (/\/statuses\/container_detail_(?:comment|mix)\/?(?:\?|$)/.test(url)) {
+        if (!Array.isArray(obj.items)) return false;
+        obj.items = obj.items.filter(v => !(record(v) && marked(v.commentAdType)));
+        return true;
+      }
+      if (!Array.isArray(obj.items)) return false;
       // fmz200 weibo_ads.js: only explicit advertising markers in known topic/search
       // lists. Keep recommendations, navigation, profile and comment semantics.
       const ad = item => record(item) && record(item.data) && (item.data.mblogtypename === '广告' || item.data.ad_state === 1 || item.data.is_ad === 1);
@@ -2069,11 +2125,11 @@ payload:
  * research/ad-repair-evidence.json; license texts: licenses/.
  * Runtime and optional fixed-code diagnostics generated by build_ad_scripts.py.
  */
-// Generated by tools/build_ad_scripts.py; version AD-20261020.4
+// Generated by tools/build_ad_scripts.py; version AD-20261020.5
 
 (() => {
   let result = {}, state = 'url-unmatched';
-  const version = "AD-20261020.4", id = "xiaohongshu";
+  const version = "AD-20261020.5", id = "xiaohongshu";
   const debug = typeof $argument === 'string' && /(?:^|&)diagnostic=1(?:&|$)/.test($argument);
   /* SPDX-License-Identifier: MIT
    * Optional device-only observation. No request values, headers or bodies.
@@ -2149,7 +2205,7 @@ payload:
     const req = typeof $request === 'object' && $request ? $request : {};
     const resp = typeof $response === 'object' && $response ? $response : {};
     const url = String(req.url || '');
-    if (!["^https://edith\\.xiaohongshu\\.com/api/sns/(?:v\\d+/system_service/(?:splash_config|config)|v6/homefeed)/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
+    if (!["^https?://(?:edith\\.xiaohongshu\\.com/api/sns/v\\d+/system_service/(?:splash_config|config)|(?:edith|rec|www)\\.xiaohongshu\\.com/api/sns/v6/homefeed)/?(?:\\?|$)"].some(p => new RegExp(p).test(url))) return;
     state = 'unsupported-method';
     if (!["GET", "POST"].includes(req.method)) return;
     state = 'body-unavailable';

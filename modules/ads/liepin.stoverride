@@ -3,9 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 猎聘广告专项（维护源）
-desc: AD-20261020.1；明确命名的 live.get-ad-cards；不拦职位推荐或投递。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；明确命名的 live.get-ad-cards；不拦职位推荐或投递。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - api-ac.liepin.com
   url-rewrite:
-  - ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject-dict
+  - ^https?://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject-dict

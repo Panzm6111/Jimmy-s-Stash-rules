@@ -3,9 +3,9 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 麦当劳广告专项（维护源）
-desc: AD-20261020.1；专用 portal/home/splash；保留点餐、支付、领券。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；专用 portal/home/splash；保留点餐、支付、领券。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - api.mcd.cn
   url-rewrite:
-  - ^https://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$) - reject-200
+  - ^https?://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$) - reject-200

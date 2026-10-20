@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 import yaml
+from build_ad_scripts import VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = 'https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/'
@@ -13,7 +14,7 @@ def rendered(catalog):
     for item in catalog['modules']:
         source = catalog['sources'][item['source']]
         config = {'name': item['app'] + '广告专项（维护源）',
-                  'desc': 'AD-20261020.1；' + item['scope'] + '。已纳入整合入口，无需单独导入；需设备验收。'}
+                  'desc': VERSION + '；' + item['scope'] + '。已纳入整合入口，无需单独导入；需设备验收。'}
         if item['domains']:
             config['rules'] = ['DOMAIN,' + host + ',广告拦截' for host in item['domains']]
         http = {}

@@ -10,7 +10,7 @@ from scan_secrets import inspect
 
 OUTPUT = 'config/stash.yaml'
 URL = RAW + OUTPUT
-VERSION = 'AD-20261020.4'
+VERSION = 'AD-20261020.5'
 
 def integrated():
     """The user-facing integrated entry; module files remain maintained sources."""
@@ -55,10 +55,10 @@ def verify(text):
     assert set(config['rule-providers']) == {'基础广告'}
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
     assert config['rule-providers']['基础广告']['url'] == RAW + 'rules/vendor/ads-expanded.yaml'
-    assert len(config['http']['url-rewrite']) == 38
+    assert len(config['http']['url-rewrite']) == 43
     assert len(config['http']['script']) == 12
     assert sum(h['type'] == 'response' for h in config['http']['script']) == 11
-    assert len(config['http']['mitm']) == 46
+    assert len(config['http']['mitm']) == 59
     assert len(config['script-providers']) == 12
     for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider

@@ -3,10 +3,11 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 知乎广告专项（维护源）
-desc: AD-20261020.1；仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - api.zhihu.com
   url-rewrite:
   - ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$) - reject-dict
   - ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$) - reject-dict
+  - ^https://api\.zhihu\.com/commercial_api/(?:answer|article)/\d+/bottom-v2/?(?:\?|$) - reject-dict

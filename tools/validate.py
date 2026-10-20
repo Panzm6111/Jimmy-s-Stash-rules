@@ -340,7 +340,7 @@ class ProjectChecks(unittest.TestCase):
         for file, text in rendered().items(): self.assertEqual((ROOT / file).read_text(), text)
 
     def test_added_ad_scene_urls_do_not_catch_business_or_duplicate_handlers(self):
-        tb = load('modules/ads/taobao.stoverride')['http']['url-rewrite'][0].rsplit(' - ',1)[0]
+        tb = next(r for r in load('modules/ads/taobao.stoverride')['http']['url-rewrite'] if 'noah' in r).rsplit(' - ',1)[0]
         prefix='https://acs.m.taobao.com/gw/mtop.etao.noah.query/1.0/'
         for query in ['?scene=tao_splash', '?data=%7B%22scene%22%3A%22tao_splash%22%7D']:
             self.assertRegex(prefix+query, tb)
@@ -672,10 +672,46 @@ class ProjectChecks(unittest.TestCase):
         broken['proxy-groups'][0]['proxies'] = ['nonexistent-policy']
         with self.assertRaises(AssertionError): validate_structure(broken)
 
+    def test_fmz_native_additions_and_handler_separation(self):
+        from urllib.parse import urlsplit
+        config = load('config/stash.yaml')
+        rewrites = [line.rsplit(' - ', 1) for line in config['http']['url-rewrite']]
+        handlers = config['http']['script']
+        cases = [
+            ('https://acs.m.taobao.com/gw/mtop.alibaba.advertisementservice.getadv/1.0/', 'reject-dict'),
+            ('http://www.xiaohongshu.com/api/sns/v1/ads/resource?x=1', 'reject-dict'),
+            ('https://api.zhihu.com/commercial_api/article/123/bottom-v2', 'reject-dict'),
+            ('http://interface9.music.163.com/eapi/ad/get', 'reject-dict'),
+            ('https://flowplus.meituan.net/v1/mss_test/linglong/video.mp4', 'reject-200'),
+        ]
+        for url, action in cases:
+            self.assertEqual([a for pattern, a in rewrites if re.search(pattern, url)], [action], url)
+            self.assertFalse(any(re.search(h['match'], url) for h in handlers), url)
+            self.assertIn(urlsplit(url).hostname, config['http']['mitm'])
+        for url in [
+            'https://acs.m.taobao.com/gw/mtop.alibaba.advertisementservice.getadvExtra',
+            'https://www.xiaohongshu.com/api/sns/v1/ads/resourceExtra',
+            'https://issuecdn.baidupcs.com/issue/netdisk/download/file',
+            'https://api.zhihu.com/articles/123',
+            'https://interface9.music.163.com/eapi/song/enhance/player/url',
+            'https://flowplus.meituan.net/v1/mss_test/product/video.mp4',
+        ]:
+            self.assertFalse(any(re.search(pattern, url) for pattern, _ in rewrites), url)
+
+    def test_fmz_http_compatibility_keeps_narrow_hosts_and_paths(self):
+        catalog = json.loads((ROOT / 'research/ad-catalog.json').read_text())
+        for item in catalog['modules']:
+            for rule in item['rewrite']:
+                if not rule['match'].startswith('^https?://'):
+                    continue
+                self.assertRegex(rule['positive'].replace('https:', 'http:', 1), rule['match'])
+                for url in rule['negative']:
+                    self.assertNotRegex(url.replace('https:', 'http:', 1), rule['match'])
+
     def test_no_tls_bypass_or_wildcard_mitm(self):
         catalog = json.loads((ROOT / 'research/ad-catalog.json').read_text())
         reviewed_hosts = {h for item in catalog['modules'] for h in item['mitm']}
-        reviewed_hosts.update({'app.bilibili.com', 'tiebac.baidu.com', 'edith.xiaohongshu.com', 'guide-acs.m.taobao.com', 'bootrealtime.uve.weibo.com', 'bootpreload.uve.weibo.com', 'api.weibo.cn'})
+        reviewed_hosts.update({'app.bilibili.com', 'tiebac.baidu.com', 'edith.xiaohongshu.com', 'guide-acs.m.taobao.com', 'bootrealtime.uve.weibo.com', 'bootpreload.uve.weibo.com', 'api.weibo.cn', 'mapi.weibo.cn', 'api.weibo.com', 'mapi.weibo.com', 'rec.xiaohongshu.com', 'www.xiaohongshu.com'})
         # One separately reviewed manual self-check host, never an App wildcard.
         self.assertEqual(load('modules/diagnostics/self-check.stoverride')['http']['mitm'], ['example.com'])
         reviewed_hosts.add('example.com')

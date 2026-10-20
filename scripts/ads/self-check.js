@@ -9,7 +9,7 @@
  */
 (() => {
   let output = {};
-  const version = 'AD-20261020.4', key = 'jimmy.ads.diag.session.v1';
+  const version = 'AD-20261020.5', key = 'jimmy.ads.diag.session.v1';
   const modules = [{"id": "alipan", "name": "阿里云盘广告专项"}, {"id": "bilibili", "name": "哔哩哔哩广告处理"}, {"id": "cainiao", "name": "菜鸟广告专项"}, {"id": "jingdong", "name": "京东广告专项"}, {"id": "luckin", "name": "瑞幸咖啡广告专项"}, {"id": "meituan", "name": "美团广告专项"}, {"id": "taobao", "name": "淘宝开屏广告处理"}, {"id": "tieba", "name": "贴吧开屏广告处理"}, {"id": "wechat-articles", "name": "微信广告专项"}, {"id": "weibo", "name": "微博开屏广告处理"}, {"id": "xiaohongshu", "name": "小红书开屏广告处理"}];
   const labels = {
     'url-unmatched':'脚本已进入，但URL未匹配',

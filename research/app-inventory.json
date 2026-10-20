@@ -801,7 +801,7 @@
       "modules": [
         "modules/ads/meituan.stoverride"
       ],
-      "scope": "外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖",
+      "scope": "外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文",
       "reason": "AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。",
       "public_source_matches": [
         {
@@ -1351,7 +1351,7 @@
       "modules": [
         "modules/ads/netease-music.stoverride"
       ],
-      "scope": "仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文",
+      "scope": "interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文",
       "reason": "上游匹配 interface 加可选数字，本模块只列 interface、interface3、ipv4，其他编号主机不在范围。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。",
       "public_source_matches": [
         {
@@ -1771,7 +1771,7 @@
       "modules": [
         "modules/ads/zhihu.stoverride"
       ],
-      "scope": "仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告",
+      "scope": "开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告",
       "reason": "上游其他脚本还处理回答与推荐流，但未整体引入。本模块只匹配明确广告端点，不把有限路径等同于知乎全界面去广告；普通回答、搜索与推荐保留。",
       "public_source_matches": [
         {

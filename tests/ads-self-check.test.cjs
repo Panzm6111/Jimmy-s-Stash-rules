@@ -37,7 +37,7 @@ function run(url=base, options={}) {
   return {out,data,reads,writes,store};
 }
 function session(until=now+900000) { return JSON.stringify({id:now,until}); }
-function record(extra={}) { return JSON.stringify({sessionId:now,version:'AD-20261020.4',last:now,counts:{changed:2},...extra}); }
+function record(extra={}) { return JSON.stringify({sessionId:now,version:'AD-20261020.5',last:now,counts:{changed:2},...extra}); }
 test('manual page returns native response envelope once, actual protocol and no-store',()=>{
   for(const protocol of ['http','https']) {
     const {out,reads,writes}=run(protocol+'://example.com/jimmy-stash-check');
@@ -45,7 +45,7 @@ test('manual page returns native response envelope once, actual protocol and no-
     assert.equal(out.response.headers['Content-Type'],'text/html; charset=utf-8');
     assert.equal(out.response.headers['Cache-Control'],'no-store');
     assert.match(out.response.body,new RegExp('<strong>'+protocol+'</strong>'));
-    assert.match(out.response.body,/AD-20261020\.4/);
+    assert.match(out.response.body,/AD-20261020\.5/);
     assert.match(out.response.body,/这不证明淘宝等App已命中/);
     assert.match(out.response.body,/尚未开始诊断/);
     assert.deepEqual(writes,[]);
@@ -157,7 +157,7 @@ test('start, actual generated ad handler, result page and stop share one device 
   const start=run(base+'?start=1');
   assert.match(start.out.response.body,/已开始15分钟诊断/);
   const adScript=fs.readFileSync(path.join(root,'scripts/ads/xiaohongshu.js'),'utf8');
-  assert.match(adScript,/version AD-20261020\.4/);
+  assert.match(adScript,/version AD-20261020\.5/);
   const observedKey='jimmy.ads.diag.xiaohongshu.v1';
   function executeAd(clock) {
     const done=[],logs=[];
@@ -186,13 +186,13 @@ test('start, actual generated ad handler, result page and stop share one device 
   }
   executeAd(now+1000);
   assert.deepEqual(JSON.parse(start.data.get(observedKey)),{
-    sessionId:now,version:'AD-20261020.4',last:now+1000,counts:{changed:1}
+    sessionId:now,version:'AD-20261020.5',last:now+1000,counts:{changed:1}
   });
   const result=run(base,{data:start.data,now:now+2000});
   assert.equal(result.data,start.data);
   assert.match(result.out.response.body,/小红书开屏广告处理/);
   assert.match(result.out.response.body,/实际产生修改：1/);
-  assert.match(result.out.response.body,/AD-20261020\.4/);
+  assert.match(result.out.response.body,/AD-20261020\.5/);
   assert.deepEqual(result.writes,[]);
   const stop=run(base+'?stop=1',{data:start.data,now:now+3000});
   assert.deepEqual(JSON.parse(start.data.get(key)),{id:now,until:0});

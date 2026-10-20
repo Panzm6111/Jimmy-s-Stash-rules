@@ -47,7 +47,7 @@ TLS 与已有源内容校验保持开启。刷新同一 SHA 必须匹配原校�
 
 Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNECT 403 阻塞；没有假称读过最新正文，也不编造最低版本号。已有原生公开模块仅作为辅助证据。具体未核实清单见 [STASH-CAPABILITIES.md](STASH-CAPABILITIES.md)。
 
-## 当前广告来源与修改（配置及脚本AD-20261020.4）
+## 广告来源与修改（.4修订记录；当前增量见下方.5）
 
 | 来源与固定版本 | 许可、实际读取与取用 | 当前边界 |
 |---|---|---|
@@ -80,3 +80,9 @@ AD-20261020.2曾在整合入口和本地包使用`script-providers.content`；�
 `research/ad-catalog.json`是35个生成模块的源数据；原5款模块在原路径维护。`tools/ad_transforms`保存11份有归属的广告转换源，`build_ad_scripts.py`生成同名稳定JS并引入原创观察记录逻辑；`build_ad_diagnostics.py`生成手动自检页、对应模块和旧只读probe。`build_subscription.py`构建原公共入口，`build_local_bundle.py`构建同逻辑本地包。详细规格的真实声明/完整JS附录由`render_ad_architecture.py`生成，避免文档再次保留旧代码。
 
 维护者修改功能后执行`python tools/build_ads.py --write --bundle`重建，再运行`python tools/validate.py`及私人配置回归。纯文字调整仍须检查生成一致性、链接和运行结构未变，不把重复运行功能测试当作新的手机证据。输出哈希由构建同步，**不改变上游固定SHA或源哈希**；升级来源仍须先审查许可、实际代码与业务影响。不能为通过审计修改源校验值或关闭TLS。真实手机验收单独记录，当前均未完成。
+
+## fmz200指定来源接入 AD-20261020.5
+
+2026-10-20重新拉取fmz200完整公开仓库并审查实际源码，HEAD仍为`5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97`，不是新的上游版本。GPL-3.0许可证文本与已保存文件一致。新增范围、原文件及行号、正常业务保护与未采用内容见[接入明细](FMZ-INTEGRATION.md)；10份审阅文件的固定URL和SHA256见[审计JSON](../research/fmz-integration.json)。不直接加载Quantumult X或Surge整包；保留源许可和署名，公开改写源码。
+
+新增5条原生动作（合计43条），补齐小红书/微博主机和微博广告分支，以及有来源依据的HTTP匹配。当前58个App精确MITM主机加自检example.com，共59个；解密覆盖整个精确主机，实际修改限于所列路径。规则和脚本由本仓库生成发布，手机不直接加载fmz200 main。上游变化仍由现有maintain.py报告后审阅适配；不会自动执行未审查上游脚本。

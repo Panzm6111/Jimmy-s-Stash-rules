@@ -1,22 +1,25 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Source pins and independent licenses: docs/SOURCES.md
 name: 微博开屏广告处理（维护源）
-desc: AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。
+desc: AD-20261020.5；实时/预载空JSON、专用SDK与素材主机、话题/搜索/热搜/评论明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。
 http:
   mitm:
   - bootrealtime.uve.weibo.com
   - bootpreload.uve.weibo.com
   - api.weibo.cn
+  - mapi.weibo.cn
+  - api.weibo.com
+  - mapi.weibo.com
   script:
-  - match: ^https://api\.weibo\.cn/2/(?:searchall|statuses/container_timeline_topic(?:page)?)/?(?:\?|$)
+  - match: ^https?://m?api\.weibo\.c(?:n|om)/2/(?:searchall|page|flowpage|comments/mix_comments|statuses/container_(?:timeline_topic(?:page)?|detail_comment|detail_mix))/?(?:\?|$)
     name: jimmy_weibo_ads
     type: response
     require-body: true
     timeout: 5
     argument: diagnostic=0
   url-rewrite:
-  - ^https://bootrealtime\.uve\.weibo\.com/v\d+/ad/realtime/?(?:\?|$) - reject-dict
-  - ^https://bootpreload\.uve\.weibo\.com/v\d+/ad/preload/?(?:\?|$) - reject-dict
+  - ^https?://bootrealtime\.uve\.weibo\.com/v\d+/ad/realtime/?(?:\?|$) - reject-dict
+  - ^https?://bootpreload\.uve\.weibo\.com/v\d+/ad/preload/?(?:\?|$) - reject-dict
 script-providers:
   jimmy_weibo_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js

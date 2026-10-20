@@ -10,7 +10,7 @@
 
 没有方案只表示本次有限来源未找到可审核实现，不证明整个互联网没有。用户曾反馈旧版去广告整体效果不足；当前整合版尚未提供逐款接口命中或修改结果，所以不能把某个模块直接记为有效或断定某端点已经失效。域名路由不能识别全部App流量，静态测试不能替代手机效果和正常功能验收。
 
-调查时已直接读取固定版本的公开源码、模块与许可，并核对主要仓库HEAD；不是只读项目介绍。本次表述整理没有重新调查接口或扩大实现范围。原检索范围：
+调查时已直接读取固定版本的公开源码、模块与许可，并核对主要仓库HEAD；不是只读项目介绍。后续fmz200接入差异见[接入明细](FMZ-INTEGRATION.md)，本表沿用完整App范围。原检索范围：
 
 - fmz200/wool_scripts@5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97 的730款合集标签及相关实际JS（宣称数量不视作有效性证据）
 - blackmatrix7/ios_rule_script@7dd06b44f5093dd5404e1e5f3bca5452d97146ef 原生Stash重写和启动脚本
@@ -81,7 +81,7 @@
 | 53 | 麦当劳 | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 专用 portal/home/splash；保留点餐、支付、领券；已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 54 | 脉脉 | [maimai](../modules/ads/maimai.stoverride) | 仅 adshow；保留礼物、消息和普通推荐；已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 55 | 每日英语听力 | 保留通用规则；未加专项 | 本次资源未找到同名、可审计且明确去广告的App方案；不混同欧路词典或会员解锁。 |
-| 56 | 美团 | [meituan](../modules/ads/meituan.stoverride) | 外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
+| 56 | 美团 | [meituan](../modules/ads/meituan.stoverride) | 外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 57 | 米家 | [mijia](../modules/ads/mijia.stoverride) | 仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化；已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 58 | 密码 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 59 | 墨墨背单词 | 保留通用规则；未加专项 | 本次资源未找到可保留学习/词量真实权限的可靠广告专项，不改付费权限。 |
@@ -123,7 +123,7 @@
 | 95 | UC浏览器 | [uc](../modules/ads/uc.stoverride) | 仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告；只拦独立广告请求，不提供网页元素隐藏，也不能清除与正文同域的广告；保留反诈、安全、语音和网页正文。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 96 | 王者荣耀 | 保留通用规则；未加专项 | 游戏活动、资源与公告共用接口；没有采用可能影响登录、更新和对局的泛拦。 |
 | 97 | 网易邮箱大师 | [netease-mail](../modules/ads/netease-mail.stoverride) | mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步；已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
-| 98 | 网易云音乐 | [netease-music](../modules/ads/netease-music.stoverride) | 仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文；上游匹配 interface 加可选数字，本模块只列 interface、interface3、ipv4，其他编号主机不在范围。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
+| 98 | 网易云音乐 | [netease-music](../modules/ads/netease-music.stoverride) | interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文；上游匹配 interface 加可选数字，本模块只列 interface、interface3、ipv4，其他编号主机不在范围。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 99 | 微博 | [weibo](../modules/ads/weibo.stoverride) | AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
 | 100 | 微信 | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天；公开源仍保留这个历史端点，但没有当前微信版本调用证据；只能作为公众号候选，不称微信整体去广告。保留原 appid 与其他文章字段。 来源：[NobyDa/Script](https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js)，GPL-3.0-only。 |
 | 101 | 微信读书 | 找到方案但暂缓采用 | Maasea WeRead模块删除评论/分享数字和阅读提示，属于UI精简，不是已确认广告过滤；不移除这些正常功能。 |
@@ -153,7 +153,7 @@
 | 125 | YouTube Music | 找到方案但暂缓采用 | Maasea声明兼容Music，但二进制适配、广告与后台播放功能裁剪尚未完成；不把YouTube域名分流当作Music去广告。 |
 | 126 | 照片 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 127 | 支付宝 | 保留通用规则；未加专项 | 未采用可审核且只处理广告的独立方案；不解密支付网关，不封禁安全、风控或正常领券服务。 |
-| 128 | 知乎 | [zhihu](../modules/ads/zhihu.stoverride) | 仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告；上游其他脚本还处理回答与推荐流，但未整体引入。本模块只匹配明确广告端点，不把有限路径等同于知乎全界面去广告；普通回答、搜索与推荐保留。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
+| 128 | 知乎 | [zhihu](../modules/ads/zhihu.stoverride) | 开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告；上游其他脚本还处理回答与推荐流，但未整体引入。本模块只匹配明确广告端点，不把有限路径等同于知乎全界面去广告；普通回答、搜索与推荐保留。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 129 | 指南针 | 保留通用规则；未加专项 | 按截图名称/图标识别为Apple系统或配套App；当前审核源没有明确独立广告方案，保留核心功能。系统商店推广、股市赞助等同域内容不作已去除承诺。 |
 | 130 | 智联招聘 | 保留通用规则；未加专项 | 本次资源未找到明确同名、许可与端点均可靠的广告专项；不套用猎聘规则。 |
 | 131 | 中国建设银行 | 保留通用规则；未加专项 | 本次资源未找到不触碰银行业务的可靠广告方案；不解密银行主域名。 |

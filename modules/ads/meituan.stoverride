@@ -3,7 +3,7 @@
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
 name: 美团广告专项（维护源）
-desc: AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。已纳入整合入口，无需单独导入；需设备验收。
+desc: AD-20261020.5；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文。已纳入整合入口，无需单独导入；需设备验收。
 script-providers:
   jimmy_meituan_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js
@@ -15,11 +15,12 @@ http:
   - s3plus.meituan.net
   - flowplus.meituan.net
   url-rewrite:
-  - ^https://wmapi\.meituan\.com/api/v7/(?:openscreen|startpicture)/?(?:\?|$) - reject-dict
-  - ^https://img\.meituan\.net/bizad/bizad_brandCpt_\d+\.jpg(?:\?|$) - reject-img
-  - ^https://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.(?:gif|jpg)(?:\?|$) - reject-img
+  - ^https?://wmapi\.meituan\.com/api/v7/(?:openscreen|startpicture)/?(?:\?|$) - reject-dict
+  - ^https?://img\.meituan\.net/bizad/bizad_brandCpt_\d+\.jpg(?:\?|$) - reject-img
+  - ^https?://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.(?:gif|jpg)(?:\?|$) - reject-img
+  - ^https?://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.mp4(?:\?|$) - reject-200
   script:
-  - match: ^https://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
+  - match: ^https?://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
     name: jimmy_meituan_ads
     type: response
     require-body: true

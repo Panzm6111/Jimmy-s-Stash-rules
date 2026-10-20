@@ -25,11 +25,11 @@
 | 响应脚本 | `http.script` + `script-providers`；response、require-body:true、timeout:5；默认无控制台日志。自检页手动开启15分钟固定状态记录 | app2smile原生覆写、blackmatrix7锁定`AdvertisingScript.stoverride`中的argument声明已实际读取并哈希锁定；不是当前官方或手机执行证明。没有证据时不盲改`$response.status`、method、body类型保护；自动长度/压缩处理需真机验收 |
 | 固定空响应与Mock | 已移除原共享请求JS；原生URL动作直接处理固定空结果。需要先识别真实成功结构的业务仍用响应JS | 用户提供当前官方列出五种reject和Mock；当前固定结果不需自定义Mock。没有把普通拒绝与合法无广告结果视为相同，没有声称验证了原生返回字节/头部 |
 | 整合专项与恢复 | 统一入口内置40个原专项，用户已取消逐App开关要求；域名拦截用广告组控制，HTTP处理通过HTTP/MITM设置暂停 | 入口结构符合新需求，真实效果仍待手机验收。旧分层文件只保留兼容；关闭额外同名覆写不能撤销内置动作，不可混装 |
-| 临时诊断探针 | 仅已审阅45个精确主机的request handler，require-body:false；只记录URL是否命中预期，不改请求 | 字段形态有既有原生request参考；诊断覆写默认关闭，应与正式App专项隔离对照。没日志不能单独证明没进MITM |
+| 临时诊断探针 | 仅已审阅58个App精确主机的request handler，require-body:false；只记录URL是否命中预期，不改请求 | 字段形态有既有原生request参考；诊断覆写默认关闭，应与正式App专项隔离对照。没日志不能单独证明没进MITM |
 | 手动自检页与本机临时记录 | 整合入口增加example.com精确MITM及单独路径request handler，`$done({response:{status,headers,body}})`返回本机页面。`$persistentStore.read/write`仅存15分钟内的固定状态、计数和时间 | 已核对NobyDa锁定原生Stash IPA-Installer模块及其JS：request响应包装和read/write调用均存在；仅作API用法依据，不复制安装器业务。来源哈希见[SOURCES](SOURCES.md)。没有新增真机成功结论；HTTPS页只证明测试主机的执行，不证明App命中 |
 | HTTP/3 | 当前HTTP/3不进改写引擎，不能靠force-http-engine宣称解密 | 依据用户提供官方调查；当前无真实QUIC证据，未添加UDP阻断。不根据h3域名猜传输协议 |
 | 整合入口与本地包的脚本来源 | `script-providers.<name>.url` 指向本仓库原JS文件，`interval: 86400`；不再生成仅含content的provider | 用户实机报`provider: url,payload, path are all empty`；出错的旧配置中11个content-only脚本声明没有这些来源字段。恢复项目既有app2smile原生Stash覆写使用的URL写法；不据报错猜测payload正文类型或最低版本 |
-| 脚本更新 | 整合主入口包含URL声明，Stash联网加载JS；新增主机/handler须刷新主配置，不能只刷新JS。原路径加`?v=AD-20261020.4`区分新版资源请求 | URL/interval来自既有原生覆写；实际刷新和缓存时机待手机验证，不保证断网更新。配置和脚本当前均AD-20261020.4；版本参数不是Git固定提交或不可变快照 |
+| 脚本更新 | 整合主入口包含URL声明，Stash联网加载JS；新增主机/handler须刷新主配置，不能只刷新JS。原路径加`?v=AD-20261020.5`区分新版资源请求 | URL/interval来自既有原生覆写；实际刷新和缓存时机待手机验证，不保证断网更新。配置和脚本当前均AD-20261020.5；版本参数不是Git固定提交或不可变快照 |
 | 策略选择保留 | 固定配置名称、策略组名、provider 名；不写未经核实的 profile.store-selected | native 持久化行为未验证。普通 YAML 合并不能保存 UI 的运行时选择；更新前记下选择，更新后核对，必要时重选 |
 | 定时签到（已暂停，仅备忘） | **不生成 cron**，用户已暂停此项 | 官方当前 cron 字段、时区、前后台语义、错过补跑及最低版本尚未查实；不能把 Surge cron 原样复制，也不承诺后台准点 |
 | 原生持久化/通知（签到备忘） | 日后用户明确恢复才继续，不作为当前交付前提 | N 携程脚本源码列出 Stash，但兼容声明不是本项目实机证明；当前未创建凭据存储脚本 |
@@ -48,4 +48,4 @@
 
 [research/projects.json](../research/projects.json) 与 [sources.lock.json](../research/sources.lock.json) 可以复查已读原生模块和脚本，而不是用另一个代理客户端代替 Stash。
 
-配置及脚本AD-20261020.4：真实实现、官方访问限制、脚本约定与待真机项统一见[详细规格](AD-ARCHITECTURE.md)。广告规则集、机场和远程JS均配置24小时尝试刷新，主配置每周手动刷新一次、修复发布后立即刷新；新主机或handler不能只刷新JS。测速30分钟不是规则更新。具体机制以[更新教程](UPDATES.md)为准，不承诺断网或iOS后台下准点执行。本轮增加自检和临时观察，地区策略、私人订阅机制和广告转换逻辑保留，自动签到暂停。
+配置及脚本AD-20261020.5：真实实现、官方访问限制、脚本约定与待真机项统一见[详细规格](AD-ARCHITECTURE.md)。广告规则集、机场和远程JS均配置24小时尝试刷新，主配置每周手动刷新一次、修复发布后立即刷新；新主机或handler不能只刷新JS。测速30分钟不是规则更新。具体机制以[更新教程](UPDATES.md)为准，不承诺断网或iOS后台下准点执行。本轮补齐fmz200部分广告分支并保留自检和临时观察，地区策略及私人订阅机制保留，自动签到暂停。

@@ -128,7 +128,7 @@
       "output": "scripts/ads/bilibili.js",
       "license": "MIT",
       "native_reference": "module/bilibili.stoverride",
-      "output_sha256": "b5543bbaf454e4b5d73a90338b93267f8ff27cbed9a4f4c9d1fd5147083d92c1"
+      "output_sha256": "6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232"
     },
     {
       "repository": "app2smile/rules",
@@ -139,7 +139,7 @@
       "output": "scripts/ads/tieba.js",
       "license": "MIT",
       "native_reference": "module/tieba.stoverride",
-      "output_sha256": "ee3d48ca94d71c6171b02c82ad62c2e78855abf81feed1dfbe35540a3728ca3a"
+      "output_sha256": "058007aa16d18f35faf207c6bb22e67e8ea3f1fd31d7c7a400cb6668990dc830"
     },
     {
       "repository": "fmz200/wool_scripts",
@@ -148,11 +148,11 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/xiaohongshu/xiaohongshu.js",
       "source_sha256": "318d89bce1117edb26a93b383804e195649ec4674a04efa9e3ddb4ef7f34b498",
       "output": "scripts/ads/xiaohongshu.js",
-      "output_sha256": "bd1e3f15382950bbbc0abe9c787cfab86e26e56582896e89ca0605aefb8537f1",
+      "output_sha256": "0104308f8d71e4b05201b9b1619ba852b80b4001efa905048f73e7fdffcd8431",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
-      "adaptation": "仅splash_config时间、config.splash、v6 homefeed中非空ads_info赞助项；保留普通带货/直播和全部水印、下载、画质、用户字段；无正文日志、存储和外联。"
+      "adaptation": "AD-20261020.5：仅splash_config时间、config.splash、edith/rec/www v6 homefeed非空ads_info赞助项；保留普通带货/直播、水印/下载/画质/用户字段。无业务正文日志、内容存储或外联；诊断仅本机限时固定状态。"
     },
     {
       "repository": "fmz200/wool_scripts",
@@ -161,7 +161,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/myBlockAds.js",
       "source_sha256": "4cf62100424886068a5470daecec319e93ccd034c647d79a9daaa72bbbc341bb",
       "output": "scripts/ads/taobao.js",
-      "output_sha256": "ade17f384d15c5e0d2c1e5d61ba368efd25bae07e359dfdbcbb244972bbdbce6",
+      "output_sha256": "b42e18518196b86f5f40c2a45fd6e729ffc6dba403e2871ffe2217bd03f7537c",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -174,11 +174,11 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/weibo/weibo_ads.js",
       "source_sha256": "0f1f3eba5b2c96f4f089525ad033b578b6a18a2fd99eb95409e5b0816f4a4b34",
       "output": "scripts/ads/weibo.js",
-      "output_sha256": "6bc6ffd19e687c6c4764e4a2f73d082e9656a2367b207e16040f1448275ddfaa",
+      "output_sha256": "dff123fedef74faa1487dff0f4653b7b395cf356a00a79a214912928d372ff86",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
-      "adaptation": "仅话题/搜索中明确广告标记；开屏改用原生reject-dict，广告SDK/素材单独域名路由；不复制其日志、导航/推荐/账号修改。"
+      "adaptation": "AD-20261020.5：话题/搜索、page/flowpage热搜及mix_comments/container_detail_comment/container_detail_mix的明确广告标记；四个api/mapi精确主机与HTTP/HTTPS；原生开屏空JSON保留。不复制上游正文日志、导航/账号/会员修改；诊断仅记录本机限时固定状态。"
     },
     {
       "repository": "fmz200/wool_scripts",
@@ -187,7 +187,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js",
       "source_sha256": "9d31582028a31ea605e69d09aa9e33949e57050006a8e0f3deb79b1c89933acd",
       "output": "scripts/ads/alipan.js",
-      "output_sha256": "eda94445f28f293e4949b7776a6d98e6016c6a8e163015fd6b15d3470f921998",
+      "output_sha256": "5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -200,7 +200,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js",
       "source_sha256": "76fe899db1e045aaff2d71d6ff3c58cb665bac52a5996ff20e56079a02a6451c",
       "output": "scripts/ads/cainiao.js",
-      "output_sha256": "364c5a371c2d7e5cfeb01b3aed6f6e416e3b6582fde726b39ba13036924579ea",
+      "output_sha256": "08894302f66e98e5b4ff1f48d017dd8727e23c56b2ef139a3d8ccdfc4ed9e9b6",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -213,7 +213,7 @@
       "source_url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
       "source_sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
       "output": "scripts/ads/jingdong.js",
-      "output_sha256": "16344ef61ba2d4c38d42c22324e57b15ff31554843e81971b58a47cd1a4f85c3",
+      "output_sha256": "d6ef9c739a5c2abab83d7ae615299452fe8ef96f3db7e7d9a78a52381f245cd3",
       "license": "GPL-2.0",
       "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
       "native_reference": "script/startup/startup.stoverride",
@@ -226,7 +226,7 @@
       "source_url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
       "source_sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
       "output": "scripts/ads/meituan.js",
-      "output_sha256": "6749b93c9675085c3a7c1c230ce9b97089641158cdb073cb99b514c22925c459",
+      "output_sha256": "b179202e6813d3d4cdf0768d9e9cf56e6d0b1a7392ddeb3dd4dc3ec76024e40d",
       "license": "GPL-2.0",
       "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
       "native_reference": "script/startup/startup.stoverride",
@@ -239,7 +239,7 @@
       "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
       "source_sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d",
       "output": "scripts/ads/luckin.js",
-      "output_sha256": "96a62a0f673040e5b185638a9492a4d236e21a8c9d076c5834a800d8ee7e7a08",
+      "output_sha256": "3b2f83671bc9b7b0d8c2cb676b6cf99f056757abd7e516cdc9216bd26c2c1d91",
       "license": "GPL-3.0-only",
       "license_file": "licenses/fmz200-GPL-3.0.txt",
       "native_reference": null,
@@ -252,7 +252,7 @@
       "source_url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js",
       "source_sha256": "f661257b7bdedf5de63c6a9272f4e646829d8b95607f60faecd9ced39afa2c24",
       "output": "scripts/ads/wechat-articles.js",
-      "output_sha256": "ea41e4eef48babdfec1d4cd6ef4569b84eac8a0872baa87c383e90aa7c00facb",
+      "output_sha256": "2002b5684925139744cb89e664e99f79ffa85a0d46a043aea4cd507a2205b8d3",
       "license": "GPL-3.0-only",
       "license_file": "licenses/NobyDa-GPL-3.0.txt",
       "native_reference": null,
