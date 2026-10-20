@@ -138,7 +138,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core
 - [一条链接订阅导入与本机私人设置（推荐）](docs/SUBSCRIBE.md)
 - [订阅兼容、漏节点与 SS/VLESS](docs/SUBSCRIPTION.md)
 - [广告覆盖、MITM、模块启停](docs/ADBLOCKING.md)
-- [当前去广告技术路线、40款实现与开关/更新关系](docs/AD-ARCHITECTURE.md)
+- [完整去广告方案与调查规格：配置原文、40款范围、12份JS源码](docs/AD-ARCHITECTURE.md)
 - [图片135款App名称与逐款调查](docs/APP-INVENTORY.md)
 - [全部专项模块、稳定导入链接与通用规则重叠](docs/AD-MODULES.md)
 - [淘宝、小红书、微博与独立天猫的专项范围](docs/APP-SPLASH.md)

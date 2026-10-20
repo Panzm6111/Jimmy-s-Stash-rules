@@ -895,5 +895,33 @@
         "ok": true
       }
     ]
+  },
+  "detailed_specification": {
+    "reviewed_at": "2026-10-20",
+    "source_commit": "c831aa3d03244cd1e6f42f328163e1ea25ef1935",
+    "contains_complete_ad_configuration_snapshot": true,
+    "ad_routes": 49,
+    "http_match_entries": 44,
+    "complete_js_sources": 12,
+    "source_files_unchanged": true,
+    "phone_runtime_object_shapes_verified": false,
+    "root_cause_identified": false,
+    "validation": {
+      "ad_snapshot_matches_runtime_source": true,
+      "ad_routes": 49,
+      "http_match_declarations": 44,
+      "mitm_hosts": 41,
+      "embedded_js_sources_match_original_files": 12,
+      "embedded_js_syntax_checks_passed": 12,
+      "public_file_sha256_values_included": 15,
+      "unchanged_reviewed_source_hashes": 58,
+      "local_markdown_links": 277,
+      "broken_local_links": 0,
+      "changed_file_secret_findings": 0,
+      "runtime_files_changed": 0,
+      "new_native_stash_or_iphone_test": false,
+      "document_lines": 1337,
+      "document_bytes": 78319
+    }
   }
 }

@@ -1,6 +1,8 @@
-# 当前去广告技术路线与实现总览
+# Stash去广告方案：完整技术说明与排查规格
 
 整理日期：2026-10-20。审阅基线：`d8ea21e`；配置、规则、40个专项模块和12份JS均直接读取。本文盘点已写入代码的功能，不将文件存在、模拟通过或证书受信任记为真实广告已去除。用户此前已确认HTTP/MITM开启且自建证书完全信任，也反馈过淘宝、微博等开屏仍在；目前没有逐款设备验收通过记录。自动签到继续暂停。
+
+本文可独立交给调查者审阅。第1—10部分说明当前方案；第11部分提供从真实公共主配置提取的全部广告规则、HTTP处理声明及脚本地址；第12—14部分记录脚本对运行环境的具体假设、手机端手工接入与源码校验值；第15部分附上12份运行JS完整原文。配置片段是供核对的技术材料，不是一份可直接导入的完整配置。本次补全只展开已有方案，不调整实际规则或JS，也没有诊断出唯一失败根因。
 
 **1. 当前实际装了什么**
 
@@ -293,3 +295,1043 @@ DOMAIN,config.unityads.unitychina.cn
 ```
 
 逐款远程链接、通用包重叠与精确主机详见 [AD-MODULES](AD-MODULES.md)；本机安装/停用详见 [ADBLOCKING](ADBLOCKING.md)；审阅数据记录在 [ad-architecture-audit.json](../research/ad-architecture-audit.json)。后续沿用本文稳定路径更新。
+
+<!-- DETAILED-SPEC-BEGIN -->
+
+**11. 真实公共主配置中的去广告声明原文**
+
+以下片段逐项抽取自`config/stash.yaml`，包括：广告组默认值、49条广告路由、41个MITM主机、16条URL拒绝、18个request和10个response声明，以及12个脚本名称/地址/刷新间隔。没有为了说明而改写正则或替换脚本地址。
+
+它省略机场代理集、其他策略组、普通分流及DNS等非广告内容，因此不能直接当作完整配置导入。49条广告规则在真实主配置中的位置仍按第7部分，不应把本片段机械前插到其他配置。
+
+<!-- CONFIG:ad-core -->
+```yaml
+mode: rule
+proxy-groups:
+- name: 广告拦截
+  type: select
+  proxies:
+  - REJECT
+  - DIRECT
+rules:
+- DOMAIN,ads.95516.com,广告拦截
+- DOMAIN,ads.cup.com.cn,广告拦截
+- DOMAIN,ads.uc.cn,广告拦截
+- DOMAIN,adslot.uc.cn,广告拦截
+- DOMAIN,ad.12306.cn,广告拦截
+- DOMAIN,bdsp-x.jd.com,广告拦截
+- DOMAIN,dsp-x.jd.com,广告拦截
+- DOMAIN,emdcadvertise.eastmoney.com,广告拦截
+- DOMAIN,ma-adx.ctrip.com,广告拦截
+- DOMAIN,optimus-ads.amap.com,广告拦截
+- DOMAIN,optimus-ads.amap.com.w.alikunlun.com,广告拦截
+- DOMAIN-SUFFIX,pangle.io,广告拦截
+- DOMAIN-SUFFIX,pangolin.snssdk.com,广告拦截
+- DOMAIN-SUFFIX,mobads-logs.baidu.cn,广告拦截
+- DOMAIN-SUFFIX,mobads-logs.baidu.com,广告拦截
+- DOMAIN-SUFFIX,mobads.baidu.cn,广告拦截
+- DOMAIN-SUFFIX,c.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,d.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,mi.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,nc.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,s.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,t.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,v.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,win.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,xc.gdt.qq.com,广告拦截
+- DOMAIN,mobads-pre-config.cdn.bcebos.com,广告拦截
+- DOMAIN-SUFFIX,doubleclick.net,广告拦截
+- DOMAIN-SUFFIX,googlesyndication.com,广告拦截
+- DOMAIN-SUFFIX,admob.com,广告拦截
+- DOMAIN-SUFFIX,adsrvr.org,广告拦截
+- DOMAIN-SUFFIX,adnxs.com,广告拦截
+- DOMAIN-SUFFIX,adkwai.com,广告拦截
+- DOMAIN-KEYWORD,pangolin-sdk-toutiao,广告拦截
+- DOMAIN-KEYWORD,pglstatp-toutiao,广告拦截
+- DOMAIN-KEYWORD,mobads.baidu.com,广告拦截
+- DOMAIN,v2.gdt.qq.com,广告拦截
+- DOMAIN,vr.gdt.qq.com,广告拦截
+- DOMAIN,xs.gdt.qq.com,广告拦截
+- DOMAIN,adsmind.gdtimg.com,广告拦截
+- DOMAIN,qzs.gdtimg.com,广告拦截
+- DOMAIN-SUFFIX,canvas.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,pgdt.gtimg.cn,广告拦截
+- DOMAIN-SUFFIX,pgdt.gtimg.com,广告拦截
+- DOMAIN-SUFFIX,q.i.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,rm.gdt.qq.com,广告拦截
+- DOMAIN-SUFFIX,ugdtimg.com,广告拦截
+- DOMAIN-SUFFIX,unityads.unity3d.com,广告拦截
+- DOMAIN,unityads.unitychina.cn,广告拦截
+- DOMAIN,config.unityads.unitychina.cn,广告拦截
+http:
+  mitm:
+  - api.zhihu.com
+  - api.xiaoyuzhoufm.com
+  - edith.xiaohongshu.com
+  - acs.m.goofish.com
+  - api.xiachufang.com
+  - ios.wps.cn
+  - mobile-pic.cache.iciba.com
+  - bootrealtime.uve.weibo.com
+  - bootpreload.uve.weibo.com
+  - mp.weixin.qq.com
+  - m.client.10010.com
+  - oss.umetrip.com
+  - tiebac.baidu.com
+  - acs.m.taobao.com
+  - guide-acs.m.taobao.com
+  - api.pinduoduo.com
+  - api.yangkeduo.com
+  - interface.music.163.com
+  - interface3.music.163.com
+  - ipv4.music.163.com
+  - appconf.mail.163.com
+  - client.mail.163.com
+  - home.mi.com
+  - wmapi.meituan.com
+  - api.mcd.cn
+  - open.taou.com
+  - h3.open.taou.com
+  - capi.lkcoffee.com
+  - api-ac.liepin.com
+  - res.kfc.com.cn
+  - api.m.jd.com
+  - appapi.huazhu.com
+  - mapi.dianping.com
+  - client.app.coc.10086.cn
+  - cn-acs.m.cainiao.com
+  - app.bilibili.com
+  - pan.baidu.com
+  - m5.amap.com
+  - amap-aos-info-nogw.amap.com
+  - member.alipan.com
+  - app.58.com
+  rewrite:
+  - ^https://api\.xiachufang\.com/v\d+/ad/[^?#]*(?:\?|$) - reject
+  - ^https://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$) - reject
+  - ^https://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject
+  - ^https://oss\.umetrip\.com/fs/advert/polite(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https://acs\.m\.taobao\.com/gw/mtop\.film\.mtopadvertiseapi\.queryloadingbanner(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject
+  - ^https://api\.pinduoduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
+  - ^https://api\.yangkeduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
+  - ^https://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
+  - ^https://res\.kfc\.com\.cn/advertisement/[^?#]*(?:\?|$) - reject
+  - ^https://appapi\.huazhu\.com(?::\d+)?/client/app/getAppStartPage/(?:\?|$) - reject
+  - ^https://mapi\.dianping\.com/mapi/operating/loadsplashconfig/?(?:\?|$) - reject
+  - ^https://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject
+  - ^https://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https://amap\-aos\-info\-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt/?(?:\?|$) - reject
+  - ^https://app\.58\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\?|$) - reject
+  script:
+  - match: ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config(\?|$)
+    name: jimmy_xiaohongshu_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https:\/\/bootrealtime\.uve\.weibo\.com\/v\d+\/ad\/realtime(\?|$)
+    name: jimmy_weibo_ads
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https:\/\/bootpreload\.uve\.weibo\.com\/v\d+\/ad\/preload(\?|$)
+    name: jimmy_weibo_ads
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://mp\.weixin\.qq\.com/mp/getappmsgad/?(?:\?|$)
+    name: jimmy_wechat_articles_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(\?|$)
+    name: jimmy_tieba_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(\/\d+(\.\d+)*\/?)?(\?|$)
+    name: jimmy_taobao_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
+    name: jimmy_meituan_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://open\.taou\.com/maimai/adshow/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://capi\.lkcoffee\.com/resource/m/sys/app/adposNew/?(?:\?|$)
+    name: jimmy_luckin_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://api\.m\.jd\.com/client\.action\?(?:[^#&]*&)*functionId=start(?:&|$)
+    name: jimmy_jingdong_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://cn-acs\.m\.cainiao\.com/gw/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_cainiao_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/(splash\/(list|show)|feed\/index)(\?|$)
+    name: jimmy_bilibili_ads
+    type: response
+    require-body: true
+    timeout: 5
+  - match: ^https://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$)
+    name: jimmy_ad_empty_response
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https://member\.alipan\.com/v1/users/onboard_list/?(?:\?|$)
+    name: jimmy_alipan_ads
+    type: response
+    require-body: true
+    timeout: 5
+script-providers:
+  jimmy_alipan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js
+    interval: 86400
+  jimmy_ad_empty_response:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/empty-response.js
+    interval: 86400
+  jimmy_bilibili_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js
+    interval: 86400
+  jimmy_cainiao_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js
+    interval: 86400
+  jimmy_jingdong_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js
+    interval: 86400
+  jimmy_luckin_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js
+    interval: 86400
+  jimmy_meituan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js
+    interval: 86400
+  jimmy_taobao_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js
+    interval: 86400
+  jimmy_tieba_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js
+    interval: 86400
+  jimmy_wechat_articles_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js
+    interval: 86400
+  jimmy_weibo_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js
+    interval: 86400
+  jimmy_xiaohongshu_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js
+    interval: 86400
+```
+
+这些字段声明了“要处理什么”，不证明手机已经成功下载脚本、启用HTTP引擎、完成原生MITM或采用返回值。`http`块在当前源码只包含`mitm`、`rewrite`、`script`；没有配置强制HTTP/3降级、全端口捕获或绕过证书固定。
+
+**12. 调查者需要知道的运行对象假设**
+
+下面逐项描述现有代码的实际判断。右侧是由代码条件可直接推导的结果，不代表已经确认Stash在用户设备上给出的对象就是这种形态。
+
+| 位置 | 当前代码的具体假设 | 哪种输入会导致不修改或分支改变 |
+|---|---|---|
+| 请求URL | 使用`$request.url`，再按写死的HTTPS主机和路径正则判断 | 其他主机、HTTP、端口写法、尾斜杠或路径版本不在正则允许范围时不匹配；多数规则没有显式允许`:443`，华住规则另有端口分支 |
+| HTTP方法 | 大多数脚本只接受大写GET/POST，B站只接受GET；贴吧没有额外方法限制 | 方法缺失、小写或其他方法会使有方法限制的脚本放行 |
+| 响应正文 | 10份JSON脚本需要`$response.body`为字符串，再执行`JSON.parse` | 正文缺失、二进制、非JSON、JSONP或业务加密数据不会按普通JSON修改；网易云方案没有实现EAPI解密 |
+| 响应状态 | 大多数JSON脚本在`resp.status`有值时要求它是裸三位2xx；B站/贴吧接受以2xx开头的字符串 | `HTTP/1.1 200 OK`不符合这些正则，存在该值时会跳过修改；如果只有`statusCode`而没有`status`，当前这层状态判断会跳过，并非必定失败 |
+| JSON业务状态 | 各脚本分别检查`code`、`ret`、`status`、`error`等已知字段，没有通用schema适配器 | 例如小红书`code`只接受数值0；淘宝已存在的`ret`必须是全部SUCCESS；京东要求`images`是二维数组。字段或类型改变可导致原样放行 |
+| 正文长度 | 对字符串`.length`作1,048,576或2,097,152阈值检查 | 超过阈值不修改；该数值是JS字符串码元数，不是HTTP字节数 |
+| 请求期的`$response`：共享脚本 | `empty-response.js`要求`typeof $response === 'undefined'` | 如果请求阶段变量存在但值为null，或是空对象，共享脚本都会直接返回空修改对象；实际Stash请求阶段采用哪种形态尚未验证 |
+| 请求期的`$response`：微博 | `weibo.js`把非null对象视为旧response调用，其余走请求响应构造分支 | 请求期null会走请求分支；空对象会走兼容response分支。它与共享脚本的判断不同，不能假设两者行为一致 |
+| 请求脚本返回值 | 使用`$done({response: {status: 200, headers: ..., body: ...}})`；body为`{}`或空字符串 | 依赖Stash接受当前对象结构和字段类型。已有原生公开模块调用链作为参考，但没有用户手机上的实际回调验证 |
+| 响应脚本返回值 | 有修改时使用`$done({body: 新字符串})`，通常不自行重写响应头 | 正文解压、重新编码及Content-Length/Content-Encoding处理依赖Stash；本项目未实测其当前版本行为 |
+| 不修改时的返回 | 脚本多数用`$done({})`结束 | 依赖原生运行环境把空修改对象理解为保留原处理；模拟测试采用该模型，不代替原生验证 |
+| 超时 | 28个脚本处理项全部声明`timeout: 5` | 超时的具体回退和连接处理由Stash决定，本项目没有自行实现超时重试或保证原请求放行 |
+
+尤其应区分以下两个事实：
+
+```javascript
+// empty-response.js的实际条件：请求阶段也必须完全没有$response变量。
+if (typeof $response !== 'undefined' || !['GET', 'POST'].includes(req.method)) return;
+
+// weibo.js的实际条件：有非null对象时进入兼容的响应式分支。
+if (typeof $response === 'object' && $response !== null) {
+  // 返回响应正文修改
+} else {
+  // 返回请求阶段的response对象
+}
+```
+
+这里只列明源码差异，**没有确认真实Stash会提供null、空对象或未定义变量，也没有把它认定为已经查出的根因**。同理，不能只看到`status`的检查就断言当前Stash返回HTTP状态行。完整脚本在第15部分，可逐行复核。
+
+普通URL拒绝则不经过上述JSON结构保护。请求空响应不等原服务器返回，无法根据原响应判断端点是不是已经改用途；响应修改必须同时匹配URL和所支持的结构。它们对“接口改版”的容忍能力不同。
+
+**13. 手机端的接入方式与手工步骤**
+
+预期组合是：
+
+```text
+GitHub config/stash.yaml：公开规则、策略组、HTTP声明、JS地址
+                ↓ 用户在Stash下载并选中
+手机主配置 ＋ 本机私人覆写：只保存机场URL
+                ↓ Stash按本机顺序合并、运行
+最终配置 ＋ 已下载的12份JS ＋ 设备HTTP/MITM设置与受信任CA
+```
+
+私人覆写的预期形状如下，只有占位符；不是用户实际内容：
+
+```yaml
+name: 本机私人订阅
+proxy-providers:
+  机场:
+    url: https://example.invalid/REPLACE_ON_DEVICE
+```
+
+`name`是显示名称；`机场`是被公共组的`use`引用的代理集键，不能把它删成根级`url`。该方案意图只覆盖已有provider的URL，保留公共配置中的type、interval和health-check；真实深层合并需以设备最终结果为准。新建覆写开始只有name时，不会自动复制已下载主配置的内容。
+
+以下手工动作曾出现在项目接入过程中，但本文不能读取用户手机确认当前状态：
+
+- 将GitHub配置链接复制进Stash，下载并选中。
+- 创建配置副本后，在手机修改代理集URL；或者另建私人覆写保存URL。
+- 在Stash生成CA，在iOS安装和完全信任，再启用HTTP/MITM。
+- 在设备选策略、启用/暂停覆写、刷新配置与资源。
+
+“创建副本”产生的本地修改不会回写GitHub。副本是否保留远程来源、刷新会覆盖哪些本地修改，当前没有原生实测记录，不能凭菜单名称作保证。如果副本没有公共更新关系，仓库发布新handler并不会自动进入它。只在多个配置中看见同一批节点，也不能证明它们拥有同样的新广告规则；节点缓存和共享机制尚未核实。
+
+已有另一种可用载体：工具将机场YAML中的节点嵌入私人主配置。那份文件的节点和广告规则都是生成时的快照；远程JS可能单独更新，规则和处理项不会随之改变。本文不附用户私人输入或输出。
+
+因此，“机场能刷新、有节点、可以上网、地区组看起来正确、证书受信任”分别是不同层的现象，不能单独证明当前44个HTTP匹配项都已运行。手机保存的广告组选择或其他覆写，也可能与文件默认值不同。
+
+**14. 本方案的识别信息、边界和当前已知状态**
+
+- 本文件包含的是当前仓库原方案，不是新提出的替代方案。
+- 公开主配置地址：`https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml`。
+- 配置与脚本以本仓库固定路径维护；上游版本和许可证固定记录，不在手机自动执行未审核的上游最新代码。
+- 广告引擎按域名/IP、URL及JSON结构工作，没有按App的Bundle ID识别全部流量。App自带DNS、直连IP、协议或端口变化可能影响可识别范围。
+- 默认域名包只有38条，另有11条专项主机；扩展包在一体化配置无引用的问题已由结构检查确认。
+- 全部40款专项已在公共主配置内组装；单App开关没有在该一体化文件中实现。
+- 用户报告过HTTP/MITM开启且本人CA完全信任；没有检查其当前手机设置，也没有因此推定全部解密成功。
+- 真实Stash最低版本、当前JS对象形态、原生合并、HTTP/3/固定证书/解压编码等环节尚未完成设备验证。
+- 没有取得可证明当前App版本广告链路的真实样本或逐款成功验收。已有模拟测试只验证预设输入下的逻辑。
+- 当前信息不足以唯一确定“为什么大部分用不了”；默认覆盖、扩展接法、配置版本、URL命中、JS对象/结构、协议和客户端对空响应的接受情况均需分别判断。
+
+以下SHA256只用于标识本次说明所引用的**公开原始文件**。带私人覆写或本机修改的最终配置不会与公开主配置具有相同哈希；不应将包含真实URL的最终配置当作公共文件分享。
+
+| 文件 | SHA256 |
+|---|---|
+| [config/stash.yaml](../config/stash.yaml) | `18f633958c3bd52f8442c1a6faaaa6036ed69cc3dcd3b972f751da9776e4240c` |
+| [config/core.stoverride](../config/core.stoverride) | `9691f2b4386c0a0978d9d34e05865616a619105a24c127d2fa1a4986ecd88e48` |
+| [tools/build_subscription.py](../tools/build_subscription.py) | `61fb0013f223579d9eec4aaf14a52d1fb4d00162fac84a39cdd1ed3f457fec8f` |
+| [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `c90be8f4fa02ca8d4857229e49a82066305ee53b101a97dcf441d7dbb15fd1fa` |
+| [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `09994000b9d3c5332848f6788dd1948e9f7f961b81aecd4247e39c78792e8cc5` |
+| [scripts/ads/cainiao.js](../scripts/ads/cainiao.js) | `95e56c4c6c787fc85adcaf0be5ac9be8fb68b2f4b4338828e1d1c4d3b36a84d4` |
+| [scripts/ads/empty-response.js](../scripts/ads/empty-response.js) | `6983e6662f453a51b54acd4da429639e63affdbf43a7b9c21349c4674fd9a3be` |
+| [scripts/ads/jingdong.js](../scripts/ads/jingdong.js) | `1586841af3a30ccf246d98730c49d3027323db6b4bfa6fa578067e03676515ab` |
+| [scripts/ads/luckin.js](../scripts/ads/luckin.js) | `ebe583ac0d7c8a6194470787c75ffc5e80cf04539d8798ff2ea01616069aead6` |
+| [scripts/ads/meituan.js](../scripts/ads/meituan.js) | `f9eca13c143039ad7a47320ffb0e056f8cf9e1886f1f5e7996656d35bb18ce53` |
+| [scripts/ads/taobao.js](../scripts/ads/taobao.js) | `134eab65f7443a19f5a4b401fe7784443d4b21cea6b31a18e06527b342a7f19d` |
+| [scripts/ads/tieba.js](../scripts/ads/tieba.js) | `a9a763d2c3b4bb185d1fcc12871d13431860ca20a10fcc1ecf613e1a3464da6e` |
+| [scripts/ads/wechat-articles.js](../scripts/ads/wechat-articles.js) | `7cd38a1b9bc4b66eea6f7295806e35ece420d88676f3b3efa7f0fc5a838b19f5` |
+| [scripts/ads/weibo.js](../scripts/ads/weibo.js) | `33f30a06cc01171d444fc89204578004d979a6da61a01f6cd8343afcddf62cb1` |
+| [scripts/ads/xiaohongshu.js](../scripts/ads/xiaohongshu.js) | `0da66fb2483bce7aad7c17ef06db80fc102380ba2e192c93416976bbdb103e6a` |
+
+**15. 12份运行JS完整源码**
+
+下面是文件原文，不是伪代码或缩减示例。每段保留原始归属和许可，不以说明文档的原创文字许可重新授权。独立许可全文见 [app2smile MIT](../licenses/app2smile-MIT.txt)、[blackmatrix7 GPL-2.0](../licenses/blackmatrix7-GPL-2.0.txt)、[fmz200 GPL-3.0](../licenses/fmz200-GPL-3.0.txt)、[NobyDa GPL-3.0](../licenses/NobyDa-GPL-3.0.txt)。
+
+**15.1 alipan.js**
+
+源文件：[scripts/ads/alipan.js](../scripts/ads/alipan.js)。
+
+<!-- SOURCE:scripts/ads/alipan.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Derived from fmz200/wool_scripts Scripts/adrive/adrive.js; see sources.lock.json.
+ * Modified 2026-10-19: only four banner anchors; keep backups, news, sign-in and
+ * account features. No logs, storage or network. License: licenses/fmz200-GPL-3.0.txt.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    if (!/^https:\/\/member\.alipan\.com\/v1\/users\/onboard_list\/?(?:\?|$)/.test(String(req.url || ''))) return;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
+    const obj = JSON.parse(resp.body);
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0', 200, '200', 'Success'].includes(obj.code)) return;
+    if (!Array.isArray(obj.result)) return;
+    const ads = ['backup_top_banner', 'home_top_banner', 'resource_top_banner', 'video_top_banner'];
+    const filtered = obj.result.filter(item => !item || !ads.includes(item.anchor));
+    if (filtered.length !== obj.result.length) {
+      obj.result = filtered;
+      result = {body: JSON.stringify(obj)};
+    }
+  } catch (_) {
+    // Keep the original response on unknown/error data.
+  } finally { $done(result); }
+})();
+```
+
+**15.2 bilibili.js**
+
+源文件：[scripts/ads/bilibili.js](../scripts/ads/bilibili.js)。
+
+<!-- SOURCE:scripts/ads/bilibili.js -->
+```javascript
+/* SPDX-License-Identifier: MIT
+ * Derived from app2smile/rules js/bilibili-json.js, revision in research/sources.lock.json.
+ * Copyright (c) 2023 app2smile. See licenses/app2smile-MIT.txt.
+ * Modified 2026-10-18: narrow endpoints, preserve non-ad features, fail open,
+ * no URL/body/header logging, no account storage or outbound requests.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    const path = String(req.url || '').match(/^https:\/\/app\.bilibili\.com(\/x\/v2\/(?:splash\/(?:list|show)|feed\/index))(?:\?|$)/);
+    if (!path || req.method !== 'GET' || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d/.test(String(resp.status))) return;
+    const body = JSON.parse(resp.body);
+    if (!body || body.code !== 0 || !body.data || typeof body.data !== 'object' || Array.isArray(body.data)) return;
+    let changed = false;
+    if (path[1].startsWith('/x/v2/splash/')) {
+      if (Object.prototype.hasOwnProperty.call(body.data, 'show')) {
+        delete body.data.show;
+        changed = true;
+      }
+    } else if (Array.isArray(body.data.items)) {
+      const before = body.data.items;
+      const adTypes = ['ad_web_s', 'ad_av', 'ad_web_gif', 'ad_player', 'ad_inline_3d', 'ad_inline_eggs'];
+      const after = before.filter(item => {
+        if (!item || typeof item !== 'object') return true;
+        if (item.card_type === 'cm_v2' && adTypes.includes(item.card_goto)) return false;
+        if (item.card_type === 'cm_double_v9' && item.card_goto === 'ad_inline_av') return false;
+        if (item.card_type === 'banner_v8' && item.card_goto === 'banner' && Array.isArray(item.banner_item)) {
+          // 不丢弃整个 banner：只删明确标为 ad 的条目。
+          item.banner_item = item.banner_item.filter(v => !v || v.type !== 'ad');
+        }
+        return true;
+      });
+      body.data.items = after;
+      changed = JSON.stringify(body.data.items) !== JSON.stringify(JSON.parse(resp.body).data.items);
+    }
+    if (changed) result = {body: JSON.stringify(body)};
+  } catch (_) {
+    // Stash 的空修改对象保留原响应。不输出异常内容，避免泄露响应数据。
+  } finally {
+    $done(result);
+  }
+})();
+```
+
+**15.3 cainiao.js**
+
+源文件：[scripts/ads/cainiao.js](../scripts/ads/cainiao.js)。
+
+<!-- SOURCE:scripts/ads/cainiao.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Derived from fmz200/wool_scripts Scripts/cainiao/cainiao.js; see sources.lock.json.
+ * Modified 2026-10-19: only explicit adItemDetail entries in ads.show. Preserve
+ * coupons, points, package import, messages and ordinary cards. No logs/storage/network.
+ * License: licenses/fmz200-GPL-3.0.txt.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    if (!/^https:\/\/cn-acs\.m\.cainiao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:\/[0-9]+(?:\.[0-9]+)*)?\/?(?:\?|$)/.test(String(req.url || ''))) return;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
+    const obj = JSON.parse(resp.body);
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'ret') && (!Array.isArray(obj.ret) || !obj.ret.length || !obj.ret.every(value => typeof value === 'string' && /^SUCCESS(?:::|$)/.test(value)))) return;
+    const items = obj.data && obj.data.result;
+    if (!Array.isArray(items)) return;
+    const filtered = items.filter(item => !(item && item.materialContentMapper && item.materialContentMapper.adItemDetail));
+    if (items.length !== filtered.length) {
+      obj.data.result = filtered;
+      result = {body: JSON.stringify(obj)};
+    }
+  } catch (_) {
+    // Do not log response bodies or request headers.
+  } finally { $done(result); }
+})();
+```
+
+**15.4 empty-response.js**
+
+源文件：[scripts/ads/empty-response.js](../scripts/ads/empty-response.js)。
+
+<!-- SOURCE:scripts/ads/empty-response.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Dedicated advertising endpoints adapted from fmz200/wool_scripts.
+ * Generated from research/ad-catalog.json; edit that catalog, not this file.
+ * Native Stash request response API evidence: docs/SOURCES.md.
+ * No request body, account data, storage, external requests or notifications.
+ */
+(() => {
+  let result = {};
+  let marker = '';
+  try {
+    const req = typeof $request === 'object' && $request ? $request : {};
+    // A request script must never modify a response-phase invocation.
+    if (typeof $response !== 'undefined' || !['GET', 'POST'].includes(req.method)) return;
+    const routes = [
+  {
+    "id": "damai",
+    "match": "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+    "json": false
+  },
+  {
+    "id": "amap",
+    "match": "^https://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "mcdonalds",
+    "match": "^https://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)",
+    "json": false
+  },
+  {
+    "id": "maimai",
+    "match": "^https://open\\.taou\\.com/maimai/adshow/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "maimai",
+    "match": "^https://h3\\.open\\.taou\\.com/maimai/adshow/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "liepin",
+    "match": "^https://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "mijia",
+    "match": "^https://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "netease-mail",
+    "match": "^https://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)",
+    "json": false
+  },
+  {
+    "id": "netease-music",
+    "match": "^https://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "netease-music",
+    "match": "^https://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "netease-music",
+    "match": "^https://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "xianyu",
+    "match": "^https://acs\\.m\\.goofish\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "xiaoyuzhou",
+    "match": "^https://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "wps",
+    "match": "^https://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)",
+    "json": false
+  },
+  {
+    "id": "zhihu",
+    "match": "^https://api\\.zhihu\\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\\?|$)",
+    "json": true
+  },
+  {
+    "id": "zhihu",
+    "match": "^https://api\\.zhihu\\.com/ad-style-service/request/?(?:\\?|$)",
+    "json": true
+  }
+];
+    const hit = routes.find(route => new RegExp(route.match).test(String(req.url || '')));
+    if (!hit) return;
+    result = {response: {
+      status: 200,
+      headers: {'Content-Type': hit.json ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8',
+                'Cache-Control': 'no-store'},
+      body: hit.json ? '{}' : ''
+    }};
+    marker = '[JimmyAds][' + hit.id + '] ' + (hit.json ? 'empty-json' : 'empty-200');
+  } catch (_) {
+    // Unexpected runtime errors pass through; never print the exception.
+  } finally {
+    if (marker) { try { console.log(marker); } catch (_) {} }
+    $done(result);
+  }
+})();
+```
+
+**15.5 jingdong.js**
+
+源文件：[scripts/ads/jingdong.js](../scripts/ads/jingdong.js)。
+
+<!-- SOURCE:scripts/ads/jingdong.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-2.0
+ * Derived from blackmatrix7/ios_rule_script script/startup/startup.js (JD branch).
+ * Source revision/checksum: sources.lock.json. License: licenses/blackmatrix7-GPL-2.0.txt.
+ * Modified 2026-10-19: strict URL/response guards; only existing display counts
+ * and durations; preserve product/order/coupon data. No logging, storage or requests.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    const url = String(req.url || '');
+    if (!/^https:\/\/api\.m\.jd\.com\/client\.action\?[^#]*$/.test(url)) return;
+    const functions = url.split('?')[1].split('&').filter(part => /^functionId=/.test(part));
+    if (functions.length !== 1 || functions[0] !== 'functionId=start') return;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
+    const obj = JSON.parse(resp.body);
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
+    if (!Array.isArray(obj.images) || !obj.images.every(Array.isArray)) return;
+    const before = JSON.stringify(obj);
+    function zero(item, key) {
+      if (typeof item[key] === 'number' && Number.isFinite(item[key])) item[key] = 0;
+      else if (typeof item[key] === 'string' && /^\d+$/.test(item[key])) item[key] = '0';
+    }
+    for (const group of obj.images) {
+      for (const ad of group) {
+        if (ad && typeof ad === 'object' && !Array.isArray(ad) && Object.prototype.hasOwnProperty.call(ad, 'showTimes')) {
+          zero(ad, 'showTimes');
+          zero(ad, 'time');
+        }
+      }
+    }
+    zero(obj, 'showTimesDaily');
+    const body = JSON.stringify(obj);
+    if (body !== before) result = {body};
+  } catch (_) {
+    // Unknown formats and errors pass through unchanged.
+  } finally { $done(result); }
+})();
+```
+
+**15.6 luckin.js**
+
+源文件：[scripts/ads/luckin.js](../scripts/ads/luckin.js)。
+
+<!-- SOURCE:scripts/ads/luckin.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Endpoint and successful empty-ad result from fmz200/wool_scripts rewrite.snippet.
+ * Modified 2026-10-19: only a successful dedicated adposNew JSON response; no
+ * product, coupon, exchange or order endpoints. No logging/storage/network.
+ * License: licenses/fmz200-GPL-3.0.txt. Source: sources.lock.json.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    if (!/^https:\/\/capi\.lkcoffee\.com\/resource\/m\/sys\/app\/adposNew\/?(?:\?|$)/.test(String(req.url || ''))) return;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
+    const obj = JSON.parse(resp.body);
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.status !== 'SUCCESS' || obj.error || obj.error_code || obj.success === false) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0', 200, '200'].includes(obj.code)) return;
+    if (Object.keys(obj).some(key => key !== 'status')) result = {body: JSON.stringify({status: 'SUCCESS'})};
+  } catch (_) {
+    // Original failures remain visible; no fabricated account success.
+  } finally { $done(result); }
+})();
+```
+
+**15.7 meituan.js**
+
+源文件：[scripts/ads/meituan.js](../scripts/ads/meituan.js)。
+
+<!-- SOURCE:scripts/ads/meituan.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-2.0
+ * Derived from blackmatrix7/ios_rule_script script/startup/startup.js (Meituan branch).
+ * Modified 2026-10-19: only known ad/mk arrays, preserving other loadInfo fields.
+ * No logs/storage/network. License: licenses/blackmatrix7-GPL-2.0.txt; source: sources.lock.json.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    if (!/^https:\/\/wmapi\.meituan\.com\/api\/v\d+\/loadInfo\/?(?:\?|$)/.test(String(req.url || ''))) return;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
+    const obj = JSON.parse(resp.body);
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'code') && ![0, '0'].includes(obj.code)) return;
+    const splash = obj.data && obj.data.startpicture;
+    if (!splash || typeof splash !== 'object' || Array.isArray(splash)) return;
+    let changed = false;
+    for (const key of ['ad', 'mk']) {
+      if (Array.isArray(splash[key]) && splash[key].length) { splash[key] = []; changed = true; }
+    }
+    if (changed) result = {body: JSON.stringify(obj)};
+  } catch (_) {
+    // Do not discard unknown startup/business data.
+  } finally { $done(result); }
+})();
+```
+
+**15.8 taobao.js**
+
+源文件：[scripts/ads/taobao.js](../scripts/ads/taobao.js)。
+
+<!-- SOURCE:scripts/ads/taobao.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Adapted from fmz200/wool_scripts Scripts/myBlockAds.js (Taobao splash branch).
+ * Source revision/checksum: research/sources.lock.json.
+ * Modifications 2026-10-19: only the dedicated splash API and taobao-splash items;
+ * preserve MTOP envelope, normal sections, products, coupons and payment paths.
+ * Restore upstream's missing control-field defaults; keep known scalar types.
+ * Only fixed diagnostic codes; no URLs, headers, payloads or exception logging.
+ * No generic cloudvideo/poplayer handling, storage or outbound requests.
+ * License text: licenses/fmz200-GPL-3.0.txt.
+ */
+(() => {
+  let result = {};
+  let matched = false;
+  let diagnostic = 'unsupported-body';
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    const api = 'mtop.taobao.wireless.home.splash.awesome.get';
+    if (!/^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(?:\/\d+(?:\.\d+)*\/?)?(?:\?|$)/.test(String(req.url || ''))) return;
+    matched = true;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) { diagnostic = 'http-error'; return; }
+    const obj = JSON.parse(resp.body);
+    diagnostic = 'unsupported-schema';
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
+    if (typeof obj.api === 'string' && obj.api.toLowerCase() !== api) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'ret') && (!Array.isArray(obj.ret) || !obj.ret.length || !obj.ret.every(x => typeof x === 'string' && /^SUCCESS(?:::|$)/.test(x)))) return;
+    const sections = obj.data && obj.data.containers && obj.data.containers.splash_home_base && obj.data.containers.splash_home_base.base && obj.data.containers.splash_home_base.base.sections;
+    if (!Array.isArray(sections)) return;
+    let supported = sections.length === 0;
+    for (const section of sections) {
+      const splash = section && section.bizData && section.bizData['taobao-splash'];
+      if (!splash || !Array.isArray(splash.data)) continue;
+      supported = true;
+      for (const item of splash.data) {
+        if (!item || typeof item !== 'object' || Array.isArray(item) || !Object.keys(item).length) continue;
+        // Only the fields documented by the reviewed upstream splash handler.
+        const changes = {waitTime:'0', times:'0', hotStart:'false', coldStart:'false',
+          startTime:'3818332800000', endTime:'3818419199000',
+          gmtStart:'2090-12-31 00:00:00', gmtEnd:'2090-12-31 23:59:59',
+          gmtStartMs:'3818332800000', gmtEndMs:'3818419199000', imgUrl:'', videoUrl:''};
+        for (const [key, value] of Object.entries(changes)) {
+          const before = item[key];
+          // These controls belong to a confirmed taobao-splash entry. Leaving
+          // absent controls unset lets the app apply its normal display defaults.
+          if (!Object.prototype.hasOwnProperty.call(item, key) || typeof before === 'string') item[key] = value;
+          else if (typeof before === 'number' && Number.isFinite(before) && /^\d+$/.test(value)) item[key] = Number(value);
+          else if (typeof before === 'boolean' && /^(true|false)$/.test(value)) item[key] = value === 'true';
+        }
+      }
+    }
+    const after = JSON.stringify(obj);
+    if (after !== JSON.stringify(JSON.parse(resp.body))) {
+      result = {body: after};
+      diagnostic = 'changed';
+    } else if (supported) diagnostic = 'unchanged';
+  } catch (_) {
+    // Unknown/broken responses stay unchanged. Do not log tokens or MTOP payloads.
+  } finally {
+    // Exactly one fixed marker for a matching endpoint. Logging failures must
+    // never prevent $done, and the exception itself is intentionally discarded.
+    if (matched) {
+      try { console.log('[JimmyAds][taobao] ' + diagnostic); } catch (_) {}
+    }
+    $done(result);
+  }
+})();
+```
+
+**15.9 tieba.js**
+
+源文件：[scripts/ads/tieba.js](../scripts/ads/tieba.js)。
+
+<!-- SOURCE:scripts/ads/tieba.js -->
+```javascript
+/* SPDX-License-Identifier: MIT
+ * Derived from app2smile/rules js/tieba-json.js, revision in research/sources.lock.json.
+ * Copyright (c) 2023 app2smile. See licenses/app2smile-MIT.txt.
+ * Modified 2026-10-18: only splash JSON; fail open; no logging or outbound requests.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    if (!/^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(?:\?|$)/.test(String(req.url || ''))) return;
+    if (typeof resp.body !== 'string' || resp.body.length > 1024 * 1024) return;
+    if (resp.status && !/^2\d\d/.test(String(resp.status))) return;
+    const body = JSON.parse(resp.body);
+    if (body && body.error_code === 0 && Object.prototype.hasOwnProperty.call(body, 'data')) {
+      body.error_code = 2230209;
+      body.data = null;
+      result = {body: JSON.stringify(body)};
+    }
+  } catch (_) {
+    // 返回原始内容；不记录请求或响应。
+  } finally {
+    $done(result);
+  }
+})();
+```
+
+**15.10 wechat-articles.js**
+
+源文件：[scripts/ads/wechat-articles.js](../scripts/ads/wechat-articles.js)。
+
+<!-- SOURCE:scripts/ads/wechat-articles.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Derived from NobyDa/Script QuantumultX/File/Wechat.js (see sources.lock.json).
+ * Modified 2026-10-19: strict path/schema/error guards; preserve appid and all
+ * non-ad fields. Articles only; no chat, Moments or Channels processing.
+ * No logging/storage/network. License: licenses/NobyDa-GPL-3.0.txt.
+ */
+(() => {
+  let result = {};
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    if (!/^https:\/\/mp\.weixin\.qq\.com\/mp\/getappmsgad\/?(?:\?|$)/.test(String(req.url || ''))) return;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) return;
+    const obj = JSON.parse(resp.body);
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false || obj.error || obj.error_code) return;
+    if (obj.base_resp && obj.base_resp.ret !== 0) return;
+    if (!Array.isArray(obj.advertisement_info) || typeof obj.advertisement_num !== 'number') return;
+    if (obj.advertisement_info.length || obj.advertisement_num !== 0) {
+      obj.advertisement_info = [];
+      obj.advertisement_num = 0;
+      result = {body: JSON.stringify(obj)};
+    }
+  } catch (_) {
+    // Unknown/error data stays untouched.
+  } finally { $done(result); }
+})();
+```
+
+**15.11 weibo.js**
+
+源文件：[scripts/ads/weibo.js](../scripts/ads/weibo.js)。
+
+<!-- SOURCE:scripts/ads/weibo.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Endpoint references: fmz200/wool_scripts QuantumultX/rewrite/weibo.snippet.
+ * Configuration attribution there: fmz200 / zmqcherish / Keywos.
+ * This is a local Stash handler, not a copied remote Weibo cleanup script.
+ * Modifications 2026-10-19: only two dedicated splash ad paths; no timeline,
+ * messaging, login, notifications, check-in, paid features or storage.
+ * Return empty JSON before a network request, matching upstream reject-dict.
+ * Keep response mode for existing configs whose remote script updates first.
+ * Diagnostics contain fixed codes only; no URL/header/body/exception data.
+ * License text: licenses/fmz200-GPL-3.0.txt; source pin: research/sources.lock.json.
+ */
+(() => {
+  let result = {};
+  let matched = false;
+  let diagnostic = 'unsupported-method';
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const url = String(req.url || '');
+    const realtime = /^https:\/\/bootrealtime\.uve\.weibo\.com\/v\d+\/ad\/realtime(?:\?|$)/;
+    const preload = /^https:\/\/bootpreload\.uve\.weibo\.com\/v\d+\/ad\/preload(?:\?|$)/;
+    if (!realtime.test(url) && !preload.test(url)) return;
+    matched = true;
+    if (!['GET', 'POST'].includes(req.method)) return;
+    if (typeof $response === 'object' && $response !== null) {
+      // Legacy response handlers must receive a response modification, not the
+      // synthetic-response envelope used by request scripts.
+      if ($response.status && !/^2\d\d$/.test(String($response.status))) { diagnostic = 'http-error'; return; }
+      if ($response.body === '{}') { diagnostic = 'unchanged'; return; }
+      result = {body: '{}'};
+    } else {
+      result = {response: {status: 200, headers: {'Content-Type': 'application/json'}, body: '{}'}};
+    }
+    diagnostic = 'changed';
+  } catch (_) {
+    // Never log a request, body or exception.
+  } finally {
+    if (matched) {
+      try { console.log('[JimmyAds][weibo] ' + diagnostic); } catch (_) {}
+    }
+    $done(result);
+  }
+})();
+```
+
+**15.12 xiaohongshu.js**
+
+源文件：[scripts/ads/xiaohongshu.js](../scripts/ads/xiaohongshu.js)。
+
+<!-- SOURCE:scripts/ads/xiaohongshu.js -->
+```javascript
+/* SPDX-License-Identifier: GPL-3.0-only
+ * Adapted from fmz200/wool_scripts Scripts/xiaohongshu/xiaohongshu.js.
+ * Original author: fmz200. Source revision and checksum: research/sources.lock.json.
+ * Modifications 2026-10-19: splash only; no feed, download, watermark or account
+ * changes; no storage or outbound requests; fail open.
+ * Diagnostics use fixed codes only, never URL/header/body/exception data.
+ * Restore upstream's missing start/end fields for recognized ad records.
+ * License text: licenses/fmz200-GPL-3.0.txt.
+ */
+(() => {
+  let result = {};
+  let matched = false;
+  let diagnostic = 'unsupported-body';
+  try {
+    const req = typeof $request === 'object' ? $request : {};
+    const resp = typeof $response === 'object' ? $response : {};
+    if (!/^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config(?:\?|$)/.test(String(req.url || ''))) return;
+    matched = true;
+    if (!['GET', 'POST'].includes(req.method) || typeof resp.body !== 'string' || resp.body.length > 2 * 1024 * 1024) return;
+    if (resp.status && !/^2\d\d$/.test(String(resp.status))) { diagnostic = 'http-error'; return; }
+    const obj = JSON.parse(resp.body);
+    diagnostic = 'unsupported-schema';
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj) || obj.success === false) return;
+    if (Object.prototype.hasOwnProperty.call(obj, 'code') && obj.code !== 0) return;
+    const groups = obj.data && obj.data.ads_groups;
+    if (!Array.isArray(groups)) return;
+    let supported = groups.length === 0;
+    // Keep all non-ad fields. Change only the upstream-recognized ad time windows.
+    function postpone(item) {
+      if (!item || typeof item !== 'object' || Array.isArray(item) || !Object.keys(item).length) return;
+      // A structured/non-numeric time field signals an unknown schema. Keep
+      // that record unchanged instead of inventing a conversion.
+      for (const key of ['start_time', 'end_time']) {
+        if (!Object.prototype.hasOwnProperty.call(item, key)) continue;
+        if (!(typeof item[key] === 'number' && Number.isFinite(item[key])) &&
+            !(typeof item[key] === 'string' && /^\d+$/.test(item[key]))) return;
+      }
+      supported = true;
+      for (const [key, value] of [['start_time', 3818332800], ['end_time', 3818419199]]) {
+        const before = item[key];
+        if (!Object.prototype.hasOwnProperty.call(item, key) || typeof before === 'number') item[key] = value;
+        else if (typeof before === 'string' && /^\d+$/.test(before)) item[key] = String(value);
+      }
+    }
+    for (const group of groups) {
+      postpone(group);
+      if (group && Array.isArray(group.ads)) group.ads.forEach(postpone);
+    }
+    const after = JSON.stringify(obj);
+    if (after !== JSON.stringify(JSON.parse(resp.body))) {
+      result = {body: after};
+      diagnostic = 'changed';
+    } else if (supported) diagnostic = 'unchanged';
+  } catch (_) {
+    // Unknown/broken responses stay unchanged. Never log response/account data.
+  } finally {
+    if (matched) {
+      try { console.log('[JimmyAds][xiaohongshu] ' + diagnostic); } catch (_) {}
+    }
+    $done(result);
+  }
+})();
+```
