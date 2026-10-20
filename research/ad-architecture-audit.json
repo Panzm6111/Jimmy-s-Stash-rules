@@ -922,6 +922,33 @@
       "new_native_stash_or_iphone_test": false,
       "document_lines": 1337,
       "document_bytes": 78319
+    },
+    "publication": {
+      "checked_at": "2026-10-20T13:56:20.066915+08:00",
+      "document_release_commit": "7703571626dc716022fa867efba84b772fcc6e38",
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/AD-ARCHITECTURE.md",
+      "raw_url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
+      "sha256": "d18dbb995dc3062a90b36d9702cffd9a7fdb4122a4de10d98ff42af3f6cf277e",
+      "http_status": 200,
+      "matches_local_bytes": true,
+      "passed": 2,
+      "total": 2,
+      "results": [
+        {
+          "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
+          "status": 200,
+          "sha256_matches": true,
+          "bytes": 78319,
+          "ok": true
+        },
+        {
+          "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/README.md",
+          "status": 200,
+          "sha256_matches": true,
+          "bytes": 17540,
+          "ok": true
+        }
+      ]
     }
   }
 }
