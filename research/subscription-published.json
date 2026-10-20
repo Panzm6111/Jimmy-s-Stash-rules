@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-20T16:00:34.816093+08:00",
+  "checked_at": "2026-10-20T16:27:52.460229+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 286902,
-  "sha256": "72f361b5d1a83ce0b1dcf3607c9bd1109c90a823be9598fd16f82434325a662d",
+  "bytes": 286925,
+  "sha256": "6a57834a0512f3b89a3644980568f4708920664ae464456f3147514e7ac99afc",
   "matches_local_bytes": true,
   "proxy_groups": 18,
   "rules": 5287,
@@ -37,7 +37,7 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "21e2783b4fe203bdf3678e25ade2b29b0d93a5d7",
+  "code_release_commit": "9462d4900ba090a06d9c4600efa4b625f0b849ed",
   "hong_kong_name_aliases": [
     "HK",
     "HKG"
@@ -48,7 +48,7 @@
   "ad_rule_set_referenced": true,
   "base_http_embedded": true,
   "per_app_overrides_retained": 40,
-  "per_app_http_switches": "only in main.yaml + core layered installation; integrated stash.yaml has no per-app switch",
+  "per_app_http_switches": "not required by current user requirement; integrated entry only; separate modules retained as maintained sources and legacy compatibility",
   "all_app_overrides_combined": {
     "native_url_rewrites": 38,
     "response_handlers": 11,
@@ -71,5 +71,34 @@
     "local_document_links": 241
   },
   "script_revision": "AD-20261020.1",
-  "expanded_default_enabled": true
+  "expanded_default_enabled": true,
+  "current_requirements": {
+    "daily_entry": "config/stash.yaml",
+    "per_app_switches_required": false,
+    "checkin": "paused",
+    "private_subscription": "device-only"
+  },
+  "update_recommendation": {
+    "ad_rule_provider_seconds": 86400,
+    "airport_provider_seconds": 86400,
+    "main_config": "manual weekly; immediately after a relevant published fix",
+    "inline_scripts": "with main config",
+    "node_probe_seconds": 1800,
+    "upstream_review": "weekly manual review recommended; no scheduled workflow"
+  },
+  "offline_checks_scope": "The existing full functional check counts are from the prior implementation release 21e2783; this wording-only release did not rerun the full suite or iPhone tests.",
+  "editorial_verification": {
+    "baseline": "f494a85",
+    "yaml_runtime_unchanged": 45,
+    "javascript_byte_identical": 12,
+    "rule_and_airport_interval_seconds": 86400,
+    "probe_interval_seconds": 1800,
+    "main_config_version": "AD-20261020.2",
+    "native_iphone_tested": false,
+    "generated_checks": 4,
+    "local_file_links": 253,
+    "archive_route_comparisons": 222,
+    "current_files_secret_scanned": 145,
+    "secret_pattern_findings": 0
+  }
 }
