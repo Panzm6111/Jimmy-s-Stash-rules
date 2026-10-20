@@ -1,18 +1,18 @@
 {
-  "checked_at": "2026-10-20T15:10:45.952002+08:00",
+  "checked_at": "2026-10-20T16:00:34.816093+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 228871,
-  "sha256": "5a0e982df98e194c8165fe8c63be593b72eb9922f10fc404c46261d206eaa6ac",
+  "bytes": 286902,
+  "sha256": "72f361b5d1a83ce0b1dcf3607c9bd1109c90a823be9598fd16f82434325a662d",
   "matches_local_bytes": true,
   "proxy_groups": 18,
-  "rules": 5266,
-  "inline_scripts": 0,
+  "rules": 5287,
+  "inline_scripts": 11,
   "remote_scripts": 0,
   "request_handlers": 0,
-  "response_handlers": 0,
-  "rewrite_rules": 0,
-  "mitm_hosts": 0,
+  "response_handlers": 11,
+  "rewrite_rules": 38,
+  "mitm_hosts": 45,
   "private_url_is_placeholder": true,
   "automatic_pools": [
     "自动节点",
@@ -37,18 +37,18 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "ec3f05468533350ac97f13e178e724fde0ecdbfe",
+  "code_release_commit": "21e2783b4fe203bdf3678e25ade2b29b0d93a5d7",
   "hong_kong_name_aliases": [
     "HK",
     "HKG"
   ],
   "hong_kong_name_case_insensitive": true,
-  "ad_revision": "AD-20261020.1",
+  "ad_revision": "AD-20261020.2",
   "rule_providers": 1,
   "ad_rule_set_referenced": true,
-  "base_http_embedded": false,
+  "base_http_embedded": true,
   "per_app_overrides_retained": 40,
-  "per_app_http_switches": "independent override; remove old combined pack; native phone acceptance pending",
+  "per_app_http_switches": "only in main.yaml + core layered installation; integrated stash.yaml has no per-app switch",
   "all_app_overrides_combined": {
     "native_url_rewrites": 38,
     "response_handlers": 11,
@@ -62,11 +62,14 @@
     "total": 68
   },
   "offline_checks": {
-    "project": 34,
+    "project": 35,
     "javascript_simulated": 62,
     "private_builder": 12,
     "current_files_scanned": 145,
-    "history_blobs_scanned": 370,
-    "secret_pattern_findings": 0
-  }
+    "history_blobs_scanned": 375,
+    "secret_pattern_findings": 0,
+    "local_document_links": 241
+  },
+  "script_revision": "AD-20261020.1",
+  "expanded_default_enabled": true
 }

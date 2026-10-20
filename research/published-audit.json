@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-20T15:08:40.696755+08:00",
+  "checked_at": "2026-10-20T15:59:53.499160+08:00",
   "target": "published",
   "passed": 68,
   "total": 68,
@@ -22,7 +22,7 @@
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 228871,
+      "bytes": 286902,
       "ok": true
     },
     {
@@ -113,7 +113,7 @@
       "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/expanded.stoverride",
       "status": 200,
       "sha256_matches": true,
-      "bytes": 318,
+      "bytes": 449,
       "ok": true
     },
     {
@@ -481,76 +481,40 @@
       "ok": true
     }
   ],
-  "code_release_commit": "ec3f05468533350ac97f13e178e724fde0ecdbfe",
+  "code_release_commit": "21e2783b4fe203bdf3678e25ade2b29b0d93a5d7",
   "documentation_at_code_commit": {
-    "commit": "ec3f05468533350ac97f13e178e724fde0ecdbfe",
-    "passed": 9,
-    "total": 9,
+    "code_commit": "21e2783b4fe203bdf3678e25ade2b29b0d93a5d7",
+    "passed": 4,
+    "total": 4,
     "results": [
       {
         "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/README.md",
         "status": 200,
         "sha256_matches": true,
-        "bytes": 17951,
+        "bytes": 18384,
         "ok": true
       },
       {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/PROGRESS.md",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/QUICKSTART.md",
         "status": 200,
         "sha256_matches": true,
-        "bytes": 32029,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 97563,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/ADBLOCKING.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 5715,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-MODULES.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 16924,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/SOURCES.md",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 10566,
+        "bytes": 4093,
         "ok": true
       },
       {
         "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/SUBSCRIBE.md",
         "status": 200,
         "sha256_matches": true,
-        "bytes": 12456,
+        "bytes": 13105,
         "ok": true
       },
       {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/research/ad-repair-evidence.json",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/docs/AD-ARCHITECTURE.md",
         "status": 200,
         "sha256_matches": true,
-        "bytes": 60243,
-        "ok": true
-      },
-      {
-        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/research/ad-architecture-audit.json",
-        "status": 200,
-        "sha256_matches": true,
-        "bytes": 9450,
+        "bytes": 98497,
         "ok": true
       }
     ]
-  },
-  "github_actions_result": "not independently checked"
+  }
 }
