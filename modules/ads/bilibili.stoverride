@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Source pins and independent licenses: docs/SOURCES.md
-name: 哔哩哔哩广告处理（可选）
-desc: AD-20261020.1；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。默认不导入，需设备验收。
+name: 哔哩哔哩广告处理（维护源）
+desc: AD-20261020.1；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。已纳入整合入口，无需单独导入；需设备验收。
 http:
   mitm:
   - app.bilibili.com

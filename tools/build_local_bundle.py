@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a device-local package from the single maintained project. Never reads private data."""
+"""Build the legacy offline package for compatibility. Never reads private data."""
 from __future__ import annotations
 import argparse
 import copy
@@ -63,13 +63,14 @@ def inline_scripts(config):
     return result
 
 def documents():
-    # The simple default uses the same basic domain policy as the maintained core.
+    # Preserve the legacy offline layout; current users use config/stash.yaml.
     main = flatten(merged())
     main.pop('http', None)
     main.pop('script-providers', None)
     # Put the one device-only field at the beginning of the editor.
     main = {'proxy-providers': main.pop('proxy-providers'), **main}
-    files = {MAIN: ('# 本地导入；只在iPhone替换下面的机场URL，然后选择总代理地区。\n'
+    files = {MAIN: ('# 旧离线包兼容文件；当前日常入口为config/stash.yaml，见docs/SUBSCRIBE.md。\n'
+                    '# 已有离线安装只在iPhone替换下面的机场URL，然后选择总代理地区。\n'
                     '# 已内嵌分流和基础广告规则；不需要下载本仓库远程规则。\n'
                     '# 代理连接/地区失效行为仍需Stash设备验收，初始总代理为REJECT。\n'
                     '# 第三方规则保持原许可；完整来源、许可和可读源码见同包“源码”目录。\n' + dump(main))}
@@ -78,17 +79,18 @@ def documents():
         if path.stem == 'expanded': continue
         original = load(path.relative_to(ROOT))
         local = inline_scripts(original)
-        # Keep per-App packages for independent switches when desired.
-        files['按App单独开关/' + path.name] = ('# 独立资源保持各自许可，见包内源码/licenses与docs/SOURCES.md。\n' + dump(local))
+        # Retain the original archive path for existing offline installations.
+        files['按App单独开关/' + path.name] = ('# 旧目录名为兼容保留；当前整合入口无需导入此文件。\n'
+                                            '# 独立资源保持各自许可，见包内源码/licenses与docs/SOURCES.md。\n' + dump(local))
         combined = merge_model(combined, local)
     combined['http']['mitm'] = list(dict.fromkeys(combined['http']['mitm']))
     enhanced = {'name': 'Jimmy 广告增强（本地整合）',
-                'desc': '40款专项一次导入；需设备自建CA。不解密银行支付。异常先关闭本覆写；逐款开关可改用包内单App覆写。', **combined}
+                'desc': '旧离线包兼容的专项合包；当前整合订阅已包含这些动作，不要重复导入。仅精确主机使用设备自建CA，效果待设备验收。', **combined}
     files[ADS] = ('# 由原40个独立模块组装，内嵌11份独立JS资源；不下载远程脚本。\n'
                   '# 不与“按App单独开关”中的同款重复启用；各独立资源按原许可分发。\n' + dump(enhanced))
     expanded = flatten(merged('modules/ads/expanded.stoverride'))
-    files[EXPANDED] = ('# 可选；完整规则顺序含局域网/系统例外，不能只把38,066条前插。\n'
-                       '# 本覆写优先于主配置、低于广告增强/私人白名单；默认不导入。\n' + dump({'name': 'Jimmy 扩展域名（本地快照）',
+    files[EXPANDED] = ('# 旧离线包兼容；完整规则顺序含局域网/系统例外，不能只把38,066条前插。\n'
+                       '# 只适用于旧离线主配置；当前整合订阅已引用扩展包，无需导入。\n' + dump({'name': 'Jimmy 扩展域名（本地快照）',
                                           'desc': '更多广告域名，可能误拦；不需要MITM。广告增强应在更高优先级。',
                                           'rules': expanded['rules']}))
     files['诊断（临时）.stoverride'] = dump(inline_scripts(load('modules/diagnostics/ads.stoverride')))

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build an opt-in, metadata-only HTTP probe from actual maintained matches.
 
-Use in isolation with App HTTP overrides disabled. It never changes requests,
+Use in isolation with normal HTTP actions disabled in a temporary local copy.
+It never changes requests,
 reads bodies/headers, makes requests, or writes device storage.
 """
 import argparse
@@ -39,7 +40,7 @@ def rendered():
 })();
 '''.replace('__ROUTES__', json.dumps(routes,ensure_ascii=False)).replace('__VERSION__', VERSION)
     config = {'name':'Jimmy 广告诊断（临时、只观察）',
-              'desc':VERSION+'；先暂停App专项，独立启用本覆写短测。仅固定状态，不改流量。用完关闭；不能凭无日志推断没进MITM。',
+              'desc':VERSION+'；仅临时排查：先在本地诊断副本停用正式HTTP动作并将广告组设为DIRECT，再单独启用探针。用完恢复原配置。步骤见docs/ADBLOCKING.md；无日志不能证明未进MITM。',
               'http':{'mitm':sorted(hosts), 'script':[{
                   'match':r'^https://(?:'+ '|'.join(re.escape(h) for h in sorted(hosts)) +r')(?::443)?/',
                   'name':'jimmy_ads_probe','type':'request','require-body':False,'timeout':5}]},

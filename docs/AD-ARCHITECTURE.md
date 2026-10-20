@@ -1,21 +1,21 @@
 # Stash 去广告：当前实现、修复证据与排查规格
 
-配置修订：**AD-20261020.2**；脚本逻辑仍为 **AD-20261020.1**。本次按用户要求将原订阅链接恢复为整合入口，刷新主配置即可携带全部已审阅专项，无需另行逐款安装。前轮修复从 `936fe45` 检查并保留基线之后的路由/HKG改动；本轮在已发布修复上调整入口承载方式，没有退回旧HTTP字段或脚本。本文和全部生成结果沿用原路径。**已修改运行配置、生成器与脚本；没有完成真实 iPhone 去广告验收。** 用户已确认 HTTP/MITM 开启、自建 CA 完全信任，并将 Stash、App 更新到最新版；本轮不再把未装证书当作统一解释。自动签到继续暂停。
+当前配置：**AD-20261020.2**；脚本：**AD-20261020.1**。用户已明确采用整合入口，并取消逐App独立开关要求。日常只使用原 `config/stash.yaml` 链接，刷新主配置即可取得全部已审阅专项和内嵌脚本，无需逐款安装。本次统一说明文字，不改变广告逻辑、分流、私人接入或上述版本。此前修复保留了路由/HKG改动，原生URL字段与脚本保护继续有效。**文件已发布，真实 iPhone 去广告效果仍未完成验收。** 用户已确认 HTTP/MITM 开启、自建 CA 完全信任，并表示会将 Stash、App 更新到最新版；不把未装证书当作统一解释。自动签到继续暂停。
 
-## 1. 已确认的问题、修复及证据边界
+## 1. 已修复问题与证据边界
 
-| 问题 | 这次实际修改 | 能确认到哪一层 |
+| 历史问题或调整 | 当前实现 | 能确认到哪一层 |
 |---|---|---|
 | 主配置没有广告 RULE-SET，expanded 只换了不存在的 provider | `build_subscription.py` 保留并引用唯一“基础广告”provider；AD-20261020.2默认指向扩展快照，其他分流继续按原顺序展开 | 扩展包有实际引用；局域网、Apple推送、Microsoft登录例外与手动放行仍优先。规则集数量不等于开屏效果 |
 | 配置用旧 `http.rewrite`，与用户核对的当前官方 `http.url-rewrite` 不同 | 修改真正的目录生成器与旧5款模块，统一生成 `url-rewrite` | 字段现与用户提供的当前官方调查一致；**旧 rewrite 是否仍为别名未验证，不能据此断言所有失败的根因** |
 | 固定空响应绕到 JS；联通图片改成普通拒绝 | 原生 reject、reject-200、reject-dict、reject-img 分别保留；删除共享空响应脚本及对应 provider/request handler | 静态动作、端点正反例和无重复处理通过；真实状态码、头部与 App 回退须 Stash 验收 |
 | 请求脚本依赖 `$response` 未定义；null/空对象会放行 | 固定响应不再经过请求 JS | 消除了该代码路径；**没有证明旧 Stash 真会传入 null/空对象** |
-| 关闭同名覆写，主配置里的专项仍运行 | AD-20261020.1曾拆出全部专项；本次按用户要求恢复整合，并明确整合入口没有逐App开关。40款独立覆写只用于main.yaml＋core高级分层 | 分层逐款移除模型用于高级模式，不能推广为整合入口有开关。整合入口应停用额外同名覆写以免重复 |
+| 安装步骤过多，逐App开关需求已取消 | 原订阅入口整合现有专项；40份模块文件保留为构建源与旧安装兼容文件 | 已满足整合入口的结构要求；不再将逐App开关列为缺失功能。额外同名覆写仍须停用，避免重复挂载 |
 | 脚本无版本、解析/结构问题难区分 | 统一自包含运行模板，临时参数诊断和独立只读探针 | 默认无日志；所有返回只调用一次 `$done`，固定状态不包含私人值。不是“没日志=没广告” |
 
-官方能力核对的实际限制：本轮常规和额外权限下请求官方站均得到云网络 403，**没有下载到当前正文**。`url-rewrite`、五种 reject 动作、Mock 和 HTTP/3 限制依据是本次用户提供的官方调查结论。`argument` 另有锁定版本 blackmatrix7 原生 Stash 模块声明作为参考。不能把这些说成已独立核实最低版本；目标为用户将更新的最新版，数字版本未提供。来源和未核实点见 [能力记录](STASH-CAPABILITIES.md)、[访问记录](../research/official-doc-access.json)。
+官方能力核对的实际限制：最近一次常规和额外权限下请求官方站均得到云网络 403，**没有下载到当前正文**。`url-rewrite`、五种 reject 动作、Mock 和 HTTP/3 限制依据是用户此前提供的官方调查结论。`argument` 另有锁定版本 blackmatrix7 原生 Stash 模块声明作为参考。不能把这些说成已独立核实最低版本；目标为用户将更新的最新版，数字版本未提供。来源和未核实点见 [能力记录](STASH-CAPABILITIES.md)、[访问记录](../research/official-doc-access.json)。
 
-## 2. 现在到底怎么接入与开关
+## 2. 统一入口与日常使用
 
 稳定主链接仍为：
 
@@ -23,29 +23,29 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.2默认整合全部40款已有App专项、11份内嵌响应JS、扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向38,066条已审阅扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包保留给高级分层模式。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
+主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.2默认整合全部40款已有App专项、11份内嵌响应JS、扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向38,066条已审阅扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
 
 11份JS通过`script-providers.<name>.content`内嵌，刷新主配置时同时取得脚本正文、主机、原生动作和handler，不再要求整合模式单独刷新JS。content只有历史原生示例作为参考，原注释仅推荐开发使用且示例已停止维护；当前官方正文不可访问，未核实当前原生执行或最低版本，完整证据见[能力记录](STASH-CAPABILITIES.md)。脚本逻辑未改，诊断仍显示AD-20261020.1；配置头部AD-20261020.2标识的是新的承载方式。
 
 首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部AD-20261020.2，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
 
-**整合入口没有逐App开关，也没有要另行开启的expanded按钮。** Stash界面的覆写启用项只控制额外导入的文件；关闭它不能撤销主配置的内置处理。“广告拦截→DIRECT”只控制域名路由，不能停止HTTP改写。需要独立控制时才选择原有main.yaml＋core高级分层方式；在该模式下导入40款原App覆写中的所需项，一款一份，才由覆写启停对应专项。
+**当前需求是整合入口，不设置逐App开关，也不另装expanded。** 主配置内的专项随主配置共同启用；额外覆写的启停不能撤销内置处理。“广告拦截→DIRECT”只控制域名路由，暂停HTTPS改写需关闭HTTP/MITM并重建连接。单App模块文件不是手机上的待安装清单。
 
-高级分层中，关闭某App覆写并重建连接会移除它声明的脚本、重写、MITM和专项路由；通用域名包或其他覆写仍可能影响同一主机。设备私人精确白名单可优先放行确认误拦的主机，但不会停止HTTP。共享主机被另一款使用时，MITM声明也可能保留。
+历史兼容说明：原main.yaml、core和单App文件继续用于构建、来源审计及已有分层安装，原路径不删除。其覆写合并检查仅证明项目模型中的声明关系，不构成当前用户的额外安装步骤。设备私人精确白名单仍可优先放行确认误拦的主机，但不会停止HTTP处理。
 
 整合生成时，专项域名规则放在LAN/关键直连例外之后、通用广告RULE-SET之前。扩展快照包含`flowplus.meituan.net`与`bootpreload.uve.weibo.com`的整域阻断，与本项目已有路径级处理冲突；主入口在广告位之前为两主机增加精确DIRECT例外，让已审阅URL处理接管，避免共享flowplus普通素材被整域拒绝。没有改上游快照、泛化白名单或声称已验证Stash原生执行顺序；这只是消除静态声明冲突。
 
-本地ZIP保留基础主配置和可选广告增强合包、单App文件，各文件使用相同源逻辑。它属于备选分层安装，不能重复叠加到整合订阅。离线expanded是含终止MATCH的整套有序路由快照，不能随意前插当普通广告列表。
+本地ZIP保留基础主配置和可选广告增强合包、单App文件，各文件使用相同源逻辑。它仅保留作旧安装兼容及离线维护，不能重复叠加到整合订阅。离线expanded是含终止MATCH的整套有序路由快照，不能随意前插当普通广告列表。
 
 ## 3. 优先五款的广告链逐项核查
 
-详细证据与每个分支的固定源码版本、行号、哈希见 [ad-repair-evidence.json](../research/ad-repair-evidence.json)。下面“实现”都指代码端，不等于当前 App 实测成功。全部测试样本为从固定源码重建的模拟结构；本轮没有用户真实脱敏响应样本。
+详细证据与每个分支的固定源码版本、行号、哈希见 [ad-repair-evidence.json](../research/ad-repair-evidence.json)。下面“实现”都指代码端，不等于当前 App 实测成功。已有测试样本为从固定源码重建的模拟结构；当前没有用户真实脱敏响应样本。
 
 | App/环节 | 当前实现与匹配范围 | 来源、正常业务影响与验证 |
 |---|---|---|
 | 淘宝：实时开屏、预加载展示数据 | 保留 `guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get` 的已有响应分支；只改 `splash_home_base` 内 `taobao-splash` 条目的次数、等待、冷热启动、时间窗和图片/视频 URL | fmz200 `myBlockAds.js` 85–115行。MTOP失败不改；不删除普通首页、券、订单；兼容数字/布尔/字符串、补缺省字段、幂等与未知结构测试 |
 | 淘宝：明确广告场景的补充请求 | 新增 `acs.m.taobao.com/gw/mtop.etao.noah.query/...` 且查询含独立 `tao_splash` 标记时原生空 JSON | fmz200合集4431行。没有这个广告标记的相同共享 API 不匹配；正例、普通场景、近似路径、伪域名测试 |
-| 淘宝：cloudvideo 视频 | 已读 `cloudvideo.video.query` 上游63–83行，**未泛化启用** | 上游对整个响应清资源/时长，接口可能也用于商品视频；缺少当前开屏场景判别证据。本轮不能证明视频开屏完整覆盖，不能改为整个视频 API 拒绝 |
+| 淘宝：cloudvideo 视频 | 已读 `cloudvideo.video.query` 上游63–83行，**未泛化启用** | 上游对整个响应清资源/时长，接口可能也用于商品视频；缺少当前开屏场景判别证据。当前不能证明视频开屏完整覆盖，不能改为整个视频 API 拒绝 |
 | 淘宝：活动弹层/素材 | 已读 `poplayer.template.alibaba.com` 分支126–146行，**未泛化启用**；开屏主分支会清已识别广告条目的素材 URL | 上游只看通用活动结构，也可能清正常促销/领券；缺少广告专用判别。不封整域或整个活动 JSON |
 | 微博：实时与预载 | `bootrealtime.../v*/ad/realtime`、`bootpreload.../v*/ad/preload` 改原生 reject-dict，支持结尾 `/` | fmz200 `weibo.snippet` 128–129行。不再等 JS 返回或依赖请求 `$response` 形态；近似路径不匹配 |
 | 微博：SDK 广告/素材 | 新增精确广告主机 `sdkapp.uve.weibo.com`、`wbapp.uve.weibo.com`、`adimg.uve.weibo.com`、`adimg.vue.weibo.com` 的广告组路由 | 上游域名列表及 sdkad/wbpullad 路径旁证。SDK这两主机由上游列为广告专用，采用域名路由，**没有再重复添加相同主机 HTTP handler**；未拦通用微博 API/头像主机 |
@@ -84,7 +84,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 - 实际原生参考使用 `$response.status`。数字200和字符串"200"接受；错误、完整HTTP状态行或非预期形态不猜测放行修改。只有statusCode的形态输出unsupported-status；两者都不存在时沿用旧无状态字段保护分支，仍要求JSON与已知业务结构。具体原生对象形态待真机记录。
 - 保留业务错误/MTOP错误，空修改对象 `$done({})` 保留原响应；产生修改只返回 `{body: JSON字符串}`，不手动伪造压缩/长度头。Stash自动重编码和头部处理仍是原生验收项。
 - try/finally确保本地执行恰好调用一次`$done`。没有异步请求/重试。**原生5秒超时由Stash记录，JS被终止后不能自己补发timeout日志或保证回退**。
-- 临时诊断：整合模式在设备创建主配置的**临时诊断副本**，仅将目标HTTP脚本条目的`argument: diagnostic=0`改为1，选中副本并保持私人层关联。高级分层模式则临时复制目标App覆写、停用原件，只启用副本。完成后删除/停用临时副本，切回原远程配置/覆写；不要把副本当长期更新入口。
+- 临时诊断：整合模式在设备创建主配置的**临时诊断副本**，仅将目标HTTP脚本条目的`argument: diagnostic=0`改为1，选中副本并保持私人层关联。完成后删除/停用临时副本，切回原远程主配置；不要把副本当长期更新入口。旧分层安装的诊断才涉及单独覆写，当前日常使用无需进行这种操作。
 
 日志示例：`[JimmyAds][taobao][AD-20261020.1] changed`。状态仅为固定枚举：url-unmatched、unsupported-method、body-unavailable、body-too-large、http-error、unsupported-status、non-json、parse-error、unsupported-schema、unchanged、changed、exception。没有异常详情、账号值、完整URL/查询或正文。默认参数0完全不记录，开启时每次调用最多一条；测试包含注入私人哨兵及故障日志设施。
 
@@ -98,10 +98,10 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/diagnostics/ads.stoverride
 ```
 
-1. 整合入口需在设备创建临时本地诊断副本，清空其`http.url-rewrite`和`http.script`数组，广告组暂选DIRECT，并停用额外广告覆写；保留分流、私人接入和HTTP/MITM。仅关闭同名覆写不能隔离内置处理。高级分层模式可直接暂关App专项/整合广告增强并将广告组DIRECT。探针只观察已审阅45个精确主机，不解密全域名。
+1. 整合入口需在设备创建临时本地诊断副本，清空其`http.url-rewrite`和`http.script`数组，广告组暂选DIRECT，并停用额外广告覆写；保留分流、私人接入和HTTP/MITM。仅关闭同名覆写不能隔离内置处理。旧分层安装可通过暂停原广告覆写隔离处理；这不是当前整合入口的操作步骤。探针只观察已审阅45个精确主机，不解密全域名。
 2. 启用诊断覆写，刷新其`jimmy_ads_probe`脚本，重建连接，冷启动目标App；诊断会输出固定 `request-url-matched` 或 `request-url-unmatched`，不改变请求。记录广告位置、时间及模块/版本/状态。
 3. 在Stash本机连接/HTTP记录中查看目标主机、端口、TCP或UDP、是否已解密；**不要分享完整记录**。没有探针日志可能是资源未下载、脚本未挂载、没发新请求、未进HTTP、缓存或不在当前主机列表，不能单凭无日志判定原因。
-4. 关闭探针，恢复原配置中的正式处理与广告组选择；如需响应日志，按上节另做仅目标handler参数为1的临时副本。高级分层则恢复目标App覆写。探针不与正式改写竞争；不能假定Stash不同改写步骤必定按同一顺序执行。
+4. 关闭探针，恢复原配置中的正式处理与广告组选择；如需响应日志，按上节另做仅目标handler参数为1的临时副本。旧分层安装才恢复其原广告覆写。探针不与正式改写竞争；不能假定Stash不同改写步骤必定按同一顺序执行。
 5. 原生固定动作不运行响应JS，在Stash本机看其重写命中；响应handler看下面决策表。排查完成关闭探针和临时诊断。
 
 | 观察到的证据 | 可以判断的方向 | 不能直接下的结论 |
@@ -117,30 +117,32 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 
 ## 7. HTTP/3、缓存、端口与更新
 
-当前官方调查指出 HTTP/3 不进入改写引擎。本轮没有真实连接证据，**未添加任何UDP阻断**，也不把`h3.open.taou.com`的名字当作QUIC证明。`force-http-engine`不能被宣传为解密HTTP/3。
+当前官方调查指出 HTTP/3 不进入改写引擎。当前没有真实连接证据，**未添加任何UDP阻断**，也不把`h3.open.taou.com`的名字当作QUIC证明。`force-http-engine`不能被宣传为解密HTTP/3。
 
-如果在Stash本机确实观察到某广告主机UDP443，先记录该主机/端口/发生时间，再制作只针对该主机的UDP443对照规则，并验证是否回退TCP和正常业务；本轮没有证据，因此没有发布未经确认语法/协议适用性的默认限制。不能全局禁UDP、通配MITM、泛解密银行支付域名或关闭TLS验证。显式非443端口、IP直连、证书固定、应用层加密均可能超出现有处理，不擅自宣称覆盖。
+如果在Stash本机确实观察到某广告主机UDP443，先记录该主机/端口/发生时间，再制作只针对该主机的UDP443对照规则，并验证是否回退TCP和正常业务；当前没有证据，因此没有发布未经确认语法/协议适用性的默认限制。不能全局禁UDP、通配MITM、泛解密银行支付域名或关闭TLS验证。显式非443端口、IP直连、证书固定、应用层加密均可能超出现有处理，不擅自宣称覆盖。
 
-区分新广告与预加载：先开启模块使用一段时间，再冷启动、后台返回、再次启动进行多轮观察。已下载素材可在没有新网络请求时展示；网络规则不能删除App私有文件。优先用App自己的清缓存入口，保留登录/重要数据，不默认要求卸载重装。
+区分新广告与预加载：先使用已启用的整合配置一段时间，再冷启动、后台返回、再次启动进行多轮观察。已下载素材可在没有新网络请求时展示；网络规则不能删除App私有文件。优先用App自己的清缓存入口，保留登录/重要数据，不默认要求卸载重装。
 
 | 层 | 更新操作 | 会不会带入新处理 |
 |---|---|---|
-| 公共主配置 | 在原配置列表刷新同一URL | 主机、原生动作、handler和11份内嵌JS一并更新；扩展provider默认引用也在这里。不承诺后台自动更新整份配置 |
-| App覆写（仅高级分层） | 刷新原远程覆写，并确认关联main.yaml＋core | 新主机、原生动作、handler、参数/版本在这里；整合入口不要另加。本地编辑副本不会自动跟随远程声明 |
-| 基础/扩展规则集 | provider间隔86400秒请求刷新，必要时手动更新 | 只有最终配置中仍有RULE-SET引用才起效；本轮已修这个引用 |
-| JS provider | 整合入口内嵌，随主配置更新；高级分层远程JS间隔86400秒，必要时手动刷新 | 分层单刷新JS不能添加新MITM/handler；内嵌JS不会独立后台更新 |
+| 公共主配置 | 建议每周手动刷新原URL一次；发布修复后立即刷新 | 主机、原生动作、handler和11份内嵌JS一并更新；扩展provider默认引用也在这里。不承诺后台自动更新整份配置 |
+| 旧App覆写（仅历史兼容） | 仅已有旧分层安装仍分别更新覆写 | 当前整合入口已包含这些声明，不新增或叠加；本地副本不会自动跟随远程声明 |
+| 远程广告规则集 | 建议保持现有86400秒，即24小时自动尝试刷新；下载错误时手动刷新 | 整合入口默认引用扩展快照，存在真实RULE-SET；这是刷新间隔，不是每日北京时间零点执行保证 |
+| 广告JS | 随整合主配置一起更新，无需独立刷新 | 内嵌JS不会独立后台更新；旧分层远程JS的86400秒刷新机制仅用于历史兼容 |
 | 本地静态包/私人节点快照 | 重新用当前源构建/导入，保留设备私人信息 | 静态规则/内嵌JS不是远程自动更新；私人节点快照不自动更新机场 |
-| 私人机场 | 原本机provider仍由本人URL更新 | 不继承机场响应中的分流/DNS；没有把私人订阅写进公共项目 |
+| 私人机场 | 建议保持现有86400秒，即24小时自动尝试刷新；节点异常或机场通知变更时手动刷新 | 不继承机场响应中的分流/DNS；机场更换URL时仍须本人在设备修改，不能自动发现新URL |
+
+以上频率统一见[更新教程](UPDATES.md)。7个节点池的1800秒检查是30分钟测速，不是更新规则。规则集只下载本仓库已发布快照；建议维护者每周人工检查上游一次，有已确认失效时及时检查，审核许可与代码后再发布。当前没有自动审查并同步上游的定时任务。
 
 ## 8. 验收、误伤与回退
 
-验证分三层：静态配置/源与生成结果；源代码重建模拟样本；真实iPhone Stash解析、命中及广告效果。本轮完成前两层，**第三层未运行**。官方站403、数字版本缺失、无真实脱敏响应都记录为限制，不用62个模拟测试或38,066条规则替代效果判断。精确运行记录见 [PROGRESS](../PROGRESS.md)。
+验证分三层：静态配置/源与生成结果；源代码重建模拟样本；真实iPhone Stash解析、命中及广告效果。已有检查覆盖前两层，**第三层未运行**。官方站403、数字版本缺失、无真实脱敏响应都记录为限制，不用62个模拟测试或38,066条规则替代效果判断。精确运行记录见 [PROGRESS](../PROGRESS.md)。
 
-手机最小验收顺序：整合入口已载入全部已有专项，先依次观察淘宝、微博、小红书，然后美团、京东及其他App；高级分层才逐个启用模块。每款分别检查冷启动、后台返回、正常使用触发预加载后再启动；记录广告是否消失、有无空白页/倒计时/更长加载，并检查登录、搜索、消息、视频、正常领券等业务。广告有频控，至少多次观察并结合命中记录；分层模式可关模块作对照，整合模式需用已隔离处理的临时诊断副本或原来可用的备份配置对照。单次没有广告不能判成功。
+手机最小验收顺序：整合入口已载入全部已有专项，先依次观察淘宝、微博、小红书，然后美团、京东及其他App；观察顺序不改变整合配置的已启用范围。每款分别检查冷启动、后台返回、正常使用触发预加载后再启动；记录广告是否消失、有无空白页/倒计时/更长加载，并检查登录、搜索、消息、视频、正常领券等业务。广告有频控，至少多次观察并结合命中记录；可用已隔离处理的临时诊断副本或原来可用的备份配置对照。单次没有广告不能判成功。
 
 需要反馈时只提供：App名和广告位置、冷启动/后台/预载场景、是否空白/倒计时、对应固定版本/状态日志，以及仅包含主机、端口、协议、路径（**去掉整个查询**）的手工摘录。若更新后仍异常，再记录当时数字版本帮助复现。不要发送私人完整配置、原始日志、Cookie、token、证书私钥或响应正文。用户将全部更新，当前不再重复索取版本。
 
-整合入口误伤时，先将广告组DIRECT判断域名拦截是否相关；它不会停止HTTP。需快速恢复时切换手机上原来可用的配置备份，保留私人覆写并核对关联/地区选择。没有备份且急需用该App时，可暂关Stash作对照，但会同时停止本项目代理分流和去广告。需要长期仅停某App时改用高级分层；该模式才可关闭对应App覆写或expanded，本地广告增强合包也仅支持总开关。代码基线`936fe45`可供维护者取历史公共文件，但回退到它会恢复本轮已确认的旧接入缺陷，不应作为长期方案。
+整合入口误伤时，先将广告组DIRECT判断域名拦截是否相关；它不会停止HTTP。需快速恢复时切换手机上原来可用的配置备份，保留私人覆写并核对关联/地区选择。没有备份且急需用该App时，可暂关Stash作对照，但会同时停止本项目代理分流和去广告。用户已取消逐App开关需求；当前恢复步骤以整体域名拦截、HTTP/MITM和可用配置备份为单位，不要求另建多份App覆写。代码基线`936fe45`可供维护者取历史公共文件，但回退到它会恢复本轮已确认的旧接入缺陷，不应作为长期方案。
 
 <!-- GENERATED-AD-SPEC -->
 
@@ -162,50 +164,50 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/dia
 | mitm_exact_hosts | 45 |
 | optional_probe_js | 1 |
 
-公共主配置已整合以下全部40款专项，11份响应JS通过content内嵌。此表是来源与范围目录，不是整合入口的逐App开关；独立覆写仅用于main.yaml＋core高级分层。探针另列、默认关闭。
+公共主配置已整合以下全部40款专项，11份响应JS通过content内嵌。此表列出构建来源与处理范围，用户不需逐款导入；模块原路径保留作维护和旧安装兼容。逐App开关已取消需求，探针另列、默认关闭。
 
-| App模块 | 源路径/高级分层覆写 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
+| App专项 | 维护源路径 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
 |---|---|---|---|---|---|
-| 58同城广告专项（可选） | [58tongcheng](../modules/ads/58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 home/advertising 和 appadv；保留职位、联系与发布。独立启停；需设备验收。 |
-| 阿里云盘广告专项（可选） | [alipan](../modules/ads/alipan.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。独立启停；需设备验收。 |
-| 高德地图广告专项（可选） | [amap](../modules/ads/amap.stoverride) | 2 | 2 | 0 | AD-20261020.1；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。独立启停；需设备验收。 |
-| 百度网盘广告专项（可选） | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) | 0 | 1 | 0 | AD-20261020.1；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。独立启停；需设备验收。 |
-| 哔哩哔哩广告处理（可选） | [bilibili](../modules/ads/bilibili.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。默认不导入，需设备验收。 |
-| 菜鸟广告专项（可选） | [cainiao](../modules/ads/cainiao.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。独立启停；需设备验收。 |
-| 中国移动广告专项（可选） | [cmcc](../modules/ads/cmcc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。独立启停；需设备验收。 |
-| 携程旅行广告专项（可选） | [ctrip](../modules/ads/ctrip.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。独立启停；需设备验收。 |
-| 大麦广告专项（可选） | [damai](../modules/ads/damai.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。独立启停；需设备验收。 |
-| 大众点评广告专项（可选） | [dianping](../modules/ads/dianping.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。独立启停；需设备验收。 |
-| 东方财富广告专项（可选） | [eastmoney](../modules/ads/eastmoney.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。独立启停；需设备验收。 |
-| 华住会广告专项（可选） | [huazhu](../modules/ads/huazhu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。独立启停；需设备验收。 |
-| 京东金融广告专项（可选） | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。独立启停；需设备验收。 |
-| 京东广告专项（可选） | [jingdong](../modules/ads/jingdong.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。独立启停；需设备验收。 |
-| 肯德基广告专项（可选） | [kfc](../modules/ads/kfc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。独立启停；需设备验收。 |
-| 猎聘广告专项（可选） | [liepin](../modules/ads/liepin.stoverride) | 0 | 1 | 0 | AD-20261020.1；明确命名的 live.get-ad-cards；不拦职位推荐或投递。独立启停；需设备验收。 |
-| 瑞幸咖啡广告专项（可选） | [luckin](../modules/ads/luckin.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。独立启停；需设备验收。 |
-| 脉脉广告专项（可选） | [maimai](../modules/ads/maimai.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 adshow；保留礼物、消息和普通推荐。独立启停；需设备验收。 |
-| 麦当劳广告专项（可选） | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 portal/home/splash；保留点餐、支付、领券。独立启停；需设备验收。 |
-| 美团广告专项（可选） | [meituan](../modules/ads/meituan.stoverride) | 0 | 3 | 1 | AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。独立启停；需设备验收。 |
-| 米家广告专项（可选） | [mijia](../modules/ads/mijia.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。独立启停；需设备验收。 |
-| 网易邮箱大师广告专项（可选） | [netease-mail](../modules/ads/netease-mail.stoverride) | 0 | 2 | 0 | AD-20261020.1；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。独立启停；需设备验收。 |
-| 网易云音乐广告专项（可选） | [netease-music](../modules/ads/netease-music.stoverride) | 0 | 3 | 0 | AD-20261020.1；仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文。独立启停；需设备验收。 |
-| 拼多多广告专项（可选） | [pinduoduo](../modules/ads/pinduoduo.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 cappuccino/splash；保留首页、买菜、红包和领券。独立启停；需设备验收。 |
-| 铁路12306广告专项（可选） | [railway12306](../modules/ads/railway12306.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。独立启停；需设备验收。 |
-| 淘宝开屏广告处理（可选） | [taobao](../modules/ads/taobao.stoverride) | 0 | 1 | 1 | AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。待真机验收。 |
-| 淘票票广告专项（可选） | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。独立启停；需设备验收。 |
-| 贴吧开屏广告处理（可选） | [tieba](../modules/ads/tieba.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。默认不导入，需设备验收。 |
-| UC浏览器广告专项（可选） | [uc](../modules/ads/uc.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。独立启停；需设备验收。 |
-| 航旅纵横广告专项（可选） | [umetrip](../modules/ads/umetrip.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。独立启停；需设备验收。 |
-| 中国联通广告专项（可选） | [unicom](../modules/ads/unicom.stoverride) | 0 | 2 | 0 | AD-20261020.1；专用启动/广告接口；保留 accountListData、客户端配置和缴费。独立启停；需设备验收。 |
-| 云闪付广告专项（可选） | [unionpay](../modules/ads/unionpay.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。独立启停；需设备验收。 |
-| 微信广告专项（可选） | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。独立启停；需设备验收。 |
-| 微博开屏广告处理（可选） | [weibo](../modules/ads/weibo.stoverride) | 4 | 2 | 1 | AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收。 |
-| WPS Office广告专项（可选） | [wps](../modules/ads/wps.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。独立启停；需设备验收。 |
-| 下厨房广告专项（可选） | [xiachufang](../modules/ads/xiachufang.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。独立启停；需设备验收。 |
-| 闲鱼广告专项（可选） | [xianyu](../modules/ads/xianyu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。独立启停；需设备验收。 |
-| 小红书开屏广告处理（可选） | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | 4 | 0 | 1 | AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。待真机验收。 |
-| 小宇宙广告专项（可选） | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。独立启停；需设备验收。 |
-| 知乎广告专项（可选） | [zhihu](../modules/ads/zhihu.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告。独立启停；需设备验收。 |
+| 58同城广告专项（维护源） | [58tongcheng](../modules/ads/58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 home/advertising 和 appadv；保留职位、联系与发布。已纳入整合入口，无需单独导入；需设备验收。 |
+| 阿里云盘广告专项（维护源） | [alipan](../modules/ads/alipan.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 高德地图广告专项（维护源） | [amap](../modules/ads/amap.stoverride) | 2 | 2 | 0 | AD-20261020.1；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。已纳入整合入口，无需单独导入；需设备验收。 |
+| 百度网盘广告专项（维护源） | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) | 0 | 1 | 0 | AD-20261020.1；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。已纳入整合入口，无需单独导入；需设备验收。 |
+| 哔哩哔哩广告处理（维护源） | [bilibili](../modules/ads/bilibili.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 菜鸟广告专项（维护源） | [cainiao](../modules/ads/cainiao.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。已纳入整合入口，无需单独导入；需设备验收。 |
+| 中国移动广告专项（维护源） | [cmcc](../modules/ads/cmcc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 携程旅行广告专项（维护源） | [ctrip](../modules/ads/ctrip.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 大麦广告专项（维护源） | [damai](../modules/ads/damai.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。已纳入整合入口，无需单独导入；需设备验收。 |
+| 大众点评广告专项（维护源） | [dianping](../modules/ads/dianping.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。已纳入整合入口，无需单独导入；需设备验收。 |
+| 东方财富广告专项（维护源） | [eastmoney](../modules/ads/eastmoney.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。已纳入整合入口，无需单独导入；需设备验收。 |
+| 华住会广告专项（维护源） | [huazhu](../modules/ads/huazhu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。已纳入整合入口，无需单独导入；需设备验收。 |
+| 京东金融广告专项（维护源） | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。已纳入整合入口，无需单独导入；需设备验收。 |
+| 京东广告专项（维护源） | [jingdong](../modules/ads/jingdong.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 肯德基广告专项（维护源） | [kfc](../modules/ads/kfc.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 猎聘广告专项（维护源） | [liepin](../modules/ads/liepin.stoverride) | 0 | 1 | 0 | AD-20261020.1；明确命名的 live.get-ad-cards；不拦职位推荐或投递。已纳入整合入口，无需单独导入；需设备验收。 |
+| 瑞幸咖啡广告专项（维护源） | [luckin](../modules/ads/luckin.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 脉脉广告专项（维护源） | [maimai](../modules/ads/maimai.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 adshow；保留礼物、消息和普通推荐。已纳入整合入口，无需单独导入；需设备验收。 |
+| 麦当劳广告专项（维护源） | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 0 | 1 | 0 | AD-20261020.1；专用 portal/home/splash；保留点餐、支付、领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 美团广告专项（维护源） | [meituan](../modules/ads/meituan.stoverride) | 0 | 3 | 1 | AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。已纳入整合入口，无需单独导入；需设备验收。 |
+| 米家广告专项（维护源） | [mijia](../modules/ads/mijia.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。已纳入整合入口，无需单独导入；需设备验收。 |
+| 网易邮箱大师广告专项（维护源） | [netease-mail](../modules/ads/netease-mail.stoverride) | 0 | 2 | 0 | AD-20261020.1；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。已纳入整合入口，无需单独导入；需设备验收。 |
+| 网易云音乐广告专项（维护源） | [netease-music](../modules/ads/netease-music.stoverride) | 0 | 3 | 0 | AD-20261020.1；仅3个精确主机的 api/ad 或 eapi/ad 路径候选；不解密 EAPI 正文。已纳入整合入口，无需单独导入；需设备验收。 |
+| 拼多多广告专项（维护源） | [pinduoduo](../modules/ads/pinduoduo.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅 cappuccino/splash；保留首页、买菜、红包和领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 铁路12306广告专项（维护源） | [railway12306](../modules/ads/railway12306.stoverride) | 1 | 0 | 0 | AD-20261020.1；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。已纳入整合入口，无需单独导入；需设备验收。 |
+| 淘宝开屏广告处理（维护源） | [taobao](../modules/ads/taobao.stoverride) | 0 | 1 | 1 | AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。 |
+| 淘票票广告专项（维护源） | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。已纳入整合入口，无需单独导入；需设备验收。 |
+| 贴吧开屏广告处理（维护源） | [tieba](../modules/ads/tieba.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。已纳入整合入口，无需单独导入；需设备验收。 |
+| UC浏览器广告专项（维护源） | [uc](../modules/ads/uc.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 航旅纵横广告专项（维护源） | [umetrip](../modules/ads/umetrip.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。已纳入整合入口，无需单独导入；需设备验收。 |
+| 中国联通广告专项（维护源） | [unicom](../modules/ads/unicom.stoverride) | 0 | 2 | 0 | AD-20261020.1；专用启动/广告接口；保留 accountListData、客户端配置和缴费。已纳入整合入口，无需单独导入；需设备验收。 |
+| 云闪付广告专项（维护源） | [unionpay](../modules/ads/unionpay.stoverride) | 2 | 0 | 0 | AD-20261020.1；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 微信广告专项（维护源） | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 0 | 0 | 1 | AD-20261020.1；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。已纳入整合入口，无需单独导入；需设备验收。 |
+| 微博开屏广告处理（维护源） | [weibo](../modules/ads/weibo.stoverride) | 4 | 2 | 1 | AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。 |
+| WPS Office广告专项（维护源） | [wps](../modules/ads/wps.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 下厨房广告专项（维护源） | [xiachufang](../modules/ads/xiachufang.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。已纳入整合入口，无需单独导入；需设备验收。 |
+| 闲鱼广告专项（维护源） | [xianyu](../modules/ads/xianyu.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。已纳入整合入口，无需单独导入；需设备验收。 |
+| 小红书开屏广告处理（维护源） | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | 4 | 0 | 1 | AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。已纳入整合入口，无需单独导入；待真机验收。 |
+| 小宇宙广告专项（维护源） | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) | 0 | 1 | 0 | AD-20261020.1；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。已纳入整合入口，无需单独导入；需设备验收。 |
+| 知乎广告专项（维护源） | [zhihu](../modules/ads/zhihu.stoverride) | 0 | 2 | 0 | AD-20261020.1；仅开屏、顶部横幅与 ad-style-service 候选；不包含全部回答和信息流广告。已纳入整合入口，无需单独导入；需设备验收。 |
 
 ## 10. 精确原生声明与基础规则原文
 
@@ -406,7 +408,7 @@ http:
     argument: diagnostic=0
 ```
 
-高级分层默认基础payload（无需MITM）；整合入口默认使用上方provider指向的扩展快照，以下38条不同时叠加：
+旧分层安装保留的基础payload（无需MITM）；当前整合入口默认使用上方provider指向的扩展快照，以下38条仅供维护对照，不同时叠加：
 
 ```yaml
 payload:
@@ -456,8 +458,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `72f361b5d1a83ce0b1dcf3607c9bd1109c90a823be9598fd16f82434325a662d` |
-| [config/core.stoverride](../config/core.stoverride) | `9691f2b4386c0a0978d9d34e05865616a619105a24c127d2fa1a4986ecd88e48` |
+| [config/stash.yaml](../config/stash.yaml) | `6a57834a0512f3b89a3644980568f4708920664ae464456f3147514e7ac99afc` |
+| [config/core.stoverride](../config/core.stoverride) | `e64bfa01488b4579e03accb239e5688f004bcfab8c2ccd40d12a21fa6a715b94` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `0af78f79d83532318c23c3a442c31927e16dad43163640178aa8b737b3ae3a79` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `729a277242f2bbbe626c34716e4eddff031c161d3011b8f39e7e346799991aa8` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `54b416c99de3dd6d401cac10481883bafcebf677e18981383338384a007bc43e` |
@@ -476,7 +478,7 @@ payload:
 
 ## 12. 当前全部运行JS原文
 
-其中11份是整合入口内嵌的响应处理，高级App覆写则远程加载；另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。
+其中11份是整合入口内嵌的响应处理；模块中的远程加载声明仅保留作旧安装兼容。另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。
 
 ### alipan.js
 

@@ -13,7 +13,7 @@ URL = RAW + OUTPUT
 VERSION = 'AD-20261020.2'
 
 def integrated():
-    """One maintained entry; the existing layered install remains opt-in."""
+    """The user-facing integrated entry; module files remain maintained sources."""
     modules = sorted(p.relative_to(ROOT) for p in (ROOT / 'modules/ads').glob('*.stoverride')
                      if p.stem != 'expanded')
     config = merged(*modules, 'modules/ads/expanded.stoverride')
@@ -38,9 +38,9 @@ def render():
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；18个原策略组、DNS、私人订阅接入保留。\n'
             '# 已整合40款现有专项与11份响应JS，扩展域名规则默认启用；诊断默认关闭。\n'
-            '# 刷新本配置即可更新专项与内嵌JS；域名规则集由Stash每日检查，也可手动刷新。\n'
+            '# 建议每周手动刷新本配置，修复发布后立即刷新；规则集与机场每24小时尝试刷新。\n'
             '# 不需另加App或expanded覆写；停用已额外添加的广告覆写，保留私人订阅/白名单。\n'
-            '# 本整合入口无逐App开关；需要独立开关时才使用原main.yaml+core分层方式。\n'
+            '# 当前需求统一为整合入口，不再要求逐App开关；原模块保留作维护来源与旧安装兼容。\n'
             '# 各独立模块/JS保持原许可；来源与完整源码：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
             '# 私人机场URL只在设备本地覆写，不放到GitHub。总代理首次REJECT，需选择出口。\n'
             '# 当前仅离线验证；真实Stash解析、MITM、脚本执行与广告效果待iPhone验收。\n'

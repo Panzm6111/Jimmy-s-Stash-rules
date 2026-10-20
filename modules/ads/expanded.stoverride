@@ -1,5 +1,5 @@
-name: 扩展域名广告（可选）
-desc: 高级分层模式替换基础规则集；整合主入口已默认包含，不需另加。两条精确直连例外保留专项HTTP处理与普通素材。
+name: 扩展域名广告（维护源）
+desc: 供生成器与旧分层安装兼容使用；整合入口已默认包含，无需单独导入。两条精确直连例外保留专项HTTP处理与普通素材。
 rule-providers:
   基础广告:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml

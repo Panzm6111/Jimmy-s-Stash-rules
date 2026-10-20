@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Source pins and independent licenses: docs/SOURCES.md
-name: 淘宝开屏广告处理（可选）
-desc: AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。待真机验收。
+name: 淘宝开屏广告处理（维护源）
+desc: AD-20261020.1；专用开屏展示控制、明确tao_splash场景；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。
 http:
   mitm:
   - guide-acs.m.taobao.com

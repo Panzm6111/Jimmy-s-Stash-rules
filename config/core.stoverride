@@ -1,5 +1,5 @@
 name: Jimmy 公共分流
-desc: 与本机 main.yaml 和私人订阅覆写搭配；总代理首次需选出口；海外AI默认美国，Apple默认直连。
+desc: 维护用公共分流源与旧分层安装兼容；整合入口已包含，无需另加。总代理首次需选出口；海外AI默认美国，Apple默认直连。
 proxy-groups:
 - name: 总代理
   type: select

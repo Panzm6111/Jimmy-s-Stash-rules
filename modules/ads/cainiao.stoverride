@@ -2,8 +2,8 @@
 # Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
-name: 菜鸟广告专项（可选）
-desc: AD-20261020.1；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。独立启停；需设备验收。
+name: 菜鸟广告专项（维护源）
+desc: AD-20261020.1；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。已纳入整合入口，无需单独导入；需设备验收。
 script-providers:
   jimmy_cainiao_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js

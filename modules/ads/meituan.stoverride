@@ -2,8 +2,8 @@
 # Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
-name: 美团广告专项（可选）
-desc: AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。独立启停；需设备验收。
+name: 美团广告专项（维护源）
+desc: AD-20261020.1；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖。已纳入整合入口，无需单独导入；需设备验收。
 script-providers:
   jimmy_meituan_ads:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js

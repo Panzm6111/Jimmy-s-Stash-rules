@@ -12,8 +12,8 @@ def rendered(catalog):
     result = {}
     for item in catalog['modules']:
         source = catalog['sources'][item['source']]
-        config = {'name': item['app'] + '广告专项（可选）',
-                  'desc': 'AD-20261020.1；' + item['scope'] + '。独立启停；需设备验收。'}
+        config = {'name': item['app'] + '广告专项（维护源）',
+                  'desc': 'AD-20261020.1；' + item['scope'] + '。已纳入整合入口，无需单独导入；需设备验收。'}
         if item['domains']:
             config['rules'] = ['DOMAIN,' + host + ',广告拦截' for host in item['domains']]
         http = {}

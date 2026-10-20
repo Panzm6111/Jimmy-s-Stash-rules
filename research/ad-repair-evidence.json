@@ -1,4 +1,5 @@
 {
+  "record_status": "Historical evidence for AD-20261020.1 repair. Scope text and source excerpts retain their original wording; they are not current installation instructions. Current use is the integrated config/stash.yaml; per-App switches are no longer required. See README.md and docs/AD-ARCHITECTURE.md.",
   "revision": "AD-20261020.1",
   "checked_at": "2026-10-20",
   "baseline": "d8ea21e",

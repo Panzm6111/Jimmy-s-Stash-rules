@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Source pins and independent licenses: docs/SOURCES.md
-name: 小红书开屏广告处理（可选）
-desc: AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。待真机验收。
+name: 小红书开屏广告处理（维护源）
+desc: AD-20261020.1；开屏时间、启动配置splash、专用广告素材、v6首页明确赞助项；不改下载/水印/画质/用户信息。已纳入整合入口，无需单独导入；待真机验收。
 http:
   mitm:
   - edith.xiaohongshu.com

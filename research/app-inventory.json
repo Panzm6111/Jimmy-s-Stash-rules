@@ -14,7 +14,7 @@
     "Maasea/sgmodule@65075cdb388fc5e3094afd7e7314c67b243f3525 的YouTube实际脚本、模块、许可及WeRead模块",
     "NobyDa/Script@0b8d083d444f4476700cb9d5d059c07b42da85eb 的微信公众号脚本与GPL-3.0许可"
   ],
-  "limits": "没有方案只表示本次有限来源未找到可审核实现，不证明整个互联网没有。用户反馈现有去广告整体效果不足；尚未提供逐款接口命中或修改结果，所以不能把某个模块直接记为有效或断定某端点已经失效。域名路由不能识别全部App流量，静态测试不能替代手机效果和正常功能验收。",
+  "limits": "没有方案只表示本次有限来源未找到可审核实现，不证明整个互联网没有。用户曾反馈旧版去广告整体效果不足；当前整合版尚未提供逐款接口命中或修改结果，所以不能把某个模块直接记为有效或断定某端点已经失效。域名路由不能识别全部App流量，静态测试不能替代手机效果和正常功能验收。",
   "apps": [
     {
       "index": 1,
@@ -78,7 +78,7 @@
         "modules/ads/baidu-netdisk.stoverride"
       ],
       "scope": "网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -108,7 +108,7 @@
       "modules": [
         "modules/ads/bilibili.stoverride"
       ],
-      "scope": "仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。默认不导入，需设备验收。",
+      "scope": "仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。已纳入整合入口，需设备验收。",
       "reason": "原源代码含2023年的JSON路径/结构；上游仓库有新提交不证明这些端点在当前iOS版本仍使用。现有文件保留候选，不能据此宣称B站全广告有效去除。",
       "public_source_matches": [],
       "device_tested": false
@@ -197,7 +197,7 @@
         "modules/ads/damai.stoverride"
       ],
       "scope": "专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -217,7 +217,7 @@
         "modules/ads/dianping.stoverride"
       ],
       "scope": "仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -381,7 +381,7 @@
         "modules/ads/amap.stoverride"
       ],
       "scope": "两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -505,7 +505,7 @@
         "modules/ads/huazhu.stoverride"
       ],
       "scope": "仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -731,7 +731,7 @@
         "modules/ads/liepin.stoverride"
       ],
       "scope": "明确命名的 live.get-ad-cards；不拦职位推荐或投递",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -751,7 +751,7 @@
         "modules/ads/mcdonalds.stoverride"
       ],
       "scope": "专用 portal/home/splash；保留点餐、支付、领券",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -771,7 +771,7 @@
         "modules/ads/maimai.stoverride"
       ],
       "scope": "仅 adshow；保留礼物、消息和普通推荐",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -822,7 +822,7 @@
         "modules/ads/mijia.stoverride"
       ],
       "scope": "仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -908,7 +908,7 @@
         "modules/ads/pinduoduo.stoverride"
       ],
       "scope": "仅 cappuccino/splash；保留首页、买菜、红包和领券",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -1173,7 +1173,7 @@
         "modules/ads/taopiaopiao.stoverride"
       ],
       "scope": "仅 queryloadingbanner 启动广告；保留普通活动、选座和购票",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -1332,7 +1332,7 @@
         "modules/ads/netease-mail.stoverride"
       ],
       "scope": "mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -1502,7 +1502,7 @@
         "modules/ads/xiachufang.stoverride"
       ],
       "scope": "仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -1522,7 +1522,7 @@
         "modules/ads/xianyu.stoverride"
       ],
       "scope": "仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -1584,7 +1584,7 @@
         "modules/ads/xiaoyuzhou.stoverride"
       ],
       "scope": "仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -1825,7 +1825,7 @@
         "modules/ads/unicom.stoverride"
       ],
       "scope": "专用启动/广告接口；保留 accountListData、客户端配置和缴费",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",
@@ -1876,7 +1876,7 @@
         "modules/ads/58tongcheng.stoverride"
       ],
       "scope": "仅 home/advertising 和 appadv；保留职位、联系与发布",
-      "reason": "采用广告范围明确的部分，默认不导入；实际接口、缓存、证书与正常功能仍需设备验收。",
+      "reason": "已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。",
       "public_source_matches": [
         {
           "source": "fmz-rewrite",

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Source pins and independent licenses: docs/SOURCES.md
-name: 微博开屏广告处理（可选）
-desc: AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收。
+name: 微博开屏广告处理（维护源）
+desc: AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。
 http:
   mitm:
   - bootrealtime.uve.weibo.com

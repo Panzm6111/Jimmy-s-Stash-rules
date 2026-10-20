@@ -1,5 +1,5 @@
-# 公共启动模板：下载为本地文件导入。不要在 GitHub 填机场链接。
-# 搭配 core.stoverride 与设备端 private-provider.stoverride 使用。
+# 维护用启动源与旧分层安装兼容模板。当前日常入口为config/stash.yaml。
+# 构建时搭配core.stoverride；私人订阅只在设备设置，不要在GitHub填写。
 # 未启用 core 时默认拒绝，防止误以为已启用分流。
 mode: rule
 log-level: warning

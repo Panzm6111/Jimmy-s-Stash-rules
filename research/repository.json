@@ -1,4 +1,5 @@
 {
+  "record_status": "Historical repository observation at checked_at; release fields describe that earlier observation. Current publication evidence is in research/subscription-published.json and PROGRESS.md.",
   "checked_at": "2026-10-19T02:24:03.485058+08:00",
   "name": "Panzm6111/Jimmy-s-Stash-rules",
   "sanitized_origin": "https://github.com/Panzm6111/Jimmy-s-Stash-rules.git",

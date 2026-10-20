@@ -2,7 +2,7 @@
 # Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
 # License: licenses/fmz200-GPL-3.0.txt
 # Generated from research/ad-catalog.json; edit the catalog, then regenerate.
-name: 铁路12306广告专项（可选）
-desc: AD-20261020.1；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。独立启停；需设备验收。
+name: 铁路12306广告专项（维护源）
+desc: AD-20261020.1；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。已纳入整合入口，无需单独导入；需设备验收。
 rules:
 - DOMAIN,ad.12306.cn,广告拦截

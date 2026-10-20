@@ -1,8 +1,8 @@
 {
   "checked_at": "2026-10-20",
-  "purpose": "图片135款App调查对应的人工审核候选专项；用户反馈整体去广告效果不足，尚无逐款设备命中证据，不能按模块数量宣称有效覆盖。",
+  "purpose": "图片135款App调查对应的人工审核候选专项；已采用的专项作为原config/stash.yaml整合入口的维护来源，无需用户逐个导入。用户曾反馈旧版整体去广告效果不足，当前整合版尚无逐款设备命中证据，不能按模块数量宣称有效覆盖。",
   "native_rewrite_reference": "bm-native",
-  "rewrite_adaptation": "使用当前官方文档列出的 http.url-rewrite 动作；保留 reject/reject-200/reject-dict/reject-img/reject-array 的不同语义。官方站本轮网络403，最低版本和旧rewrite别名待原生核实。固定空响应不再使用请求脚本。",
+  "rewrite_adaptation": "依据用户提供的当前官方文档调查采用 http.url-rewrite 动作；保留 reject/reject-200/reject-dict/reject-img/reject-array 的不同语义。记录的官方站访问受环境网络403限制，最低版本和旧rewrite别名待原生核实。固定空响应不再使用请求脚本。",
   "sources": {
     "fmz-rewrite": {
       "repository": "fmz200/wool_scripts",
@@ -1061,7 +1061,7 @@
         "ads.cup.com.cn"
       ],
       "script": null,
-      "notes": "两个独立广告主机与扩展包重叠；基础模式可单独启用。保留推送和安全SDK，不解密支付；缓存和其他同域业务推广不在已知覆盖范围。",
+      "notes": "两个独立广告主机与扩展包重叠，已随整合入口接入，不额外增加拦截次数。保留推送和安全SDK，不解密支付；缓存和其他同域业务推广不在已知覆盖范围。",
       "device_tested": false,
       "default_enabled": false,
       "source_evidence": [
