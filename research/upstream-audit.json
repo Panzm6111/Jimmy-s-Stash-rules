@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-19T21:54:37.916441+08:00",
+  "checked_at": "2026-10-20T14:48:25.249230+08:00",
   "target": "upstream",
-  "passed": 44,
-  "total": 44,
+  "passed": 45,
+  "total": 45,
   "results": [
     {
       "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/LICENSE",
@@ -82,6 +82,13 @@
       "ok": true
     },
     {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 7819,
+      "ok": true
+    },
+    {
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
       "status": 200,
       "sha256_matches": true,
@@ -138,13 +145,6 @@
       "ok": true
     },
     {
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/weibo.snippet",
-      "status": 200,
-      "sha256_matches": true,
-      "bytes": 10009,
-      "ok": true
-    },
-    {
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js",
       "status": 200,
       "sha256_matches": true,
@@ -191,6 +191,13 @@
       "status": 200,
       "sha256_matches": true,
       "bytes": 215,
+      "ok": true
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/weibo/weibo_ads.js",
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 11082,
       "ok": true
     },
     {

@@ -1,23 +1,19 @@
 {
-  "checked_at": "2026-10-19T22:30:45.126046+08:00",
+  "checked_at": "2026-10-20T15:10:45.952002+08:00",
   "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
   "http_status": 200,
-  "bytes": 240361,
-  "sha256": "18f633958c3bd52f8442c1a6faaaa6036ed69cc3dcd3b972f751da9776e4240c",
+  "bytes": 228871,
+  "sha256": "5a0e982df98e194c8165fe8c63be593b72eb9922f10fc404c46261d206eaa6ac",
   "matches_local_bytes": true,
   "proxy_groups": 18,
-  "rules": 5314,
+  "rules": 5266,
   "inline_scripts": 0,
-  "remote_scripts": 12,
-  "request_handlers": 18,
-  "response_handlers": 10,
-  "rewrite_rules": 16,
-  "mitm_hosts": 41,
+  "remote_scripts": 0,
+  "request_handlers": 0,
+  "response_handlers": 0,
+  "rewrite_rules": 0,
+  "mitm_hosts": 0,
   "private_url_is_placeholder": true,
-  "new_selectors": [
-    "自动节点",
-    "海外AI"
-  ],
   "automatic_pools": [
     "自动节点",
     "美国",
@@ -41,10 +37,36 @@
   "node_protocols_modified": false,
   "native_stash_tested": false,
   "iphone_tested": false,
-  "code_release_commit": "94cd7d13b6b2a7111491d9265cb638eb3aad8785",
+  "code_release_commit": "ec3f05468533350ac97f13e178e724fde0ecdbfe",
   "hong_kong_name_aliases": [
     "HK",
     "HKG"
   ],
-  "hong_kong_name_case_insensitive": true
+  "hong_kong_name_case_insensitive": true,
+  "ad_revision": "AD-20261020.1",
+  "rule_providers": 1,
+  "ad_rule_set_referenced": true,
+  "base_http_embedded": false,
+  "per_app_overrides_retained": 40,
+  "per_app_http_switches": "independent override; remove old combined pack; native phone acceptance pending",
+  "all_app_overrides_combined": {
+    "native_url_rewrites": 38,
+    "response_handlers": 11,
+    "remote_js": 11,
+    "mitm_exact_hosts": 45
+  },
+  "optional_probe_default_enabled": false,
+  "source_credentials_read": false,
+  "runtime_public_resources": {
+    "passed": 68,
+    "total": 68
+  },
+  "offline_checks": {
+    "project": 34,
+    "javascript_simulated": 62,
+    "private_builder": 12,
+    "current_files_scanned": 145,
+    "history_blobs_scanned": 370,
+    "secret_pattern_findings": 0
+  }
 }
