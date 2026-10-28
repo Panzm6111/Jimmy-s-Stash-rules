@@ -548,6 +548,20 @@ class MaintenanceTransactionTests(unittest.TestCase):
         self.assertEqual(git(self.root, "status", "--porcelain"), "")
         self.assertFalse((self.root / ".local/maintenance/latest-backup.json").exists())
 
+    def test_comments_only_update_keeps_source_tree_and_pins(self):
+        fixture, payload = self.prepare_rule_increment()
+        original = (self.root / "rules/vendor/ads-expanded.yaml").read_bytes()
+        comments = b"# changed upstream publication date only\n" + original
+        fixture.data[public_url(RULE_REPO, NEW_REVISION, fixture.rule_path)] = comments
+        runner = self.simulated_refresh_runner(comments, fail_label="build")
+        with mock.patch.object(maintain.shutil, "which", return_value="node"):
+            with mock.patch.object(maintain, "run_step", side_effect=runner):
+                self.assertIsNone(maintain.update(self.root, fixture.check()))
+        self.assertEqual(git(self.root, "status", "--porcelain"), "")
+        self.assertEqual((self.root / "rules/vendor/ads-expanded.yaml").read_bytes(), original)
+        report = json.loads((self.root / ".local/maintenance/latest.json").read_text(encoding="utf-8"))
+        self.assertEqual(report["update"]["status"], "no_semantic_rule_changes")
+
 
 if __name__ == "__main__":
     unittest.main()

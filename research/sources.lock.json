@@ -145,6 +145,50 @@
       "output_sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3",
       "retained": 33,
       "omitted": []
+    },
+    {
+      "source_path": "rule/Clash/Apple/Apple_Classical.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Apple/Apple_Classical.yaml",
+      "source_sha256": "635fa6c279ba3616e82a0334818fdeac99ac46c8d1a309490aefcce438cb6ea6",
+      "output": "rules/apple.yaml",
+      "output_sha256": "dd282e776234a4ad56bcfce89b310e804635050791ff612d906b48e40a5978c6",
+      "retained": 1579,
+      "omitted": [
+        "PROCESS-NAME,CoreLocationAgent",
+        "PROCESS-NAME,WeatherWidget",
+        "PROCESS-NAME,apsd",
+        "PROCESS-NAME,com.apple.Maps",
+        "PROCESS-NAME,findmydevice-user-agent",
+        "PROCESS-NAME,fmfd",
+        "PROCESS-NAME,mapspushd",
+        "PROCESS-NAME,netbiosd",
+        "PROCESS-NAME,trustd",
+        "PROCESS-NAME,com.apple.geod",
+        "PROCESS-NAME,Music",
+        "PROCESS-NAME,LookupViewService",
+        "PROCESS-NAME,TV"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/Microsoft/Microsoft.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Microsoft/Microsoft.yaml",
+      "source_sha256": "a289a1d52394e92ceee26a5c83953cd292609717d39fb2970d189dc7877b2a4d",
+      "output": "rules/microsoft.yaml",
+      "output_sha256": "5d97835b04c9d0d28ba50bc8518b518e082d19c87cc68a3c220e06f2c10a77da",
+      "retained": 668,
+      "omitted": [
+        "PROCESS-NAME,OneDrive",
+        "PROCESS-NAME,OneDriveUpdater"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/GitHub/GitHub.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/GitHub/GitHub.yaml",
+      "source_sha256": "a2641ce2f10857831b600623f97d354e6f8db7b20dff175c5313c2c46e0b6867",
+      "output": "rules/vendor/github.yaml",
+      "output_sha256": "a40b30900dc605bb37af83074977083d2e72bae8ca7720d197557e8cbc6b2c74",
+      "retained": 31,
+      "omitted": []
     }
   ],
   "ad_scripts": [

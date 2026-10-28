@@ -9,6 +9,7 @@ import sys
 import urllib.request
 import yaml
 from validate import ROOT, RULE_KINDS
+from maintain import fetch_public
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -18,14 +19,13 @@ def main():
     if not re.fullmatch('[0-9a-f]{40}',args.revision):parser.error('full lowercase commit required')
     lock=json.loads((ROOT/'research/sources.lock.json').read_text())
     license_url=f'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/{args.revision}/LICENSE'
-    with urllib.request.urlopen(license_url,timeout=30) as response: license_bytes=response.read(256*1024)
+    license_bytes=fetch_public(license_url)
     if hashlib.sha256(license_bytes).hexdigest()!=hashlib.sha256((ROOT/lock['upstream']['license_file']).read_bytes()).hexdigest():
         raise ValueError('upstream license changed; manual review required before refreshing')
     pending=[]
     for item in lock['resources']:
         url=f'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/{args.revision}/{item["source_path"]}'
-        with urllib.request.urlopen(url,timeout=30) as response:
-            raw=response.read(8*1024*1024+1)
+        raw=fetch_public(url)
         if len(raw)>8*1024*1024:raise ValueError('response too large')
         # Preserve integrity checks when replaying the already-reviewed revision.
         if args.revision==lock['upstream']['revision']:

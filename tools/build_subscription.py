@@ -56,6 +56,8 @@ def remote_integrated():
     slot = core['rules'].index('RULE-SET,基础广告,广告拦截')
     extra = [('系统直连例外','rules/system-direct.yaml','DIRECT'),
              ('广告路径例外','rules/ad-exceptions.yaml','DIRECT'),
+             ('TikTok广告','rules/vendor/tiktok-tracking.yaml','广告拦截'),
+             ('TikTok核心','rules/vendor/tiktok-core.yaml','TikTok'),
              ('App广告域名','rules/app-ads.yaml','广告拦截')]
     for name, path, policy in extra:
         config['rule-providers'][name] = {'type':'http','behavior':'classical','url':RAW+path,'interval':86400}
@@ -76,7 +78,7 @@ def render():
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；20个策略组（含日本+美国、TikTok）、DNS、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261028.2；14个远程规则集按24小时刷新，保留20个策略组。\n'
+            '# JIMMY-ROUTING ROUTE-20261029.1；19个社区维护的远程规则集按24小时刷新，保留20个策略组。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
             '# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。\n'
@@ -95,7 +97,7 @@ def verify(text):
     config = yaml.safe_load(text)
     validate_structure(config)
     assert set(config['rule-providers']) == set(remote_integrated()['rule-providers'])
-    assert len(config['rule-providers']) == 14
+    assert len(config['rule-providers']) == 19
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
     assert config['rule-providers']['基础广告']['url'] == RAW + 'rules/vendor/ads-expanded.yaml'
     assert len(config['http']['url-rewrite']) == 43

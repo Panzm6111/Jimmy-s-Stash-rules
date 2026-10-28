@@ -14,7 +14,7 @@
 
 没有变化时无需更新；上游改了与本项目无关的内容，也不必重写配置。App专项脚本、URL重写及MITM主机的变化需要审查；工具不会把整包上游脚本直接覆盖进来。
 
-本轮自动同步范围是blackmatrix7来源的9份规则输出：Netflix、YouTube、Telegram、国内域名、扩展广告包、基础广告子集、TikTok、Instagram和Twitter。AI精选规则、App专项与其他参考来源会检查并提示变化，不自动改写。本地白名单与私人接入保持原样，生成的主配置仍用原稳定路径，地区组保留。
+2026-10-29自动同步范围扩展为12份blackmatrix7输入（增加Apple、Microsoft、GitHub）和10份MetaCubeX/Sukka完整社区分类，包含TikTok功能/广告、AI、常用社交与通用海外规则。只做格式转换和去重，退出原人工精选AI生成链；只改注释时不提交。来源清单、许可和兼容遗漏见[社区规则说明](COMMUNITY-SOURCES.md)。本地白名单、私人接入、策略组与HTTP专项保持原样。
 
 ## 一次性准备
 
@@ -97,7 +97,7 @@ python tools/maintain.py update
 
 ## 发布到GitHub，手机才会得到变化
 
-工具不会自动提交、推送或修改仓库可见性。更新完成后先运行：
+兼容命令update只更新本地；已授权的publish模式会在必要验证通过后自动提交并推送。手工发布时，更新完成后先运行：
 
 ```sh
 git status --short
@@ -139,7 +139,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Run-Maintenance.
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Run-Maintenance.ps1 -Mode update
 ```
 
-update是仅更新本地的兼容命令；-Mode publish才执行获授权的日常发布。两者均要求干净工作区。专项脚本、MITM、新AI主机等由人工审阅后采用。完整配置构建会同步生成Stash和Clash文件。
+update是仅更新本地的兼容命令；-Mode publish才执行获授权的日常发布。两者均要求干净工作区。专项脚本、MITM、许可及陌生规则类型需审阅；已接入的完整AI分类可机械同步。完整配置构建会同步生成Stash和Clash文件。
 
 查看或删除任务（删除不影响仓库文件）：
 
@@ -156,7 +156,7 @@ Unregister-ScheduledTask -TaskName Jimmy-Stash-Rules-Noon-Check -Confirm:$false
 
 只允许原origin地址和main分支。任务启动时若有其他会话的暂存、未提交或未跟踪内容会停止；不stash、reset、清理或上传它们。远端前进只允许快进，本地未知提交或分叉停止。仅临时生成、校验并应用白名单文件；提交前复核HEAD、文件集合、内容哈希与暂存内容。私人订阅、证书、.local、.venv及缓存不进入提交。
 
-网络/许可变化、异常变化量、任何必要验证失败都不发布。无法安全自动适配的AI精选域名、HTTP脚本、MITM和参考来源保留明确待审查状态，不能记为已经更新。Apple/Microsoft等本项目维护的规则也由远程规则集发布，但不会凭猜测生成新的来源。
+网络/许可变化、异常变化量、任何必要验证失败都不发布。无法安全自动适配的HTTP脚本、MITM、陌生规则类型和参考来源保留明确待审查状态，不能记为已经更新。Apple/Microsoft/GitHub直接采用社区维护源；规则和源锁分别跟踪实际内容与提交，Meta数据分支和许可分支独立检查。
 
 若推送失败，只记录本程序刚创建提交的SHA/父提交/文件哈希。以后仅能重试这个已核验提交；不会替其他本地提交推送，也不会强制推送。GitHub已接收但确认网络失败时可识别为已收到，不重复提交。进程在提交之前被中止或用户编辑造成冲突时保持失败与现状，需要先核对日志，避免覆盖个人修改。
 

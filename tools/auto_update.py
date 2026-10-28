@@ -121,6 +121,9 @@ def execute(root, expected_origin=ORIGIN, checker=m.check_upstreams, updater=m.u
                 'review_required':report['summary']['review-required']}
     manifest=m.read_json(root/'.local/maintenance/backups'/backup/'manifest.json')
     generated=set(m.GENERATED)|{i['output'] for i in m.read_json(root/'research/sources.lock.json')['resources']}
+    if (root/'research/community-sources.json').is_file():
+        community=m.read_json(root/'research/community-sources.json')
+        generated|={x['output'] for x in community['resources']}|{x['output'] for x in community['aggregates']}
     files={i['path'] for i in manifest['files']}
     if not files <= generated or dirty(root)!=files or git(root,'diff','--cached','--name-only'):
         raise m.MaintenanceError('unrelated_worktree_changes')
@@ -131,7 +134,7 @@ def execute(root, expected_origin=ORIGIN, checker=m.check_upstreams, updater=m.u
     if git(root,'rev-parse','HEAD')!=head or (root/'PROGRESS.md').read_bytes()!=before_main:
         raise m.MaintenanceError('publication_head_or_main_changed')
     evidence={'date':datetime.now(timezone(timedelta(hours=8))).isoformat(),
-              'upstream_revision':report['repositories'][m.PRIMARY]['head'],
+              'upstream_revision':report['repositories'][m.PRIMARY]['head'],'upstream_heads':report['repositories'],
               'base_head':head,'files':sorted(files),
               'validation':'isolated source/license/delta/build/project/JS/private/maintenance/Clash/auto-publication regressions',
               'review_required':report['summary']['review-required'],'device_tested':False}

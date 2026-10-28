@@ -292,6 +292,8 @@ proxy-groups:
 rules:
 - RULE-SET,系统直连例外,DIRECT
 - RULE-SET,广告路径例外,DIRECT
+- RULE-SET,TikTok广告,广告拦截
+- RULE-SET,TikTok核心,TikTok
 - RULE-SET,App广告域名,广告拦截
 - RULE-SET,基础广告,广告拦截
 - RULE-SET,海外AI,海外AI
@@ -301,8 +303,11 @@ rules:
 - RULE-SET,Netflix,Netflix
 - RULE-SET,YouTube,YouTube
 - RULE-SET,Telegram,Telegram
+- RULE-SET,海外社交,TikTok
 - RULE-SET,Apple服务,Apple
+- RULE-SET,GitHub,总代理
 - RULE-SET,Microsoft服务,Microsoft
+- RULE-SET,通用代理,总代理
 - RULE-SET,国内服务,国内直连
 - GEOIP,CN,国内直连
 - MATCH,未匹配流量
@@ -384,6 +389,27 @@ rule-providers:
     behavior: classical
     format: yaml
     path: ./ruleset/jimmy-bcd18ead5fa8.yaml
+  GitHub:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/github.yaml
+    interval: 86400
+    format: yaml
+    path: ./ruleset/jimmy-f911e414cf6b.yaml
+  海外社交:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/social-community.yaml
+    interval: 86400
+    format: yaml
+    path: ./ruleset/jimmy-fb737d3cb6d8.yaml
+  通用代理:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/proxy-community.yaml
+    interval: 86400
+    format: yaml
+    path: ./ruleset/jimmy-c9cab4f157b7.yaml
   系统直连例外:
     type: http
     behavior: classical
@@ -398,6 +424,20 @@ rule-providers:
     interval: 86400
     format: yaml
     path: ./ruleset/jimmy-de6c2f9833bd.yaml
+  TikTok广告:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-tracking.yaml
+    interval: 86400
+    format: yaml
+    path: ./ruleset/jimmy-fe1e80ce06e7.yaml
+  TikTok核心:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-core.yaml
+    interval: 86400
+    format: yaml
+    path: ./ruleset/jimmy-4f9049352b23.yaml
   App广告域名:
     type: http
     behavior: classical

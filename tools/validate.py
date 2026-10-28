@@ -625,26 +625,23 @@ class ProjectChecks(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT / item['output']).read_bytes()).hexdigest(), item['output_sha256'])
 
     def test_ai_source_manifest_and_narrow_domain_scope(self):
-        from generate_ai_rules import rendered, selected_rules
-        manifest = json.loads((ROOT / 'research/ai-sources.json').read_text())
-        self.assertEqual(manifest['group'], '海外AI')
-        self.assertEqual(manifest['output'], 'rules/openai.yaml')
-        self.assertEqual((ROOT / manifest['output']).read_text(), rendered(manifest))
-        upstream = manifest['upstream']
-        self.assertEqual(hashlib.sha256((ROOT / upstream['license_file']).read_bytes()).hexdigest(), upstream['license_sha256'])
-        for source in manifest['sources']:
-            self.assertIn('/' + upstream['revision'] + '/', source['url'])
-            self.assertNotIn('?', source['url'])
-        rules = selected_rules(manifest)
-        self.assertEqual(len(rules), len(set(rules)))
-        # A common shared host or a Chinese AI service must not become an
-        # accidental overseas-AI route when a broader upstream list changes.
-        for host in ['google.com', 'www.google.com', 'accounts.google.com', 'googleapis.com',
-                     'www.microsoft.com', 'login.microsoftonline.com', 'github.com',
-                     'www.bing.com', 'cdn.auth0.com', 'cdn.cloudflare.net',
-                     'chat.deepseek.com', 'www.doubao.com', 'www.kimi.com',
-                     'chat.qwen.ai', 'hailuoai.video', 'www.minimax.io']:
-            self.assertFalse(any(matches(rule, host) for rule in rules), host)
+        from community_rules import verify,generated_documents
+        verify(ROOT)
+        self.assertEqual(load('rules/openai.yaml')['payload'],yaml.safe_load(generated_documents()['rules/openai.yaml'])['payload'])
+        # Whole maintained sets determine service classification; no local additions.
+        for host in ['google.com','accounts.google.com','googleapis.com','www.microsoft.com','login.microsoftonline.com','github.com','cdn.cloudflare.net']:
+            self.assertFalse(any(matches(rule,host) for rule in load('rules/openai.yaml')['payload']),host)
+
+    def test_tiktok_maintained_core_precedes_generic_ads(self):
+        config=load('config/stash.yaml')
+        self.assertLess(config['rules'].index('RULE-SET,TikTok核心,TikTok'),config['rules'].index('RULE-SET,基础广告,广告拦截'))
+        for host in ['ttcdn-us.com','ttlivecdn.com','ttoverseaus.net','ttwstatic.com','roovza-launches.appsflyersdk.com','roovza.inapps.appsflyersdk.com','roovza.launches.appsflyersdk.com','roovza.skadsdk.appsflyersdk.com']:
+            self.assertEqual(route(config,host,country='CN'),'TikTok',host)
+        self.assertEqual(route(config,'analytics.tiktok.com'),'广告拦截')
+        for host in ['www.facebook.com','discord.com','web.whatsapp.com','line.me','signal.org']:
+            self.assertEqual(route(config,host),'TikTok',host)
+        self.assertEqual(route(config,'github.com'),'总代理')
+        self.assertEqual(route(config,'api.github.com'),'海外AI')
 
     def test_us_japan_combined_pool(self):
         pool = self.groups['日本+美国']

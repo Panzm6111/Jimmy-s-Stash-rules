@@ -576,5 +576,6 @@
     "native_core_tested": false,
     "account_or_unlock_tested": false,
     "evidence": "实际源文件、SHA-256、完整许可、结构转换与代表域名规则模型；不等于设备连接或 AI 服务解锁通过。"
-  }
+  },
+  "status": "historical-superseded-by-community-sources"
 }

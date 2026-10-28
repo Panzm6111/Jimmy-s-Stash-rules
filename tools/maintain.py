@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from datetime import datetime, timezone
@@ -29,11 +30,11 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 PRIMARY = 'blackmatrix7/ios_rule_script'
 REPOSITORIES = frozenset({PRIMARY, 'fmz200/wool_scripts', 'app2smile/rules',
-                          'NobyDa/Script', 'Maasea/sgmodule', 'v2fly/domain-list-community'})
+                          'NobyDa/Script', 'Maasea/sgmodule', 'v2fly/domain-list-community', 'MetaCubeX/meta-rules-dat', 'SukkaW/Surge'})
 SHA = re.compile(r'[0-9a-f]{40}\Z')
 DIGEST = re.compile(r'[0-9a-f]{64}\Z')
 LIMIT = 8 * 1024 * 1024
-GENERATED = frozenset({'rules/system-direct.yaml','rules/ad-exceptions.yaml','rules/app-ads.yaml','config/clash-verge.yaml', 'config/clash-verge.js', 'config/stash.yaml', 'research/sources.lock.json',
+GENERATED = frozenset({'research/community-sources.json','rules/openai.yaml','rules/vendor/social-community.yaml','rules/system-direct.yaml','rules/ad-exceptions.yaml','rules/app-ads.yaml','config/clash-verge.yaml', 'config/clash-verge.js', 'config/stash.yaml', 'research/sources.lock.json',
                        'docs/AD-MODULES.md', 'docs/APP-INVENTORY.md',
                        'docs/AD-ARCHITECTURE.md', 'research/ad-architecture-audit.json',
                        'research/local-bundle-audit.json'})
@@ -106,7 +107,7 @@ def collect_sources(root):
     catalog = read_json(root / 'research/ad-catalog.json')
     entries = {}
 
-    def add(url, expected, category, output=None):
+    def add(url, expected, category, output=None, ref='HEAD', source_format=None):
         repository, revision, path = parse_source_url(url)
         if expected is not None and not DIGEST.fullmatch(expected):
             raise MaintenanceError('invalid_source_hash')
@@ -122,6 +123,8 @@ def collect_sources(root):
             entry['categories'].append(category)
         if output and output not in entry['outputs']:
             entry['outputs'].append(output)
+        if ref != 'HEAD': entry['ref']=ref
+        if source_format: entry['source_format']=source_format
 
     for item in lock['resources']:
         add(item['url'], item['source_sha256'], 'rules', item['output'])
@@ -137,9 +140,17 @@ def collect_sources(root):
         add(item['url'], item['sha256'], category)
     for item in catalog['sources'].values():
         add(item['url'], item['sha256'], 'script')
-    for item in ai['sources']:
-        add(item['url'], item['sha256'], 'curated', ai['output'])
-    add(ai['upstream']['license_url'], ai['upstream']['license_sha256'], 'license')
+    community_path=Path(root)/'research/community-sources.json'
+    if community_path.is_file():
+        community=read_json(community_path)
+        for item in community['resources']:
+            add(item['url'],item['source_sha256'],'rules',item['output'],item.get('ref','HEAD'),item['source_format'])
+        for item in community['licenses']:
+            add(item['url'],item['sha256'],'license',ref=item.get('ref','HEAD'))
+    else:
+        for item in ai['sources']:
+            add(item['url'],item['sha256'],'curated',ai['output'])
+        add(ai['upstream']['license_url'],ai['upstream']['license_sha256'],'license')
     # Licenses for actually adopted repositories; these local copies are reviewed baselines.
     licenses = {PRIMARY: ('LICENSE', 'licenses/blackmatrix7-GPL-2.0.txt'),
                 'fmz200/wool_scripts': ('LICENSE', 'licenses/fmz200-GPL-3.0.txt'),
@@ -160,23 +171,51 @@ class PublicRedirect(urllib.request.HTTPRedirectHandler):
         return super().redirect_request(request, fp, code, msg, headers, newurl)
 
 
+def cache_public(url,data):
+    base=Path(os.environ.get('JIMMY_PUBLIC_SOURCE_CACHE',str(ROOT/'.local/maintenance/source-cache')))
+    base.mkdir(parents=True,exist_ok=True)
+    key=sha256(url.encode())
+    atomic_write(base/(key+'.bin'),data)
+    atomic_write(base/(key+'.json'),json.dumps({'sha256':sha256(data)}).encode())
+    return data
+
+
+def fetch_public_api(url):
+    repository,revision,path=parse_source_url(url)
+    endpoint='https://api.github.com/repos/'+repository+'/contents/'+urllib.parse.quote(path,safe='/')+'?ref='+revision
+    request=urllib.request.Request(endpoint,headers={'User-Agent':'Jimmy-Stash-maintenance/1','Accept':'application/vnd.github+json'})
+    with urllib.request.urlopen(request,timeout=25) as response:
+        item=json.loads(response.read(LIMIT*2+1))
+    oid=item['sha']
+    if item.get('encoding')!='base64':
+        request=urllib.request.Request('https://api.github.com/repos/'+repository+'/git/blobs/'+oid,headers={'User-Agent':'Jimmy-Stash-maintenance/1'})
+        with urllib.request.urlopen(request,timeout=25) as response:item=json.loads(response.read(LIMIT*2+1))
+    data=base64.b64decode(item['content'],validate=False)
+    if not data or len(data)>LIMIT:raise MaintenanceError('empty_or_oversized_source')
+    actual=hashlib.sha1(b'blob '+str(len(data)).encode()+bytes([0])+data).hexdigest()
+    if actual!=oid:raise MaintenanceError('git_blob_integrity_failed')
+    return cache_public(url,data)
+
+
 def fetch_public(url):
     parse_source_url(url)
+    base=Path(os.environ.get('JIMMY_PUBLIC_SOURCE_CACHE',str(ROOT/'.local/maintenance/source-cache')))
+    key=sha256(url.encode())
+    try:
+        data=(base/(key+'.bin')).read_bytes()
+        if 0<len(data)<=LIMIT and sha256(data)==read_json(base/(key+'.json'))['sha256']:return data
+    except (OSError,ValueError,KeyError):pass
     for attempt in range(2):
         try:
-            request = urllib.request.Request(url, headers={'User-Agent': 'Jimmy-Stash-maintenance/1'})
-            with urllib.request.build_opener(PublicRedirect()).open(request, timeout=20) as response:
-                data = response.read(LIMIT + 1)
-            if not data or len(data) > LIMIT:
-                raise MaintenanceError('empty_or_oversized_source')
-            return data
-        except MaintenanceError:
-            raise
-        except (urllib.error.URLError, TimeoutError, OSError) as error:
-            if attempt:
-                raise MaintenanceError('public_download_failed') from None
-            time.sleep(1)
-    raise MaintenanceError('public_download_failed')
+            request=urllib.request.Request(url,headers={'User-Agent':'Jimmy-Stash-maintenance/1'})
+            with urllib.request.build_opener(PublicRedirect()).open(request,timeout=20) as response:data=response.read(LIMIT+1)
+            if not data or len(data)>LIMIT:raise MaintenanceError('empty_or_oversized_source')
+            return cache_public(url,data)
+        except MaintenanceError:raise
+        except (urllib.error.URLError,TimeoutError,OSError):
+            if not attempt:time.sleep(1)
+    try:return fetch_public_api(url)
+    except Exception:raise MaintenanceError('public_download_failed') from None
 
 
 def git(root, *args, timeout=40):
@@ -188,18 +227,20 @@ def git(root, *args, timeout=40):
         raise MaintenanceError('git_failed') from None
 
 
-def resolve_head(repository):
+def resolve_head(repository, ref='HEAD'):
     if repository not in REPOSITORIES:
         raise MaintenanceError('unapproved_repository')
+    if ref not in {'HEAD','refs/heads/meta','refs/heads/master'}:
+        raise MaintenanceError('unapproved_source_ref')
     env = dict(os.environ, GIT_TERMINAL_PROMPT='0')
     for attempt in range(2):
         try:
             result = subprocess.run(['git', '-c', 'credential.helper=', 'ls-remote',
-                                     f'https://github.com/{repository}.git', 'HEAD'],
+                                     f'https://github.com/{repository}.git', ref],
                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                     timeout=25, env=env, check=True)
             lines = result.stdout.decode('ascii').splitlines()
-            hashes = [line.split()[0] for line in lines if len(line.split()) == 2 and line.split()[1] == 'HEAD']
+            hashes = [line.split()[0] for line in lines if len(line.split()) == 2 and line.split()[1] == ref]
             if len(hashes) != 1 or not SHA.fullmatch(hashes[0]):
                 raise MaintenanceError('invalid_upstream_head')
             return hashes[0]
@@ -212,23 +253,26 @@ def resolve_head(repository):
 
 def check_upstreams(root, fetcher=fetch_public, head_resolver=resolve_head):
     sources = collect_sources(Path(root))
-    repositories = sorted({item['repository'] for item in sources})
+    repositories = sorted({(item['repository'],item.get('ref','HEAD')) for item in sources})
 
-    def head(repository):
+    def head(target):
+        repository, ref=target
+        key=repository if ref=='HEAD' else repository+'@'+ref
         try:
-            revision = head_resolver(repository)
+            revision = head_resolver(repository) if ref=='HEAD' else head_resolver(repository,ref)
             if not SHA.fullmatch(revision):
                 raise MaintenanceError('invalid_upstream_head')
-            return repository, {'status': 'ok', 'head': revision}
+            return key, {'status': 'ok', 'head': revision}
         except Exception as error:
-            return repository, {'status': 'error', 'error_type': type(error).__name__}
+            return key, {'status': 'error', 'error_type': type(error).__name__}
 
     with ThreadPoolExecutor(max_workers=4) as executor:
         heads = dict(executor.map(head, repositories))
 
     def compare(item):
         entry = dict(item)
-        upstream = heads[item['repository']]
+        ref=item.get('ref','HEAD')
+        upstream = heads[item['repository'] if ref=='HEAD' else item['repository']+'@'+ref]
         if upstream['status'] != 'ok':
             return dict(entry, status='error', error_type='UpstreamHeadUnavailable')
         try:
@@ -242,9 +286,16 @@ def check_upstreams(root, fetcher=fetch_public, head_resolver=resolve_head):
                 raise MaintenanceError('empty_or_oversized_source')
             digest = sha256(raw)
             if 'rules' in item['categories']:
-                rule_payload(raw)
+                if item.get('source_format'):
+                    from community_rules import parse
+                    rules,_=parse(raw,item['source_format'])
+                    for rule in rules: validate_rule(rule)
+                else: rule_payload(raw)
             if revision == item['pinned_revision'] and digest != expected:
-                raise MaintenanceError('pinned_source_integrity_failed')
+                # A raw mirror/cache may be inconsistent. Cross-check the immutable Git blob.
+                raw=fetch_public_api(url) if fetcher is fetch_public else raw
+                digest=sha256(raw)
+                if digest!=expected:raise MaintenanceError('pinned_source_integrity_failed')
             if digest == expected:
                 status = 'unchanged'
             elif 'rules' in item['categories']:
@@ -593,7 +644,10 @@ def update(root, report=None):
     if target.get('status') != 'ok':
         raise MaintenanceError('primary_upstream_unavailable')
     revision = target['head']
-    relevant = [item for item in report['files'] if item['repository'] == PRIMARY and
+    community_path=root/'research/community-sources.json'
+    community=read_json(community_path) if community_path.is_file() else None
+    families={PRIMARY}|({x['repository'] for x in community['resources']} if community else set())
+    relevant = [item for item in report['files'] if item['repository'] in families and
                 ('rules' in item['categories'] or 'license' in item['categories'])]
     if any(item['status'] == 'error' for item in relevant):
         raise MaintenanceError('required_source_unavailable')
@@ -605,6 +659,8 @@ def update(root, report=None):
         return None
     print('普通规则有变化，创建隔离副本；专项脚本保持原样。', flush=True)
     allowed = set(GENERATED) | {item['output'] for item in lock['resources']}
+    if community: allowed|={x['output'] for x in community['resources']}|{x['output'] for x in community['aggregates']}
+    os.environ['JIMMY_PUBLIC_SOURCE_CACHE']=str(maintenance_dir(root)/'source-cache')
     with tempfile.TemporaryDirectory(prefix='jimmy-maintenance-') as temporary:
         candidate = Path(temporary) / 'candidate'
         # A local clone includes tracked public history, but not ignored private/ or .local/ files.
@@ -615,7 +671,10 @@ def update(root, report=None):
         hook_dir.mkdir()
         git(candidate, 'config', 'core.hooksPath', str(hook_dir))
         git(candidate, 'checkout', '--quiet', '--detach', base_head)
-        run_step(candidate, [sys.executable, 'tools/refresh_rules.py', '--revision', revision, '--write'], 'refresh_rules')
+        if any(x['status']=='rules-update' and x['repository']==PRIMARY for x in relevant):
+            run_step(candidate, [sys.executable, 'tools/refresh_rules.py', '--revision', revision, '--write'], 'refresh_rules')
+        if community and any(x['status']=='rules-update' and x['repository']!=PRIMARY for x in relevant):
+            run_step(candidate,[sys.executable,'tools/refresh_community.py','--report',str(root/'.local/maintenance/latest.json')],'refresh_community')
         new_lock = read_json(candidate / 'research/sources.lock.json')
         expected = {(item['path'], item['pinned_revision']): item for item in relevant if 'rules' in item['categories']}
         deltas = []
@@ -633,20 +692,37 @@ def update(root, report=None):
                 report['update'] = {'status': 'blocked_rule_delta', 'deltas': deltas}
                 write_report(root, report)
                 raise MaintenanceError('large_rule_delta')
+        if community:
+            updated=read_json(candidate/'research/community-sources.json')
+            for old,new in zip(community['resources'],updated['resources'],strict=True):
+                baseline=expected.get((old['path'],old['revision']))
+                if baseline is None or new['source_sha256']!=baseline['latest_sha256']:
+                    raise MaintenanceError('source_changed_after_check')
+                before=rule_payload(safe_path(root,old['output']).read_bytes())
+                after=rule_payload(safe_path(candidate,new['output']).read_bytes())
+                for rule in after: validate_rule(rule)
+                delta=dict(rule_delta(before,after),output=old['output']);deltas.append(delta)
+                if delta['blocked']:
+                    report['update']={'status':'blocked_rule_delta','deltas':deltas};write_report(root,report)
+                    raise MaintenanceError('large_rule_delta')
+        if all(delta['added'] == 0 and delta['removed'] == 0 for delta in deltas):
+            report['update'] = {'status': 'no_semantic_rule_changes', 'deltas': deltas}
+            write_report(root, report)
+            return None
         run_step(candidate, [sys.executable, 'tools/build_ads.py', '--write'], 'build')
         run_step(candidate, [sys.executable, 'tools/build_ads.py'], 'generated_consistency')
         run_step(candidate, [sys.executable, 'tools/validate.py'], 'project_and_scripts', timeout=360)
         run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_private_config.py'], 'private_builder', timeout=600)
         if (candidate / 'tests/test_maintenance.py').is_file():
             run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_maintenance.py'], 'maintenance_tests')
-        for pattern in ('test_clash.py', 'test_auto_update.py'):
+        for pattern in ('test_clash.py', 'test_auto_update.py', 'test_community.py'):
             if (candidate / 'tests' / pattern).is_file():
                 run_step(candidate,[sys.executable,'-m','unittest','discover','-s','tests','-p',pattern],pattern)
         backup_id = apply_verified_changes(root, candidate, allowed, base_head)
     report['operation'] = 'update'
     report['update'] = {'status': 'updated_locally' if backup_id else 'no_output_changes',
                         'backup_id': backup_id, 'base_head': base_head,
-                        'upstream_revision': revision, 'deltas': deltas,
+                        'upstream_revision': revision, 'upstream_heads': report['repositories'], 'deltas': deltas,
                         'changed_files': [entry['path'] for entry in read_json(maintenance_dir(root) / 'backups' / backup_id / 'manifest.json')['files']] if backup_id else [],
                         'committed': False, 'pushed': False, 'device_tested': False}
     write_report(root, report)

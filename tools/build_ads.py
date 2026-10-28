@@ -22,7 +22,7 @@ def main():
         command=[sys.executable,'-X','utf8',str(ROOT/'tools'/name)]
         if args.write: command.append('--write')
         subprocess.run(command,cwd=ROOT,check=True)
-    for name in ['generate_ad_modules.py','build_ad_scripts.py','build_ad_diagnostics.py','build_subscription.py','build_clash.py']:
+    for name in ['community_rules.py','generate_ad_modules.py','build_ad_scripts.py','build_ad_diagnostics.py','build_subscription.py','build_clash.py']:
         run(name)
     path=ROOT/'research/sources.lock.json';lock=json.loads(path.read_text())
     drift=False

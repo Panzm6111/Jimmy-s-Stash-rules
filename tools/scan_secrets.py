@@ -25,6 +25,17 @@ def inspect(text, location):
         for match in pattern.finditer(text):
             candidate = match.group(1) if match.lastindex else match.group()
             if candidate in PLACEHOLDERS: continue
+            if name == 'uuid':
+                start=text.rfind('\n',0,match.start())+1
+                end=text.find('\n',match.end())
+                row=text[start:end if end>=0 else len(text)].strip().removeprefix('-').strip()
+                fields=row.split(',')
+                # A reviewed public hostname can contain a UUID label. This
+                # does not exempt UUID credentials, URLs, server fields or prose.
+                if (len(fields)>=2 and fields[0] in {'DOMAIN','DOMAIN-SUFFIX'}
+                        and re.fullmatch(r'[a-zA-Z0-9_.-]+',fields[1])
+                        and (fields[1].startswith(candidate+'.') or '.'+candidate+'.' in fields[1])):
+                    continue
             line = text.count('\n', 0, match.start()) + 1
             hits.append((location, line, name))
     return hits

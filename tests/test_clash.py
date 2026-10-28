@@ -28,8 +28,8 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
-        self.assertEqual(len(clash['rule-providers']),14)
-        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),14)
+        self.assertEqual(len(clash['rule-providers']),19)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),19)
         self.assertTrue(all(p['type']=='http' and p['interval']==86400 for p in clash['rule-providers'].values()))
         self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 

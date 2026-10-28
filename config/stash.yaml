@@ -2,7 +2,7 @@
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # JIMMY-STASH AD-20261020.5；20个策略组（含日本+美国、TikTok）、DNS、私人订阅接入保留。
-# JIMMY-ROUTING ROUTE-20261028.2；14个远程规则集按24小时刷新，保留20个策略组。
+# JIMMY-ROUTING ROUTE-20261029.1；19个社区维护的远程规则集按24小时刷新，保留20个策略组。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
 # Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。
 # 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。
@@ -304,6 +304,8 @@ proxy-groups:
 rules:
 - RULE-SET,系统直连例外,DIRECT
 - RULE-SET,广告路径例外,DIRECT
+- RULE-SET,TikTok广告,广告拦截
+- RULE-SET,TikTok核心,TikTok
 - RULE-SET,App广告域名,广告拦截
 - RULE-SET,基础广告,广告拦截
 - RULE-SET,海外AI,海外AI
@@ -313,8 +315,11 @@ rules:
 - RULE-SET,Netflix,Netflix
 - RULE-SET,YouTube,YouTube
 - RULE-SET,Telegram,Telegram
+- RULE-SET,海外社交,TikTok
 - RULE-SET,Apple服务,Apple
+- RULE-SET,GitHub,总代理
 - RULE-SET,Microsoft服务,Microsoft
+- RULE-SET,通用代理,总代理
 - RULE-SET,国内服务,国内直连
 - GEOIP,CN,国内直连
 - MATCH,未匹配流量
@@ -374,6 +379,21 @@ rule-providers:
     interval: 86400
     type: http
     behavior: classical
+  GitHub:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/github.yaml
+    interval: 86400
+  海外社交:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/social-community.yaml
+    interval: 86400
+  通用代理:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/proxy-community.yaml
+    interval: 86400
   系统直连例外:
     type: http
     behavior: classical
@@ -383,6 +403,16 @@ rule-providers:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ad-exceptions.yaml
+    interval: 86400
+  TikTok广告:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-tracking.yaml
+    interval: 86400
+  TikTok核心:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-core.yaml
     interval: 86400
   App广告域名:
     type: http

@@ -1,0 +1,214 @@
+{
+  "date": "2026-10-29",
+  "release": "ROUTE-20261029.1",
+  "baseline_commit": "ddbab70ff9eb0e68882c45a671268f165e561670",
+  "source_check": {
+    "checked_at_utc": "2026-10-28T16:36:33.978895+00:00",
+    "ok": true,
+    "summary": {
+      "unchanged": 52,
+      "rules-update": 0,
+      "review-required": 1,
+      "reference-changed": 0,
+      "error": 0
+    },
+    "repositories": {
+      "Maasea/sgmodule": {
+        "status": "ok",
+        "head": "65075cdb388fc5e3094afd7e7314c67b243f3525"
+      },
+      "MetaCubeX/meta-rules-dat@refs/heads/master": {
+        "status": "ok",
+        "head": "4178770badecb1b349fbcd62c737e0d7a2079729"
+      },
+      "MetaCubeX/meta-rules-dat@refs/heads/meta": {
+        "status": "ok",
+        "head": "9f2b7462c7508ad85a1137e70d502b783c89794d"
+      },
+      "NobyDa/Script": {
+        "status": "ok",
+        "head": "0b8d083d444f4476700cb9d5d059c07b42da85eb"
+      },
+      "SukkaW/Surge": {
+        "status": "ok",
+        "head": "33830e0c4efdedd34c71e5b9ef1e487c9fcbee84"
+      },
+      "app2smile/rules": {
+        "status": "ok",
+        "head": "df6366a7024e0b3f0aa3510c5b791eea6f3cba89"
+      },
+      "blackmatrix7/ios_rule_script": {
+        "status": "ok",
+        "head": "0b6897dc17e0c513d25449c935a9694818e32f0c"
+      },
+      "fmz200/wool_scripts": {
+        "status": "ok",
+        "head": "c3f8128dd03c6b3cb35821c347968282cc45b34f"
+      }
+    }
+  },
+  "resources": {
+    "primary_inputs": 12,
+    "community_inputs": 10,
+    "remote_providers": 19,
+    "groups": 20,
+    "pools": 8
+  },
+  "tests": {
+    "project": {
+      "passed": 42
+    },
+    "javascript": {
+      "passed": 88
+    },
+    "private": {
+      "passed": 13
+    },
+    "clash": {
+      "passed": 3
+    },
+    "community": {
+      "passed": 9
+    },
+    "auto_publication": {
+      "passed": 9
+    },
+    "maintenance": {
+      "passed": 30,
+      "skipped": 1,
+      "reason": "Windows account cannot create symlinks"
+    }
+  },
+  "native": {
+    "core": "Mihomo v1.19.32",
+    "http_rule_providers": 19,
+    "AI_count_before": 231,
+    "AI_count_after": 232,
+    "main_config_reload": false,
+    "updated_via": "provider HTTP reload API after localhost payload changed",
+    "groups_preserved": true,
+    "real_airport_used": false,
+    "system_proxy_changed": false
+  },
+  "adoption": {
+    "handwritten_functional_hosts_added": 0,
+    "AI": "whole MetaCubeX category-ai-!cn plus Sukka ai.conf, mechanical conversion and deduplication",
+    "social": "whole category-social-media-!cn plus Discord/WhatsApp/Line/Signal",
+    "tiktok": "whole upstream functional and ads categories; functional before generic ads",
+    "unsupported": "one Sukka URL-REGEX explicitly omitted, primary process rules omitted by cross-client basic-kind adapter"
+  },
+  "routing_regressions": {
+    "fixed_functional_hosts": 8,
+    "cn_geoip_does_not_override_tiktok": true,
+    "tiktok_analytics_blocked": true,
+    "github_before_microsoft": true,
+    "AI_before_general_services": true
+  },
+  "public_artifacts": [
+    {
+      "path": "config/stash.yaml",
+      "sha256": "9ebbcef831e928ea15338bf6f3f0d5674d9a748ed02de8de1f104f44f8e76e80"
+    },
+    {
+      "path": "config/clash-verge.yaml",
+      "sha256": "b846d08a0a9b3e83f2c9117eeb0db8f794c9b6f2a93a0d7cdf9b2bba558fbcb2"
+    },
+    {
+      "path": "config/clash-verge.js",
+      "sha256": "8cedfc79d72d6dab6663e74aa095e07cb08d2a9be0409bf9741f90ccf4144218"
+    },
+    {
+      "path": "rules/vendor/ads-expanded.yaml",
+      "sha256": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604"
+    },
+    {
+      "path": "rules/openai.yaml",
+      "sha256": "9a0d7a075cc3ae40a5a37ee8812c7364864c25959de6618938b599f9c147325f"
+    },
+    {
+      "path": "rules/vendor/netflix.yaml",
+      "sha256": "0ae31c92c380e78aabebb252349715f243e845b9430f84d9dfe61b0845962f8d"
+    },
+    {
+      "path": "rules/vendor/youtube.yaml",
+      "sha256": "4e5591c1438ed993cc743d87dd301d1c78bb35259016854948658bbeb0e09a2f"
+    },
+    {
+      "path": "rules/vendor/telegram.yaml",
+      "sha256": "596e37cd54f0af5f19001e7c4e100d30060812709c8635b90c809c5b93880973"
+    },
+    {
+      "path": "rules/apple.yaml",
+      "sha256": "dd282e776234a4ad56bcfce89b310e804635050791ff612d906b48e40a5978c6"
+    },
+    {
+      "path": "rules/microsoft.yaml",
+      "sha256": "5d97835b04c9d0d28ba50bc8518b518e082d19c87cc68a3c220e06f2c10a77da"
+    },
+    {
+      "path": "rules/vendor/china.yaml",
+      "sha256": "d1c118ed502aaaec17d08a2b28d3d29ec35f9cbd84ac0327bdc682c51e6bab0c"
+    },
+    {
+      "path": "rules/vendor/tiktok.yaml",
+      "sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f"
+    },
+    {
+      "path": "rules/vendor/instagram.yaml",
+      "sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917"
+    },
+    {
+      "path": "rules/vendor/twitter.yaml",
+      "sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3"
+    },
+    {
+      "path": "rules/vendor/github.yaml",
+      "sha256": "a40b30900dc605bb37af83074977083d2e72bae8ca7720d197557e8cbc6b2c74"
+    },
+    {
+      "path": "rules/vendor/social-community.yaml",
+      "sha256": "1a4f05cf920d1580dc23854255b0cf5771dbbf315cbc518e6b8831aee2402123"
+    },
+    {
+      "path": "rules/vendor/proxy-community.yaml",
+      "sha256": "d46e9f8b6b582ee1da6f39629dc06be4573bcf83c495c2f5c9d8ca8e20d39749"
+    },
+    {
+      "path": "rules/system-direct.yaml",
+      "sha256": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f"
+    },
+    {
+      "path": "rules/ad-exceptions.yaml",
+      "sha256": "dff02ef3ba06ddb336fbde2d896132edc5f3d445761a4df6830ec6ef21b3ff45"
+    },
+    {
+      "path": "rules/vendor/tiktok-tracking.yaml",
+      "sha256": "27d8c1ce9f323a951ea7c622c37f9390b7d727543d415844f02d7ba1ecb1cfe1"
+    },
+    {
+      "path": "rules/vendor/tiktok-core.yaml",
+      "sha256": "8f7d7c86857f06e94eb5d1bb3502a2f12a04f678953ca4fb2a86b0f8db0a59dd"
+    },
+    {
+      "path": "rules/app-ads.yaml",
+      "sha256": "b9d679f4c320ae6d881551eadcd6f07b1e8c09fa8dcaa3c7f5709b3ad04afc8c"
+    }
+  ],
+  "publication": {
+    "status": "prepared; pending actual push and verification"
+  },
+  "limits": [
+    "iPhone TikTok playback/login and other social service unlock not tested",
+    "No real airport used for native provider loading test",
+    "Existing local Merge v2 from side conversation preserved; structure is a snapshot",
+    "Temporary isolated connection used for public downloads, not installed into daily job"
+  ],
+  "local_merge_v3": {
+    "path": ".local/clash-global-merge-community-v3",
+    "native_checks_passed": 20,
+    "providers": 19,
+    "namespaced_groups": 20,
+    "original_v2_preserved": true,
+    "installed_into_current_client": false
+  }
+}

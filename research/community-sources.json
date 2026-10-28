@@ -1,0 +1,199 @@
+{
+  "checked_at": "2026-10-28",
+  "policy": "Use whole maintained sets; only mechanical supported-format conversion and deduplication. No manual host additions or selection lists.",
+  "resources": [
+    {
+      "id": "tiktok-functional",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/tiktok@!cn.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/tiktok@!cn.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "23c394c6bf11f7c42a2239f66fa8a8e3ae6294b4e3984395fac7f4d95df641a3",
+      "output": "rules/vendor/tiktok-core.yaml",
+      "output_sha256": "8f7d7c86857f06e94eb5d1bb3502a2f12a04f678953ca4fb2a86b0f8db0a59dd",
+      "retained": 36,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "ai-meta",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/category-ai-!cn.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/category-ai-!cn.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "2f3b87d8dcd6ade66fbb7f78d2d9b30eef20b18ffa3deebaba7cbd9a54c1d8e1",
+      "output": "rules/vendor/ai-metacubex.yaml",
+      "output_sha256": "2fccc6b6863ce2a2858c6d5fe1ac5b1d12c28e71473ef047aec5906700e0e5ac",
+      "retained": 213,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "social-meta",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/category-social-media-!cn.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/category-social-media-!cn.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "83dcd46c0a464a200f5b0360d0e96bdaf35c7d40ac483ca73cd5c87a2f9f5f90",
+      "output": "rules/vendor/social-metacubex.yaml",
+      "output_sha256": "ed1d8fe6c568ab289330ba9df4f488b4ede12910e21f46ce6f7a83b59a0eaa8d",
+      "retained": 627,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "social-discord",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/discord.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/discord.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "b066c5e8bcf3f5ceb00eac510414cbd3b61b36485f2aed0a672e07f6a50a6f17",
+      "output": "rules/vendor/social-discord.yaml",
+      "output_sha256": "7ba3f5301c8b67979055da706829f1daa7174a6f2b41342ee47cbe6934a5b4d5",
+      "retained": 28,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "social-whatsapp",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/whatsapp.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/whatsapp.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "91cf23a84c186c66f86908ad1b3b7658f325bd16c82b1c60f753ac43575513fe",
+      "output": "rules/vendor/social-whatsapp.yaml",
+      "output_sha256": "3fc7a4299f3b1ab150b464e33b92a3f6c918e558129f155b95a7c32ad0e40789",
+      "retained": 11,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "social-line",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/line.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/line.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "bc555ae0d41072e7ceb0eab7f4d9e0f2b31b046a34430932e083dbdcd445fe0f",
+      "output": "rules/vendor/social-line.yaml",
+      "output_sha256": "4d0259c2ac77d72ddc808fc7093d4b5ddd026e7bb5c2f3cd4f9c41ad3048dc7d",
+      "retained": 20,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "social-signal",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/signal.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/signal.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "f243aca1f3aa949aedc1b0bf094a4ebb3f199b649894aef46bf84789943cbd69",
+      "output": "rules/vendor/social-signal.yaml",
+      "output_sha256": "772a90af8becaa4f052f742f64896d14e6a2793e152247b394741ca30cf86bc6",
+      "retained": 8,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "proxy-meta",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/geolocation-!cn.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/geolocation-!cn.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "cd1f4504d16c35a3a46efea24ed9fcfefec0220263fef22b70bb6e9abd59cb4f",
+      "output": "rules/vendor/proxy-community.yaml",
+      "output_sha256": "d46e9f8b6b582ee1da6f39629dc06be4573bcf83c495c2f5c9d8ca8e20d39749",
+      "retained": 27271,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "ai-sukka",
+      "repository": "SukkaW/Surge",
+      "revision": "4d3fd8fed137159305427af377349b3c52664315",
+      "ref": "HEAD",
+      "path": "Source/non_ip/ai.conf",
+      "url": "https://raw.githubusercontent.com/SukkaW/Surge/4d3fd8fed137159305427af377349b3c52664315/Source/non_ip/ai.conf",
+      "source_format": "classical_text",
+      "source_sha256": "fdd9b5bebf65d755cefff467d151386d8e6fce74a7f706f564c6b1fbbee48375",
+      "output": "rules/vendor/ai-sukka.yaml",
+      "output_sha256": "33e70aec64c1b1bb65ff1a96f9272040ec065f27068aaf72b1173f7dd441899b",
+      "retained": 55,
+      "omitted": [
+        "URL-REGEX,https://www\\.google\\.com/.*continue=https://gemini\\.google\\.com.+"
+      ],
+      "license": "AGPL-3.0"
+    },
+    {
+      "id": "tiktok-ads",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/tiktok@ads.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/tiktok@ads.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "628f5937791ddf6ad41ca57e259a2e013c4485f607be77c4d126450958030cd7",
+      "output": "rules/vendor/tiktok-tracking.yaml",
+      "output_sha256": "27d8c1ce9f323a951ea7c622c37f9390b7d727543d415844f02d7ba1ecb1cfe1",
+      "retained": 1,
+      "omitted": [],
+      "license": "GPL-3.0"
+    }
+  ],
+  "licenses": [
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "4178770badecb1b349fbcd62c737e0d7a2079729",
+      "ref": "refs/heads/master",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/4178770badecb1b349fbcd62c737e0d7a2079729/LICENSE",
+      "file": "licenses/MetaCubeX-GPL-3.0.txt",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "license": "GPL-3.0"
+    },
+    {
+      "repository": "SukkaW/Surge",
+      "revision": "4d3fd8fed137159305427af377349b3c52664315",
+      "ref": "HEAD",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/SukkaW/Surge/4d3fd8fed137159305427af377349b3c52664315/LICENSE",
+      "file": "licenses/SukkaW-AGPL-3.0.txt",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "license": "AGPL-3.0"
+    }
+  ],
+  "aggregates": [
+    {
+      "output": "rules/openai.yaml",
+      "sources": [
+        "ai-meta",
+        "ai-sukka"
+      ]
+    },
+    {
+      "output": "rules/vendor/social-community.yaml",
+      "sources": [
+        "social-meta",
+        "social-discord",
+        "social-whatsapp",
+        "social-line",
+        "social-signal"
+      ]
+    }
+  ]
+}

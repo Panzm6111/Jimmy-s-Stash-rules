@@ -1,0 +1,4 @@
+# Mechanically adapted maintained rules; no locally authored domains.
+# Sources and original licenses: research/community-sources.json; tiktok-ads
+payload:
+- DOMAIN-SUFFIX,analytics.tiktok.com

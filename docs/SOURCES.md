@@ -8,7 +8,7 @@
 |---|---|---|---|
 | [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script) @ `7dd06b44f5093dd5404e1e5f3bca5452d97146ef` | GPL-2.0，原文 [licenses/blackmatrix7-GPL-2.0.txt](../licenses/blackmatrix7-GPL-2.0.txt) | Netflix、YouTube、Telegram、China 和 AdvertisingLite 数据。只转为 native 基本 classical 规则，不导入 Clash 配置/内核专用功能 | 仓库最后提交 2026-10-18 北京时间；各数据文件头的更新时间更早。全量读取后发现部分同名 `.yaml` 是拆分片段，优先使用 Classical；去掉 PROCESS-NAME/IP-ASN 等未核实项；精确遗漏列表在 lock 中 |
 | [app2smile/rules](https://github.com/app2smile/rules) @ `df6366a7024e0b3f0aa3510c5b791eea6f3cba89` | MIT，原文 [licenses/app2smile-MIT.txt](../licenses/app2smile-MIT.txt) | 修改 `bilibili-json.js` 和 `tieba-json.js` 的明确广告处理；保留归属，自己保存无外联的缩小脚本 | 实际存在 `module/bilibili.stoverride`、`module/tieba.stoverride` 原生配置，含 HTTP/MITM/script-providers 字段。仓库提交 2026-03-04，不等于 JSON 处理在当前 App 实测有效 |
-| [v2fly/domain-list-community](https://github.com/v2fly/domain-list-community) @ `6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f` | MIT，原文 [licenses/v2fly-domain-list-community-MIT.txt](../licenses/v2fly-domain-list-community-MIT.txt) | 人工精选15个源文件的海外AI专用域名，转为DOMAIN/DOMAIN-SUFFIX，保留 `rules/openai.yaml` 原地址；加1条本项目既有专用主机 | 提交日期2026-10-19；实际文件及许可证已读取，SHA256、所选/剔除项见[AI来源清单](../research/ai-sources.json)。不直接导入其整套配置或把 `!cn` 分类视为非中国厂商证明；123条规则、25类服务均未做账号解锁实测 |
+| [v2fly/domain-list-community](https://github.com/v2fly/domain-list-community) @ `6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f` | MIT，原文 [licenses/v2fly-domain-list-community-MIT.txt](../licenses/v2fly-domain-list-community-MIT.txt) | 历史人工精选方案，2026-10-29已退出生成链；当前完整维护集见[社区来源](COMMUNITY-SOURCES.md) | 提交日期2026-10-19；实际文件及许可证已读取，SHA256、所选/剔除项见[AI来源清单](../research/ai-sources.json)。不直接导入其整套配置或把 `!cn` 分类视为非中国厂商证明；123条规则、25类服务均未做账号解锁实测 |
 | 项目原创配置、教程、验证工具 | [MIT](../LICENSE) | 稳定路径、整合入口与设备私人覆写、较窄的Apple/Microsoft域名表、测试与工具 | 普通 YAML/脚本模型通过不等于 Stash 内核验收；完整能力限制另列 |
 
 上游原始规则以公开源码形式可取得；锁文件记录每个来源路径及 SHA，刷新脚本就是本项目转换流程。修改后的广告脚本保留 MIT 归属与修改说明。第三方数据仍保持其原许可，不用根 MIT 重新授权。没有复制未明确授权的广告/签到包。
@@ -19,7 +19,7 @@
 
 设备上的广告规则集按现有86400秒，即24小时间隔尝试刷新**本仓库已发布快照**；不会直接执行上游最新未知代码。整合主配置建议每周手动刷新一次，发布修复后立即刷新；11份JS由主配置中的URL引用，单独配置24小时尝试更新。新增主机或handler仍须刷新主配置。机场节点同样保持24小时间隔；节点测速30分钟不属于规则更新。时间间隔不保证离线或iOS后台下准点执行，统一操作见[更新教程](UPDATES.md)。
 
-上游提交改变不会自行进入本仓库。现在可在电脑运行 `python tools/maintain.py check`，检查所引用公开文件的变化，建议每天一次；需要更新普通规则时运行 `python tools/maintain.py update`。工具先在临时副本生成和验证，通过后才写入本地公开文件。脚本、重写、MITM和人工选取的AI域名变动只进入审查报告，不直接覆盖。完整安装、保护条件与回退见[本地维护教程](MAINTENANCE.md)。
+上游提交改变不会自行进入本仓库。现在可在电脑运行 `python tools/maintain.py check`，检查所引用公开文件的变化，建议每天一次；需要更新普通规则时运行 `python tools/maintain.py update`。工具先在临时副本生成和验证，通过后才写入本地公开文件。脚本、重写、MITM和许可变化只进入审查报告；当前完整AI及社交分类已纳入机械同步，不再人工选域名。完整安装、保护条件与回退见[本地维护教程](MAINTENANCE.md)。
 
 本地维护工具不自动提交、推送或运行用户电脑的定时任务。只有将经过检查的变更发布到原GitHub分支，手机才能从原链接取得新内容；当前GitHub Actions仍只做验证，没有定时同步。下面的显式版本刷新命令保留供维护者审查指定提交，日常优先使用上面的维护入口。
 

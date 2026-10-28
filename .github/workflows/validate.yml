@@ -8,6 +8,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -24,4 +25,5 @@ jobs:
       - run: python tools/build_clash.py
       - run: python -m unittest discover -s tests -p test_clash.py -v
       - run: python -m unittest discover -s tests -p test_auto_update.py -v
+      - run: python -m unittest discover -s tests -p test_community.py -v
       - run: python tools/validate.py

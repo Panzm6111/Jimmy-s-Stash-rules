@@ -20,13 +20,13 @@ proxy-providers:
 4. 保存并激活这张订阅。停用此前给原机场订阅粘贴的Jimmy扩展脚本，避免两套主配置混用；原机场订阅保留作备份。私人URL不写入GitHub。
 5. 使用“规则”模式，首次将“总代理”从REJECT改为所需地区或自动节点。“海外AI”可选美国、日本、日本+美国或具体节点；TikTok组统一管理TikTok/Instagram/X，默认美国。
 
-日常无需再次复制代码：14个远程规则集按86400秒尝试更新，机场代理集按自身间隔更新。主配置的自动更新用于取得策略组、匹配顺序、DNS及provider声明等结构变化。客户端关闭、断网或下载失败会影响更新，不能保证每天固定时刻成功。
+日常无需再次复制代码：19个远程规则集按86400秒尝试更新，机场代理集按自身间隔更新。主配置的自动更新用于取得策略组、匹配顺序、DNS及provider声明等结构变化。客户端关闭、断网或下载失败会影响更新，不能保证每天固定时刻成功。
 
 ## 更新链路与能力边界
 
 | 内容 | 更新入口 |
 |---|---|
-| AI、社交、Netflix/YouTube/Telegram、Apple/Microsoft、国内分流、全部域名广告和例外 | 14个HTTP rule-providers，各自24小时尝试刷新；每个有独立缓存路径 |
+| AI、社交、Netflix/YouTube/Telegram、Apple/Microsoft、国内分流、全部域名广告和例外 | 19个HTTP rule-providers，各自24小时尝试刷新；每个有独立缓存路径 |
 | 策略组结构、国家组合、规则集顺序、DNS、provider声明 | 上方远程主配置订阅的自动更新；不由机场节点刷新替代 |
 | 机场节点 | 本机私人机场proxy-provider；URL更换时需本人修改本机覆写 |
 | Stash HTTP改写/响应JS/自检 | Clash不执行；Stash用自己的主配置及script-providers更新 |
@@ -35,7 +35,7 @@ proxy-providers:
 
 ## 原机场扩展脚本：兼容方式
 
-[config/clash-verge.js](../config/clash-verge.js)仍保留，供必须在原机场订阅上转换的用户使用。**需先复制一次新版脚本**：新版不再展开规则正文，改为引用14个远程规则集，所以规则集内容之后可以自动刷新。但这个本地脚本里的策略组、provider清单和顺序仍是固定版本；将来结构变更时需重新复制脚本。它不能替代完整远程主配置的结构更新。
+[config/clash-verge.js](../config/clash-verge.js)仍保留，供必须在原机场订阅上转换的用户使用。**需先复制一次新版脚本**：新版不再展开规则正文，改为引用19个远程规则集，所以规则集内容之后可以自动刷新。但这个本地脚本里的策略组、provider清单和顺序仍是固定版本；将来结构变更时需重新复制脚本。它不能替代完整远程主配置的结构更新。
 
 如节点名与本项目策略组冲突，转换会明确停止，不静默丢节点。其他全局/订阅扩展可能再次覆盖规则，应检查最终生效配置。
 
@@ -43,6 +43,6 @@ proxy-providers:
 
 切回原机场订阅可恢复原用法；将广告拦截切DIRECT可对照域名误伤。日常保留能用的私人配置备份。真实节点连通、TikTok地区可用性、AI解锁和实际广告效果仍需设备验证。
 
-已在独立Mihomo v1.19.32进程验证14个HTTP规则集，并通过本地HTTP刷新让AI测试条目数由126变为127，主配置不重载、策略组保持；测试未使用私人机场，未修改系统代理。完整展开的43,421条有序规则与迁移前逐条相同。
+2026-10-29已在独立Mihomo v1.19.32进程验证全部19个HTTP规则集，AI测试条目数由231变为232，主配置不重载、策略组保持；规则加载测试仅使用虚构节点，不修改系统代理。当前接入维护中的完整社区分类，来源与顺序见[社区规则说明](COMMUNITY-SOURCES.md)。
 
 依据：[Clash扩展规则](https://www.clashverge.dev/guide/extend.html)、[脚本能力](https://www.clashverge.dev/guide/script.html)、[订阅响应头](https://www.clashverge.dev/guide/url_schemes.html)、[Mihomo远程规则集](https://wiki.metacubex.one/config/rule-providers/)。进度与发布结果见[PROGRESS](../PROGRESS.md)。

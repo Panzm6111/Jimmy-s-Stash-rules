@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 16 |
+| public_main_rules | 21 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -287,6 +287,21 @@ rule-providers:
     interval: 86400
     type: http
     behavior: classical
+  GitHub:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/github.yaml
+    interval: 86400
+  海外社交:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/social-community.yaml
+    interval: 86400
+  通用代理:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/proxy-community.yaml
+    interval: 86400
   系统直连例外:
     type: http
     behavior: classical
@@ -297,12 +312,23 @@ rule-providers:
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ad-exceptions.yaml
     interval: 86400
+  TikTok广告:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-tracking.yaml
+    interval: 86400
+  TikTok核心:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-core.yaml
+    interval: 86400
   App广告域名:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/app-ads.yaml
     interval: 86400
 rules:
+- RULE-SET,TikTok广告,广告拦截
 - RULE-SET,App广告域名,广告拦截
 - RULE-SET,基础广告,广告拦截
 http:
@@ -574,8 +600,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `8854e4ff8e015e6e3c35704bf1b695e48ca2ce0e787aaa1e3743b6fcb6dc789f` |
-| [config/core.stoverride](../config/core.stoverride) | `5a0a8f7d63a94795b7f09b696cf23d81ccc82c8cfe31a07b25de732cafebfd20` |
+| [config/stash.yaml](../config/stash.yaml) | `9ebbcef831e928ea15338bf6f3f0d5674d9a748ed02de8de1f104f44f8e76e80` |
+| [config/core.stoverride](../config/core.stoverride) | `a6b9c771c73de6fb692fe38a056dfcd3d97ebf2cfe4fa03876198c62a8d21efe` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |

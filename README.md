@@ -1,5 +1,7 @@
 # Jimmy 的 iPhone Stash 项目
 
+2026-10-29分流版本 `ROUTE-20261029.1`：已接入维护中的TikTok、AI、其他常用社交及通用海外完整分类，两端19个远程规则集。先刷新主配置，再刷新规则集并重连；[来源、优先级和边界](docs/COMMUNITY-SOURCES.md)。
+
 项目接续先读 [PROGRESS.md](PROGRESS.md) 顶部的当前SOP总览；协作约束见 [AGENTS.md](AGENTS.md)。现有Stash HTTP去广告继续保留；另提供[Clash Verge完整分流版](docs/CLASH-VERGE.md)，广告层只用域名规则。
 
 供个人长期维护的公共分流、地区池与去广告项目。**支持Stash；另提供Clash Verge完整分流版（域名去广告）**，无需自建服务器、购买额外服务或把订阅交给第三方转换网站。
@@ -67,7 +69,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 | 项目 | 建议与当前设置 |
 |---|---|
-| 全部14个远程规则集（AI/社交/软件/广告/例外） | 每24小时自动尝试刷新一次，现为`interval: 86400` |
+| 全部19个远程规则集（AI/社交/软件/广告/例外） | 每24小时自动尝试刷新一次，现为`interval: 86400` |
 | 机场节点 | 每24小时自动尝试刷新一次，现为`interval: 86400`；机场通知变更或节点失效时手动刷新 |
 | 公共主配置 | Stash已加入首行#SUBSCRIBED，官方默认12小时检查；Clash远程配置需首次开启自动更新（一天）。结构变更由此取得 |
 | 远程广告脚本 | 由主配置引用，现为`interval: 86400`；新增主机或handler时必须同时更新主配置 |

@@ -1,6 +1,6 @@
 # 更新机制与日常使用
 
-2026-10-28起，规则内容全部改为14个远程规则集，两端共享相同有序分流；Stash继续有HTTP层，Clash只做域名去广告。完整展开与迁移前43,421条有序规则逐条一致。
+2026-10-29更新为19个远程规则集，两端共享相同有序分流；Stash继续有HTTP层，Clash只做域名去广告。本轮接入完整社区分类，扩展TikTok、AI、其他社交和通用海外覆盖，详见[来源与维护](COMMUNITY-SOURCES.md)。
 
 | 内容 | 更新方式 |
 |---|---|
@@ -10,11 +10,11 @@
 | Stash 12份广告/自检JS | 原URL的script-providers，86400秒尝试刷新；新增主机或handler仍需要主配置更新 |
 | 机场节点 | 本机私人proxy-provider，每24小时尝试刷新；URL变更需本人修改本机覆写 |
 | 本机公开上游维护 | 原Windows每天12点任务运行publish；普通规则有实际变化且验证通过才提交推送；无变化不动受控文件 |
-| AI精选/HTTP/MITM/许可等不能安全自动适配的变化 | 明确列入待审查报告，保留已核准实现，不误报为已更新 |
+| HTTP/MITM/许可及未知规则类型等不能安全自动适配的变化 | 明确列入待审查报告，保留已核准实现，不误报为已更新 |
 
 GitHub只托管本项目已核准的版本。电脑检查上游、验证并发布，客户端才能取得新版；客户端间隔不保证iOS后台准点、关机执行或断网成功。旧完整私人合成文件和离线包保留作兼容快照，不作为自动更新入口。
 
-Stash首次刷新原链接并确认ROUTE-20261028.2与#SUBSCRIBED；Clash按[远程订阅教程](CLASH-VERGE.md)迁移一次。旧Clash本地扩展脚本若未换新版仍内嵌旧规则；即使用新版，其结构仍不会自行更新，所以推荐完整远程主配置。
+Stash首次刷新原链接并确认ROUTE-20261029.1与#SUBSCRIBED；Clash按[远程订阅教程](CLASH-VERGE.md)迁移一次。旧Clash本地扩展脚本若未换新版仍内嵌旧规则；即使用新版，其结构仍不会自行更新，所以推荐完整远程主配置。
 
 依据：[Stash规则集](https://stash.wiki/rules/rule-set)、[托管配置](https://stash.wiki/features/service-provider-subscription)、[脚本管理](https://stash.wiki/en/script/manage-script)、[Clash订阅响应头](https://www.clashverge.dev/guide/url_schemes.html)。电脑配置及日志见[维护教程](MAINTENANCE.md)。
 
@@ -79,7 +79,7 @@ DNS的`dot.pub / NotValidForName`、陌生`Google/NCloud`策略组等旧故障�
 
 主配置回退只恢复当时的声明；远程JS和规则集若仍指向main，会继续读取当前资源，脚本URL上的`?v=...`也不把main固定为历史字节。完整版本回退需配套脚本及规则集版本，不能只换一个旧YAML就声称所有资源一起回退。旧content-only版本已有解析失败反馈，不作为本次推荐回退目标。
 
-本地维护工具产生的规则更新可按[维护教程](MAINTENANCE.md)使用备份回退；已经发布的变化还需把回退结果重新提交到GitHub，手机才能通过原链接取得回退内容。其他手工修复需还原对应的源配置、规则、模块和脚本，运行`python tools/build_ads.py --write --bundle`，验证后提交到原main；稳定链接不变，不用破坏性重置清掉未保存修改。维护频率是建议，不代表已设置定时任务。
+本地维护工具产生的规则更新可按[维护教程](MAINTENANCE.md)使用备份回退；已经发布的变化还需把回退结果重新提交到GitHub，手机才能通过原链接取得回退内容。其他手工修复需还原对应的源配置、规则、模块和脚本，运行`python tools/build_ads.py --write --bundle`，验证后提交到原main；稳定链接不变，不用破坏性重置清掉未保存修改。本机已设置每天12点任务；电脑和可用GitHub连接均是成功执行的条件。
 
 ## 私人信息误提交
 

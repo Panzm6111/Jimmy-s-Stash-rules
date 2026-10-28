@@ -230,15 +230,15 @@
   },
   {
     "domain": "www.google.com",
-    "policy": "未匹配流量"
+    "policy": "总代理"
   },
   {
     "domain": "cdn.auth0.com",
-    "policy": "未匹配流量"
+    "policy": "总代理"
   },
   {
     "domain": "host.livekit.cloud",
-    "policy": "未匹配流量"
+    "policy": "海外AI"
   },
   {
     "domain": "gemini.google.com.evil.example",
@@ -258,7 +258,7 @@
   },
   {
     "domain": "www.github.com",
-    "policy": "Microsoft"
+    "policy": "总代理"
   },
   {
     "domain": "chat.deepseek.com",

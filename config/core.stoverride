@@ -317,6 +317,21 @@ rule-providers:
   Twitter:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/twitter.yaml
     interval: 86400
+  GitHub:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/github.yaml
+    interval: 86400
+  海外社交:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/social-community.yaml
+    interval: 86400
+  通用代理:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/proxy-community.yaml
+    interval: 86400
 rules:
 - DOMAIN-SUFFIX,local,DIRECT
 - DOMAIN-SUFFIX,lan,DIRECT
@@ -352,8 +367,11 @@ rules:
 - RULE-SET,Netflix,Netflix
 - RULE-SET,YouTube,YouTube
 - RULE-SET,Telegram,Telegram
+- RULE-SET,海外社交,TikTok
 - RULE-SET,Apple服务,Apple
+- RULE-SET,GitHub,总代理
 - RULE-SET,Microsoft服务,Microsoft
+- RULE-SET,通用代理,总代理
 - RULE-SET,国内服务,国内直连
 - GEOIP,CN,国内直连
 - MATCH,未匹配流量
