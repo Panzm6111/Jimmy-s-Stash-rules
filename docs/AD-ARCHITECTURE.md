@@ -178,46 +178,46 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 
 | App专项 | 维护源路径 | 域名路由 | 原生URL动作 | 响应handler | 当前范围 |
 |---|---|---|---|---|---|
-| 58同城广告专项（维护源） | [58tongcheng](../modules\ads\58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 home/advertising 和 appadv；保留职位、联系与发布。已纳入整合入口，无需单独导入；需设备验收。 |
-| 阿里云盘广告专项（维护源） | [alipan](../modules\ads\alipan.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 高德地图广告专项（维护源） | [amap](../modules\ads\amap.stoverride) | 2 | 2 | 0 | AD-20261020.5；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。已纳入整合入口，无需单独导入；需设备验收。 |
-| 百度网盘广告专项（维护源） | [baidu-netdisk](../modules\ads\baidu-netdisk.stoverride) | 0 | 1 | 0 | AD-20261020.5；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。已纳入整合入口，无需单独导入；需设备验收。 |
-| 哔哩哔哩广告处理（维护源） | [bilibili](../modules\ads\bilibili.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 菜鸟广告专项（维护源） | [cainiao](../modules\ads\cainiao.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。已纳入整合入口，无需单独导入；需设备验收。 |
-| 中国移动广告专项（维护源） | [cmcc](../modules\ads\cmcc.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
-| 携程旅行广告专项（维护源） | [ctrip](../modules\ads\ctrip.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
-| 大麦广告专项（维护源） | [damai](../modules\ads\damai.stoverride) | 0 | 1 | 0 | AD-20261020.5；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。已纳入整合入口，无需单独导入；需设备验收。 |
-| 大众点评广告专项（维护源） | [dianping](../modules\ads\dianping.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。已纳入整合入口，无需单独导入；需设备验收。 |
-| 东方财富广告专项（维护源） | [eastmoney](../modules\ads\eastmoney.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。已纳入整合入口，无需单独导入；需设备验收。 |
-| 华住会广告专项（维护源） | [huazhu](../modules\ads\huazhu.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。已纳入整合入口，无需单独导入；需设备验收。 |
-| 京东金融广告专项（维护源） | [jingdong-finance](../modules\ads\jingdong-finance.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。已纳入整合入口，无需单独导入；需设备验收。 |
-| 京东广告专项（维护源） | [jingdong](../modules\ads\jingdong.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 肯德基广告专项（维护源） | [kfc](../modules\ads\kfc.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 猎聘广告专项（维护源） | [liepin](../modules\ads\liepin.stoverride) | 0 | 1 | 0 | AD-20261020.5；明确命名的 live.get-ad-cards；不拦职位推荐或投递。已纳入整合入口，无需单独导入；需设备验收。 |
-| 瑞幸咖啡广告专项（维护源） | [luckin](../modules\ads\luckin.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 脉脉广告专项（维护源） | [maimai](../modules\ads\maimai.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅 adshow；保留礼物、消息和普通推荐。已纳入整合入口，无需单独导入；需设备验收。 |
-| 麦当劳广告专项（维护源） | [mcdonalds](../modules\ads\mcdonalds.stoverride) | 0 | 1 | 0 | AD-20261020.5；专用 portal/home/splash；保留点餐、支付、领券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 美团广告专项（维护源） | [meituan](../modules\ads\meituan.stoverride) | 0 | 4 | 1 | AD-20261020.5；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文。已纳入整合入口，无需单独导入；需设备验收。 |
-| 米家广告专项（维护源） | [mijia](../modules\ads\mijia.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。已纳入整合入口，无需单独导入；需设备验收。 |
-| 网易邮箱大师广告专项（维护源） | [netease-mail](../modules\ads\netease-mail.stoverride) | 0 | 2 | 0 | AD-20261020.5；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。已纳入整合入口，无需单独导入；需设备验收。 |
-| 网易云音乐广告专项（维护源） | [netease-music](../modules\ads\netease-music.stoverride) | 0 | 4 | 0 | AD-20261020.5；interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文。已纳入整合入口，无需单独导入；需设备验收。 |
-| 拼多多广告专项（维护源） | [pinduoduo](../modules\ads\pinduoduo.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅 cappuccino/splash；保留首页、买菜、红包和领券。已纳入整合入口，无需单独导入；需设备验收。 |
-| 铁路12306广告专项（维护源） | [railway12306](../modules\ads\railway12306.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。已纳入整合入口，无需单独导入；需设备验收。 |
-| 淘宝开屏广告处理（维护源） | [taobao](../modules\ads\taobao.stoverride) | 0 | 2 | 1 | AD-20261020.5；专用开屏展示控制、明确tao_splash场景；补充advertisementservice.getadv；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。 |
-| 淘票票广告专项（维护源） | [taopiaopiao](../modules\ads\taopiaopiao.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。已纳入整合入口，无需单独导入；需设备验收。 |
-| 贴吧开屏广告处理（维护源） | [tieba](../modules\ads\tieba.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。已纳入整合入口，无需单独导入；需设备验收。 |
-| UC浏览器广告专项（维护源） | [uc](../modules\ads\uc.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 航旅纵横广告专项（维护源） | [umetrip](../modules\ads\umetrip.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。已纳入整合入口，无需单独导入；需设备验收。 |
-| 中国联通广告专项（维护源） | [unicom](../modules\ads\unicom.stoverride) | 0 | 2 | 0 | AD-20261020.5；专用启动/广告接口；保留 accountListData、客户端配置和缴费。已纳入整合入口，无需单独导入；需设备验收。 |
-| 云闪付广告专项（维护源） | [unionpay](../modules\ads\unionpay.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
-| 微信广告专项（维护源） | [wechat-articles](../modules\ads\wechat-articles.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。已纳入整合入口，无需单独导入；需设备验收。 |
-| 微博开屏广告处理（维护源） | [weibo](../modules\ads\weibo.stoverride) | 4 | 2 | 1 | AD-20261020.5；实时/预载空JSON、专用SDK与素材主机、话题/搜索/热搜/评论明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。 |
-| WPS Office广告专项（维护源） | [wps](../modules\ads\wps.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
-| 下厨房广告专项（维护源） | [xiachufang](../modules\ads\xiachufang.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。已纳入整合入口，无需单独导入；需设备验收。 |
-| 闲鱼广告专项（维护源） | [xianyu](../modules\ads\xianyu.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。已纳入整合入口，无需单独导入；需设备验收。 |
-| 小红书开屏广告处理（维护源） | [xiaohongshu](../modules\ads\xiaohongshu.stoverride) | 4 | 1 | 1 | AD-20261020.5；开屏时间、启动配置splash、专用广告素材、edith/rec/www的v6首页明确赞助项及www独立ads/resource；不改下载/水印/画质/用户信息。已纳入整合入口，无需单独导入；待真机验收。 |
-| 小宇宙广告专项（维护源） | [xiaoyuzhou](../modules\ads\xiaoyuzhou.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。已纳入整合入口，无需单独导入；需设备验收。 |
-| 知乎广告专项（维护源） | [zhihu](../modules\ads\zhihu.stoverride) | 0 | 3 | 0 | AD-20261020.5；开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 58同城广告专项（维护源） | [58tongcheng](../modules/ads/58tongcheng.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 home/advertising 和 appadv；保留职位、联系与发布。已纳入整合入口，无需单独导入；需设备验收。 |
+| 阿里云盘广告专项（维护源） | [alipan](../modules/ads/alipan.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 高德地图广告专项（维护源） | [amap](../modules/ads/amap.stoverride) | 2 | 2 | 0 | AD-20261020.5；两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片。已纳入整合入口，无需单独导入；需设备验收。 |
+| 百度网盘广告专项（维护源） | [baidu-netdisk](../modules/ads/baidu-netdisk.stoverride) | 0 | 1 | 0 | AD-20261020.5；网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享。已纳入整合入口，无需单独导入；需设备验收。 |
+| 哔哩哔哩广告处理（维护源） | [bilibili](../modules/ads/bilibili.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 JSON 开屏与推荐流广告；不处理会员权限、视频贴片或领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 菜鸟广告专项（维护源） | [cainiao](../modules/ads/cainiao.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化。已纳入整合入口，无需单独导入；需设备验收。 |
+| 中国移动广告专项（维护源） | [cmcc](../modules/ads/cmcc.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 携程旅行广告专项（维护源） | [ctrip](../modules/ads/ctrip.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 大麦广告专项（维护源） | [damai](../modules/ads/damai.stoverride) | 0 | 1 | 0 | AD-20261020.5；专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单。已纳入整合入口，无需单独导入；需设备验收。 |
+| 大众点评广告专项（维护源） | [dianping](../modules/ads/dianping.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价。已纳入整合入口，无需单独导入；需设备验收。 |
+| 东方财富广告专项（维护源） | [eastmoney](../modules/ads/eastmoney.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 emdcadvertise 独立广告主机；不代表行情页面全部推广。已纳入整合入口，无需单独导入；需设备验收。 |
+| 华住会广告专项（维护源） | [huazhu](../modules/ads/huazhu.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订。已纳入整合入口，无需单独导入；需设备验收。 |
+| 京东金融广告专项（维护源） | [jingdong-finance](../modules/ads/jingdong-finance.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏。已纳入整合入口，无需单独导入；需设备验收。 |
+| 京东广告专项（维护源） | [jingdong](../modules/ads/jingdong.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 肯德基广告专项（维护源） | [kfc](../modules/ads/kfc.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 猎聘广告专项（维护源） | [liepin](../modules/ads/liepin.stoverride) | 0 | 1 | 0 | AD-20261020.5；明确命名的 live.get-ad-cards；不拦职位推荐或投递。已纳入整合入口，无需单独导入；需设备验收。 |
+| 瑞幸咖啡广告专项（维护源） | [luckin](../modules/ads/luckin.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 脉脉广告专项（维护源） | [maimai](../modules/ads/maimai.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅 adshow；保留礼物、消息和普通推荐。已纳入整合入口，无需单独导入；需设备验收。 |
+| 麦当劳广告专项（维护源） | [mcdonalds](../modules/ads/mcdonalds.stoverride) | 0 | 1 | 0 | AD-20261020.5；专用 portal/home/splash；保留点餐、支付、领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 美团广告专项（维护源） | [meituan](../modules/ads/meituan.stoverride) | 0 | 4 | 1 | AD-20261020.5；外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文。已纳入整合入口，无需单独导入；需设备验收。 |
+| 米家广告专项（维护源） | [mijia](../modules/ads/mijia.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化。已纳入整合入口，无需单独导入；需设备验收。 |
+| 网易邮箱大师广告专项（维护源） | [netease-mail](../modules/ads/netease-mail.stoverride) | 0 | 2 | 0 | AD-20261020.5；mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步。已纳入整合入口，无需单独导入；需设备验收。 |
+| 网易云音乐广告专项（维护源） | [netease-music](../modules/ads/netease-music.stoverride) | 0 | 4 | 0 | AD-20261020.5；interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文。已纳入整合入口，无需单独导入；需设备验收。 |
+| 拼多多广告专项（维护源） | [pinduoduo](../modules/ads/pinduoduo.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅 cappuccino/splash；保留首页、买菜、红包和领券。已纳入整合入口，无需单独导入；需设备验收。 |
+| 铁路12306广告专项（维护源） | [railway12306](../modules/ads/railway12306.stoverride) | 1 | 0 | 0 | AD-20261020.5；仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏。已纳入整合入口，无需单独导入；需设备验收。 |
+| 淘宝开屏广告处理（维护源） | [taobao](../modules/ads/taobao.stoverride) | 0 | 2 | 1 | AD-20261020.5；专用开屏展示控制、明确tao_splash场景；补充advertisementservice.getadv；通用视频/活动弹层未泛化屏蔽。已纳入整合入口，无需单独导入；待真机验收。 |
+| 淘票票广告专项（维护源） | [taopiaopiao](../modules/ads/taopiaopiao.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 queryloadingbanner 启动广告；保留普通活动、选座和购票。已纳入整合入口，无需单独导入；需设备验收。 |
+| 贴吧开屏广告处理（维护源） | [tieba](../modules/ads/tieba.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅 JSON 开屏广告；不改帖子、登录、支付或券接口。已纳入整合入口，无需单独导入；需设备验收。 |
+| UC浏览器广告专项（维护源） | [uc](../modules/ads/uc.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 航旅纵横广告专项（维护源） | [umetrip](../modules/ads/umetrip.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务。已纳入整合入口，无需单独导入；需设备验收。 |
+| 中国联通广告专项（维护源） | [unicom](../modules/ads/unicom.stoverride) | 0 | 2 | 0 | AD-20261020.5；专用启动/广告接口；保留 accountListData、客户端配置和缴费。已纳入整合入口，无需单独导入；需设备验收。 |
+| 云闪付广告专项（维护源） | [unionpay](../modules/ads/unionpay.stoverride) | 2 | 0 | 0 | AD-20261020.5；仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告。已纳入整合入口，无需单独导入；需设备验收。 |
+| 微信广告专项（维护源） | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 0 | 0 | 1 | AD-20261020.5；仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天。已纳入整合入口，无需单独导入；需设备验收。 |
+| 微博开屏广告处理（维护源） | [weibo](../modules/ads/weibo.stoverride) | 4 | 2 | 1 | AD-20261020.5；实时/预载空JSON、专用SDK与素材主机、话题/搜索/热搜/评论明确广告项；不是首页全部信息流覆盖。已纳入整合入口，无需单独导入；待真机验收。 |
+| WPS Office广告专项（维护源） | [wps](../modules/ads/wps.stoverride) | 0 | 2 | 0 | AD-20261020.5；仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据。已纳入整合入口，无需单独导入；需设备验收。 |
+| 下厨房广告专项（维护源） | [xiachufang](../modules/ads/xiachufang.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片。已纳入整合入口，无需单独导入；需设备验收。 |
+| 闲鱼广告专项（维护源） | [xianyu](../modules/ads/xianyu.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索。已纳入整合入口，无需单独导入；需设备验收。 |
+| 小红书开屏广告处理（维护源） | [xiaohongshu](../modules/ads/xiaohongshu.stoverride) | 4 | 1 | 1 | AD-20261020.5；开屏时间、启动配置splash、专用广告素材、edith/rec/www的v6首页明确赞助项及www独立ads/resource；不改下载/水印/画质/用户信息。已纳入整合入口，无需单独导入；待真机验收。 |
+| 小宇宙广告专项（维护源） | [xiaoyuzhou](../modules/ads/xiaoyuzhou.stoverride) | 0 | 1 | 0 | AD-20261020.5；仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频。已纳入整合入口，无需单独导入；需设备验收。 |
+| 知乎广告专项（维护源） | [zhihu](../modules/ads/zhihu.stoverride) | 0 | 3 | 0 | AD-20261020.5；开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告。已纳入整合入口，无需单独导入；需设备验收。 |
 
 ## 10. 精确原生声明与基础规则原文
 

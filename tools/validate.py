@@ -338,7 +338,9 @@ class ProjectChecks(unittest.TestCase):
         from render_app_research import render
         for file, text in render().items(): self.assertEqual((ROOT / file).read_text(), text)
         from render_ad_architecture import rendered
-        for file, text in rendered().items(): self.assertEqual((ROOT / file).read_text(), text)
+        for file, text in rendered().items():
+            self.assertEqual((ROOT / file).read_text(), text)
+            self.assertNotIn('](../modules' + chr(92), text)
 
     def test_added_ad_scene_urls_do_not_catch_business_or_duplicate_handlers(self):
         tb = next(r for r in load('modules/ads/taobao.stoverride')['http']['url-rewrite'] if 'noah' in r).rsplit(' - ',1)[0]

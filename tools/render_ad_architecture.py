@@ -44,7 +44,7 @@ def rendered():
             '|---|---|---|---|---|---|']
     for p,m in parsed:
         h=m.get('http',{})
-        out.append(f'| {m["name"]} | [{p.stem}](../{p}) | {len(m.get("rules",[]))} | {len(h.get("url-rewrite",[]))} | {len(h.get("script",[]))} | {m["desc"].replace("|","／")} |')
+        out.append(f'| {m["name"]} | [{p.stem}](../{p.as_posix()}) | {len(m.get("rules",[]))} | {len(h.get("url-rewrite",[]))} | {len(h.get("script",[]))} | {m["desc"].replace("|","／")} |')
     declaration={'proxy-groups':[g for g in main['proxy-groups'] if g['name']=='广告拦截'],
                  'rule-providers':main['rule-providers'],
                  'rules':[r for r in main['rules'] if r.split(',')[-1]=='广告拦截' or r in {'DOMAIN,flowplus.meituan.net,DIRECT','DOMAIN,bootpreload.uve.weibo.com,DIRECT'}],

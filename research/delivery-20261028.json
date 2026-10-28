@@ -49,7 +49,15 @@
       "appsgenaiserver-pa.clients6.google.com",
       "appsgenaiserver-pa.googleapis.com"
     ],
-    "fmz_review": "New rnote MITM scope not adopted; existing HTTP runtime retained"
+    "fmz_review": "New rnote MITM scope not adopted; existing HTTP runtime retained",
+    "immediate_update": {
+      "unchanged": 53,
+      "rules-update": 0,
+      "review-required": 1,
+      "reference-changed": 0,
+      "error": 0
+    },
+    "immediate_update_status": "no_rule_changes"
   },
   "scheduler": {
     "name": "Jimmy-Stash-Rules-Noon-Check",
@@ -73,7 +81,53 @@
     "ordinary rule changed-content transaction on Windows"
   ],
   "publication": {
-    "status": "pending",
-    "force_push": false
+    "status": "code_pushed_and_verified",
+    "code_commit": "7db782fc40df1aaddda832cd470ffd03082c1bc3",
+    "remote_main_verified": true,
+    "force_push": false,
+    "public_resources": [
+      {
+        "path": "config/stash.yaml",
+        "sha256": "bacc791f950dd5279ebd6f31dc31a4a7401ade964fa5c20cedd193fc1b90dca9",
+        "http_status": 200
+      },
+      {
+        "path": "config/clash-verge.yaml",
+        "sha256": "00f89323a9437980c2164cbe7edabd12b008fd0798a355eff83e30a7a06d6ed8",
+        "http_status": 200
+      },
+      {
+        "path": "config/clash-verge.js",
+        "sha256": "24d3241d70fe116dc613d4ee9e86c26099fa42db25629ca1d3fdc8d843e9acc3",
+        "http_status": 200
+      },
+      {
+        "path": "rules/openai.yaml",
+        "sha256": "ab9a4276b622bd59f79a4c4368bc6c401394e6d23e6858ee839285ddfa51f374",
+        "http_status": 200
+      },
+      {
+        "path": "rules/vendor/tiktok.yaml",
+        "sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f",
+        "http_status": 200
+      },
+      {
+        "path": "rules/vendor/instagram.yaml",
+        "sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917",
+        "http_status": 200
+      },
+      {
+        "path": "rules/vendor/twitter.yaml",
+        "sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3",
+        "http_status": 200
+      },
+      {
+        "path": "rules/vendor/ads-expanded.yaml",
+        "sha256": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
+        "http_status": 200
+      }
+    ],
+    "ci_initial": "failure: one Windows module-table link used backslashes; fixed to as_posix with regression assertion",
+    "ci_followup": "read current commit checks on GitHub"
   }
 }

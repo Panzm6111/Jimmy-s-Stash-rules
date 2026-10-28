@@ -37,7 +37,7 @@
     "tools/build_subscription.py": "a97d99636cca22bf11a368bfd0c6d754b9f8ad399264cb3432278058f2697235",
     "tools/build_local_bundle.py": "c58f1410203743245cd1772c058f63f70c85cc00acf4868a349363ceae2dd0dc",
     "tools/build_private_config.py": "2ddcd7db2c24d808f6dff005c9fff824cfec42dec286873cb56f5e51cc02bc1f",
-    "tools/render_ad_architecture.py": "d2e4527614778014cd0608fbfed2e55b2edbb9367fd04ff18a0be6a723e9e4cb",
+    "tools/render_ad_architecture.py": "6ff81e755cf5d419bbba2e9ce14d6e0ce3daf7a731bfcaa6bf597f25ddcb49c7",
     "tools/build_ads.py": "ebf07a2abc69c760598fe603b86ebe0a5ec4b846609061156806cf7a4f18c3fc",
     "modules/diagnostics/ads.stoverride": "c5f0e0e34cc4f5424188fb54d984975a1be967f24ca01b8cae331ca1b6e0b49f",
     "modules/diagnostics/self-check.stoverride": "8cdfdc9e2547510642368f984e82a2c1ebed0add5978d8b6c2dea860aa21f231",
@@ -111,7 +111,7 @@
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
     "bytes": 151780,
-    "sha256": "188bb2c119bc379e86542f45ea41735262bcb9fcca084710a454526efec05270",
+    "sha256": "d6b0efee2bf8b444c1222aef29fa9f6b04880ffda1527f6d9daa1739dc3da968",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,
