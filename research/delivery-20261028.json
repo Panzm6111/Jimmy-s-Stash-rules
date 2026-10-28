@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-28",
+  "requirements": [
+    "Windows daily noon check",
+    "immediate update and GitHub push",
+    "Clash full routing with domain-only ads",
+    "US+Japan pool in overseas AI",
+    "one TikTok policy for TikTok Instagram X"
+  ],
+  "counts": {
+    "groups": 20,
+    "url_test_pools": 8,
+    "routes": 5361,
+    "ai_domains": 126,
+    "social_source_rules": {
+      "TikTok": 34,
+      "Instagram": 4,
+      "Twitter": 33
+    },
+    "ordinary_snapshots": 9
+  },
+  "checks": {
+    "project_route_checks": 41,
+    "js_simulations": 88,
+    "private_synthetic_checks": 13,
+    "clash_conversion_checks": 3,
+    "maintenance_simulations": {
+      "passed": 29,
+      "skipped": 1,
+      "reason": "Windows account symlink unavailable"
+    },
+    "mihomo_version": "v1.19.32 windows amd64",
+    "mihomo_parse": "passed with synthetic nodes and local public ad payload",
+    "generated_drift": 0,
+    "markdown_files": 22,
+    "local_markdown_links": 334,
+    "broken_links": []
+  },
+  "upstreams": {
+    "original_scheduled_check": {
+      "files": 50,
+      "errors": 0
+    },
+    "ai_revision": "333d8a1810d04600bcb00870155a369954ed37f5",
+    "social_revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+    "existing_ordinary_content_changes": 0,
+    "ai_added_exact_hosts": [
+      "appsgenaiserver-pa.clients.google.com",
+      "appsgenaiserver-pa.clients6.google.com",
+      "appsgenaiserver-pa.googleapis.com"
+    ],
+    "fmz_review": "New rnote MITM scope not adopted; existing HTTP runtime retained"
+  },
+  "scheduler": {
+    "name": "Jimmy-Stash-Rules-Noon-Check",
+    "time": "12:00",
+    "timezone": "China Standard Time",
+    "first_success_date": "2026-10-28",
+    "last_verified_exit_code": 0,
+    "next_run": "2026-10-29 12:00",
+    "logged_on_user_required": true,
+    "start_when_available": true,
+    "logon_catchup_after_noon": true,
+    "scheduled_operation": "check only",
+    "scheduled_auto_push": false
+  },
+  "not_verified": [
+    "iPhone Stash parser and live TikTok/AI access",
+    "actual ad removal",
+    "real airport connectivity",
+    "Clash Verge GUI acceptance",
+    "macOS scheduler",
+    "ordinary rule changed-content transaction on Windows"
+  ],
+  "publication": {
+    "status": "pending",
+    "force_push": false
+  }
+}

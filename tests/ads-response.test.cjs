@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const {execFileSync} = require('node:child_process');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
-const cases = JSON.parse(execFileSync('python3', ['-c', `import json,yaml
+const cases = JSON.parse(execFileSync(process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3'), ['-X','utf8','-c', `import json,yaml
 from pathlib import Path
 print(json.dumps([{"module":p.stem,"rules":yaml.safe_load(p.read_text()).get('http',{}).get('url-rewrite',[])} for p in Path('modules/ads').glob('*.stoverride')]))`], {cwd:root}));
 test('native fixed responses preserve source action semantics; no empty-response provider remains', () => {

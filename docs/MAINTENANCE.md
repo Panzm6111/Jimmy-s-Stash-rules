@@ -14,7 +14,7 @@
 
 没有变化时无需更新；上游改了与本项目无关的内容，也不必重写配置。App专项脚本、URL重写及MITM主机的变化需要审查；工具不会把整包上游脚本直接覆盖进来。
 
-本轮自动同步范围是blackmatrix7来源的6份规则输出：Netflix、YouTube、Telegram、国内域名、扩展广告包和基础广告子集。AI精选规则、App专项与其他参考来源会检查并提示变化，不自动改写。本地白名单与私人接入保持原样，生成的主配置仍用原稳定路径，地区组保留。
+本轮自动同步范围是blackmatrix7来源的9份规则输出：Netflix、YouTube、Telegram、国内域名、扩展广告包和基础广告子集。AI精选规则、App专项与其他参考来源会检查并提示变化，不自动改写。本地白名单与私人接入保持原样，生成的主配置仍用原稳定路径，地区组保留。
 
 ## 一次性准备
 
@@ -24,7 +24,7 @@
 - [Git](https://git-scm.com/downloads)：用于下载仓库、检查本地状态和发布。
 - [Node.js](https://nodejs.org/en/download)：建议22 LTS，用于执行现有JavaScript检查。仅安装Python不能完成更新后的全部验证。
 
-本轮在Linux环境验证。下面提供Windows与macOS的操作方式，但尚未在这两个系统实际运行验证。
+原维护逻辑曾在Linux模拟验证；2026-10-28已在Windows实际检查来源并运行计划任务。普通规则变更事务仍以模拟覆盖，macOS尚未实机验证。
 
 已经有本仓库的Git工作副本时，进入原目录继续使用，不再克隆第二份。只有ZIP解压目录时，建议按下面的命令克隆一次；更新工具依赖Git状态和历史。
 
@@ -118,32 +118,37 @@ git push origin HEAD:main
 
 发布后，手机保留原私人覆写和证书，在Stash里刷新原主配置链接并重连；需要立即更新广告域名包时，手动刷新远程规则集“基础广告”。主配置更新脚本URL、主机及handler声明；脚本和域名包分别按24小时间隔尝试刷新。仅刷新JS不能替代新增主机/handler后的主配置更新。详细步骤见[更新教程](UPDATES.md)。
 
-## 建议多久检查
+## 本机每天中午12点检查
 
-**每天检查一次即可，有变化才处理。** 不需要每几分钟拉取。建议先手动成功运行一次，再把`check`加入电脑定时任务；暂不建议定时直接发布变化。
+2026-10-28已在本机注册 Windows 任务 Jimmy-Stash-Rules-Noon-Check，每天北京时间12:00检查；本机时区为China Standard Time。使用当前用户登录会话，锁屏可运行，关机/休眠时不唤醒；错过后在可用时或中午之后登录补检，同一天成功后不重复。电脑未登录、关机或断网时不能保证准点执行。
 
-本项目没有替你安装定时任务，也没有部署GitHub定时同步。电脑休眠、关机或断网会影响本地任务，聊天结束后也不会有助手替你后台运行。若希望不依赖电脑开机，可另外部署GitHub Actions定时检查；当前仓库的验证工作流不等于这个同步服务。
+任务只执行check并保存报告，不自动更新、提交或推送。公开上游下载失败时整轮重试一次，仍失败返回非零结果，保留原规则。运行日志位于.local/maintenance/run-*.log，latest.md为中文报告。
 
-### Windows每天检查
+重新安装或迁移任务（须先在新位置准备Python环境及Git/Node）：
 
-1. 在终端取得仓库完整路径，确认`.venv\Scripts\python.exe`存在。
-2. 打开Windows“任务计划程序”，选择“创建基本任务”，名称填写“Stash上游检查”。
-3. 触发器选“每天”，选择你通常开着电脑的时间，例如20:00。
-4. 操作选“启动程序”。程序填写虚拟环境Python的完整路径，例如`C:\Users\你的用户名\Jimmy-s-Stash-rules\.venv\Scripts\python.exe`。
-5. 参数填写`tools\maintain.py check`；“起始于”填写仓库目录的完整路径，不加引号。
-6. 保存后手动“运行”一次，查看`.local\maintenance\`中的报告时间是否更新。
-
-路径要换成你电脑的实际位置。该时间使用Windows本地时区；希望北京时间20:00执行，先确认系统时区为北京时间。任务没有弹窗不等于成功，仍需查看报告。
-
-### macOS与Linux
-
-macOS日常手动运行上面的命令即可。需要定时检查的macOS/Linux用户，可用`crontab -e`加入一行；先把下列两处路径换成自己的仓库绝对路径：
-
-```cron
-0 20 * * * cd "/绝对路径/Jimmy-s-Stash-rules" && "/绝对路径/Jimmy-s-Stash-rules/.venv/bin/python" tools/maintain.py check
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Install-MaintenanceTask.ps1
 ```
 
-这表示每天本机时区20:00检查；macOS不保证休眠时执行。保存后在终端手动运行同一条`cd ... && ... check`命令验证路径，再查看报告。定时环境通常不加载终端配置；Git需要能被该环境找到，不要把私人凭据写进任务命令。
+安装器捕获当前Git/Node路径到被忽略的.local配置。只在该进程使用Bypass，不修改全机执行策略；不保存账号密码。若同名任务指向其他程序会停止，避免覆盖无关任务。移动仓库后重新安装。
+
+立即手动检查或更新：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Run-Maintenance.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Run-Maintenance.ps1 -Mode update
+```
+
+update仍要求干净工作区；日报与自动规则更新保持原边界。专项脚本、MITM、新AI主机等由人工审阅后采用。完整配置构建会同步生成Stash和Clash文件。
+
+查看或删除任务（删除不影响仓库文件）：
+
+```powershell
+Get-ScheduledTaskInfo -TaskName Jimmy-Stash-Rules-Noon-Check
+Unregister-ScheduledTask -TaskName Jimmy-Stash-Rules-Noon-Check -Confirm:$false
+```
+
+本次首次任务有一份公开来源下载失败，保持了失败退出；补上重试和UTF-8日志后实际任务退出0，50个来源均成功。下一次计划时间为2026-10-29 12:00。这不是广告效果验收。macOS/Linux尚未安装调度。
 
 ## 回退与失败处理
 

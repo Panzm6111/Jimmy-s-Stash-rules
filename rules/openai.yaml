@@ -70,6 +70,9 @@ payload:
 - DOMAIN-SUFFIX,antigravity.google
 - DOMAIN-SUFFIX,antigravity-unleash.goog
 - DOMAIN-SUFFIX,stitch.withgoogle.com
+- DOMAIN,appsgenaiserver-pa.clients.google.com
+- DOMAIN,appsgenaiserver-pa.clients6.google.com
+- DOMAIN,appsgenaiserver-pa.googleapis.com
 - DOMAIN-SUFFIX,groq.com
 - DOMAIN-SUFFIX,hf.co
 - DOMAIN-SUFFIX,hf.space

@@ -1,0 +1,8 @@
+# Derived from blackmatrix7/ios_rule_script; GPL-2.0.
+# Source: rule/Clash/Instagram/Instagram.yaml @ 0b6897dc17e0c513d25449c935a9694818e32f0c
+# Only native basic rule kinds retained; see research/sources.lock.json.
+payload:
+- DOMAIN-SUFFIX,cdninstagram.com
+- DOMAIN-SUFFIX,instagr.am
+- DOMAIN-SUFFIX,instagram.com
+- DOMAIN-KEYWORD,instagram

@@ -7,7 +7,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
-const generated = JSON.parse(execFileSync('python3', ['-c', 'import sys,json;sys.path.insert(0,"tools");from build_ad_diagnostics import self_check_rendered;print(json.dumps(self_check_rendered()))'], {cwd: root}));
+const generated = JSON.parse(execFileSync(process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3'), ['-X','utf8','-c', 'import sys,json;sys.path.insert(0,"tools");from build_ad_diagnostics import self_check_rendered;print(json.dumps(self_check_rendered()))'], {cwd: root}));
 const script = generated['scripts/ads/self-check.js'];
 const now = 1792500000000;
 const key = 'jimmy.ads.diag.session.v1';

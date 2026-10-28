@@ -52,7 +52,9 @@ def main():
         count += 1
     blobs = 0
     if args.history:
-        for item in git('rev-list', '--objects', '--all').decode().splitlines():
+        # Scan publishable Git history. Codex's private turn-diff capture refs
+        # can contain ignored/uncommitted context and are never pushed.
+        for item in git('rev-list', '--objects', '--branches', '--remotes', '--tags').decode().splitlines():
             oid = item.split(' ', 1)[0]
             if git('cat-file', '-t', oid).strip() != b'blob': continue
             data = git('cat-file', 'blob', oid)

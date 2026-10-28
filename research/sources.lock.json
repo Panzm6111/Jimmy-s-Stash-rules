@@ -116,6 +116,35 @@
         "DOMAIN,config.unityads.unitychina.cn"
       ],
       "review_notes": "2026-10-19: 21→38; add reviewed SDK domains/keywords from identical pinned Classical source, not full analytics list. No umeng keyword or business-gateway block."
+    },
+    {
+      "source_path": "rule/Clash/TikTok/TikTok.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/TikTok/TikTok.yaml",
+      "source_sha256": "71c372b476ff9b641bb619b74c1192dd1b831c374bcd8cd0ae8fa34374c9fff2",
+      "output": "rules/vendor/tiktok.yaml",
+      "output_sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f",
+      "retained": 34,
+      "omitted": [
+        "PROCESS-NAME,com.zhiliaoapp.musically"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/Instagram/Instagram.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Instagram/Instagram.yaml",
+      "source_sha256": "3ea6152876ff1c998b9434761898af1242bcc6bcaeaed74023910d9d08c64e39",
+      "output": "rules/vendor/instagram.yaml",
+      "output_sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917",
+      "retained": 4,
+      "omitted": []
+    },
+    {
+      "source_path": "rule/Clash/Twitter/Twitter.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Twitter/Twitter.yaml",
+      "source_sha256": "67c46c3988da5cdc387eacee945c2950464691af0e2746929455cd9295c3ff2b",
+      "output": "rules/vendor/twitter.yaml",
+      "output_sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3",
+      "retained": 33,
+      "omitted": []
     }
   ],
   "ad_scripts": [

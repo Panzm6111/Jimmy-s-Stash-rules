@@ -169,6 +169,13 @@ class PrivateConfigChecks(unittest.TestCase):
         with self.assertRaises(BuildError):
             verify(broken, self.template, config['proxies'])
 
+    def test_combined_pool_is_exact_us_japan_union(self):
+        config, _ = compose(self.source)
+        groups = {g['name']: g for g in config['proxy-groups']}
+        self.assertEqual(set(groups['日本+美国']['proxies']),
+                         set(groups['日本']['proxies']) | set(groups['美国']['proxies']))
+        self.assertIn('日本+美国', groups['海外AI']['proxies'])
+
     def test_private_output_permissions_and_repository_guard(self):
         with self.assertRaises(BuildError):
             write_private(ROOT / 'dist/should-not-write.yaml', 'no private content')
@@ -178,7 +185,11 @@ class PrivateConfigChecks(unittest.TestCase):
             os.chmod(output, 0o644)
             write_private(output, 'new content')
             self.assertEqual(output.read_text(), 'new content')
-            self.assertEqual(stat.S_IMODE(output.stat().st_mode), 0o600)
+            if os.name != 'nt':
+                self.assertEqual(stat.S_IMODE(output.stat().st_mode), 0o600)
+            else:
+                # Windows uses ACLs; POSIX owner-only bits are not an ACL test.
+                self.assertTrue(os.access(output, os.R_OK | os.W_OK))
             (Path(directory) / '.git').mkdir()
             (Path(directory) / '.git/HEAD').write_text('ref: refs/heads/main\n')
             with self.assertRaises(BuildError):

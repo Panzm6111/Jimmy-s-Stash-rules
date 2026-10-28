@@ -74,7 +74,7 @@ def main() -> None:
         verify_sources(manifest, args.source_dir)
     body = rendered(manifest)
     if args.write:
-        OUTPUT.write_text(body)
+        OUTPUT.write_text(body, encoding='utf-8', newline='\n')
     elif OUTPUT.read_text() != body:
         raise SystemExit('AI rules differ from reviewed manifest; run with --write after review')
     print(f'AI rules: {len(selected_rules(manifest))}; sources: {len(manifest["sources"])}; {"written" if args.write else "checked"}')

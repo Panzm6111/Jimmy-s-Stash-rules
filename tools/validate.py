@@ -8,6 +8,7 @@ import hashlib
 import itertools
 import ipaddress
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -388,7 +389,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_other_and_all_nodes_do_not_hide_connection_candidates(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
-        self.assertEqual(len(self.groups), 18)
+        self.assertEqual(len(self.groups), 20)
         other = self.groups['其他地区']
         all_nodes = self.groups['自动节点']
         self.assertEqual(other['type'], 'url-test')
@@ -490,7 +491,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
-        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区'}
+        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', '日本+美国'}
         self.assertEqual({g['name'] for g in self.groups.values() if g['type'] == 'url-test'}, pools)
         for name in pools:
             group = self.groups[name]
@@ -643,6 +644,22 @@ class ProjectChecks(unittest.TestCase):
                      'chat.qwen.ai', 'hailuoai.video', 'www.minimax.io']:
             self.assertFalse(any(matches(rule, host) for rule in rules), host)
 
+    def test_us_japan_combined_pool(self):
+        pool = self.groups['日本+美国']
+        self.assertIn('日本+美国', self.groups['海外AI']['proxies'])
+        for name in ['美国 01', '日本 02', 'US-01', 'JP-02', 'REJECT']:
+            self.assertRegex(name, pool['filter'])
+        for name in ['香港 01', 'Singapore 01', 'TW-02', 'DIRECT']:
+            self.assertNotRegex(name, pool['filter'])
+
+    def test_social_routes_share_tiktok_policy(self):
+        self.assertEqual(self.groups['TikTok']['proxies'][0], '美国')
+        config = load('config/stash.yaml')
+        for domain in ['www.tiktok.com', 'api.tiktokv.com', 'www.instagram.com', 'scontent.cdninstagram.com', 'x.com', 'api.twitter.com', 'video.twimg.com']:
+            self.assertEqual(route(config, domain), 'TikTok', domain)
+        for domain in ['www.douyin.com', 'www.example.org']:
+            self.assertNotEqual(route(config, domain), 'TikTok', domain)
+
     def test_checkin_stays_deferred(self):
         plan = json.loads((ROOT / 'research/checkin-plan.json').read_text())
         self.assertEqual(len(plan['scope']), 24)
@@ -729,7 +746,8 @@ def main():
     args = parser.parse_args()
     result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(ProjectChecks))
     if not result.wasSuccessful(): return 1
-    node = subprocess.run(['node', '--test', *[str(p) for p in sorted((ROOT / 'tests').glob('ads*.test.cjs'))]], cwd=ROOT)
+    node = subprocess.run(['node', '--test', *[str(p) for p in sorted((ROOT / 'tests').glob('ads*.test.cjs'))]], cwd=ROOT,
+                          env=dict(os.environ, PYTHON=sys.executable, PYTHONUTF8='1'))
     if node.returncode: return node.returncode
     scan = subprocess.run([sys.executable, str(ROOT / 'tools/scan_secrets.py'), '--history'], cwd=ROOT)
     if scan.returncode: return scan.returncode

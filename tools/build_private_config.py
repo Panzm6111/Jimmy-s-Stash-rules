@@ -23,7 +23,7 @@ from build_local_bundle import dump, flatten
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
-AUTO_POOLS = ('自动节点', *REGIONS, '其他地区')
+AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', '日本+美国')
 PROBE_SETTINGS = {'url': 'https://www.gstatic.com/generate_204', 'interval': 1800}
 PROBE_FIELDS = (*PROBE_SETTINGS, 'tolerance', 'lazy')
 
@@ -75,7 +75,7 @@ def verify(config, template, expected_nodes):
     groups = config['proxy-groups']
     names = [g['name'] for g in groups]
     node_names = {n['name'] for n in expected_nodes}
-    require(len(names) == len(set(names)) == 18, '策略组数量或唯一性异常。')
+    require(len(names) == len(set(names)) == 20, '策略组数量或唯一性异常。')
     require(not (set(names) & node_names), '节点与策略重名。')
     targets = set(names) | node_names | BUILTINS
     graph = {}
@@ -117,6 +117,9 @@ def verify(config, template, expected_nodes):
         require(set(members) - {'REJECT'} == expected_members, '地区包含错误节点或遗漏节点。')
         union.update(n for n in members if n in node_names)
     require(set(by_name['自动节点']['proxies']) - {'REJECT'} == node_names, '自动节点有遗漏。')
+    require(set(by_name['日本+美国']['proxies']) - {'REJECT'} ==
+            (set(by_name['日本']['proxies']) | set(by_name['美国']['proxies'])) - {'REJECT'},
+            '日本+美国不是两个国家节点的精确并集。')
     require(by_name['手动节点']['type'] == 'select' and
             set(by_name['手动节点']['proxies']) - {'REJECT'} == node_names, '手动节点有遗漏或类型改变。')
     require(set(by_name['其他地区']['proxies']) - {'REJECT'} == node_names - union,
@@ -185,7 +188,7 @@ def compose(source, template=None):
                     for name in REGIONS}
     assigned = set().union(*(set(v) for v in region_nodes.values()))
     other_nodes = [n for n in all_names if n not in assigned]
-    pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes}
+    pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes, '日本+美国': list(dict.fromkeys(region_nodes['日本'] + region_nodes['美国']))}
     result = copy.deepcopy(template)
     result.pop('proxy-providers', None)
     result['proxies'] = eligible

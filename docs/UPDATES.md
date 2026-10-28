@@ -62,7 +62,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 | 现象 | 处理顺序 |
 |---|---|
-| `provider: url,payload, path are all empty` | `.3`已移除11个仅含content的脚本来源声明并获用户导入恢复反馈。仍运行旧配置时刷新原公共主配置至当前`.4`并重连，保留私人覆写和证书；若继续失败只反馈版本标记及脱敏错误文字 |
+| `provider: url,payload, path are all empty` | `.3`已移除11个仅含content的脚本来源声明并获用户导入恢复反馈。仍运行旧配置时刷新原公共主配置至当前`.5`并重连，保留私人覆写和证书；若继续失败只反馈版本标记及脱敏错误文字 |
 | 不能访问网络 | 确认选中整合配置、私人覆写仍关联且机场已加载。总代理初始REJECT，首次须明确选择出口；失败可回到上次能用的备份 |
 | 节点少或SS/VLESS连接失败 | 按[订阅兼容](SUBSCRIPTION.md)核对格式、数量、协议与脱敏错误；不静默删节点或关闭TLS验证 |
 | 地区池空或全部失效 | 核对名称与成员；配置不加入其他国家或DIRECT后备，原生失败行为仍需验收。不要为连通自动换国家 |

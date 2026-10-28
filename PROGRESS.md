@@ -1,5 +1,118 @@
 # 进度、验证与接续说明
 
+<!-- project-main: PROGRESS.md -->
+<!-- sop-current-start -->
+
+当前总览更新：2026-10-28（北京时间）。按 project-standard v1 整理；以下六节是当前接续入口，末尾原文是历史证据。历史中的“本次”“work 分支”“待修复”须结合时间和后续记录阅读。
+
+## 1. 项目名称与权威位置
+
+- 项目：Jimmy 的 iPhone Stash 分流与去广告规则；本地接续根目录为 `D:\Codex workspace\VPN rules`，仓库直接位于本目录。
+- **唯一当前状态主文件沿用本文件 PROGRESS.md**；[README](README.md)负责使用导航，[AGENTS](AGENTS.md)负责协作约束，不创建第二份 PROJECT.md。
+- 原仓库：[Panzm6111/Jimmy-s-Stash-rules](https://github.com/Panzm6111/Jimmy-s-Stash-rules)，本地分支 main，远程 origin/main。2026-10-28 从远端完整克隆的整理基线为 `8276bc8ce3ea9e091b2091a906d02c2b84ff67df`，保留完整 Git 历史。
+- 原电脑目录 `C:\Users\95246\Documents\GitHub\Jimmy-s-Stash-rules` 当时干净、停在 `c831aa3d03244cd1e6f42f328163e1ea25ef1935`；仅用于对照，原目录未改动。用户指定 VPN rules 为本次接续位置。
+- 原对话链接仅保存在.local，公开主文档只留标题。“开发”项目的来源页检查结果为零个独立来源文件；读取了六个对话工具返回的可访问轮次。工具返回无下一页，不等同于完整原始聊天导出。现有仓库 20 份 Markdown 文档均纳入盘点；长技术文档中的完整 JS 附录通过与源码核对。
+
+### 原始讨论与资料边界
+
+| 对话 | 本项目用途 |
+|---|---|
+| stash 规则 | 原始范围、广告调查和旧版修复要求；以仓库后续已确认调整校正旧要求 |
+| 调查去除开屏广告 | 公开来源调查线索；不视为当前手机效果证据 |
+| 新手开发软件流程探讨 | 需求、方案、验证和交付的流程背景；本次落实用户给定 project-standard v1 |
+| 创建网站主题、接管Lightroom筛片修图、快捷指令制作反思 | 核对项目范围；各自业务内容不并入 Stash 需求 |
+
+本地 `.local/sop-migration-20261028/` 保存整理前哈希、原文件备份、上述读取结果和 Stash 旧附件原文；由 Git 忽略，不发布聊天内容。旧附件 AD-ARCHITECTURE.md 基线为 d8ea21e，与现行仓库版本不同，作为历史材料保存，不覆盖现行技术说明。项目未包含设备上的私人订阅、证书私钥或账号数据，也未尝试从设备提取。
+
+## 2. 目标、范围与禁止事项
+
+| 已确认目标 / 约束 | 当前落点与状态 |
+|---|---|
+| Stash保留原整合入口，另提供Clash Verge完整分流版 | [config/stash.yaml](config/stash.yaml)；现行 AD-20261020.5；不另建项目或更换链接 |
+| 地区选择与自动测速，保留手动选节点 | 20 策略组、8 个 url-test 池（新增日本+美国）；HTTPS 204 探测，间隔 1800 秒；各地区不配置跨国或 DIRECT 后备。空池/全失效的原生行为待手机验收 |
+| 软件独立选择与 AI 覆盖 | 海外AI默认美国、Apple/Microsoft默认DIRECT，其余按既有组配置；25类 AI/126 域名是既有调查范围，不表示全部服务实测可用 |
+| 保留私人机场接入、协议与节点 | 设备本地私人覆写；初始总代理 REJECT 须用户选择；不提交订阅、不交第三方转换、不关闭 TLS 验证 |
+| 保留完整 App 调查范围，补齐有依据的去广告 | 135 个可见 App 名称：39款专项、8款暂缓、88款通用；另含贴吧，共40款专项。数量是实现范围，不是广告效果通过数 |
+| 简化手机操作 | 后续已取消逐 App 开关，全部已采用专项纳入整合入口；旧模块路径仅为维护源与旧安装兼容 |
+| 诊断不泄露隐私 | 手动开启15分钟自检；只在设备保存固定状态、版本、时间和有限计数，不记录正文、凭据、完整URL或外传；无记录原因仍待区分 |
+| 保护正常业务与权益 | 精确主机和已审查路径；不全域解密、不粗暴封共享网关、不增加会员/水印/下载权限修改 |
+| 自动签到 | 原24个平台研究范围保留；用户要求暂停，未启用、未创建运行脚本/cron、未收集凭据，不自动恢复 |
+| 维护与更新 | 本地程序按需检查公开上游；自动更新仅限既有规则与新增社交共9份普通规则，异常停止；本次已按用户要求安装每天12点Windows检查任务；本轮明确授权立即更新并推送 |
+
+新增社交需求：用统一TikTok策略组接管TikTok、Instagram和X，默认美国，不分成独立平台组；新增71条来源规则，原AI优先级仍在Twitter广域规则之前。
+
+本轮新增授权：本地中午定时检查、立即更新并推送GitHub、Clash完整分流且只迁移域名广告层，以及两端海外AI新增日本+美国池。后续业务变更须按当前确认目标执行；不从历史聊天自动恢复已取消的逐 App 开关、暂停的签到或其他项目作业。
+
+## 3. 技术方案与操作入口
+
+日常入口和设备步骤见 README、QUICKSTART、SUBSCRIBE。旧分层配置、模块和本地合包保留用于兼容，不与当前整合入口重复叠加。规则集和远程 JS 的24小时刷新不等同于主配置刷新，也不等同于仓库同步上游；新增主机/handler须刷新主配置。
+
+| 文件 / 目录 | 作用与维护来源 |
+|---|---|
+| [PROGRESS](PROGRESS.md)、[README](README.md) | 当前状态与历史；手机使用导航 |
+| [QUICKSTART](docs/QUICKSTART.md)、[SUBSCRIBE](docs/SUBSCRIBE.md)、[SUBSCRIPTION](docs/SUBSCRIPTION.md)、[LOCAL-IMPORT](docs/LOCAL-IMPORT.md) | 更新、导入、私人订阅兼容和旧本地包 |
+| [ROUTING](docs/ROUTING.md)、[AI-COVERAGE](docs/AI-COVERAGE.md) | 分流、地区及AI覆盖边界 |
+| [ADBLOCKING](docs/ADBLOCKING.md)、[APP-SPLASH](docs/APP-SPLASH.md)、[PHONE-CHECKLIST](docs/PHONE-CHECKLIST.md) | 广告处理、恢复诊断及手机验收 |
+| [AD-ARCHITECTURE](docs/AD-ARCHITECTURE.md)、[FMZ-INTEGRATION](docs/FMZ-INTEGRATION.md)、[STASH-CAPABILITIES](docs/STASH-CAPABILITIES.md) | 架构、fmz接入取舍、原生能力及未证实项 |
+| [APP-INVENTORY](docs/APP-INVENTORY.md)、[AD-MODULES](docs/AD-MODULES.md) | 完整App范围和实现目录；由 research/app-inventory.json、ad-catalog.json及模块生成 |
+| [SOURCES](docs/SOURCES.md)、[UPDATES](docs/UPDATES.md)、[MAINTENANCE](docs/MAINTENANCE.md)、[CHECKIN-RESEARCH](docs/CHECKIN-RESEARCH.md) | 来源许可、更新机制、本地维护工具、暂停的签到研究 |
+| [research](research/) | 源锁、调查数据、历史验证及本次整理核验；历史结果保留原日期 |
+| [tools](tools/)、[modules](modules/)、[scripts](scripts/)、[rules](rules/)、[config](config/) | 生成器、维护源、生成运行文件和配置；不绕过生成链只改产物 |
+
+生成链：ad-catalog.json → generate_ad_modules.py → 35款专项（另5款沿用原模块）；ad_transforms 与观察模板 → build_ad_scripts.py / build_ad_diagnostics.py → JS；build_subscription.py → 整合入口。build_ads.py 汇总检查/构建，render_app_research.py 更新两份 App 目录，render_ad_architecture.py 更新技术附录及其哈希记录。
+
+本机已在被 Git 忽略的 `.venv/` 安装仓库锁定的 PyYAML 6.0.3。PowerShell 从项目根运行 `.\.venv\Scripts\python.exe -X utf8 tools/render_app_research.py` 可检查本次涉及的目录生成一致性。功能变更按原 CI 运行维护测试、私人合成测试与 tools/validate.py；JS 测试还需要 Node。不要把本机环境提交进仓库。
+
+注意：技术附录生成器使用平台路径字符串；在 Windows 重新生成前应检查分隔符是否造成纯路径漂移。本轮保持其文件和生成器字节不变，以已记录输入哈希和13份嵌入脚本核验一致性，没有把这一核对冒充完整重新构建。
+
+### 本次执行入口（2026-10-28）
+
+- 本地检查/更新：[Run-Maintenance.ps1](tools/Run-Maintenance.ps1)，安装任务：[Install-MaintenanceTask.ps1](tools/Install-MaintenanceTask.ps1)。
+- Clash：[完整配置](config/clash-verge.yaml)、[接入原机场的扩展脚本](config/clash-verge.js)、[使用说明](docs/CLASH-VERGE.md)；生成源为[build_clash.py](tools/build_clash.py)。
+- 两端共享分流与20个策略组；海外AI保留旧选项、增加日本+美国；统一TikTok组接管海外社交。Stash保留HTTP层，Clash只保留域名广告规则集。
+- AI来源已审查到333d8a1810d04600bcb00870155a369954ed37f5，新增3个精确主机；fmz合集变化主要增加rnote.com解密范围，尚无设备证据，本轮不扩大MITM，不把上游合集整包覆盖。
+- 已修复Windows子Python UTF-8继承和生成附录路径分隔符问题；未来生成结果与Linux保持一致。公开发布文档不含聊天标识；历史扫描限定待发布的分支/远程/标签，排除Codex本机未发布的turn-diff捕获引用。
+
+## 4. 已验证现状
+
+| 项目 | 状态、日期与证据 |
+|---|---|
+| 项目拉取和文档整理 | 2026-10-28：完整克隆至用户指定目录；整理前157个受控文件、20份Markdown；唯一主文件沿用本文件。本轮结果见[核验记录](research/sop-migration-20261028.json) |
+| 当前运行结构 | AD-20261020.5：5361条有序路由；扩展广告集38066条且有RULE-SET实际引用；43条原生动作、11个响应handler、1个自检handler、12个URL脚本provider、59个精确MITM主机（58App + example.com） |
+| 原生导入 | 历史用户反馈：.3 修复 provider 来源为空后恢复导入。不是本轮在手机重测；不外推为.5全部行为通过 |
+| 部分脚本执行 | .4历史手机记录：B站/京东有修改，阿里云盘有结构不支持及HTTP失败，菜鸟无需修改；用户除贴吧外均打开过，无记录App仍有广告。不能宣称全部脚本未运行，也不能把无记录直接归因于QUIC |
+| .5 静态/模拟验证 | 2026-10-20历史记录：39项项目检查、88项JS模拟、12项私人合成检查、10份fmz来源哈希、旧包222项路由比较通过。未使用当前App真实脱敏响应；本轮不重复宣称这些测试刚刚运行 |
+| 发布 | 历史代码提交2fa649b已推送，82/82公开资源HTTP200且哈希一致；8276bc8补记发布。本轮只核对克隆基线，未重测全部远程URL或读取当前CI结果 |
+| 本次功能验证 | 生成一致性、地区筛选、统一社交路由、私人节点保留及Mihomo解析通过；维护30项模拟中29通过、Windows账户不支持符号链接的1项跳过。详细结果见[本次交付核验](research/delivery-20261028.json) |
+| .5 手机广告效果 / 正常业务 | **未验收**；冷启动、预加载后启动、后台返回及登录/消息/播放/正常领券等仍待真实设备确认 |
+| SOP迁移校验（本次功能改动前） | 2026-10-28通过：21份Markdown的321个本地链接有效；目录生成无漂移；原157个受控文件中除6份预期文档/清单外151份逐字未变；既有架构审计的85项输入哈希及13份嵌入JS一致；原主文档历史字节保留；暂存为空，HEAD未变。详见核验记录；未运行手机/原生Stash或完整功能回归 |
+
+## 5. 关键决策
+
+1. 以最新仓库和已确认要求接续；旧附件的 http.rewrite、未引用expanded、共享empty-response等问题已有后续变更，不按旧文档回退。
+2. 保留单一整合入口、40款专项和现有分流/私人接入；逐App开关已取消，签到继续暂停。
+3. 固定上游版本、逐文件来源和许可继续保留；MIT/GPL-2.0/GPL-3.0分别遵循，不能用根许可覆盖第三方文件。
+4. 模拟、哈希、公开资源可达、原生运行、真实广告效果分别记证据；不以规则数量或脚本修改计数替代效果验收。
+5. 旧资料原文和未提交内容保留。不替换Git Hook；本次用户明确授权设置Windows任务及提交推送。每日任务只检查，不自动发布。
+
+## 6. 问题、阻塞与下一步
+
+- 首要未完成项：AD-20261020.5真机效果与正常业务验收。按原[手机检查表](docs/PHONE-CHECKLIST.md)和[诊断教程](docs/ADBLOCKING.md)在当前入口继续，记录Stash/App版本、广告位置及固定状态；不索取完整私人配置、Cookie或证书私钥。
+- 无记录App的根因未确定，候选包括实际主机/URL、协议、资源更新、缓存与引擎路径；取得证据后按具体App修复，不能一律认定QUIC或证书问题。
+- 地区池空/全失效行为、协议节点兼容、Stash最低版本和部分原生语义仍待验证。旧云环境曾无法取得部分官方文档正文；本轮没有重测该网络限制，不能当成本机当前故障。
+- Windows已成功运行公开上游检查及中午计划任务；普通规则无内容变化，本轮没有真实普通规则差量事务；macOS未验收。
+- 本次修正：QUICKSTART与UPDATES当前版本统一为.5；App调查文字补上.4已有部分执行证据，网易云范围按.5精确编号主机修正；原上游调查日期保留，不伪造新一轮135款调查。
+- 当前交付：新增功能及生成文件已保存；41项配置与路由、88项JS、13项私人合成、3项Clash转换回归及Mihomo原生解析已执行；GitHub推送待核验。后续若发布，先核对精确改动清单与待推送提交，聊天快照、备份、缓存和环境继续留在.local/.venv。
+
+<!-- sop-current-end -->
+
+---
+
+## 历史原文（保留整理前内容）
+
+以下原文原样保留，其“更新时间”、分支和未完成项描述的是对应历史阶段；当前接续以顶部六节及其有效证据为准。
+# 进度、验证与接续说明
+
 更新时间：2026-10-20（北京时间）。仓库 `Panzm6111/Jimmy-s-Stash-rules`，远程默认分支 `main`，本地分支 `work`。沿用这一套稳定文件，不改变仓库可见性。
 
 ## fmz200去广告适配补齐 AD-20261020.5（2026-10-20）

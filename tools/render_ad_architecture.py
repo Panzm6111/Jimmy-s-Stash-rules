@@ -65,18 +65,18 @@ def rendered():
                'tools/build_subscription.py','tools/build_local_bundle.py','tools/build_private_config.py',
                'tools/render_ad_architecture.py','tools/build_ads.py','modules/diagnostics/ads.stoverride','modules/diagnostics/self-check.stoverride',
                'modules/ads/expanded.stoverride']
-    sources += [str(p) for p in modules]
-    sources += [str(p.relative_to(ROOT)) for p in sorted((ROOT/'scripts/ads').glob('*.js'))]
-    sources += [str(p.relative_to(ROOT)) for p in sorted((ROOT/'tools/ad_transforms').glob('*.js'))]
+    sources += [p.as_posix() for p in modules]
+    sources += [p.relative_to(ROOT).as_posix() for p in sorted((ROOT/'scripts/ads').glob('*.js'))]
+    sources += [p.relative_to(ROOT).as_posix() for p in sorted((ROOT/'tools/ad_transforms').glob('*.js'))]
     hashes = {p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in sources}
-    for p in ['config/stash.yaml','config/core.stoverride','tools/build_ad_scripts.py',*sorted(str(p.relative_to(ROOT)) for p in (ROOT/'scripts/ads').glob('*.js'))]:
+    for p in ['config/stash.yaml','config/core.stoverride','tools/build_ad_scripts.py',*sorted(p.relative_to(ROOT).as_posix() for p in (ROOT/'scripts/ads').glob('*.js'))]:
         out.append(f'| [{p}](../{p}) | `{hashes[p]}` |')
     out += ['','完整输入哈希和结构计数见 [ad-architecture-audit.json](../research/ad-architecture-audit.json)。','',
             '## 12. 当前全部运行JS原文','',
             '其中11份是整合入口按URL加载的响应处理，1份self-check只供手动访问自检；这里展示完整源代码供审查，不是可粘贴进content字段的配置。另有probe可选诊断，不参与正常去广告。每份代码独立保留许可；下列正文与稳定脚本文件逐字相同。','']
     scripts = sorted((ROOT/'scripts/ads').glob('*.js'))
     for p in scripts:
-        rel=str(p.relative_to(ROOT))
+        rel=p.relative_to(ROOT).as_posix()
         out += [f'### {p.name}','',f'源文件：[{rel}](../{rel})。','',f'<!-- SOURCE:{rel} -->','```javascript',p.read_text().rstrip(),'```','']
     doc=prefix+'\n'.join(out)
     audit={'revision':CONFIG_VERSION,'script_revision':VERSION,'baseline':'d8ea21e','before_repair_commit':'936fe457b0362d0dc439d769e9fa7faa29d56b5b',

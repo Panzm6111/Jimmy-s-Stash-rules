@@ -36,7 +36,8 @@ def render():
     config = {'proxy-providers': config.pop('proxy-providers'), **config}
     return ('# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
-            '# JIMMY-STASH ' + VERSION + '；18个原策略组、DNS、私人订阅接入保留。\n'
+            '# JIMMY-STASH ' + VERSION + '；20个策略组（含日本+美国、TikTok）、DNS、私人订阅接入保留。\n'
+            '# JIMMY-ROUTING ROUTE-20261028.1；海外AI增加日本+美国，AI域名126条。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
             '# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。\n'
@@ -63,7 +64,7 @@ def verify(text):
     for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider
         assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
-    assert len(config['proxy-groups']) == 18
+    assert len(config['proxy-groups']) == 20
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()
     for key in ('proxy-groups', 'proxy-providers', 'dns'):

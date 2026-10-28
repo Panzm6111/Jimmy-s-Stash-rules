@@ -19,10 +19,10 @@ def main():
     p.add_argument('--bundle',action='store_true',help='also render ignored dist/ with remote script references')
     args=p.parse_args()
     def run(name):
-        command=[sys.executable,str(ROOT/'tools'/name)]
+        command=[sys.executable,'-X','utf8',str(ROOT/'tools'/name)]
         if args.write: command.append('--write')
         subprocess.run(command,cwd=ROOT,check=True)
-    for name in ['generate_ad_modules.py','build_ad_scripts.py','build_ad_diagnostics.py','build_subscription.py']:
+    for name in ['generate_ad_modules.py','build_ad_scripts.py','build_ad_diagnostics.py','build_subscription.py','build_clash.py']:
         run(name)
     path=ROOT/'research/sources.lock.json';lock=json.loads(path.read_text())
     drift=False
@@ -33,7 +33,7 @@ def main():
         if not args.write:raise ValueError('output hash drift; review sources and use --write')
         path.write_text(json.dumps(lock,ensure_ascii=False,indent=2)+'\n', encoding='utf-8', newline='\n')
     for name in ['render_app_research.py','render_ad_architecture.py']:run(name)
-    if args.bundle:subprocess.run([sys.executable,str(ROOT/'tools/build_local_bundle.py')],cwd=ROOT,check=True)
+    if args.bundle:subprocess.run([sys.executable,'-X','utf8',str(ROOT/'tools/build_local_bundle.py')],cwd=ROOT,check=True)
     return 0
 
 if __name__=='__main__':raise SystemExit(main())

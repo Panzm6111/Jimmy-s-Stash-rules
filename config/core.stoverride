@@ -55,6 +55,16 @@ proxy-groups:
   use:
   - 机场
   filter: (?i)(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)
+- name: 日本+美国
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(?:(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
+    _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)|(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$))
 - name: 香港
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -100,6 +110,27 @@ proxy-groups:
   - 美国
   - 总代理
   - 日本
+  - 日本+美国
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: TikTok
+  type: select
+  proxies:
+  - 美国
+  - 总代理
+  - 日本
+  - 日本+美国
   - 香港
   - 新加坡
   - 台湾
@@ -277,6 +308,15 @@ rule-providers:
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china.yaml
     interval: 86400
+  TikTok:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok.yaml
+    interval: 86400
+  Instagram:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/instagram.yaml
+    interval: 86400
+  Twitter:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/twitter.yaml
+    interval: 86400
 rules:
 - DOMAIN-SUFFIX,local,DIRECT
 - DOMAIN-SUFFIX,lan,DIRECT
@@ -306,6 +346,9 @@ rules:
 - DOMAIN,login.microsoftonline.com,DIRECT
 - RULE-SET,基础广告,广告拦截
 - RULE-SET,海外AI,海外AI
+- RULE-SET,TikTok,TikTok
+- RULE-SET,Instagram,TikTok
+- RULE-SET,Twitter,TikTok
 - RULE-SET,Netflix,Netflix
 - RULE-SET,YouTube,YouTube
 - RULE-SET,Telegram,Telegram

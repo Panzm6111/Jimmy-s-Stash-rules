@@ -1,17 +1,16 @@
 {
-  "checked_at": "2026-10-19",
+  "checked_at": "2026-10-28",
   "scope": "海外 AI 服务的人工审阅域名；不承诺覆盖全部当前、未来服务及全部登录/共享后端流量。",
   "output": "rules/openai.yaml",
   "group": "海外AI",
   "upstream": {
     "repository": "https://github.com/v2fly/domain-list-community",
-    "revision": "6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f",
-    "commit_date": "2026-10-19",
+    "revision": "333d8a1810d04600bcb00870155a369954ed37f5",
     "license": "MIT",
     "license_file": "licenses/v2fly-domain-list-community-MIT.txt",
-    "license_url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/LICENSE",
+    "license_url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/LICENSE",
     "license_sha256": "b9d84a22870d3f21c91a4c6e410c9cc51d00902f5233ad0c84011479244bf7d2",
-    "maintenance_evidence": "git ls-remote HEAD 与检出的提交一致；git log 显示此提交日期为 2026-10-19。逐一读取以下 15 个实际数据文件及 LICENSE。"
+    "maintenance_evidence": "2026-10-28：重新读取15份固定版本文件与LICENSE并核对完整选取/排除集合。仅新增3个Google Workspace Gemini专用精确主机；新服务/未确认归属域名及遥测条目不扩入。"
   },
   "conversion": {
     "plain_domain": "DOMAIN-SUFFIX",
@@ -165,8 +164,8 @@
     {
       "id": "anthropic",
       "path": "data/anthropic",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/anthropic",
-      "sha256": "bf48dc1b342bbfd06f2a93ee8ce180fc424d9c041dafd2d182ffb3f4186698b4",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/anthropic",
+      "sha256": "48597d05d9206b7c841be6872c7ca954685a416d7e61c9316c017ed5f28c7053",
       "selected": [
         "anthropic.com",
         "clau.de",
@@ -178,13 +177,24 @@
         "claudeusercontent.com",
         "full:servd-anthropic-website.b-cdn.net"
       ],
-      "omitted": [],
+      "omitted": [
+        "ant.dev",
+        "anthropic.team",
+        "antspace.dev",
+        "chatbotclaude.com",
+        "claude.app",
+        "claude.new",
+        "claude.site",
+        "claudeacademy.com",
+        "claudepages.dev",
+        "claudestudio.com"
+      ],
       "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
     },
     {
       "id": "cerebras",
       "path": "data/cerebras",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/cerebras",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/cerebras",
       "sha256": "713ea33f6828bb2ac34db413204ea4ddb5d8740aef64e521f46f55fbc99d771d",
       "selected": [
         "cerebras.ai"
@@ -195,7 +205,7 @@
     {
       "id": "cursor",
       "path": "data/cursor",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/cursor",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/cursor",
       "sha256": "eb7315056ebfb599a7dccedddcb5aa7f7723665aa800e2783fff798c1fa3724e",
       "selected": [
         "cursor-cdn.com",
@@ -210,7 +220,7 @@
     {
       "id": "elevenlabs",
       "path": "data/elevenlabs",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/elevenlabs",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/elevenlabs",
       "sha256": "4c284a7e5947f4a40d40c9dc8fedf3e9e3091db0c7680b913b2b19db36ebd561",
       "selected": [
         "elevenlabs.com",
@@ -222,7 +232,7 @@
     {
       "id": "github-copilot",
       "path": "data/github-copilot",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/github-copilot",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/github-copilot",
       "sha256": "e41465e9e15430bf31d1054d21c0551e8fa3ef24431e317317f409511c64483c",
       "selected": [
         "githubcopilot.com",
@@ -239,8 +249,8 @@
     {
       "id": "google-deepmind",
       "path": "data/google-deepmind",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/google-deepmind",
-      "sha256": "6a9195976e75c2b6adb255ec5cc4af6d8b66d0dd2a877437642deed6da244874",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/google-deepmind",
+      "sha256": "6f768291aa81a8d88fa48fc20613f55be646674cfa24a3b3c152a97e859c33a8",
       "selected": [
         "deepmind.com",
         "deepmind.google",
@@ -287,7 +297,10 @@
         "full:antigravity.googleapis.com",
         "antigravity.google",
         "antigravity-unleash.goog",
-        "stitch.withgoogle.com"
+        "stitch.withgoogle.com",
+        "full:appsgenaiserver-pa.clients.google.com",
+        "full:appsgenaiserver-pa.clients6.google.com",
+        "full:appsgenaiserver-pa.googleapis.com"
       ],
       "omitted": [],
       "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
@@ -295,7 +308,7 @@
     {
       "id": "groq",
       "path": "data/groq",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/groq",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/groq",
       "sha256": "d779541783d4c835ad341a13ae3c3a008bfa3e535b46f79518b92bdef17588bb",
       "selected": [
         "groq.com"
@@ -306,7 +319,7 @@
     {
       "id": "huggingface",
       "path": "data/huggingface",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/huggingface",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/huggingface",
       "sha256": "67f5861b31232701f884efd38d9436dd89183fccbd01d6f10d791b9ef6fbf4b8",
       "selected": [
         "hf.co",
@@ -319,7 +332,7 @@
     {
       "id": "jetbrains-ai",
       "path": "data/jetbrains-ai",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/jetbrains-ai",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/jetbrains-ai",
       "sha256": "b1bb655fc82a45311745ef0513dc6889f76cb4bfc0cd9cd563788b5e502b6a53",
       "selected": [
         "grazie.ai",
@@ -332,8 +345,8 @@
     {
       "id": "openai",
       "path": "data/openai",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/openai",
-      "sha256": "5276ab68c1a2d44db2cd745a9146d1645ef3dd3c388fdd1079b6b49267d60ddc",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/openai",
+      "sha256": "25d53e9af3e04d926210d6436bd791594ef4b86f2dc3c108510ac8059d76d969",
       "selected": [
         "chat.com",
         "chatgpt.com",
@@ -355,11 +368,12 @@
       "omitted": [
         "chatgpt.site",
         "crixet.com",
-        "regexp:^chatgpt-async-webps-prod-\\S+-\\d+\\.webpubsub\\.azure\\.com$",
-        "full:browser-intake-datadoghq.com @ads",
-        "full:o33249.ingest.sentry.io @ads",
+        "full:browser-intake-datadoghq.com @ads @telemetry",
+        "full:o33249.ingest.sentry.io @ads @telemetry",
+        "full:o33249.ingest.us.sentry.io @ads @telemetry",
         "full:openai.qualtrics.com @ads",
         "host.livekit.cloud",
+        "regexp:^chatgpt-async-webps-prod-\\S+-\\d+\\.webpubsub\\.azure\\.com$",
         "turn.livekit.cloud"
       ],
       "omission_reason": "略去共享后端、广告/遥测、正则及尚未确认专属性的条目。"
@@ -367,7 +381,7 @@
     {
       "id": "perplexity",
       "path": "data/perplexity",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/perplexity",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/perplexity",
       "sha256": "570581bad658566cb493207c14ebb55110750071071e089b4c40054b00af3db0",
       "selected": [
         "perplexity.ai",
@@ -382,7 +396,7 @@
     {
       "id": "poe",
       "path": "data/poe",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/poe",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/poe",
       "sha256": "e689a8d337b64bcf760e5d8dfe03e3d29d8558063db93acba2d1d6eb9c11003a",
       "selected": [
         "poe.com",
@@ -394,7 +408,7 @@
     {
       "id": "windsurf",
       "path": "data/windsurf",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/windsurf",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/windsurf",
       "sha256": "d6d082e40d180efbabde3b1a5bd8fe1bdc804f1a11b79d2128fe41e0b4dc4e16",
       "selected": [
         "codeium.com",
@@ -408,7 +422,7 @@
     {
       "id": "xai",
       "path": "data/xai",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/xai",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/xai",
       "sha256": "1e15c6018174f58f6a2f3710c84566909eee45a8092247280d244cf8ea7cd928",
       "selected": [
         "grok.com",
@@ -422,8 +436,8 @@
     {
       "id": "category-ai-!cn",
       "path": "data/category-ai-!cn",
-      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/6ee52f2c36634aeabeb9c4ba486ca02cd84c3d4f/data/category-ai-!cn",
-      "sha256": "76d31c06f9a3f14803fb13a0affa1b7609fcadf747da03be901e6221fe1c2e32",
+      "url": "https://raw.githubusercontent.com/v2fly/domain-list-community/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ai-!cn",
+      "sha256": "68c652a6ec62fc8d8316c255fb32f94389b084a1b886def6f9e8e631314a11bf",
       "selected": [
         "coderabbit.ai",
         "coderabbit.gallery.vsassets.io",
@@ -444,6 +458,25 @@
         "openrouter.ai"
       ],
       "omitted": [
+        "agentclientprotocol.com",
+        "anythingllm.com",
+        "arena.ai",
+        "artificialanalysis.ai",
+        "chutes.ai",
+        "clawhub.ai",
+        "cline.bot",
+        "commandcode.ai",
+        "context7.com",
+        "copilot-stg.com",
+        "crewai.com",
+        "deepwiki.com",
+        "deepwiki.org",
+        "diabrowser.com",
+        "diabrowser.engineering",
+        "dify.ai",
+        "dreamgen.com",
+        "gateway.ai.cloudflare.com",
+        "h2o.ai",
         "include:anthropic",
         "include:bytedance-ai-!cn",
         "include:cerebras",
@@ -464,33 +497,19 @@
         "include:windsurf",
         "include:xai",
         "include:youmind",
-        "copilot-stg.com",
-        "deepwiki.com",
-        "deepwiki.org",
-        "typesafe.ai",
         "kimi.ai",
-        "moonshot.ai",
-        "muse.ai",
-        "agentclientprotocol.com",
-        "anythingllm.com",
-        "arena.ai",
-        "chutes.ai",
-        "clawhub.ai",
-        "crewai.com",
-        "diabrowser.com",
-        "diabrowser.engineering",
-        "dify.ai",
-        "dreamgen.com",
-        "gateway.ai.cloudflare.com",
-        "h2o.ai",
         "kiro.dev",
         "langchain.com",
         "lmstudio.ai",
         "lovart.ai",
         "magnific.com",
+        "metaaiusercontent.com",
         "minimax.io",
+        "moonshot.ai",
         "mozilla.ai",
+        "muse.ai",
         "notegpt.io",
+        "nousresearch.com",
         "ollama.com",
         "openart.ai",
         "openclaw.ai",
@@ -503,7 +522,8 @@
         "syntx.ai",
         "talkai.info",
         "tapnow.ai",
-        "tripo3d.ai"
+        "tripo3d.ai",
+        "typesafe.ai"
       ],
       "omission_reason": "仅人工精选明确的海外 AI 服务；未选 include 和其余域名，不把 !cn 分类等同于非中国厂商。"
     }

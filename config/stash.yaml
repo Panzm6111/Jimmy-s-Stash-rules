@@ -1,6 +1,7 @@
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
-# JIMMY-STASH AD-20261020.5；18个原策略组、DNS、私人订阅接入保留。
+# JIMMY-STASH AD-20261020.5；20个策略组（含日本+美国、TikTok）、DNS、私人订阅接入保留。
+# JIMMY-ROUTING ROUTE-20261028.1；海外AI增加日本+美国，AI域名126条。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
 # Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。
 # 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。
@@ -86,6 +87,16 @@ proxy-groups:
   use:
   - 机场
   filter: (?i)(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)
+- name: 日本+美国
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(?:(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
+    _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)|(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$))
 - name: 香港
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -131,6 +142,27 @@ proxy-groups:
   - 美国
   - 总代理
   - 日本
+  - 日本+美国
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: TikTok
+  type: select
+  proxies:
+  - 美国
+  - 总代理
+  - 日本
+  - 日本+美国
   - 香港
   - 新加坡
   - 台湾
@@ -383,6 +415,9 @@ rules:
 - DOMAIN-SUFFIX,antigravity.google,海外AI
 - DOMAIN-SUFFIX,antigravity-unleash.goog,海外AI
 - DOMAIN-SUFFIX,stitch.withgoogle.com,海外AI
+- DOMAIN,appsgenaiserver-pa.clients.google.com,海外AI
+- DOMAIN,appsgenaiserver-pa.clients6.google.com,海外AI
+- DOMAIN,appsgenaiserver-pa.googleapis.com,海外AI
 - DOMAIN-SUFFIX,groq.com,海外AI
 - DOMAIN-SUFFIX,hf.co,海外AI
 - DOMAIN-SUFFIX,hf.space,海外AI
@@ -439,6 +474,77 @@ rules:
 - DOMAIN-SUFFIX,novelai.net,海外AI
 - DOMAIN-SUFFIX,openrouter.ai,海外AI
 - DOMAIN,openai-api.arkoselabs.com,海外AI
+- DOMAIN,lf16-effectcdn.byteeffecttos-g.com,TikTok
+- DOMAIN,lf16-pkgcdn.pitaya-clientai.com,TikTok
+- DOMAIN,p16-tiktokcdn-com.akamaized.net,TikTok
+- DOMAIN,trae-api-sg.mchost.guru,TikTok
+- DOMAIN-SUFFIX,bytedapm.com,TikTok
+- DOMAIN-SUFFIX,bytegecko-i18n.com,TikTok
+- DOMAIN-SUFFIX,byteintlapi.com,TikTok
+- DOMAIN-SUFFIX,byteoversea.com,TikTok
+- DOMAIN-SUFFIX,capcut.com,TikTok
+- DOMAIN-SUFFIX,capcutapi.com,TikTok
+- DOMAIN-SUFFIX,capcutapi.us,TikTok
+- DOMAIN-SUFFIX,capcutstatic.com,TikTok
+- DOMAIN-SUFFIX,ibytedtos.com,TikTok
+- DOMAIN-SUFFIX,ibyteimg.com,TikTok
+- DOMAIN-SUFFIX,ipstatp.com,TikTok
+- DOMAIN-SUFFIX,isnssdk.com,TikTok
+- DOMAIN-SUFFIX,marscode.com,TikTok
+- DOMAIN-SUFFIX,muscdn.com,TikTok
+- DOMAIN-SUFFIX,musical.ly,TikTok
+- DOMAIN-SUFFIX,sgpstatp.com,TikTok
+- DOMAIN-SUFFIX,snssdk.com,TikTok
+- DOMAIN-SUFFIX,tik-tokapi.com,TikTok
+- DOMAIN-SUFFIX,tiktok.com,TikTok
+- DOMAIN-SUFFIX,tiktokcdn-us.com,TikTok
+- DOMAIN-SUFFIX,tiktokcdn.com,TikTok
+- DOMAIN-SUFFIX,tiktokd.net,TikTok
+- DOMAIN-SUFFIX,tiktokd.org,TikTok
+- DOMAIN-SUFFIX,tiktokmusic.app,TikTok
+- DOMAIN-SUFFIX,tiktokv.com,TikTok
+- DOMAIN-SUFFIX,tiktokv.us,TikTok
+- DOMAIN-SUFFIX,trae.ai,TikTok
+- DOMAIN-SUFFIX,ttwebview.com,TikTok
+- DOMAIN-KEYWORD,musical.ly,TikTok
+- DOMAIN-KEYWORD,tiktok,TikTok
+- DOMAIN-SUFFIX,cdninstagram.com,TikTok
+- DOMAIN-SUFFIX,instagr.am,TikTok
+- DOMAIN-SUFFIX,instagram.com,TikTok
+- DOMAIN-KEYWORD,instagram,TikTok
+- DOMAIN-SUFFIX,ads-twitter.com,TikTok
+- DOMAIN-SUFFIX,cms-twdigitalassets.com,TikTok
+- DOMAIN-SUFFIX,grok.com,TikTok
+- DOMAIN-SUFFIX,periscope.tv,TikTok
+- DOMAIN-SUFFIX,pscp.tv,TikTok
+- DOMAIN-SUFFIX,t.co,TikTok
+- DOMAIN-SUFFIX,tellapart.com,TikTok
+- DOMAIN-SUFFIX,tweetdeck.com,TikTok
+- DOMAIN-SUFFIX,twimg.co,TikTok
+- DOMAIN-SUFFIX,twimg.com,TikTok
+- DOMAIN-SUFFIX,twimg.org,TikTok
+- DOMAIN-SUFFIX,twitpic.com,TikTok
+- DOMAIN-SUFFIX,twitter.biz,TikTok
+- DOMAIN-SUFFIX,twitter.com,TikTok
+- DOMAIN-SUFFIX,twitter.jp,TikTok
+- DOMAIN-SUFFIX,twittercommunity.com,TikTok
+- DOMAIN-SUFFIX,twitterflightschool.com,TikTok
+- DOMAIN-SUFFIX,twitterinc.com,TikTok
+- DOMAIN-SUFFIX,twitteroauth.com,TikTok
+- DOMAIN-SUFFIX,twitterstat.us,TikTok
+- DOMAIN-SUFFIX,twtrdns.net,TikTok
+- DOMAIN-SUFFIX,twttr.com,TikTok
+- DOMAIN-SUFFIX,twttr.net,TikTok
+- DOMAIN-SUFFIX,twvid.com,TikTok
+- DOMAIN-SUFFIX,vine.co,TikTok
+- DOMAIN-SUFFIX,x.com,TikTok
+- DOMAIN-KEYWORD,twitter,TikTok
+- IP-CIDR,192.133.76.0/22,TikTok
+- IP-CIDR,199.59.148.0/22,TikTok
+- IP-CIDR,199.96.56.0/21,TikTok
+- IP-CIDR,202.160.128.0/22,TikTok
+- IP-CIDR,209.237.192.0/19,TikTok
+- IP-CIDR,69.195.160.0/19,TikTok
 - DOMAIN,e13252.dscg.akamaiedge.net,Netflix
 - DOMAIN,h-netflix.online-metrix.net,Netflix
 - DOMAIN,netflix.com.edgesuite.net,Netflix

@@ -8,7 +8,7 @@
 
 ## 调查依据与边界
 
-没有方案只表示本次有限来源未找到可审核实现，不证明整个互联网没有。用户曾反馈旧版去广告整体效果不足；当前整合版尚未提供逐款接口命中或修改结果，所以不能把某个模块直接记为有效或断定某端点已经失效。域名路由不能识别全部App流量，静态测试不能替代手机效果和正常功能验收。
+没有方案只表示本次有限来源未找到可审核实现，不证明整个互联网没有。用户曾反馈旧版去广告整体效果不足；AD-20261020.4已有部分手机脚本执行记录（B站/京东产生修改、阿里云盘结构不支持、菜鸟无需修改），但无记录App仍有广告。AD-20261020.5的实际去广告与正常业务效果尚未验收，不能把脚本执行或修改计数直接记为广告有效，也不能据此断定其他端点已失效。域名路由不能识别全部App流量，静态测试不能替代手机效果和正常功能验收。
 
 调查时已直接读取固定版本的公开源码、模块与许可，并核对主要仓库HEAD；不是只读项目介绍。后续fmz200接入差异见[接入明细](FMZ-INTEGRATION.md)，本表沿用完整App范围。原检索范围：
 
@@ -123,7 +123,7 @@
 | 95 | UC浏览器 | [uc](../modules/ads/uc.stoverride) | 仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告；只拦独立广告请求，不提供网页元素隐藏，也不能清除与正文同域的广告；保留反诈、安全、语音和网页正文。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 96 | 王者荣耀 | 保留通用规则；未加专项 | 游戏活动、资源与公告共用接口；没有采用可能影响登录、更新和对局的泛拦。 |
 | 97 | 网易邮箱大师 | [netease-mail](../modules/ads/netease-mail.stoverride) | mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步；已将广告范围明确的部分纳入整合入口，无需单独导入；实际接口、缓存、证书与正常功能仍需设备验收。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
-| 98 | 网易云音乐 | [netease-music](../modules/ads/netease-music.stoverride) | interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文；上游匹配 interface 加可选数字，本模块只列 interface、interface3、ipv4，其他编号主机不在范围。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
+| 98 | 网易云音乐 | [netease-music](../modules/ads/netease-music.stoverride) | interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文；上游匹配 interface 加可选数字；AD-20261020.5已按审核范围列出 interface、interface1至interface9及ipv4精确主机，不扩成任意编号或全域通配。EAPI 加密正文不能假定接受空JSON；端点、响应语义和开屏效果均待设备确认。不改音乐权限、云贝或会员真实状态。 来源：[fmz200/wool_scripts](https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet)，GPL-3.0-only。 |
 | 99 | 微博 | [weibo](../modules/ads/weibo.stoverride) | AD-20261020.1；实时/预载空JSON、专用SDK与素材主机、话题/搜索明确广告项；不是首页全部信息流覆盖。待真机验收；AD-20261020.1按固定来源补充部分处理链，完整边界见AD-ARCHITECTURE第3部分；尚无真实iPhone效果验收。 来源与许可见[既有专项说明](APP-SPLASH.md)及[来源记录](SOURCES.md)。 |
 | 100 | 微信 | [wechat-articles](../modules/ads/wechat-articles.stoverride) | 仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天；公开源仍保留这个历史端点，但没有当前微信版本调用证据；只能作为公众号候选，不称微信整体去广告。保留原 appid 与其他文章字段。 来源：[NobyDa/Script](https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js)，GPL-3.0-only。 |
 | 101 | 微信读书 | 找到方案但暂缓采用 | Maasea WeRead模块删除评论/分享数字和阅读提示，属于UI精简，不是已确认广告过滤；不移除这些正常功能。 |
