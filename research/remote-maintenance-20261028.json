@@ -42,12 +42,123 @@
     "target_mode": "publish",
     "time": "12:00",
     "timezone": "China Standard Time",
-    "registration": "pending verification",
-    "actual_run": "pending"
+    "registration": "verified existing task updated in place",
+    "actual_run": {
+      "status": "no_relevant_changes",
+      "committed": false,
+      "pushed": false,
+      "review_required": 1
+    },
+    "last_exit_code": 0,
+    "task_count": 1,
+    "actual_arguments": "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File \"D:\\Codex workspace\\VPN rules\\tools\\Run-Maintenance.ps1\" -Mode publish -Scheduled",
+    "last_run": "2026-10-28 23:14:32",
+    "next_run": "2026-10-29 12:00:00",
+    "head_before": "ce57afa35ccabffd2a628c922c7dcb13b4522bfe",
+    "head_after": "ce57afa35ccabffd2a628c922c7dcb13b4522bfe",
+    "source_summary": {
+      "unchanged": 53,
+      "rules-update": 0,
+      "review-required": 1,
+      "reference-changed": 0,
+      "error": 0
+    }
   },
   "publication": {
-    "status": "pending",
-    "no_force_push": true
+    "status": "published and verified",
+    "no_force_push": true,
+    "code_commit": "ce57afa35ccabffd2a628c922c7dcb13b4522bfe",
+    "public_resources": [
+      {
+        "path": "config/stash.yaml",
+        "status": 200,
+        "sha256": "8854e4ff8e015e6e3c35704bf1b695e48ca2ce0e787aaa1e3743b6fcb6dc789f"
+      },
+      {
+        "path": "config/clash-verge.yaml",
+        "status": 200,
+        "sha256": "74b0bf3d60d13aceed53f89a5062824e2e5c4ecec24a3071a0cbc9077c70227b"
+      },
+      {
+        "path": "config/clash-verge.js",
+        "status": 200,
+        "sha256": "fc72fd804b927b953dd4b93963c7e5070a7c8926a7dd345664b81231ca67c8a3"
+      },
+      {
+        "path": "rules/vendor/ads-expanded.yaml",
+        "status": 200,
+        "sha256": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604"
+      },
+      {
+        "path": "rules/openai.yaml",
+        "status": 200,
+        "sha256": "ab9a4276b622bd59f79a4c4368bc6c401394e6d23e6858ee839285ddfa51f374"
+      },
+      {
+        "path": "rules/vendor/netflix.yaml",
+        "status": 200,
+        "sha256": "0ae31c92c380e78aabebb252349715f243e845b9430f84d9dfe61b0845962f8d"
+      },
+      {
+        "path": "rules/vendor/youtube.yaml",
+        "status": 200,
+        "sha256": "4e5591c1438ed993cc743d87dd301d1c78bb35259016854948658bbeb0e09a2f"
+      },
+      {
+        "path": "rules/vendor/telegram.yaml",
+        "status": 200,
+        "sha256": "596e37cd54f0af5f19001e7c4e100d30060812709c8635b90c809c5b93880973"
+      },
+      {
+        "path": "rules/apple.yaml",
+        "status": 200,
+        "sha256": "b7e87ba1f32e777bb9636cb82a15c23a3a1de019149a8953a383c865795580f4"
+      },
+      {
+        "path": "rules/microsoft.yaml",
+        "status": 200,
+        "sha256": "a45d00c6ddbbbf25bd652657d321fce65ba36a860492989d42120dfc26857d5e"
+      },
+      {
+        "path": "rules/vendor/china.yaml",
+        "status": 200,
+        "sha256": "d1c118ed502aaaec17d08a2b28d3d29ec35f9cbd84ac0327bdc682c51e6bab0c"
+      },
+      {
+        "path": "rules/vendor/tiktok.yaml",
+        "status": 200,
+        "sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f"
+      },
+      {
+        "path": "rules/vendor/instagram.yaml",
+        "status": 200,
+        "sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917"
+      },
+      {
+        "path": "rules/vendor/twitter.yaml",
+        "status": 200,
+        "sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3"
+      },
+      {
+        "path": "rules/system-direct.yaml",
+        "status": 200,
+        "sha256": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f"
+      },
+      {
+        "path": "rules/ad-exceptions.yaml",
+        "status": 200,
+        "sha256": "dff02ef3ba06ddb336fbde2d896132edc5f3d445761a4df6830ec6ef21b3ff45"
+      },
+      {
+        "path": "rules/app-ads.yaml",
+        "status": 200,
+        "sha256": "b9d679f4c320ae6d881551eadcd6f07b1e8c09fa8dcaa3c7f5709b3ad04afc8c"
+      }
+    ],
+    "code_ci": {
+      "conclusion": "success",
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40713865115"
+    }
   },
   "limits": [
     "Unsafe curated AI, HTTP, MITM or license changes are reported for review, never silently marked adopted.",

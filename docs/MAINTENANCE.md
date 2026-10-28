@@ -148,7 +148,7 @@ Get-ScheduledTaskInfo -TaskName Jimmy-Stash-Rules-Noon-Check
 Unregister-ScheduledTask -TaskName Jimmy-Stash-Rules-Noon-Check -Confirm:$false
 ```
 
-本次首次任务有一份公开来源下载失败，保持了失败退出；补上重试和UTF-8日志后实际任务退出0，50个来源均成功。下一次计划时间为2026-10-29 12:00。这不是广告效果验收。macOS/Linux尚未安装调度。
+2026-10-28原任务已升级为publish模式，23:14:32真实执行退出0；54项来源读取成功，结果为无相关差量、无提交、无推送，1项上游变化保留待审查。下一次计划时间为2026-10-29 12:00。这不是广告效果验收。macOS/Linux尚未安装调度。
 
 ## 自动发布边界
 
