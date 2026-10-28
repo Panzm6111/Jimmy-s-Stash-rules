@@ -8,14 +8,14 @@
 
 | 历史问题或调整 | 当前实现 | 能确认到哪一层 |
 |---|---|---|
-| 主配置没有广告 RULE-SET，expanded 只换了不存在的 provider | `build_subscription.py` 保留并引用唯一“基础广告”provider；AD-20261020.2默认指向扩展快照，其他分流继续按原顺序展开 | 扩展包有实际引用；局域网、Apple推送、Microsoft登录例外与手动放行仍优先。规则集数量不等于开屏效果 |
+| 主配置没有广告 RULE-SET，expanded 只换了不存在的 provider | `build_subscription.py` 保留并引用“基础广告”，默认指向扩展快照；2026-10-28全部分流/例外改为14个远程provider，顺序和效果模型保持 | 扩展包有实际引用；局域网、Apple推送、Microsoft登录例外与手动放行仍优先。规则集数量不等于开屏效果 |
 | 配置用旧 `http.rewrite`，与用户核对的当前官方 `http.url-rewrite` 不同 | 修改真正的目录生成器与旧5款模块，统一生成 `url-rewrite` | 字段现与用户提供的当前官方调查一致；**旧 rewrite 是否仍为别名未验证，不能据此断言所有失败的根因** |
 | 固定空响应绕到 JS；联通图片改成普通拒绝 | 原生 reject、reject-200、reject-dict、reject-img 分别保留；删除共享空响应脚本及对应 provider/request handler | 静态动作、端点正反例和无重复处理通过；真实状态码、头部与 App 回退须 Stash 验收 |
 | 请求脚本依赖 `$response` 未定义；null/空对象会放行 | 固定响应不再经过请求 JS | 消除了该代码路径；**没有证明旧 Stash 真会传入 null/空对象** |
 | 安装步骤过多，逐App开关需求已取消 | 原订阅入口整合现有专项；40份模块文件保留为构建源与旧安装兼容文件 | 已满足整合入口的结构要求；不再将逐App开关列为缺失功能。额外同名覆写仍须停用，避免重复挂载 |
 | 脚本无版本、解析/结构问题难区分 | 原入口内置手动自检与限时本机状态；旧参数日志和隔离探针仅作维护兼容 | 默认不记录；开始排查后只存固定状态、时间、版本和计数。自检成功或无记录均不证明广告效果 |
 
-官方能力核对的实际限制：最近一次常规和额外权限下请求官方站均得到云网络 403，**没有下载到当前正文**。`url-rewrite`、五种 reject 动作、Mock 和 HTTP/3 限制依据是用户此前提供的官方调查结论。`argument` 另有锁定版本 blackmatrix7 原生 Stash 模块声明作为参考。不能把这些说成已独立核实最低版本；目标为用户将更新的最新版，数字版本未提供。来源和未核实点见 [能力记录](STASH-CAPABILITIES.md)、[访问记录](../research/official-doc-access.json)。
+历史HTTP能力核对的限制（本轮已另行取得远程规则集、脚本与托管订阅官文）：当时最后一次常规和额外权限下请求官方站均得到云网络 403，**没有下载到当前正文**。`url-rewrite`、五种 reject 动作、Mock 和 HTTP/3 限制依据是用户此前提供的官方调查结论。`argument` 另有锁定版本 blackmatrix7 原生 Stash 模块声明作为参考。不能把这些说成已独立核实最低版本；目标为用户将更新的最新版，数字版本未提供。来源和未核实点见 [能力记录](STASH-CAPABILITIES.md)、[访问记录](../research/official-doc-access.json)。
 
 ## 2. 统一入口与日常使用
 
@@ -25,7 +25,7 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-主配置保留18个策略组、7个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.5整合全部40款已有App专项、11份响应JS、1份手动自检JS及扩展域名规则集。** 唯一“基础广告”provider沿用名称，但其URL默认指向扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
+主配置保留20个策略组、8个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.5整合全部40款已有App专项、11份响应JS、1份手动自检JS及扩展域名规则集。** 14个远程规则集中，“基础广告”provider沿用名称，但其URL默认指向扩展快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
 
 12份JS通过`script-providers.<name>.url`引用本仓库原路径，并带公开`?v=AD-20261020.5`版本参数以与旧资源缓存区分，`interval: 86400`。刷新主配置取得新URL、主机和handler，脚本正文仍由Stash联网加载；自检页及观察行显示实际运行版本，下载成功不能冒充执行成功。新主机/handler必须刷新主配置。恢复的非空URL声明继续保留，不回到content-only；精确版本URL也加入发布后下载和字节校验。本轮补齐微博广告字段、相关主机与HTTP匹配；逐项范围见接入明细。
 
@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 5,361 |
+| public_main_rules | 16 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -237,28 +237,73 @@ rule-providers:
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml
     interval: 86400
+  海外AI:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/openai.yaml
+    interval: 86400
+  Netflix:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/netflix.yaml
+    interval: 86400
+  YouTube:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/youtube.yaml
+    interval: 86400
+  Telegram:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/telegram.yaml
+    interval: 86400
+  Apple服务:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/apple.yaml
+    interval: 86400
+  Microsoft服务:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/microsoft.yaml
+    interval: 86400
+  国内服务:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china.yaml
+    interval: 86400
+  TikTok:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok.yaml
+    interval: 86400
+    type: http
+    behavior: classical
+  Instagram:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/instagram.yaml
+    interval: 86400
+    type: http
+    behavior: classical
+  Twitter:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/twitter.yaml
+    interval: 86400
+    type: http
+    behavior: classical
+  系统直连例外:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/system-direct.yaml
+    interval: 86400
+  广告路径例外:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ad-exceptions.yaml
+    interval: 86400
+  App广告域名:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/app-ads.yaml
+    interval: 86400
 rules:
-- DOMAIN,flowplus.meituan.net,DIRECT
-- DOMAIN,bootpreload.uve.weibo.com,DIRECT
-- DOMAIN,optimus-ads.amap.com,广告拦截
-- DOMAIN,optimus-ads.amap.com.w.alikunlun.com,广告拦截
-- DOMAIN,ma-adx.ctrip.com,广告拦截
-- DOMAIN,emdcadvertise.eastmoney.com,广告拦截
-- DOMAIN,bdsp-x.jd.com,广告拦截
-- DOMAIN,dsp-x.jd.com,广告拦截
-- DOMAIN,ad.12306.cn,广告拦截
-- DOMAIN,ads.uc.cn,广告拦截
-- DOMAIN,adslot.uc.cn,广告拦截
-- DOMAIN,ads.95516.com,广告拦截
-- DOMAIN,ads.cup.com.cn,广告拦截
-- DOMAIN,sdkapp.uve.weibo.com,广告拦截
-- DOMAIN,wbapp.uve.weibo.com,广告拦截
-- DOMAIN,adimg.uve.weibo.com,广告拦截
-- DOMAIN,adimg.vue.weibo.com,广告拦截
-- DOMAIN,ads-img-qc.xhscdn.com,广告拦截
-- DOMAIN,ads-img-al.xhscdn.com,广告拦截
-- DOMAIN,ads-video-al.xhscdn.com,广告拦截
-- DOMAIN,ads-video-qc.xhscdn.com,广告拦截
+- RULE-SET,App广告域名,广告拦截
 - RULE-SET,基础广告,广告拦截
 http:
   mitm:
@@ -529,7 +574,7 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `bacc791f950dd5279ebd6f31dc31a4a7401ade964fa5c20cedd193fc1b90dca9` |
+| [config/stash.yaml](../config/stash.yaml) | `8854e4ff8e015e6e3c35704bf1b695e48ca2ce0e787aaa1e3743b6fcb6dc789f` |
 | [config/core.stoverride](../config/core.stoverride) | `5a0a8f7d63a94795b7f09b696cf23d81ccc82c8cfe31a07b25de732cafebfd20` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |

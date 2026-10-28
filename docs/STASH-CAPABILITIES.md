@@ -2,9 +2,13 @@
 
 核实日期：2026-10-20。客户端限定 iPhone Stash，未使用其他内核代替验收。
 
-## 当前重要阻塞
+## 2026-10-28远程更新核对
 
-**当前云网络策略拒绝访问 Stash 官方文档站 [stash.wiki](https://stash.wiki/)**：HTTPS CONNECT 返回 403，页面内容未下载。所保存的域名放行草稿尚未应用到本机（运行配置 revision=1，custom allowed_hosts 为空）。这不是 Stash 网站返回的业务错误，也不是已获官方支持的证明。
+已实际取得[规则集合](https://stash.wiki/rules/rule-set)、[脚本管理](https://stash.wiki/en/script/manage-script)及[服务提供商订阅](https://stash.wiki/features/service-provider-subscription)正文。URL规则集与脚本支持interval，托管主配置的首行#SUBSCRIBED默认每12小时检查。这次只确认这些更新能力，不替代iPhone实际运行、界面保留行为、HTTP最低版本或广告效果验收。
+
+## 历史访问阻塞（2026-10-20）
+
+**当时云网络策略拒绝访问 Stash 官方文档站 [stash.wiki](https://stash.wiki/)**：HTTPS CONNECT 返回 403，页面内容未下载。所保存的域名放行草稿尚未应用到本机（运行配置 revision=1，custom allowed_hosts 为空）。这不是 Stash 网站返回的业务错误，也不是已获官方支持的证明。
 
 最近一次官方HTTP文档访问记录仍为403，未读到正文；没有把旧访问记录当成新核实，也没有通过代理/镜像规避策略。按用户给出的当前官方调查，采用`http.url-rewrite`和原生空响应动作；旧`rewrite`别名是否仍兼容未知。`.3`根据provider错误恢复URL声明后，用户确认导入可用，但开屏仍在；本轮依据已读原生Stash示例添加手动自检，不把诊断实现当作广告效果已通过。
 

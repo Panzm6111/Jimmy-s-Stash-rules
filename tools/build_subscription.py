@@ -29,20 +29,60 @@ def integrated():
     config['rules'] = core_rules[:slot] + exceptions + special + core_rules[slot:]
     return config
 
+def remote_payload_documents():
+    original = integrated()
+    core = merged()
+    slot = core['rules'].index('RULE-SET,基础广告,广告拦截')
+    exceptions = load('modules/ads/expanded.stoverride').get('rules', [])
+    special = list(dict.fromkeys(r for p in sorted((ROOT/'modules/ads').glob('*.stoverride'))
+                               if p.stem != 'expanded' for r in load(p.relative_to(ROOT)).get('rules', [])))
+    def payload(rules, policy):
+        result = []
+        for rule in rules:
+            parts = rule.split(',')
+            assert parts[2] == policy
+            result.append(','.join(parts[:2] + parts[3:]))
+        return '# Generated from reviewed project sources; preserve SOURCES.md licenses.\n' + dump({'payload':list(dict.fromkeys(result))})
+    return {
+        'rules/system-direct.yaml':payload(core['rules'][:slot], 'DIRECT'),
+        'rules/ad-exceptions.yaml':payload(exceptions, 'DIRECT'),
+        'rules/app-ads.yaml':payload(special, '广告拦截'),
+    }
+
+
+def remote_integrated():
+    config = script_references(integrated())
+    core = merged()
+    slot = core['rules'].index('RULE-SET,基础广告,广告拦截')
+    extra = [('系统直连例外','rules/system-direct.yaml','DIRECT'),
+             ('广告路径例外','rules/ad-exceptions.yaml','DIRECT'),
+             ('App广告域名','rules/app-ads.yaml','广告拦截')]
+    for name, path, policy in extra:
+        config['rule-providers'][name] = {'type':'http','behavior':'classical','url':RAW+path,'interval':86400}
+    for provider in config['rule-providers'].values():
+        provider.update(type='http',behavior='classical',interval=86400)
+    config['rules'] = [f'RULE-SET,{name},{policy}' for name,_,policy in extra] + core['rules'][slot:]
+    terminal=next(i for i,r in enumerate(config['rules']) if r.startswith('MATCH,'))
+    config['rules']=config['rules'][:terminal+1]
+    return config
+
+
 def render():
-    config = script_references(flatten(integrated(), keep_providers={'基础广告'}))
+    config = remote_integrated()
     # Keep one user-facing config, using Stash's native URL script providers.
     # A historical content-only example was rejected by the user's current core.
     config = {'proxy-providers': config.pop('proxy-providers'), **config}
-    return ('# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
+    return ('#SUBSCRIBED ' + URL + '\n'
+            '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；20个策略组（含日本+美国、TikTok）、DNS、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261028.1；海外AI增加日本+美国，AI域名126条。\n'
+            '# JIMMY-ROUTING ROUTE-20261028.2；14个远程规则集按24小时刷新，保留20个策略组。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
             '# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。\n'
             '# 脚本URL带公开版本参数以区分旧缓存，首次加载仍需联网。\n'
-            '# 建议每周手动刷新本配置，修复发布后立即刷新；规则集与机场每24小时尝试刷新。\n'
+            '# 请在客户端启用本远程配置的自动更新；规则内容/机场/JS按24小时尝试刷新。\n'
+            '# 策略组、匹配顺序、HTTP主机或handler结构的变化仍由主配置刷新取得。\n'
             '# 不需另加App或expanded覆写；停用已额外添加的广告覆写，保留私人订阅/白名单。\n'
             '# 当前需求统一为整合入口，不再要求逐App开关；原模块保留作维护来源与旧安装兼容。\n'
             '# 各独立模块/JS保持原许可；来源与完整源码：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
@@ -51,9 +91,11 @@ def render():
             + dump(config))
 
 def verify(text):
+    assert text.splitlines()[0] == '#SUBSCRIBED ' + URL
     config = yaml.safe_load(text)
     validate_structure(config)
-    assert set(config['rule-providers']) == {'基础广告'}
+    assert set(config['rule-providers']) == set(remote_integrated()['rule-providers'])
+    assert len(config['rule-providers']) == 14
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
     assert config['rule-providers']['基础广告']['url'] == RAW + 'rules/vendor/ads-expanded.yaml'
     assert len(config['http']['url-rewrite']) == 43
@@ -88,6 +130,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write', action='store_true')
     args = parser.parse_args()
+    for name, body in remote_payload_documents().items():
+        path = ROOT/name
+        if args.write:
+            path.write_text(body,encoding='utf-8',newline='\n')
+        elif not path.is_file() or path.read_text(encoding='utf-8') != body:
+            raise ValueError('remote payload drift: '+name)
     text = render()
     verify(text)
     path = ROOT / OUTPUT

@@ -23,4 +23,5 @@ jobs:
       - run: python -m unittest discover -s tests -p test_private_config.py -v
       - run: python tools/build_clash.py
       - run: python -m unittest discover -s tests -p test_clash.py -v
+      - run: python -m unittest discover -s tests -p test_auto_update.py -v
       - run: python tools/validate.py

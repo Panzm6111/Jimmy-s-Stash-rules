@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-28",
+  "baseline_commit": "42eca19466873bd93be8f3ac23ef3afb4528bc46",
+  "authorization": "User explicitly confirmed daily automatic update and GitHub main publication in this chat.",
+  "client_updates": {
+    "rule_providers": 14,
+    "rule_interval_seconds": 86400,
+    "ordered_expanded_rules": 43421,
+    "ordered_rules_equal_before_migration": true,
+    "stash_http_unchanged": true,
+    "all_twenty_groups_unchanged": true,
+    "stash_first_line": "#SUBSCRIBED https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
+    "stash_managed_default_check_hours": 12,
+    "clash_full_remote_profile_auto_update_requires_one_time_UI_setting": true,
+    "clash_local_script_structure_auto_update": false
+  },
+  "checks": {
+    "auto_publication_regressions": 9,
+    "private_synthetic_checks": 13,
+    "maintenance_tests": {
+      "passed": 29,
+      "skipped": 1
+    },
+    "clash_conversion_checks": 3,
+    "project_checks": 41,
+    "js_simulations": 88,
+    "native_http_refresh": {
+      "core": "Mihomo v1.19.32",
+      "http_rule_providers": 14,
+      "AI_count_before": 126,
+      "AI_count_after": 127,
+      "main_config_reload": false,
+      "updated_via": "provider HTTP reload API after localhost payload changed",
+      "groups_preserved": true,
+      "real_airport_used": false,
+      "system_proxy_changed": false
+    },
+    "local_markdown_links": 337
+  },
+  "scheduled_task": {
+    "name": "Jimmy-Stash-Rules-Noon-Check",
+    "target_mode": "publish",
+    "time": "12:00",
+    "timezone": "China Standard Time",
+    "registration": "pending verification",
+    "actual_run": "pending"
+  },
+  "publication": {
+    "status": "pending",
+    "no_force_push": true
+  },
+  "limits": [
+    "Unsafe curated AI, HTTP, MITM or license changes are reported for review, never silently marked adopted.",
+    "No iPhone/live airport/TikTok/advertising-effect acceptance performed.",
+    "Client must migrate once to new remote profile; Clash auto-update toggle cannot be set by a GitHub Raw YAML body."
+  ]
+}

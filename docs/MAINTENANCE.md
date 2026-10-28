@@ -10,11 +10,11 @@
 |---|---|---|
 | 检查上游 | 电脑运行`check` | 哪些公开文件有变化的中文报告 |
 | 更新本地项目 | 电脑运行`update` | 经过生成和验证的普通规则更新；本地备份 |
-| 发布更新 | 你审阅差异后提交、推送GitHub | 原有订阅链接取得新的公开文件 |
+| 发布更新 | 每日auto_update.py在核准范围及验证通过后自动提交、推送GitHub | 原有订阅链接取得新的公开文件 |
 
 没有变化时无需更新；上游改了与本项目无关的内容，也不必重写配置。App专项脚本、URL重写及MITM主机的变化需要审查；工具不会把整包上游脚本直接覆盖进来。
 
-本轮自动同步范围是blackmatrix7来源的9份规则输出：Netflix、YouTube、Telegram、国内域名、扩展广告包和基础广告子集。AI精选规则、App专项与其他参考来源会检查并提示变化，不自动改写。本地白名单与私人接入保持原样，生成的主配置仍用原稳定路径，地区组保留。
+本轮自动同步范围是blackmatrix7来源的9份规则输出：Netflix、YouTube、Telegram、国内域名、扩展广告包、基础广告子集、TikTok、Instagram和Twitter。AI精选规则、App专项与其他参考来源会检查并提示变化，不自动改写。本地白名单与私人接入保持原样，生成的主配置仍用原稳定路径，地区组保留。
 
 ## 一次性准备
 
@@ -24,7 +24,7 @@
 - [Git](https://git-scm.com/downloads)：用于下载仓库、检查本地状态和发布。
 - [Node.js](https://nodejs.org/en/download)：建议22 LTS，用于执行现有JavaScript检查。仅安装Python不能完成更新后的全部验证。
 
-原维护逻辑曾在Linux模拟验证；2026-10-28已在Windows实际检查来源并运行计划任务。普通规则变更事务仍以模拟覆盖，macOS尚未实机验证。
+原维护逻辑曾在Linux模拟验证；2026-10-28已在Windows实际检查来源并运行计划任务。自动提交推送已用临时裸仓库验证；真实公开上游无内容差量时不伪造事务，macOS尚未实机验证。
 
 已经有本仓库的Git工作副本时，进入原目录继续使用，不再克隆第二份。只有ZIP解压目录时，建议按下面的命令克隆一次；更新工具依赖Git状态和历史。
 
@@ -122,7 +122,7 @@ git push origin HEAD:main
 
 2026-10-28已在本机注册 Windows 任务 Jimmy-Stash-Rules-Noon-Check，每天北京时间12:00检查；本机时区为China Standard Time。使用当前用户登录会话，锁屏可运行，关机/休眠时不唤醒；错过后在可用时或中午之后登录补检，同一天成功后不重复。电脑未登录、关机或断网时不能保证准点执行。
 
-任务只执行check并保存报告，不自动更新、提交或推送。公开上游下载失败时整轮重试一次，仍失败返回非零结果，保留原规则。运行日志位于.local/maintenance/run-*.log，latest.md为中文报告。
+任务动作现为Run-Maintenance.ps1 -Mode publish -Scheduled，由auto_update.py执行检查、隔离更新、验证、提交与推送。仅当普通规则确有内容变化才改受控文件并产生提交；无变化只更新.local日志。公开上游下载失败时整轮重试一次，仍失败返回非零结果，保留原规则。运行日志位于.local/maintenance/run-*.log，latest.md为中文报告。
 
 重新安装或迁移任务（须先在新位置准备Python环境及Git/Node）：
 
@@ -130,7 +130,7 @@ git push origin HEAD:main
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Install-MaintenanceTask.ps1
 ```
 
-安装器捕获当前Git/Node路径到被忽略的.local配置。只在该进程使用Bypass，不修改全机执行策略；不保存账号密码。若同名任务指向其他程序会停止，避免覆盖无关任务。移动仓库后重新安装。
+安装器捕获当前Git/Node路径到被忽略的.local配置。任务名称沿用Jimmy-Stash-Rules-Noon-Check，避免重复注册。只在该进程使用Bypass，不修改全机执行策略；不保存账号密码。若同名任务指向其他程序会停止，避免覆盖无关任务。移动仓库后重新安装。
 
 立即手动检查或更新：
 
@@ -139,7 +139,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Run-Maintenance.
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Run-Maintenance.ps1 -Mode update
 ```
 
-update仍要求干净工作区；日报与自动规则更新保持原边界。专项脚本、MITM、新AI主机等由人工审阅后采用。完整配置构建会同步生成Stash和Clash文件。
+update是仅更新本地的兼容命令；-Mode publish才执行获授权的日常发布。两者均要求干净工作区。专项脚本、MITM、新AI主机等由人工审阅后采用。完整配置构建会同步生成Stash和Clash文件。
 
 查看或删除任务（删除不影响仓库文件）：
 
@@ -149,6 +149,18 @@ Unregister-ScheduledTask -TaskName Jimmy-Stash-Rules-Noon-Check -Confirm:$false
 ```
 
 本次首次任务有一份公开来源下载失败，保持了失败退出；补上重试和UTF-8日志后实际任务退出0，50个来源均成功。下一次计划时间为2026-10-29 12:00。这不是广告效果验收。macOS/Linux尚未安装调度。
+
+## 自动发布边界
+
+默认入口为 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Run-Maintenance.ps1 -Mode publish；任务每天12点执行同一入口，并保留登录后补执行、每日成功去重、互斥、日志与失败非零退出。
+
+只允许原origin地址和main分支。任务启动时若有其他会话的暂存、未提交或未跟踪内容会停止；不stash、reset、清理或上传它们。远端前进只允许快进，本地未知提交或分叉停止。仅临时生成、校验并应用白名单文件；提交前复核HEAD、文件集合、内容哈希与暂存内容。私人订阅、证书、.local、.venv及缓存不进入提交。
+
+网络/许可变化、异常变化量、任何必要验证失败都不发布。无法安全自动适配的AI精选域名、HTTP脚本、MITM和参考来源保留明确待审查状态，不能记为已经更新。Apple/Microsoft等本项目维护的规则也由远程规则集发布，但不会凭猜测生成新的来源。
+
+若推送失败，只记录本程序刚创建提交的SHA/父提交/文件哈希。以后仅能重试这个已核验提交；不会替其他本地提交推送，也不会强制推送。GitHub已接收但确认网络失败时可识别为已收到，不重复提交。进程在提交之前被中止或用户编辑造成冲突时保持失败与现状，需要先核对日志，避免覆盖个人修改。
+
+日志：.local/maintenance/latest.md（来源与待审查）、publication-latest.json（本轮发布状态）、pending-publication.json（仅本程序待确认提交）、run-*.log（任务输出）。发布前的生成回归会核验Stash、Clash、脚本、私人合成及维护/自动发布事务。已存在的CI仍在推送后运行，不是电脑调度的替代品。
 
 ## 回退与失败处理
 

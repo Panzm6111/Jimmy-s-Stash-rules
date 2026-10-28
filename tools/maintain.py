@@ -33,7 +33,7 @@ REPOSITORIES = frozenset({PRIMARY, 'fmz200/wool_scripts', 'app2smile/rules',
 SHA = re.compile(r'[0-9a-f]{40}\Z')
 DIGEST = re.compile(r'[0-9a-f]{64}\Z')
 LIMIT = 8 * 1024 * 1024
-GENERATED = frozenset({'config/clash-verge.yaml', 'config/clash-verge.js', 'config/stash.yaml', 'research/sources.lock.json',
+GENERATED = frozenset({'rules/system-direct.yaml','rules/ad-exceptions.yaml','rules/app-ads.yaml','config/clash-verge.yaml', 'config/clash-verge.js', 'config/stash.yaml', 'research/sources.lock.json',
                        'docs/AD-MODULES.md', 'docs/APP-INVENTORY.md',
                        'docs/AD-ARCHITECTURE.md', 'research/ad-architecture-audit.json',
                        'research/local-bundle-audit.json'})
@@ -639,6 +639,9 @@ def update(root, report=None):
         run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_private_config.py'], 'private_builder', timeout=600)
         if (candidate / 'tests/test_maintenance.py').is_file():
             run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_maintenance.py'], 'maintenance_tests')
+        for pattern in ('test_clash.py', 'test_auto_update.py'):
+            if (candidate / 'tests' / pattern).is_file():
+                run_step(candidate,[sys.executable,'-m','unittest','discover','-s','tests','-p',pattern],pattern)
         backup_id = apply_verified_changes(root, candidate, allowed, base_head)
     report['operation'] = 'update'
     report['update'] = {'status': 'updated_locally' if backup_id else 'no_output_changes',

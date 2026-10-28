@@ -1,10 +1,10 @@
-param([ValidateSet('check','update','rollback')][string]$Mode = 'check', [switch]$Scheduled)
+param([ValidateSet('check','update','rollback','publish')][string]$Mode = 'check', [switch]$Scheduled)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $root
 $local = Join-Path $root '.local\maintenance'
 New-Item -ItemType Directory -Path $local -Force | Out-Null
-$stamp = Join-Path $local 'scheduled-success-date.txt'
+$stamp = Join-Path $local ('scheduled-' + $Mode + '-success-date.txt')
 $date = Get-Date -Format 'yyyy-MM-dd'
 if ($Scheduled) {
     if ((Get-Date).Hour -lt 12) { exit 0 }
@@ -24,7 +24,11 @@ if (-not (Test-Path -LiteralPath $python)) { throw 'Missing .venv. See docs/MAIN
 $log = Join-Path $local ('run-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
 $attempts = if ($Scheduled) { 2 } else { 1 }
 for ($attempt = 1; $attempt -le $attempts; $attempt++) {
-    & $python -X utf8 (Join-Path $PSScriptRoot 'maintain.py') $Mode 2>&1 | Tee-Object -FilePath $log -Append
+    if ($Mode -eq 'publish') {
+        & $python -X utf8 (Join-Path $PSScriptRoot 'auto_update.py') 2>&1 | Tee-Object -FilePath $log -Append
+    } else {
+        & $python -X utf8 (Join-Path $PSScriptRoot 'maintain.py') $Mode 2>&1 | Tee-Object -FilePath $log -Append
+    }
     $result = $LASTEXITCODE
     if ($result -eq 0) { break }
     if ($attempt -lt $attempts) { Start-Sleep -Seconds 15 }

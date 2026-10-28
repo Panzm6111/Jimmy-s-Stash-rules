@@ -54,12 +54,28 @@ def main():
     if args.history:
         # Scan publishable Git history. Codex's private turn-diff capture refs
         # can contain ignored/uncommitted context and are never pushed.
-        for item in git('rev-list', '--objects', '--branches', '--remotes', '--tags').decode().splitlines():
-            oid = item.split(' ', 1)[0]
-            if git('cat-file', '-t', oid).strip() != b'blob': continue
-            data = git('cat-file', 'blob', oid)
-            findings += inspect(data.decode('utf-8', errors='replace'), 'git-blob:' + oid[:12])
-            blobs += 1
+        # Reuse a single read-only process instead of spawning Git twice per object.
+        process = subprocess.Popen(['git','-C',str(ROOT),'cat-file','--batch'],
+                                   stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+        try:
+            for item in git('rev-list','--objects','--branches','--remotes','--tags').decode().splitlines():
+                oid=item.split(' ',1)[0]
+                process.stdin.write((oid+'\n').encode('ascii'))
+                process.stdin.flush()
+                header=process.stdout.readline().decode('ascii').split()
+                if len(header)!=3 or header[0]!=oid:
+                    raise ValueError('invalid Git batch header')
+                data=process.stdout.read(int(header[2]))
+                if len(data)!=int(header[2]) or process.stdout.read(1)!=b'\n':
+                    raise ValueError('truncated Git object')
+                if header[1]=='blob':
+                    findings+=inspect(data.decode('utf-8',errors='replace'),'git-blob:'+oid[:12])
+                    blobs+=1
+        finally:
+            process.stdin.close()
+            process.stdout.close()
+            if process.wait(timeout=30):
+                raise ValueError('Git batch failed')
     for path, line, rule in findings:
         print(f'REVIEW {path}:{line} [{rule}]')
     print(f'Secret-pattern scan: {count} current files, {blobs} reachable historical blobs, {len(findings)} findings.')

@@ -28,6 +28,10 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
+        self.assertEqual(len(clash['rule-providers']),14)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),14)
+        self.assertTrue(all(p['type']=='http' and p['interval']==86400 for p in clash['rule-providers'].values()))
+        self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 
     def test_nodes_protocol_fields_and_providers_preserved(self):
         source = {'proxies':[{'name':'US synthetic','type':'socks5','server':'127.0.0.1','port':9}],

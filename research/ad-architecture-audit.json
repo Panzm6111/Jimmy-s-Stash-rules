@@ -5,7 +5,7 @@
   "before_repair_commit": "936fe457b0362d0dc439d769e9fa7faa29d56b5b",
   "counts": {
     "app_modules": 40,
-    "public_main_rules": 5361,
+    "public_main_rules": 16,
     "basic_ad_payload": 38,
     "expanded_ad_payload": 38066,
     "app_domain_rules": 19,
@@ -21,11 +21,14 @@
     "optional_probe_js": 1
   },
   "input_sha256": {
-    "config/stash.yaml": "bacc791f950dd5279ebd6f31dc31a4a7401ade964fa5c20cedd193fc1b90dca9",
+    "config/stash.yaml": "8854e4ff8e015e6e3c35704bf1b695e48ca2ce0e787aaa1e3743b6fcb6dc789f",
     "config/main.yaml": "dcf813dcfa62754c2bc1429ff3c1aab6367ae5402cb774e3f8b728fe116ff26b",
     "config/core.stoverride": "5a0a8f7d63a94795b7f09b696cf23d81ccc82c8cfe31a07b25de732cafebfd20",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
     "rules/vendor/ads-expanded.yaml": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
+    "rules/system-direct.yaml": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f",
+    "rules/ad-exceptions.yaml": "dff02ef3ba06ddb336fbde2d896132edc5f3d445761a4df6830ec6ef21b3ff45",
+    "rules/app-ads.yaml": "b9d679f4c320ae6d881551eadcd6f07b1e8c09fa8dcaa3c7f5709b3ad04afc8c",
     "research/ad-catalog.json": "d2195338f54c5549732462cb1a91a9f4d3668f0f79d8dce1dd4a4b565660ef60",
     "research/sources.lock.json": "39c1ac0e195494691f27e1f092537b084281261efd3060bf1e9a75fbce7aaeff",
     "research/ad-repair-evidence.json": "31f00f03d54fffd651b90d5af98982e2234afe36f9aa10c2883301ebf9fcad35",
@@ -34,10 +37,10 @@
     "tools/build_ad_scripts.py": "cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22",
     "tools/build_ad_diagnostics.py": "08225111d2793fb4aec5adb3af4c33fd9f9ac46151c0863ff468791876748bba",
     "tools/ad_observation_runtime.js": "a4aaec1eaaadbfbf523a5b1896ab798400349208fe2a67c0bb6912c2d32436dd",
-    "tools/build_subscription.py": "a97d99636cca22bf11a368bfd0c6d754b9f8ad399264cb3432278058f2697235",
+    "tools/build_subscription.py": "baaf7c97910c2138c2b14dc96619d69bd70d9f23d81cd159effac074cf46f397",
     "tools/build_local_bundle.py": "c58f1410203743245cd1772c058f63f70c85cc00acf4868a349363ceae2dd0dc",
     "tools/build_private_config.py": "2ddcd7db2c24d808f6dff005c9fff824cfec42dec286873cb56f5e51cc02bc1f",
-    "tools/render_ad_architecture.py": "6ff81e755cf5d419bbba2e9ce14d6e0ce3daf7a731bfcaa6bf597f25ddcb49c7",
+    "tools/render_ad_architecture.py": "f60d9dc81fa402aacec14646d6f93a04fb757807e2a3c81a508b16fb9c499223",
     "tools/build_ads.py": "ebf07a2abc69c760598fe603b86ebe0a5ec4b846609061156806cf7a4f18c3fc",
     "modules/diagnostics/ads.stoverride": "c5f0e0e34cc4f5424188fb54d984975a1be967f24ca01b8cae331ca1b6e0b49f",
     "modules/diagnostics/self-check.stoverride": "8cdfdc9e2547510642368f984e82a2c1ebed0add5978d8b6c2dea860aa21f231",
@@ -107,11 +110,11 @@
     "tools/ad_transforms/weibo.js": "348826ddb71b078f9302a48dffa290a78cd32e3d0bf8f9b6affb0f4b26c67a1b",
     "tools/ad_transforms/xiaohongshu.js": "12a25f1e2c658851683bc8eed2d1955e3cd38033b3f037ca43512968eafce671"
   },
-  "prose_prefix_sha256": "0e5f320300916a1a8b73fcd6f51fd80163911fd74a7caac36abec0152ffd90f2",
+  "prose_prefix_sha256": "c39208a34c5285dda48bb24393bfca26899755416f42356fb5e96b86c919d254",
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
-    "bytes": 151780,
-    "sha256": "d6b0efee2bf8b444c1222aef29fa9f6b04880ffda1527f6d9daa1739dc3da968",
+    "bytes": 153351,
+    "sha256": "ceb801f0883c69dfbd20b65e2dfce187024beaa609d203a55bb9203981dd76bf",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,

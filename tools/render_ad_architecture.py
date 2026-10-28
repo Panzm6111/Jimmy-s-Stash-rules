@@ -59,6 +59,7 @@ def rendered():
             '| 文件 | SHA256 |','|---|---|']
     sources = ['config/stash.yaml','config/main.yaml','config/core.stoverride',
                'rules/ads-basic.yaml','rules/vendor/ads-expanded.yaml',
+               'rules/system-direct.yaml','rules/ad-exceptions.yaml','rules/app-ads.yaml',
                'research/ad-catalog.json','research/sources.lock.json','research/ad-repair-evidence.json',
                'research/fmz-integration.json',
                'tools/generate_ad_modules.py','tools/build_ad_scripts.py','tools/build_ad_diagnostics.py','tools/ad_observation_runtime.js',
