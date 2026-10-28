@@ -60,11 +60,52 @@
     "system_proxy_modified": false
   },
   "publication": {
-    "status": "prepared; pending push and CI"
+    "commit": "ffd044366fd91f133b26a23901f05f00c5650b41",
+    "resource": {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-merge.yaml",
+      "http_status": 200,
+      "sha256": "f2d95408b1cc4387d86ba71263e1593be876c2526308179329ee1deb36e068ae",
+      "matches": true
+    },
+    "status": "pushed and verified",
+    "ci": {
+      "conclusion": "success",
+      "run_id": 40731494044,
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40731494044"
+    }
   },
   "limits": [
     "Global Merge is a local structure snapshot; URL payload updates automatically, structural updates need replacing overlay",
     "No current Clash settings, system proxy or private subscription changed",
     "Actual client UI and TikTok service acceptance pending"
-  ]
+  ],
+  "actual_maintenance_entry": {
+    "status": "no_relevant_changes",
+    "committed": false,
+    "pushed": false,
+    "review_required": 1
+  },
+  "scheduled_task": {
+    "Count": 1,
+    "Arguments": "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File \"D:\\Codex workspace\\VPN rules\\tools\\Run-Maintenance.ps1\" -Mode publish -Scheduled",
+    "NextRun": "2026-10-29T12:00:00.0000000+08:00",
+    "StartWhenAvailable": true,
+    "WakeToRun": false
+  },
+  "source_check": {
+    "checked_at_utc": "2026-10-28T17:01:09.129305+00:00",
+    "ok": true,
+    "summary": {
+      "unchanged": 52,
+      "rules-update": 0,
+      "review-required": 1,
+      "reference-changed": 0,
+      "error": 0
+    }
+  },
+  "existing_output_sha256": {
+    "config/stash.yaml": "9ebbcef831e928ea15338bf6f3f0d5674d9a748ed02de8de1f104f44f8e76e80",
+    "config/clash-verge.yaml": "b846d08a0a9b3e83f2c9117eeb0db8f794c9b6f2a93a0d7cdf9b2bba558fbcb2",
+    "config/clash-verge.js": "8cedfc79d72d6dab6663e74aa095e07cb08d2a9be0409bf9741f90ccf4144218"
+  }
 }

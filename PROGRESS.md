@@ -123,7 +123,7 @@ Clash正式生成入口另含 [全局Merge](config/clash-verge-merge.yaml)，保
 - 用户在本对话明确确认将Clash全局Merge方案正式并入仓库和每日维护。build_clash.py沿用同一Stash分流源，新增config/clash-verge-merge.yaml；从临时v3提升为可复现的正式生成产物，解析后与原v3完全一致。原.local交付及其他会话内容保留。
 - 仅覆写rules/proxy-groups/rule-providers，保留原机场节点/代理集和DNS/TUN/端口；20组采用Jimmy前缀，include-all包含原节点和代理集，空地区REJECT，总代理初始自动节点，19集经Jimmy自动节点下载，海外AI保留日本+美国。
 - 已实现：接入build_ads生成与一致性检查、维护/自动发布精确白名单、Clash回归；正式文档改为优先说明保留原机场的全局Merge。原完整配置、扩展脚本和Stash产物不改行为。
-- 已通过：6项Clash回归；新增可复现tools/validate_clash_merge_native.py，独立Mihomo20项模拟通过，覆盖台湾等同名节点、节点/provider字段保留、空池、指定代理下载、节点增删及无重载刷新。42项项目检查、88项JS、31项维护（30通过/1跳过）和10项自动发布模拟均通过，含Merge文件随规则精确提交推送。3份既有公开入口字节未改，文档本地链接有效；[本轮核验](research/clash-merge-integration-20261029.json)。公开发布及CI结果待实际结束补记。
+- 已通过：6项Clash回归；新增可复现tools/validate_clash_merge_native.py，独立Mihomo20项模拟通过，覆盖台湾等同名节点、节点/provider字段保留、空池、指定代理下载、节点增删及无重载刷新。42项项目检查、88项JS、31项维护（30通过/1跳过）和10项自动发布模拟均通过，含Merge文件随规则精确提交推送。3份既有公开入口字节未改，文档本地链接有效；[本轮核验](research/clash-merge-integration-20261029.json)。功能提交ffd0443已正常快进推送原main；正式Merge固定URL为HTTP200且字节/哈希一致，[Linux功能CI全部通过](https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40731494044)。发布后实际运行原publish维护入口成功，53项来源全部读取，no_relevant_changes、无额外提交/推送。原中午任务仍唯一、动作未变，无需重新安装。
 - 客户端规则正文按24小时刷新；本地粘贴的Merge结构仍需换入新版。未写入现用Clash、未改变系统设置，真实机场与TikTok等业务效果未验收。使用入口见[Clash教程](docs/CLASH-VERGE.md#保留原机场订阅全局merge)。
 
 ### 完整社区接入（2026-10-29，上一阶段）
