@@ -28,7 +28,7 @@
 
 | 已确认目标 / 约束 | 当前落点与状态 |
 |---|---|
-| Stash保留原整合入口，另提供Clash Verge完整分流版 | [config/stash.yaml](config/stash.yaml)；现行 AD-20261020.5；不另建项目或更换链接 |
+| Stash保留原整合入口，Clash保留完整分流并融合全局Merge | [config/stash.yaml](config/stash.yaml)；现行 AD-20261020.5；不另建项目或更换链接 |
 | 地区选择与自动测速，保留手动选节点 | 20 策略组、8 个 url-test 池（新增日本+美国）；HTTPS 204 探测，间隔 1800 秒；各地区不配置跨国或 DIRECT 后备。空池/全失效的原生行为待手机验收 |
 | 软件独立选择与 AI 覆盖 | 海外AI默认美国、Apple/Microsoft默认DIRECT，其余按既有组配置；当前改用完整社区分类，AI聚合231条；旧25类/126条为历史人工方案，已退出生成链；服务实测仍待验收 |
 | 保留私人机场接入、协议与节点 | 设备本地私人覆写；初始总代理 REJECT 须用户选择；不提交订阅、不交第三方转换、不关闭 TLS 验证 |
@@ -58,6 +58,8 @@
 | [SOURCES](docs/SOURCES.md)、[UPDATES](docs/UPDATES.md)、[MAINTENANCE](docs/MAINTENANCE.md)、[CHECKIN-RESEARCH](docs/CHECKIN-RESEARCH.md) | 来源许可、更新机制、本地维护工具、暂停的签到研究 |
 | [research](research/) | 源锁、调查数据、历史验证及本次整理核验；历史结果保留原日期 |
 | [tools](tools/)、[modules](modules/)、[scripts](scripts/)、[rules](rules/)、[config](config/) | 生成器、维护源、生成运行文件和配置；不绕过生成链只改产物 |
+
+Clash正式生成入口另含 [全局Merge](config/clash-verge-merge.yaml)，保留原机场订阅节点更新、使用Jimmy前缀、include-all和指定规则下载代理；与完整配置/扩展脚本共享build_clash.py，由既有维护链校验和发布。
 
 生成链：ad-catalog.json → generate_ad_modules.py → 35款专项（另5款沿用原模块）；ad_transforms 与观察模板 → build_ad_scripts.py / build_ad_diagnostics.py → JS；build_subscription.py → 整合入口。build_ads.py 汇总检查/构建，render_app_research.py 更新两份 App 目录，render_ad_architecture.py 更新技术附录及其哈希记录。
 
@@ -116,7 +118,15 @@
 - 本次修正：QUICKSTART与UPDATES当前版本统一为.5；App调查文字补上.4已有部分执行证据，网易云范围按.5精确编号主机修正；原上游调查日期保留，不伪造新一轮135款调查。
 - 上阶段交付记录：远程规则与自动发布功能提交ce57afa已推送，远端main一致；17/17公开订阅/规则HTTP200且哈希一致；[GitHub功能CI通过](https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40713865115)。原Windows中午任务已升级并实际退出0，本轮无相关差量、没有额外提交或推送；14个远程规则集与本机调度都已核验。客户端还需按新教程做一次迁移；未代替用户在iPhone或Clash界面输入私人机场地址。
 
-### 完整社区接入（2026-10-29，本轮）
+### 侧对话全局Merge正式融合（2026-10-29）
+
+- 用户在本对话明确确认将Clash全局Merge方案正式并入仓库和每日维护。build_clash.py沿用同一Stash分流源，新增config/clash-verge-merge.yaml；从临时v3提升为可复现的正式生成产物，解析后与原v3完全一致。原.local交付及其他会话内容保留。
+- 仅覆写rules/proxy-groups/rule-providers，保留原机场节点/代理集和DNS/TUN/端口；20组采用Jimmy前缀，include-all包含原节点和代理集，空地区REJECT，总代理初始自动节点，19集经Jimmy自动节点下载，海外AI保留日本+美国。
+- 已实现：接入build_ads生成与一致性检查、维护/自动发布精确白名单、Clash回归；正式文档改为优先说明保留原机场的全局Merge。原完整配置、扩展脚本和Stash产物不改行为。
+- 已通过：6项Clash回归；新增可复现tools/validate_clash_merge_native.py，独立Mihomo20项模拟通过，覆盖台湾等同名节点、节点/provider字段保留、空池、指定代理下载、节点增删及无重载刷新。42项项目检查、88项JS、31项维护（30通过/1跳过）和10项自动发布模拟均通过，含Merge文件随规则精确提交推送。3份既有公开入口字节未改，文档本地链接有效；[本轮核验](research/clash-merge-integration-20261029.json)。公开发布及CI结果待实际结束补记。
+- 客户端规则正文按24小时刷新；本地粘贴的Merge结构仍需换入新版。未写入现用Clash、未改变系统设置，真实机场与TikTok等业务效果未验收。使用入口见[Clash教程](docs/CLASH-VERGE.md#保留原机场订阅全局merge)。
+
+### 完整社区接入（2026-10-29，上一阶段）
 
 - 按用户明确要求停止维护精选AI域名，接入blackmatrix7整份Apple/Microsoft/GitHub及MetaCubeX/Sukka完整TikTok、AI、社交、通用海外分类。规则只机械转换与去重；保持全部20策略组、8测速池、日本+美国、TikTok统一出口和原HTTP层。[来源比较、兼容遗漏与使用步骤](docs/COMMUNITY-SOURCES.md)。
 - 旧规则可复现8个TikTok功能主机漏分流/误拦截。采用上游TikTok广告分类在前、功能分类随后且早于通用广告；没有本地手写功能域名例外。AI聚合231条、社交694条、通用海外27,271条；整类采用的共享域与海外厂商分类边界见AI说明。

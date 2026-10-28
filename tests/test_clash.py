@@ -9,7 +9,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
-from build_clash import render
+from build_clash import render,global_merge
 
 class ClashChecks(unittest.TestCase):
     def transform(self, source):
@@ -51,6 +51,51 @@ class ClashChecks(unittest.TestCase):
     def test_no_nodes_and_conflicts_fail_explicitly(self):
         self.assertNotEqual(self.transform({}).returncode, 0)
         self.assertNotEqual(self.transform({'proxies':[{'name':'美国'}]}).returncode, 0)
+
+    def test_global_merge_preserves_airport_and_application_settings(self):
+        overlay=yaml.safe_load(render()['config/clash-verge-merge.yaml'])
+        self.assertEqual(set(overlay),{'rules','proxy-groups','rule-providers'})
+        airport={'proxies':[{'name':'台湾','type':'socks5','server':'127.0.0.1','port':9}],
+                 'proxy-providers':{'original':{'type':'inline','payload':[]}},
+                 'dns':{'enable':False},'tun':{'enable':False},'mixed-port':12345,
+                 'rules':['MATCH,DIRECT'],'proxy-groups':[{'name':'airport-original'}]}
+        merged=copy.deepcopy(airport)
+        for key,value in overlay.items():
+            if isinstance(value,dict):merged.setdefault(key,{}).update(value)
+            else:merged[key]=copy.deepcopy(value)
+        for key in ['proxies','proxy-providers','dns','tun','mixed-port']:
+            self.assertEqual(merged[key],airport[key])
+        names={g['name'] for g in merged['proxy-groups']}
+        self.assertEqual(len(names),20)
+        self.assertTrue(all(name.startswith('Jimmy · ') for name in names))
+        self.assertNotIn('台湾',names)
+
+    def test_merge_routes_and_provider_contents_follow_same_source(self):
+        source=yaml.safe_load((ROOT/'config/clash-verge.yaml').read_text(encoding='utf-8'))
+        before=copy.deepcopy(source);overlay=global_merge(source)
+        self.assertEqual(source,before)
+        reverse={'Jimmy · '+g['name']:g['name'] for g in source['proxy-groups']}
+        restored=[]
+        for rule in overlay['rules']:
+            parts=rule.split(',');index=1 if parts[0]=='MATCH' else 2
+            parts[index]=reverse.get(parts[index],parts[index]);restored.append(','.join(parts))
+        self.assertEqual(restored,source['rules'])
+        self.assertEqual(set(overlay['rule-providers']),set(source['rule-providers']))
+        for name,provider in overlay['rule-providers'].items():
+            self.assertEqual(provider['url'],source['rule-providers'][name]['url'])
+            self.assertEqual(provider['interval'],86400)
+            self.assertEqual(provider['proxy'],'Jimmy · 自动节点')
+        for group in overlay['proxy-groups']:
+            self.assertNotIn('use',group)
+            if group.get('include-all'):self.assertEqual(group['empty-fallback'],'REJECT')
+        groups={g['name']:g for g in overlay['proxy-groups']}
+        self.assertEqual(groups['Jimmy · 总代理']['proxies'][0],'Jimmy · 自动节点')
+        self.assertIn('Jimmy · 日本+美国',groups['Jimmy · 海外AI']['proxies'])
+
+    def test_merge_refuses_unknown_route_syntax(self):
+        source=yaml.safe_load((ROOT/'config/clash-verge.yaml').read_text(encoding='utf-8'))
+        source['rules'].append('AND,unknown,REJECT')
+        with self.assertRaises(ValueError):global_merge(source)
 
 if __name__ == '__main__':
     unittest.main()

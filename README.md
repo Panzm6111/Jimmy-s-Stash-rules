@@ -2,6 +2,8 @@
 
 2026-10-29分流版本 `ROUTE-20261029.1`：已接入维护中的TikTok、AI、其他常用社交及通用海外完整分类，两端19个远程规则集。先刷新主配置，再刷新规则集并重连；[来源、优先级和边界](docs/COMMUNITY-SOURCES.md)。
 
+Clash保留原机场订阅时，可使用正式[全局Merge覆写](config/clash-verge-merge.yaml)；侧对话中的Jimmy前缀、节点自动纳入和规则下载代理已融合进生成器。按[三步教程](docs/CLASH-VERGE.md#保留原机场订阅全局merge)应用一次，原机场继续更新节点；本地覆写结构仍需换版。
+
 项目接续先读 [PROGRESS.md](PROGRESS.md) 顶部的当前SOP总览；协作约束见 [AGENTS.md](AGENTS.md)。现有Stash HTTP去广告继续保留；另提供[Clash Verge完整分流版](docs/CLASH-VERGE.md)，广告层只用域名规则。
 
 供个人长期维护的公共分流、地区池与去广告项目。**支持Stash；另提供Clash Verge完整分流版（域名去广告）**，无需自建服务器、购买额外服务或把订阅交给第三方转换网站。

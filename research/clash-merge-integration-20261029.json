@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-29",
+  "scope": "Promote side-conversation Clash global Merge into tracked generation and maintenance",
+  "baseline_commit": "5948a023e8093dc561de4ef620f48bb3c362beb0",
+  "source": "tools/build_clash.py:global_merge",
+  "output": "config/clash-verge-merge.yaml",
+  "sha256": "f2d95408b1cc4387d86ba71263e1593be876c2526308179329ee1deb36e068ae",
+  "semantically_equal_to_local_v3": true,
+  "prior_local_deliveries_preserved": true,
+  "existing_public_outputs_byte_identical": [
+    "config/stash.yaml",
+    "config/clash-verge.yaml",
+    "config/clash-verge.js"
+  ],
+  "counts": {
+    "groups": 20,
+    "rule_providers": 19
+  },
+  "validation": {
+    "clash_regressions": 6,
+    "project": 42,
+    "javascript": 88,
+    "maintenance": {
+      "passed": 30,
+      "skipped": 1
+    },
+    "automatic_publication": 10,
+    "documentation_local_links": 356
+  },
+  "native": {
+    "native_core": "Mihomo",
+    "checks": [
+      "overlay contains no airport credentials, node or app settings",
+      "all rule URLs have daily interval and explicit download proxy",
+      "airport node protocol fields preserved v1",
+      "airport providers preserved v1",
+      "airport rules replaced v1",
+      "previous overlay reproduces exact Taiwan duplicate-name error",
+      "all remote rule providers loaded",
+      "rule HTTP downloads passed through selected test proxy",
+      "inline and provider nodes included; quota marker excluded",
+      "Japan+US pool filters both node sources",
+      "new master group starts with automatic nodes",
+      "AI exposes Japan+US choice",
+      "empty region falls back to rejection",
+      "airport nodes and namespaced custom groups coexist",
+      "rule URL refresh changes content without reload",
+      "airport node protocol fields preserved v2",
+      "airport providers preserved v2",
+      "airport rules replaced v2",
+      "airport URL refresh plus reload incorporates added and removed nodes",
+      "airport strategy groups replaced"
+    ],
+    "passed": 20,
+    "providers": 19,
+    "fixture_rule_requests": 20,
+    "fixture_proxy_connects": 39,
+    "client_acceptance": "pending: actual Clash Verge UI, private airport and real service connectivity",
+    "actual_client_modified": false,
+    "system_proxy_modified": false
+  },
+  "publication": {
+    "status": "prepared; pending push and CI"
+  },
+  "limits": [
+    "Global Merge is a local structure snapshot; URL payload updates automatically, structural updates need replacing overlay",
+    "No current Clash settings, system proxy or private subscription changed",
+    "Actual client UI and TikTok service acceptance pending"
+  ]
+}

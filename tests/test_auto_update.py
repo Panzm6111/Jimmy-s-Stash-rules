@@ -63,6 +63,25 @@ class AutoPublicationChecks(unittest.TestCase):
         self.assertEqual(set(result['files']),{'rules/vendor/ads-expanded.yaml','PROGRESS.md',a.EVIDENCE})
         self.assertEqual(run(self.root,'status','--porcelain'),'')
         self.assertTrue((self.root/'PROGRESS.md').read_bytes().endswith(b'HISTORY\n'))
+
+    def test_verified_merge_output_is_published_with_rule_update(self):
+        file='config/clash-verge-merge.yaml'
+        write(self.root/file,'rules: []\n')
+        run(self.root,'add','--',file);run(self.root,'commit','-m','Simulated Merge baseline')
+        run(self.root,'push','origin','main')
+        def update_with_merge(root,report):
+            identifier=self.update(root,report)
+            write(root/file,'rules:\n- MATCH,REJECT\n')
+            manifest=root/'.local/maintenance/backups'/identifier/'manifest.json'
+            value=m.read_json(manifest)
+            value['files'].append({'path':file,'after_sha256':a.digest(root/file)})
+            m.write_json(manifest,value)
+            return identifier
+        result=self.execute(update_with_merge)
+        self.assertTrue(result['pushed'])
+        self.assertEqual(set(result['files']),{file,'rules/vendor/ads-expanded.yaml','PROGRESS.md',a.EVIDENCE})
+        self.assertEqual(run(self.remote,'show','refs/heads/main:'+file),'rules:\n- MATCH,REJECT')
+        self.assertEqual(run(self.root,'status','--porcelain'),'')
     def test_dirty_or_staged_user_work_stops_before_updater(self):
         write(self.root/'user.txt','USER CONTENT')
         with self.assertRaises(m.MaintenanceError):self.execute()

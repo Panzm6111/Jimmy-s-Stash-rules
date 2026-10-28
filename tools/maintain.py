@@ -34,7 +34,7 @@ REPOSITORIES = frozenset({PRIMARY, 'fmz200/wool_scripts', 'app2smile/rules',
 SHA = re.compile(r'[0-9a-f]{40}\Z')
 DIGEST = re.compile(r'[0-9a-f]{64}\Z')
 LIMIT = 8 * 1024 * 1024
-GENERATED = frozenset({'research/community-sources.json','rules/openai.yaml','rules/vendor/social-community.yaml','rules/system-direct.yaml','rules/ad-exceptions.yaml','rules/app-ads.yaml','config/clash-verge.yaml', 'config/clash-verge.js', 'config/stash.yaml', 'research/sources.lock.json',
+GENERATED = frozenset({'research/community-sources.json','rules/openai.yaml','rules/vendor/social-community.yaml','rules/system-direct.yaml','rules/ad-exceptions.yaml','rules/app-ads.yaml','config/clash-verge.yaml', 'config/clash-verge.js', 'config/clash-verge-merge.yaml', 'config/stash.yaml', 'research/sources.lock.json',
                        'docs/AD-MODULES.md', 'docs/APP-INVENTORY.md',
                        'docs/AD-ARCHITECTURE.md', 'research/ad-architecture-audit.json',
                        'research/local-bundle-audit.json'})

@@ -39,3 +39,5 @@
 本机侧对话交付的 `.local/clash-global-merge-20261029/` v2含18集和 `Jimmy · ` 前缀，属于当时快照；本轮保留它的文件与记录，不把其18集数量当作当前公开19集结构。公开配置、生成脚本与其节点保留测试是本轮交付范围。真实手机与Clash界面导入/业务效果仍待验收。
 
 本轮另存本机Merge v3于 `.local/clash-global-merge-community-v3/`：按当前19集生成并保留 `Jimmy · ` 前缀。独立Mihomo20项模拟验证通过，原v2文件不变。需要全局覆写的本机用户可备份原内容后全文换入v3；没有自动写入正在使用的Clash。
+
+后续融合：该v3方案现已正式纳入[config/clash-verge-merge.yaml](../config/clash-verge-merge.yaml)及build_clash.py，生成、校验和每日发布共用原维护链；本机临时版本保留为历史交付，不再作为当前维护源。[当前使用教程](CLASH-VERGE.md#保留原机场订阅全局merge)。
