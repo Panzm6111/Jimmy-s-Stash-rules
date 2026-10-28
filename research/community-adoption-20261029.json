@@ -3,7 +3,7 @@
   "release": "ROUTE-20261029.1",
   "baseline_commit": "ddbab70ff9eb0e68882c45a671268f165e561670",
   "source_check": {
-    "checked_at_utc": "2026-10-28T16:36:33.978895+00:00",
+    "checked_at_utc": "2026-10-28T16:47:13.860746+00:00",
     "ok": true,
     "summary": {
       "unchanged": 52,
@@ -107,95 +107,149 @@
   "public_artifacts": [
     {
       "path": "config/stash.yaml",
-      "sha256": "9ebbcef831e928ea15338bf6f3f0d5674d9a748ed02de8de1f104f44f8e76e80"
+      "sha256": "9ebbcef831e928ea15338bf6f3f0d5674d9a748ed02de8de1f104f44f8e76e80",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "config/clash-verge.yaml",
-      "sha256": "b846d08a0a9b3e83f2c9117eeb0db8f794c9b6f2a93a0d7cdf9b2bba558fbcb2"
+      "sha256": "b846d08a0a9b3e83f2c9117eeb0db8f794c9b6f2a93a0d7cdf9b2bba558fbcb2",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "config/clash-verge.js",
-      "sha256": "8cedfc79d72d6dab6663e74aa095e07cb08d2a9be0409bf9741f90ccf4144218"
+      "sha256": "8cedfc79d72d6dab6663e74aa095e07cb08d2a9be0409bf9741f90ccf4144218",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/ads-expanded.yaml",
-      "sha256": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604"
+      "sha256": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/openai.yaml",
-      "sha256": "9a0d7a075cc3ae40a5a37ee8812c7364864c25959de6618938b599f9c147325f"
+      "sha256": "9a0d7a075cc3ae40a5a37ee8812c7364864c25959de6618938b599f9c147325f",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/netflix.yaml",
-      "sha256": "0ae31c92c380e78aabebb252349715f243e845b9430f84d9dfe61b0845962f8d"
+      "sha256": "0ae31c92c380e78aabebb252349715f243e845b9430f84d9dfe61b0845962f8d",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/youtube.yaml",
-      "sha256": "4e5591c1438ed993cc743d87dd301d1c78bb35259016854948658bbeb0e09a2f"
+      "sha256": "4e5591c1438ed993cc743d87dd301d1c78bb35259016854948658bbeb0e09a2f",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/telegram.yaml",
-      "sha256": "596e37cd54f0af5f19001e7c4e100d30060812709c8635b90c809c5b93880973"
+      "sha256": "596e37cd54f0af5f19001e7c4e100d30060812709c8635b90c809c5b93880973",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/apple.yaml",
-      "sha256": "dd282e776234a4ad56bcfce89b310e804635050791ff612d906b48e40a5978c6"
+      "sha256": "dd282e776234a4ad56bcfce89b310e804635050791ff612d906b48e40a5978c6",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/microsoft.yaml",
-      "sha256": "5d97835b04c9d0d28ba50bc8518b518e082d19c87cc68a3c220e06f2c10a77da"
+      "sha256": "5d97835b04c9d0d28ba50bc8518b518e082d19c87cc68a3c220e06f2c10a77da",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/china.yaml",
-      "sha256": "d1c118ed502aaaec17d08a2b28d3d29ec35f9cbd84ac0327bdc682c51e6bab0c"
+      "sha256": "d1c118ed502aaaec17d08a2b28d3d29ec35f9cbd84ac0327bdc682c51e6bab0c",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/tiktok.yaml",
-      "sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f"
+      "sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/instagram.yaml",
-      "sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917"
+      "sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/twitter.yaml",
-      "sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3"
+      "sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/github.yaml",
-      "sha256": "a40b30900dc605bb37af83074977083d2e72bae8ca7720d197557e8cbc6b2c74"
+      "sha256": "a40b30900dc605bb37af83074977083d2e72bae8ca7720d197557e8cbc6b2c74",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/social-community.yaml",
-      "sha256": "1a4f05cf920d1580dc23854255b0cf5771dbbf315cbc518e6b8831aee2402123"
+      "sha256": "1a4f05cf920d1580dc23854255b0cf5771dbbf315cbc518e6b8831aee2402123",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/proxy-community.yaml",
-      "sha256": "d46e9f8b6b582ee1da6f39629dc06be4573bcf83c495c2f5c9d8ca8e20d39749"
+      "sha256": "d46e9f8b6b582ee1da6f39629dc06be4573bcf83c495c2f5c9d8ca8e20d39749",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/system-direct.yaml",
-      "sha256": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f"
+      "sha256": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/ad-exceptions.yaml",
-      "sha256": "dff02ef3ba06ddb336fbde2d896132edc5f3d445761a4df6830ec6ef21b3ff45"
+      "sha256": "dff02ef3ba06ddb336fbde2d896132edc5f3d445761a4df6830ec6ef21b3ff45",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/tiktok-tracking.yaml",
-      "sha256": "27d8c1ce9f323a951ea7c622c37f9390b7d727543d415844f02d7ba1ecb1cfe1"
+      "sha256": "27d8c1ce9f323a951ea7c622c37f9390b7d727543d415844f02d7ba1ecb1cfe1",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/vendor/tiktok-core.yaml",
-      "sha256": "8f7d7c86857f06e94eb5d1bb3502a2f12a04f678953ca4fb2a86b0f8db0a59dd"
+      "sha256": "8f7d7c86857f06e94eb5d1bb3502a2f12a04f678953ca4fb2a86b0f8db0a59dd",
+      "status": 200,
+      "verified": true
     },
     {
       "path": "rules/app-ads.yaml",
-      "sha256": "b9d679f4c320ae6d881551eadcd6f07b1e8c09fa8dcaa3c7f5709b3ad04afc8c"
+      "sha256": "b9d679f4c320ae6d881551eadcd6f07b1e8c09fa8dcaa3c7f5709b3ad04afc8c",
+      "status": 200,
+      "verified": true
     }
   ],
   "publication": {
-    "status": "prepared; pending actual push and verification"
+    "status": "published and verified",
+    "code_commit": "b1c320467bc17a4d19b0e37d7078a2c8f54839fe",
+    "remote_main_verified": true,
+    "public_resources_verified": 22,
+    "ci": {
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 40729039219,
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40729039219"
+    },
+    "no_force_push": true
   },
   "limits": [
     "iPhone TikTok playback/login and other social service unlock not tested",
@@ -210,5 +264,27 @@
     "namespaced_groups": 20,
     "original_v2_preserved": true,
     "installed_into_current_client": false
+  },
+  "scheduled_task": {
+    "Count": 1,
+    "State": "Ready",
+    "Arguments": "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File \"D:\\Codex workspace\\VPN rules\\tools\\Run-Maintenance.ps1\" -Mode publish -Scheduled",
+    "LastRun": "2026-10-28T23:14:32.0000000+08:00",
+    "LastTaskResult": 0,
+    "NextRun": "2026-10-29T12:00:00.0000000+08:00",
+    "StartWhenAvailable": true,
+    "WakeToRun": false
+  },
+  "actual_publish_entry_run": {
+    "mode": "publish, manual immediate invocation of installed entry; before noon",
+    "head_before": "b1c320467bc17a4d19b0e37d7078a2c8f54839fe",
+    "head_after": "b1c320467bc17a4d19b0e37d7078a2c8f54839fe",
+    "result": {
+      "status": "no_relevant_changes",
+      "committed": false,
+      "pushed": false,
+      "review_required": 1
+    },
+    "network_note": "first attempt failed in Git stage; same non-interactive Git verified, one retry succeeded"
   }
 }
