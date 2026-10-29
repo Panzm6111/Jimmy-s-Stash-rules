@@ -92,7 +92,8 @@ def publish(root=ROOT):
     root=Path(root);state=m.read_json(root/STATE)
     if state['status']=='no_changes':print('No semantic rule changes; no commit or push.');return
     if git(root,'rev-parse','HEAD')!=state['base_head']:raise ValueError('HEAD changed during validation')
-    if git(root,'branch','--show-current')!='main' or git(root,'remote','get-url','origin')!='https://github.com/Panzm6111/Jimmy-s-Stash-rules.git':raise ValueError('Unexpected publication target')
+    origin=git(root,'remote','get-url','origin')
+    if git(root,'branch','--show-current')!='main' or origin.removesuffix('.git')!='https://github.com/Panzm6111/Jimmy-s-Stash-rules':raise ValueError('Unexpected publication target')
     if git(root,'diff','--cached','--name-only'):raise ValueError('Unexpected staged changes')
     if set(git(root,'diff','--name-only').splitlines())!=set(state['files']):raise ValueError('Checkout changed during validation')
     from scan_secrets import inspect

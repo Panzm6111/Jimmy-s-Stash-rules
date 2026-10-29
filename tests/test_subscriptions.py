@@ -77,7 +77,8 @@ class Subscriptions(unittest.TestCase):
             self.assertEqual(state['status'],'updated')
             real_git=cloud.git
             def publication_git(path,*args):
-                if args==('remote','get-url','origin'):return 'https://github.com/Panzm6111/Jimmy-s-Stash-rules.git'
+                # actions/checkout uses the canonical remote without a .git suffix.
+                if args==('remote','get-url','origin'):return 'https://github.com/Panzm6111/Jimmy-s-Stash-rules'
                 return real_git(path,*args)
             with patch.object(cloud,'git',side_effect=publication_git):cloud.publish(root)
             self.assertEqual(cmd('-C',root,'rev-parse','HEAD'),cmd('--git-dir',remote,'rev-parse','refs/heads/main'))
