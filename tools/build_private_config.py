@@ -22,8 +22,9 @@ import yaml
 from build_local_bundle import dump, flatten
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
+AI_REGIONS = ('日本', '美国', '新加坡', '台湾')
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
-AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', '日本+美国')
+AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', 'ai')
 PROBE_SETTINGS = {'url': 'https://www.gstatic.com/generate_204', 'interval': 1800}
 PROBE_FIELDS = (*PROBE_SETTINGS, 'tolerance', 'lazy')
 
@@ -94,6 +95,10 @@ def verify(config, template, expected_nodes):
         visit(name, set())
     by_name = {g['name']: g for g in groups}
     template_groups = {g['name']: g for g in template['proxy-groups']}
+    for name, group in template_groups.items():
+        if group['type'] == 'select' and name != '手动节点':
+            require('ai' in by_name[name]['proxies'], '选择组缺少ai选项。')
+            require(by_name[name]['proxies'][0] == group['proxies'][0], '选择组默认选项改变。')
     require(not ({'全部节点', 'OpenAI'} & set(names)), '仍有旧策略组名称。')
     for name in AUTO_POOLS:
         group = by_name[name]
@@ -117,9 +122,9 @@ def verify(config, template, expected_nodes):
         require(set(members) - {'REJECT'} == expected_members, '地区包含错误节点或遗漏节点。')
         union.update(n for n in members if n in node_names)
     require(set(by_name['自动节点']['proxies']) - {'REJECT'} == node_names, '自动节点有遗漏。')
-    require(set(by_name['日本+美国']['proxies']) - {'REJECT'} ==
-            (set(by_name['日本']['proxies']) | set(by_name['美国']['proxies'])) - {'REJECT'},
-            '日本+美国不是两个国家节点的精确并集。')
+    require(set(by_name['ai']['proxies']) - {'REJECT'} ==
+            set().union(*(set(by_name[name]['proxies']) for name in AI_REGIONS)) - {'REJECT'},
+            'ai不是日本、美国、新加坡、台湾节点的精确并集。')
     require(by_name['手动节点']['type'] == 'select' and
             set(by_name['手动节点']['proxies']) - {'REJECT'} == node_names, '手动节点有遗漏或类型改变。')
     require(set(by_name['其他地区']['proxies']) - {'REJECT'} == node_names - union,
@@ -188,7 +193,7 @@ def compose(source, template=None):
                     for name in REGIONS}
     assigned = set().union(*(set(v) for v in region_nodes.values()))
     other_nodes = [n for n in all_names if n not in assigned]
-    pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes, '日本+美国': list(dict.fromkeys(region_nodes['日本'] + region_nodes['美国']))}
+    pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes, 'ai': list(dict.fromkeys(node for name in AI_REGIONS for node in region_nodes[name]))}
     result = copy.deepcopy(template)
     result.pop('proxy-providers', None)
     result['proxies'] = eligible

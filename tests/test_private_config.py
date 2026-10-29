@@ -136,7 +136,7 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertEqual(yaml.safe_load(render(config)), config)
 
     def test_name_conflicts_aliased_without_connection_changes(self):
-        for bad_name in ('总代理', 'REJECT', '美国', '自动节点', '海外AI'):
+        for bad_name in ('总代理', 'REJECT', '美国', '自动节点', '海外AI', 'ai'):
             source = copy.deepcopy(self.source)
             source['proxies'][0]['name'] = bad_name
             config, report = compose(source)
@@ -169,12 +169,34 @@ class PrivateConfigChecks(unittest.TestCase):
         with self.assertRaises(BuildError):
             verify(broken, self.template, config['proxies'])
 
-    def test_combined_pool_is_exact_us_japan_union(self):
-        config, _ = compose(self.source)
+    def test_ai_pool_is_exact_four_region_union(self):
+        source = copy.deepcopy(self.source)
+        for name in ('SG01', 'TW01', '香港01', 'JP-US-SG-TW'):
+            node = copy.deepcopy(source['proxies'][0])
+            node['name'] = name
+            source['proxies'].append(node)
+        config, _ = compose(source)
         groups = {g['name']: g for g in config['proxy-groups']}
-        self.assertEqual(set(groups['日本+美国']['proxies']),
-                         set(groups['日本']['proxies']) | set(groups['美国']['proxies']))
-        self.assertIn('日本+美国', groups['海外AI']['proxies'])
+        self.assertEqual(set(groups['ai']['proxies']),
+                         set().union(*(set(groups[n]['proxies']) for n in ('日本','美国','新加坡','台湾'))))
+        self.assertEqual(groups['ai']['proxies'].count('JP-US-SG-TW'), 1)
+        self.assertNotIn('香港01', groups['ai']['proxies'])
+        for group in self.template['proxy-groups']:
+            if group['type'] == 'select' and group['name'] != '手动节点':
+                self.assertIn('ai', groups[group['name']]['proxies'])
+        for forbidden in ('香港01', 'DIRECT', 'ai', '日本'):
+            broken = copy.deepcopy(config)
+            next(g for g in broken['proxy-groups'] if g['name']=='ai')['proxies'].insert(0, forbidden)
+            with self.subTest(forbidden=forbidden), self.assertRaises(BuildError):
+                verify(broken, self.template, config['proxies'])
+
+    def test_empty_ai_pool_has_only_reject(self):
+        node = copy.deepcopy(self.source['proxies'][0])
+        node['name'] = '香港01'
+        config, _ = compose({'proxies':[node]})
+        groups = {g['name']:g for g in config['proxy-groups']}
+        self.assertEqual(groups['ai'], {'name':'ai','type':'select','proxies':['REJECT']})
+        self.assertIn('ai', groups['海外AI']['proxies'])
 
     def test_private_output_permissions_and_repository_guard(self):
         with self.assertRaises(BuildError):

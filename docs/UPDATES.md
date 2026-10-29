@@ -1,6 +1,8 @@
 # 更新机制与日常使用
 
-2026-10-29：Stash采用20个规则集并保留HTTP层；Clash完整自动订阅保留21个业务组，新增1个隐藏的订阅更新回退组，采用19个规则集、基础社区广告分类。策略组和规则顺序也随主订阅更新，详见[迁移教程](CLASH-VERGE.md#完整自动订阅推荐)与[来源审查](COMMUNITY-SOURCES.md)。
+两端四地区ai更新：Stash确认 `ROUTE-20261029.3`，Clash前缀入口确认 `Jimmy · ai`。原“日本+美国”改名为ai，覆盖日本、美国、新加坡、台湾，11个业务select组可选，原默认值不变；手动节点仍只选实际节点。原先选旧聚合组的位置请核对并重新选择ai，不承诺旧名称自动迁移。保留私人覆写和证书；完整远程主配置更新结构，旧本地Merge/扩展脚本需换同路径新版。
+
+2026-10-29：Stash采用21个规则集并保留HTTP层；Clash完整自动订阅保留21个业务组，新增1个隐藏的订阅更新回退组，采用19个规则集、基础社区广告分类。策略组和规则顺序也随主订阅更新，详见[迁移教程](CLASH-VERGE.md#完整自动订阅推荐)与[来源审查](COMMUNITY-SOURCES.md)。
 
 | 内容 | 更新方式 |
 |---|---|
@@ -15,7 +17,7 @@
 
 GitHub只托管本项目已核准的版本。电脑检查上游、验证并发布，客户端才能取得新版；客户端间隔不保证iOS后台准点、关机执行或断网成功。旧完整私人合成文件和离线包保留作兼容快照，不作为自动更新入口。
 
-Stash首次刷新原链接并确认ROUTE-20261029.2与#SUBSCRIBED；Clash按[远程订阅教程](CLASH-VERGE.md)迁移一次。旧Clash本地扩展脚本若未换新版仍内嵌旧规则；即使用新版，其结构仍不会自行更新，所以推荐完整远程主配置。
+Stash首次刷新原链接并确认ROUTE-20261029.3与#SUBSCRIBED；Clash按[远程订阅教程](CLASH-VERGE.md)迁移一次。旧Clash本地扩展脚本若未换新版仍内嵌旧规则；即使用新版，其结构仍不会自行更新，所以推荐完整远程主配置。
 
 依据：[Stash规则集](https://stash.wiki/rules/rule-set)、[托管配置](https://stash.wiki/features/service-provider-subscription)、[脚本管理](https://stash.wiki/en/script/manage-script)、[Clash订阅响应头](https://www.clashverge.dev/guide/url_schemes.html)。电脑配置及日志见[维护教程](MAINTENANCE.md)。
 

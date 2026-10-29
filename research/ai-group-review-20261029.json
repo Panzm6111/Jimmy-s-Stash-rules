@@ -1,0 +1,313 @@
+{
+  "date_utc": "2026-10-29",
+  "status": "published_verified",
+  "baseline_commit": "2c73c2179d4659cbcff9be623a210ea3612cb1cc",
+  "target_repository": "Panzm6111/Jimmy-s-Stash-rules",
+  "target_branch": "main",
+  "stash_routing_version": "ROUTE-20261029.3",
+  "ad_version": "AD-20261020.5",
+  "runtime_diff_checks": [
+    {
+      "path": "config/core.stoverride",
+      "sha256": "4c7f389a61d55fec11ca1c5cb96f308c2282f5310576f7276325d6f057070272",
+      "group_count": 20,
+      "ai_selectors": [
+        "总代理",
+        "海外AI",
+        "TikTok",
+        "Netflix",
+        "YouTube",
+        "Telegram",
+        "Apple",
+        "Microsoft",
+        "未匹配流量",
+        "国内直连",
+        "广告拦截"
+      ],
+      "defaults_and_other_options_preserved": true,
+      "non_group_settings_identical_to_baseline": true,
+      "no_cycle_or_missing_group_reference": true
+    },
+    {
+      "path": "config/stash.yaml",
+      "sha256": "9f37e85051eac9480389de62225c01fdd653e1c3c7dfe0a692065d1f37ebb194",
+      "group_count": 20,
+      "ai_selectors": [
+        "总代理",
+        "海外AI",
+        "TikTok",
+        "Netflix",
+        "YouTube",
+        "Telegram",
+        "Apple",
+        "Microsoft",
+        "未匹配流量",
+        "国内直连",
+        "广告拦截"
+      ],
+      "defaults_and_other_options_preserved": true,
+      "non_group_settings_identical_to_baseline": true,
+      "no_cycle_or_missing_group_reference": true
+    },
+    {
+      "path": "config/clash-verge.yaml",
+      "sha256": "ca764f540da514e79e2f4eb0efe26c6906a64f490828270cbd3d9bf8ed07a58c",
+      "group_count": 20,
+      "ai_selectors": [
+        "总代理",
+        "海外AI",
+        "TikTok",
+        "Netflix",
+        "YouTube",
+        "Telegram",
+        "Apple",
+        "Microsoft",
+        "未匹配流量",
+        "国内直连",
+        "广告拦截"
+      ],
+      "defaults_and_other_options_preserved": true,
+      "non_group_settings_identical_to_baseline": true,
+      "no_cycle_or_missing_group_reference": true
+    },
+    {
+      "path": "config/clash-verge-merge.yaml",
+      "sha256": "c0f314b11aac1e42ce6ba9db263dee2348bd6c907b700edee18de2bcd845f9e1",
+      "group_count": 20,
+      "ai_selectors": [
+        "Jimmy · 总代理",
+        "Jimmy · 海外AI",
+        "Jimmy · TikTok",
+        "Jimmy · Netflix",
+        "Jimmy · YouTube",
+        "Jimmy · Telegram",
+        "Jimmy · Apple",
+        "Jimmy · Microsoft",
+        "Jimmy · 未匹配流量",
+        "Jimmy · 国内直连",
+        "Jimmy · 广告拦截"
+      ],
+      "defaults_and_other_options_preserved": true,
+      "non_group_settings_identical_to_baseline": true,
+      "no_cycle_or_missing_group_reference": true
+    },
+    {
+      "path": "config/clash-verge-auto.yaml",
+      "sha256": "fed114742b056fe9d5be27cd4873a5c25822f9bc2bb0f1d7086297410877615c",
+      "group_count": 21,
+      "ai_selectors": [
+        "Jimmy · 总代理",
+        "Jimmy · 海外AI",
+        "Jimmy · TikTok",
+        "Jimmy · Netflix",
+        "Jimmy · YouTube",
+        "Jimmy · Telegram",
+        "Jimmy · Apple",
+        "Jimmy · Microsoft",
+        "Jimmy · 未匹配流量",
+        "Jimmy · 国内直连",
+        "Jimmy · 广告拦截"
+      ],
+      "defaults_and_other_options_preserved": true,
+      "non_group_settings_identical_to_baseline": true,
+      "no_cycle_or_missing_group_reference": true
+    },
+    {
+      "path": "config/clash-verge.js",
+      "sha256": "b528b069ce4c6556f675cdfa09130d95e13ccb7e34bce9176bd1cf8899ce5f80",
+      "group_count": 20,
+      "ai_selectors": [
+        "总代理",
+        "海外AI",
+        "TikTok",
+        "Netflix",
+        "YouTube",
+        "Telegram",
+        "Apple",
+        "Microsoft",
+        "未匹配流量",
+        "国内直连",
+        "广告拦截"
+      ],
+      "defaults_and_other_options_preserved": true,
+      "non_group_settings_identical_to_baseline": true,
+      "no_cycle_or_missing_group_reference": true
+    }
+  ],
+  "unchanged_paths": [
+    "rules/",
+    "scripts/",
+    "modules/",
+    "examples/",
+    "config/main.yaml",
+    "research/checkin-plan.json",
+    ".github/"
+  ],
+  "changed_file_secret_pattern_scan": {
+    "files": 23,
+    "findings": 0
+  },
+  "changed_markdown_local_links_checked": 231,
+  "manual_selector_exception": "Both clients keep 手动节点 as a pure node selector to preserve the original default, including the dynamic first airport node in Clash include-all profiles.",
+  "not_run": [
+    "Native Stash / iPhone",
+    "Mihomo native fixture tests: existing executable and Country.mmdb unavailable",
+    "Real service connectivity / latency selection / all-nodes-failed behavior",
+    "Device UI selection migration"
+  ],
+  "permission_boundary": {
+    "action": "optional local Mihomo/MMDB file discovery",
+    "target": "/tmp/codex-daemon-1000",
+    "result": "filesystem permission denied; no retry or alternative access",
+    "impact": "not needed for requested static/unit verification"
+  },
+  "private_input_read": false,
+  "client_or_system_settings_modified": false,
+  "checkin_enabled": false,
+  "pushed": true,
+  "validation": [
+    {
+      "command": "python -m unittest discover -s tools -p validate.py -v",
+      "passed": 42,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_private_config.py -v",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_clash.py -v",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_maintenance.py -v",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_auto_update.py -v",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_community.py -v",
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node --test tests/ads*.test.cjs",
+      "passed": 88,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "python tools/build_ads.py",
+      "result": "all generators consistent; no drift"
+    },
+    {
+      "command": "python -m py_compile (changed Python files)",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub Actions existing validate workflow, push d3fcf4a",
+      "result": "completed / success; all configured checks including tools/validate.py and its history scan passed",
+      "run_id": 40826556193
+    }
+  ],
+  "stable_urls": [
+    "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core.stoverride",
+    "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
+    "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge.yaml",
+    "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-merge.yaml",
+    "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-auto.yaml",
+    "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge.js"
+  ],
+  "publication_plan": [
+    "Recheck origin/main against baseline and review exact changed paths; keep unrelated work.",
+    "After specific scope approval, commit only reviewed changes and fast-forward push to main; existing push CI runs automatically.",
+    "Read the stable public URLs and compare HTTP status and SHA256 to the published commit; inspect CI.",
+    "Only then notify that the original subscriptions can refresh. No device or system settings are changed by this task."
+  ],
+  "publication_authorization": {
+    "date_utc": "2026-10-29",
+    "scope": "Confirmed publishing the reviewed ROUTE-20261029.3 changes to existing Stash and Clash subscriptions on main; no client or system changes."
+  },
+  "publication": {
+    "checked_at_utc": "2026-10-29T06:00:03.122646+00:00",
+    "code_commit": "d3fcf4a05d3f3278636e9387a2855fb3818fbc8a",
+    "entries": [
+      {
+        "path": "config/stash.yaml",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml",
+        "status": 200,
+        "bytes": 36375,
+        "sha256": "9f37e85051eac9480389de62225c01fdd653e1c3c7dfe0a692065d1f37ebb194",
+        "expected_sha256": "9f37e85051eac9480389de62225c01fdd653e1c3c7dfe0a692065d1f37ebb194",
+        "matches": true
+      },
+      {
+        "path": "config/clash-verge-auto.yaml",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-auto.yaml",
+        "status": 200,
+        "bytes": 29905,
+        "sha256": "fed114742b056fe9d5be27cd4873a5c25822f9bc2bb0f1d7086297410877615c",
+        "expected_sha256": "fed114742b056fe9d5be27cd4873a5c25822f9bc2bb0f1d7086297410877615c",
+        "matches": true
+      },
+      {
+        "path": "config/clash-verge.yaml",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge.yaml",
+        "status": 200,
+        "bytes": 26261,
+        "sha256": "ca764f540da514e79e2f4eb0efe26c6906a64f490828270cbd3d9bf8ed07a58c",
+        "expected_sha256": "ca764f540da514e79e2f4eb0efe26c6906a64f490828270cbd3d9bf8ed07a58c",
+        "matches": true
+      },
+      {
+        "path": "config/clash-verge-merge.yaml",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-merge.yaml",
+        "status": 200,
+        "bytes": 28192,
+        "sha256": "c0f314b11aac1e42ce6ba9db263dee2348bd6c907b700edee18de2bcd845f9e1",
+        "expected_sha256": "c0f314b11aac1e42ce6ba9db263dee2348bd6c907b700edee18de2bcd845f9e1",
+        "matches": true
+      },
+      {
+        "path": "config/clash-verge.js",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge.js",
+        "status": 200,
+        "bytes": 26652,
+        "sha256": "b528b069ce4c6556f675cdfa09130d95e13ccb7e34bce9176bd1cf8899ce5f80",
+        "expected_sha256": "b528b069ce4c6556f675cdfa09130d95e13ccb7e34bce9176bd1cf8899ce5f80",
+        "matches": true
+      },
+      {
+        "path": "config/core.stoverride",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/core.stoverride",
+        "status": 200,
+        "bytes": 24340,
+        "sha256": "4c7f389a61d55fec11ca1c5cb96f308c2282f5310576f7276325d6f057070272",
+        "expected_sha256": "4c7f389a61d55fec11ca1c5cb96f308c2282f5310576f7276325d6f057070272",
+        "matches": true
+      }
+    ],
+    "remote_main_verified": "d3fcf4a05d3f3278636e9387a2855fb3818fbc8a",
+    "ci": {
+      "run_id": 40826556193,
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40826556193",
+      "trigger": "existing push workflow",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 123290833213
+    }
+  },
+  "preparation_remote_main": "2c73c2179d4659cbcff9be623a210ea3612cb1cc"
+}

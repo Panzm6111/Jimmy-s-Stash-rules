@@ -493,7 +493,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
-        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', '日本+美国'}
+        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'ai'}
         self.assertEqual({g['name'] for g in self.groups.values() if g['type'] == 'url-test'}, pools)
         for name in pools:
             group = self.groups[name]
@@ -643,13 +643,29 @@ class ProjectChecks(unittest.TestCase):
         self.assertEqual(route(config,'github.com'),'总代理')
         self.assertEqual(route(config,'api.github.com'),'海外AI')
 
-    def test_us_japan_combined_pool(self):
-        pool = self.groups['日本+美国']
-        self.assertIn('日本+美国', self.groups['海外AI']['proxies'])
-        for name in ['美国 01', '日本 02', 'US-01', 'JP-02', 'REJECT']:
-            self.assertRegex(name, pool['filter'])
-        for name in ['香港 01', 'Singapore 01', 'TW-02', 'DIRECT']:
-            self.assertNotRegex(name, pool['filter'])
+    def test_ai_four_region_pool_and_choices(self):
+        fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
+        defaults = {'总代理':'REJECT', '手动节点':'REJECT', '海外AI':'美国',
+                    'TikTok':'美国', 'Netflix':'总代理', 'YouTube':'总代理',
+                    'Telegram':'总代理', 'Apple':'DIRECT', 'Microsoft':'DIRECT',
+                    '未匹配流量':'总代理', '国内直连':'DIRECT', '广告拦截':'REJECT'}
+        for config in [self.config, load('config/stash.yaml')]:
+            validate_structure(config)
+            groups = {g['name']: g for g in config['proxy-groups']}
+            self.assertNotIn('日本+美国', groups)
+            pool = groups['ai']
+            self.assertEqual(pool['type'], 'url-test')
+            self.assertEqual(pool['proxies'], ['REJECT'])
+            for region, names in fixtures['positive'].items():
+                for name in names:
+                    self.assertEqual(bool(re.search(pool['filter'], name)), region != '香港', name)
+            for name in fixtures['other'] + fixtures['negative'] + fixtures['info'] + ['DIRECT', 'ai']:
+                self.assertNotRegex(name, pool['filter'])
+            self.assertEqual({g['name']:g['proxies'][0] for g in groups.values()
+                              if g['type']=='select'}, defaults)
+            for group in groups.values():
+                self.assertNotIn('日本+美国', group['proxies'])
+                self.assertEqual(group['proxies'].count('ai'), int(group['type']=='select' and group['name']!='手动节点'))
 
     def test_social_routes_share_tiktok_policy(self):
         self.assertEqual(self.groups['TikTok']['proxies'][0], '美国')
