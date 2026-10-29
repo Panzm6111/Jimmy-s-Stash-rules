@@ -311,5 +311,14 @@
       }
     ]
   },
-  "remaining": "Clients receive new upstream URLs at next full profile refresh; iPhone/native Stash and real application behavior not accepted this turn"
+  "remaining": "Clients receive new upstream URLs at next full profile refresh; iPhone/native Stash and real application behavior not accepted this turn",
+  "windows_task_removal": {
+    "name": "Jimmy-Stash-Rules-Noon-Check",
+    "registered": false,
+    "removed": true,
+    "backupRetained": true,
+    "runningMaintenanceProcesses": 0,
+    "checkedAt": "2026-10-29T23:06:50+08:00"
+  },
+  "retained_legacy_code_reason": "tools/cloud_update.py imports auto_update.progress_bytes; test_auto_update.py imports auto_update. Registration removed, shared code retained."
 }
