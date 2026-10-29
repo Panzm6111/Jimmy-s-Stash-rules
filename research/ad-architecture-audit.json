@@ -5,7 +5,7 @@
   "before_repair_commit": "936fe457b0362d0dc439d769e9fa7faa29d56b5b",
   "counts": {
     "app_modules": 40,
-    "public_main_rules": 23,
+    "public_main_rules": 29,
     "basic_ad_payload": 38,
     "expanded_ad_payload": 38066,
     "app_domain_rules": 19,
@@ -21,7 +21,7 @@
     "optional_probe_js": 1
   },
   "input_sha256": {
-    "config/stash.yaml": "0b46d421651cc089885bd138ad3057c76268aef6e93634fbcef40f7557371e39",
+    "config/stash.yaml": "0e4957f6a05080af263fd9ec27722ad1104d7598605efd17474c0fc59a6dce54",
     "config/main.yaml": "dcf813dcfa62754c2bc1429ff3c1aab6367ae5402cb774e3f8b728fe116ff26b",
     "config/core.stoverride": "834b9b965093ea62072ee9db30480d34a63b3193ca29a155deab36829fc76306",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
@@ -37,8 +37,8 @@
     "tools/build_ad_scripts.py": "cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22",
     "tools/build_ad_diagnostics.py": "08225111d2793fb4aec5adb3af4c33fd9f9ac46151c0863ff468791876748bba",
     "tools/ad_observation_runtime.js": "a4aaec1eaaadbfbf523a5b1896ab798400349208fe2a67c0bb6912c2d32436dd",
-    "tools/build_subscription.py": "d8dc37d1dc575bd1213dc1a8eacee3de21ba0fcc246cc7a54b1e8235b2f47325",
-    "tools/build_local_bundle.py": "f9ddb6c8e19c38aa1f1d1a0848552105bd68660b14d801b0676ec88dc16ccc4e",
+    "tools/build_subscription.py": "4dc65fa169f55b5847b9a5a80cf986d45c0c056e884d60d19c35e92b554ee55d",
+    "tools/build_local_bundle.py": "fcdbef766c8d62a9ac8dd8bda55571f7fa009ca1a697048e1b93b0b0bd41a856",
     "tools/build_private_config.py": "b707900106a0fd0eafec45f7723e70a6d6845f2ad3c770eb1b39b6fadb929050",
     "tools/render_ad_architecture.py": "f60d9dc81fa402aacec14646d6f93a04fb757807e2a3c81a508b16fb9c499223",
     "tools/build_ads.py": "09a24c2d56c448e189557b2b36c8a4bd7eb9923ac881e01f6189ef9fa1b7765e",
@@ -113,8 +113,8 @@
   "prose_prefix_sha256": "c39208a34c5285dda48bb24393bfca26899755416f42356fb5e96b86c919d254",
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
-    "bytes": 154695,
-    "sha256": "c19fa4e00d475db0da0432151ce84c3bd056102fb11e783f762a5259e4f6cdbc",
+    "bytes": 156043,
+    "sha256": "d92f56dd375952096dcaa198c3ccc3c0c86d062952f98915c76f0e565679b324",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,

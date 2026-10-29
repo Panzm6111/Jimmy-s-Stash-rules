@@ -283,169 +283,217 @@ proxy-groups:
 rule-providers:
   Adobe服务:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/adobe.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/adobe.yaml
     path: ./ruleset/jimmy-merge-c836896863b8.yaml
+    proxy: Jimmy · 自动节点
+  Adobe官方补充:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/adobe-official.yaml
+    path: ./ruleset/jimmy-merge-adfbc475b564.yaml
     proxy: Jimmy · 自动节点
   基础广告:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml
     interval: 86400
+    behavior: classical
     format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml
     path: ./ruleset/jimmy-merge-0d6c2ad6a6ac.yaml
     proxy: Jimmy · 自动节点
   海外AI:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/openai.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.yaml
     path: ./ruleset/jimmy-merge-14481bb41f3a.yaml
+    proxy: Jimmy · 自动节点
+  海外AI补充:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ai-sukka.yaml
+    path: ./ruleset/jimmy-merge-d71b1b34b089.yaml
     proxy: Jimmy · 自动节点
   Netflix:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/netflix.yaml
-    interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-f09f149fa268.yaml
     proxy: Jimmy · 自动节点
   YouTube:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/youtube.yaml
     interval: 86400
+    behavior: classical
     format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml
     path: ./ruleset/jimmy-merge-fb7accfff8c6.yaml
     proxy: Jimmy · 自动节点
   Telegram:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/telegram.yaml
-    interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-acdd1e734125.yaml
     proxy: Jimmy · 自动节点
   Apple服务:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/apple.yaml
-    interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-d72b2aec8d3c.yaml
     proxy: Jimmy · 自动节点
   Microsoft服务:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/microsoft.yaml
-    interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-f232f1259912.yaml
     proxy: Jimmy · 自动节点
   东方财富直连:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/eastmoney-community.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/eastmoney.yaml
     path: ./ruleset/jimmy-merge-e9d3c7116ba7.yaml
     proxy: Jimmy · 自动节点
   国内服务:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china-direct-community.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml
     path: ./ruleset/jimmy-merge-998cddb7fad7.yaml
     proxy: Jimmy · 自动节点
   TikTok:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok.yaml
     interval: 86400
     type: http
     behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok.yaml
     format: yaml
     path: ./ruleset/jimmy-merge-1bb6fcfbf136.yaml
     proxy: Jimmy · 自动节点
   Instagram:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/instagram.yaml
     interval: 86400
     type: http
     behavior: classical
     format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Instagram/Instagram.yaml
     path: ./ruleset/jimmy-merge-bad57ef7837c.yaml
     proxy: Jimmy · 自动节点
   Twitter:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/twitter.yaml
     interval: 86400
     type: http
     behavior: classical
     format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml
     path: ./ruleset/jimmy-merge-bcd18ead5fa8.yaml
     proxy: Jimmy · 自动节点
   GitHub:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/github.yaml
     interval: 86400
+    behavior: classical
     format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml
     path: ./ruleset/jimmy-merge-f911e414cf6b.yaml
     proxy: Jimmy · 自动节点
   海外社交:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/social-community.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-social-media-!cn.yaml
     path: ./ruleset/jimmy-merge-fb737d3cb6d8.yaml
+    proxy: Jimmy · 自动节点
+  社交Discord:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/discord.yaml
+    path: ./ruleset/jimmy-merge-f4b9677a983e.yaml
+    proxy: Jimmy · 自动节点
+  社交WhatsApp:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/whatsapp.yaml
+    path: ./ruleset/jimmy-merge-c2c0fea35bbe.yaml
+    proxy: Jimmy · 自动节点
+  社交LINE:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/line.yaml
+    path: ./ruleset/jimmy-merge-5974ddee13c5.yaml
+    proxy: Jimmy · 自动节点
+  社交Signal:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/signal.yaml
+    path: ./ruleset/jimmy-merge-75e2b96e5520.yaml
     proxy: Jimmy · 自动节点
   通用代理:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/proxy-community.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.yaml
     path: ./ruleset/jimmy-merge-c9cab4f157b7.yaml
     proxy: Jimmy · 自动节点
   系统直连例外:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/system-direct.yaml
-    interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-47bacca8b016.yaml
     proxy: Jimmy · 自动节点
   广告路径例外:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ad-exceptions.yaml
-    interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-de6c2f9833bd.yaml
     proxy: Jimmy · 自动节点
   TikTok广告:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-tracking.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@ads.yaml
     path: ./ruleset/jimmy-merge-fe1e80ce06e7.yaml
     proxy: Jimmy · 自动节点
   TikTok核心:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-core.yaml
     interval: 86400
+    behavior: domain
     format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@!cn.yaml
     path: ./ruleset/jimmy-merge-4f9049352b23.yaml
     proxy: Jimmy · 自动节点
   App广告域名:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/app-ads.yaml
-    interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-352cbe26c57c.yaml
     proxy: Jimmy · 自动节点
@@ -457,8 +505,10 @@ rules:
 - RULE-SET,App广告域名,Jimmy · 广告拦截
 - RULE-SET,东方财富直连,DIRECT
 - RULE-SET,Adobe服务,Jimmy · Adobe
+- RULE-SET,Adobe官方补充,Jimmy · Adobe
 - RULE-SET,基础广告,Jimmy · 广告拦截
 - RULE-SET,海外AI,Jimmy · 海外AI
+- RULE-SET,海外AI补充,Jimmy · 海外AI
 - RULE-SET,TikTok,Jimmy · TikTok
 - RULE-SET,Instagram,Jimmy · TikTok
 - RULE-SET,Twitter,Jimmy · TikTok
@@ -470,6 +520,10 @@ rules:
 - RULE-SET,Microsoft服务,Jimmy · Microsoft
 - RULE-SET,国内服务,Jimmy · 国内直连
 - RULE-SET,海外社交,Jimmy · TikTok
+- RULE-SET,社交Discord,Jimmy · TikTok
+- RULE-SET,社交WhatsApp,Jimmy · TikTok
+- RULE-SET,社交LINE,Jimmy · TikTok
+- RULE-SET,社交Signal,Jimmy · TikTok
 - RULE-SET,通用代理,Jimmy · 总代理
 - GEOIP,CN,Jimmy · 国内直连
 - MATCH,Jimmy · 未匹配流量

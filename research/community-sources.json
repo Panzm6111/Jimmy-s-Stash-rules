@@ -264,6 +264,11 @@
         "adobe-meta"
       ],
       "official_supplement": "research/adobe-official-endpoints.json"
+    },
+    {
+      "output": "rules/adobe-official.yaml",
+      "sources": [],
+      "official_supplement": "research/adobe-official-endpoints.json"
     }
   ]
 }

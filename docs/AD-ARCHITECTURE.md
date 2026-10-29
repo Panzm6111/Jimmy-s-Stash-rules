@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 23 |
+| public_main_rules | 29 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -235,109 +235,158 @@ proxy-groups:
 rule-providers:
   Adobe服务:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/adobe.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/adobe.yaml
+  Adobe官方补充:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/adobe-official.yaml
   基础广告:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ads-expanded.yaml
     interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml
   海外AI:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/openai.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.yaml
+  海外AI补充:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ai-sukka.yaml
   Netflix:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/netflix.yaml
-    interval: 86400
   YouTube:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/youtube.yaml
     interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml
   Telegram:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/telegram.yaml
-    interval: 86400
   Apple服务:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/apple.yaml
-    interval: 86400
   Microsoft服务:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/microsoft.yaml
-    interval: 86400
   东方财富直连:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/eastmoney-community.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/eastmoney.yaml
   国内服务:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china-direct-community.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml
   TikTok:
+    interval: 86400
+    type: http
+    behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok.yaml
-    interval: 86400
-    type: http
-    behavior: classical
   Instagram:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/instagram.yaml
     interval: 86400
     type: http
     behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Instagram/Instagram.yaml
   Twitter:
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/twitter.yaml
     interval: 86400
     type: http
     behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml
   GitHub:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/github.yaml
     interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml
   海外社交:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/social-community.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-social-media-!cn.yaml
+  社交Discord:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/discord.yaml
+  社交WhatsApp:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/whatsapp.yaml
+  社交LINE:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/line.yaml
+  社交Signal:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/signal.yaml
   通用代理:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/proxy-community.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.yaml
   系统直连例外:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/system-direct.yaml
-    interval: 86400
   广告路径例外:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ad-exceptions.yaml
-    interval: 86400
   TikTok广告:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-tracking.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@ads.yaml
   TikTok核心:
     type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok-core.yaml
     interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@!cn.yaml
   App广告域名:
     type: http
+    interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/app-ads.yaml
-    interval: 86400
 rules:
 - RULE-SET,TikTok广告,广告拦截
 - RULE-SET,App广告域名,广告拦截
@@ -611,7 +660,7 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `0b46d421651cc089885bd138ad3057c76268aef6e93634fbcef40f7557371e39` |
+| [config/stash.yaml](../config/stash.yaml) | `0e4957f6a05080af263fd9ec27722ad1104d7598605efd17474c0fc59a6dce54` |
 | [config/core.stoverride](../config/core.stoverride) | `834b9b965093ea62072ee9db30480d34a63b3193ca29a155deab36829fc76306` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |

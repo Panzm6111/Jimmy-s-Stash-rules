@@ -1,0 +1,265 @@
+{
+  "date": "2026-10-29",
+  "baseline": "a9d5630271ae185c1e7836b750c5e55816253b38",
+  "runtime": {
+    "stash_rule_providers": 27,
+    "clash_rule_providers": 25,
+    "direct_each_client": 17,
+    "unique_direct_urls": 18,
+    "cloud_converted_inputs": 6,
+    "business_groups_unchanged": 21,
+    "clash_hidden_download_groups": 1
+  },
+  "equivalence": "Policy order restored by collapsing adjacent split providers; each split union equals previous provider on pinned snapshot; groups, DNS, HTTP and script maps unchanged",
+  "direct_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml",
+      "behavior": "classical",
+      "status": 200,
+      "rules": 183,
+      "sha256": "2f84cc9d35c8559ebea4c43aa9b30bb43b36313d70684f23a359f1acabb879bb",
+      "snapshot": "rules/vendor/youtube.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Instagram/Instagram.yaml",
+      "behavior": "classical",
+      "status": 200,
+      "rules": 4,
+      "sha256": "3ea6152876ff1c998b9434761898af1242bcc6bcaeaed74023910d9d08c64e39",
+      "snapshot": "rules/vendor/instagram.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml",
+      "behavior": "classical",
+      "status": 200,
+      "rules": 33,
+      "sha256": "67c46c3988da5cdc387eacee945c2950464691af0e2746929455cd9295c3ff2b",
+      "snapshot": "rules/vendor/twitter.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml",
+      "behavior": "classical",
+      "status": 200,
+      "rules": 31,
+      "sha256": "a2641ce2f10857831b600623f97d354e6f8db7b20dff175c5313c2c46e0b6867",
+      "snapshot": "rules/vendor/github.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "behavior": "classical",
+      "status": 200,
+      "rules": 38066,
+      "sha256": "f1273a862ad8ca3f930ba5286a935cb78e710ff4184055431b49c957b4379c02",
+      "snapshot": "rules/vendor/ads-expanded.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 110177,
+      "sha256": "f03c301bc6ef21349da52b377e164aa1518f5549188575bc08b4e4436651b620",
+      "snapshot": "rules/vendor/china-direct-community.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/eastmoney.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 8,
+      "sha256": "051fa34a181ef3c21b1aa0a49c6b09836745346e6ff9db043926aa3a712dedaf",
+      "snapshot": "rules/vendor/eastmoney-community.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@!cn.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 36,
+      "sha256": "23c394c6bf11f7c42a2239f66fa8a8e3ae6294b4e3984395fac7f4d95df641a3",
+      "snapshot": "rules/vendor/tiktok-core.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@ads.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 1,
+      "sha256": "628f5937791ddf6ad41ca57e259a2e013c4485f607be77c4d126450958030cd7",
+      "snapshot": "rules/vendor/tiktok-tracking.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 27272,
+      "sha256": "b11a55798d37d756add5d0a036f4c2b829d80a08cf8e3359b355ee5b488063e2",
+      "snapshot": "rules/vendor/proxy-community.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 213,
+      "sha256": "4a2f981eb292188c642bbdf698a4aa534e67b670b70ee2025e698d39ce7d6207",
+      "snapshot": "rules/vendor/ai-metacubex.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-social-media-!cn.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 627,
+      "sha256": "5da56cd387a51d2a588a44b15d2afb265724ebd3f6aa5b24597d6e355568ed14",
+      "snapshot": "rules/vendor/social-metacubex.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/discord.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 28,
+      "sha256": "b066c5e8bcf3f5ceb00eac510414cbd3b61b36485f2aed0a672e07f6a50a6f17",
+      "snapshot": "rules/vendor/social-discord.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/whatsapp.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 11,
+      "sha256": "91cf23a84c186c66f86908ad1b3b7658f325bd16c82b1c60f753ac43575513fe",
+      "snapshot": "rules/vendor/social-whatsapp.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/line.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 20,
+      "sha256": "bc555ae0d41072e7ceb0eab7f4d9e0f2b31b046a34430932e083dbdcd445fe0f",
+      "snapshot": "rules/vendor/social-line.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/signal.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 8,
+      "sha256": "f243aca1f3aa949aedc1b0bf094a4ebb3f199b649894aef46bf84789943cbd69",
+      "snapshot": "rules/vendor/social-signal.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/adobe.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 260,
+      "sha256": "7ee5c5815a4706bd242fd8b218edfd431eea5d5348e34f17905ff3576b584fc6",
+      "snapshot": "rules/vendor/adobe-community.yaml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads.yaml",
+      "behavior": "domain",
+      "status": 200,
+      "rules": 844,
+      "sha256": "2aad15e370b6b38886e0872d7f41fd11629e493d35e85ab417ecd6afd507f995",
+      "snapshot": "rules/vendor/clash-ads-community.yaml"
+    }
+  ],
+  "native_real_content": [
+    {
+      "configuration": "config/clash-verge.yaml",
+      "providers": 27,
+      "counts": {
+        "Adobe服务": 260,
+        "Adobe官方补充": 28,
+        "基础广告": 38066,
+        "海外AI": 213,
+        "海外AI补充": 55,
+        "Netflix": 1156,
+        "YouTube": 183,
+        "Telegram": 35,
+        "Apple服务": 1579,
+        "Microsoft服务": 668,
+        "东方财富直连": 8,
+        "国内服务": 110177,
+        "TikTok": 34,
+        "Instagram": 4,
+        "Twitter": 33,
+        "GitHub": 31,
+        "海外社交": 627,
+        "社交Discord": 28,
+        "社交WhatsApp": 11,
+        "社交LINE": 20,
+        "社交Signal": 8,
+        "通用代理": 27272,
+        "系统直连例外": 26,
+        "广告路径例外": 2,
+        "TikTok广告": 1,
+        "TikTok核心": 36,
+        "App广告域名": 19
+      },
+      "source_bytes_verified": true,
+      "current_client_modified": false
+    },
+    {
+      "configuration": "config/clash-verge-auto.yaml",
+      "providers": 25,
+      "counts": {
+        "Adobe服务": 260,
+        "Adobe官方补充": 28,
+        "基础广告": 844,
+        "海外AI": 213,
+        "海外AI补充": 55,
+        "Netflix": 1156,
+        "YouTube": 183,
+        "Telegram": 35,
+        "Apple服务": 1579,
+        "Microsoft服务": 668,
+        "东方财富直连": 8,
+        "国内服务": 110177,
+        "TikTok": 34,
+        "Instagram": 4,
+        "Twitter": 33,
+        "GitHub": 31,
+        "海外社交": 627,
+        "社交Discord": 28,
+        "社交WhatsApp": 11,
+        "社交LINE": 20,
+        "社交Signal": 8,
+        "通用代理": 27272,
+        "系统直连例外": 26,
+        "TikTok广告": 1,
+        "TikTok核心": 36
+      },
+      "source_bytes_verified": true,
+      "current_client_modified": false
+    }
+  ],
+  "native_reload": {
+    "passed": 19,
+    "checks": [
+      "all 25 remote rule providers load",
+      "private fallback supplies nodes with failed first download and no cache",
+      "airport informational redirect entry is excluded from selectable nodes",
+      "successful later download replaces startup fallback with a cache",
+      "airport fetch requests Clash YAML through explicit client user agent",
+      "21 application groups and one download failover group load",
+      "same-name airport nodes coexist with groups",
+      "initial default is automatic pool",
+      "four-region ai option exposed",
+      "empty region rejects instead of direct fallback",
+      "new group arrives after complete profile reload",
+      "new rule priority takes effect",
+      "new provider declaration loads rules after reload",
+      "private airport URL survives public structural update",
+      "selected AI pool survives reload",
+      "airport node refresh propagates without profile replacement",
+      "advertising rules refresh independently",
+      "core rejects invalid reload and keeps running configuration",
+      "previous profile can be restored"
+    ],
+    "actual_client_modified": false,
+    "boundary": "Native fixture checks only; does not test Clash Verge timer or real airport connectivity."
+  },
+  "tests": {
+    "project": 42,
+    "javascript": 88,
+    "clash": 12,
+    "subscriptions": 6
+  },
+  "cloud_status": "Prepared; hosted run not verified yet",
+  "windows_task": "Still enabled; disable only after hosted workflow succeeds and public files verify",
+  "device_acceptance": "Not run; no client activated or network settings changed"
+}

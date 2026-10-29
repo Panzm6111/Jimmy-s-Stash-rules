@@ -1,25 +1,25 @@
 # 更新机制与日常使用
 
-两端四地区ai更新：Stash确认 `ROUTE-20261029.4`，Clash前缀入口确认 `Jimmy · ai`。原“日本+美国”改名为ai，覆盖日本、美国、新加坡、台湾，12个业务select组可选（含Adobe），原默认值不变；手动节点仍只选实际节点。原先选旧聚合组的位置请核对并重新选择ai，不承诺旧名称自动迁移。保留私人覆写和证书；完整远程主配置更新结构，旧本地Merge/扩展脚本需换同路径新版。
+当前版本ROUTE-20261029.5。客户端直订兼容上游；只有必须过滤/转换的规则交给GitHub Actions。电脑不再需要承担日常同步，Windows旧任务在云端验收通过后停用，实际状态以[PROGRESS](../PROGRESS.md)为准。
 
-2026-10-29：Stash采用21个规则集并保留HTTP层；Clash完整自动订阅保留21个业务组，新增1个隐藏的订阅更新回退组，采用19个规则集、基础社区广告分类。策略组和规则顺序也随主订阅更新，详见[迁移教程](CLASH-VERGE.md#完整自动订阅推荐)与[来源审查](COMMUNITY-SOURCES.md)。
-
-| 内容 | 更新方式 |
+| 内容 | 执行位置和更新方式 |
 |---|---|
-| AI、TikTok/Instagram/X、其他软件、国内分流、域名广告及例外 | rule-providers的URL，各自86400秒尝试刷新，无需复制代码 |
-| Stash主配置、策略组与HTTP声明结构 | 原URL首行#SUBSCRIBED，官方默认每12小时检查，可在配置页修改 |
-| Clash主配置与策略组结构 | 从config/clash-verge-auto.yaml远程订阅导入，首次开启自动更新，设为1440分钟；不是刷新机场订阅 |
-| Clash全局Merge | 保留原机场自动更新节点；规则集URL按24小时刷新，结构变化需换入config/clash-verge-merge.yaml新版，文件由同一生成/每日维护链发布 |
-| Stash 12份广告/自检JS | 原URL的script-providers，86400秒尝试刷新；新增主机或handler仍需要主配置更新 |
-| 机场节点 | 本机私人proxy-provider，每24小时尝试刷新；URL变更需本人修改本机覆写 |
-| 本机公开上游维护 | 原Windows每天12点任务运行publish；普通规则有实际变化且验证通过才提交推送；无变化不动受控文件 |
-| HTTP/MITM/许可及未知规则类型等不能安全自动适配的变化 | 明确列入待审查报告，保留已核准实现，不误报为已更新 |
+| 国内、东方财富、TikTok功能/广告、通用海外、AI主集、社交、Adobe主集 | 客户端直接订阅MetaCubeX的meta分支，domain YAML，86400秒刷新 |
+| YouTube、Instagram、Twitter、GitHub、Stash大广告集 | 客户端直接订阅blackmatrix7完整兼容classical YAML，86400秒刷新 |
+| Clash基础去广告 | 直接订阅MetaCubeX category-ads；保留仅基础域名广告的范围 |
+| Netflix、Telegram、TikTok、Apple、Microsoft | GitHub过滤既有不兼容PROCESS-NAME/IP-ASN后发布，共5份转换 |
+| Sukka AI补充 | GitHub转为classical YAML，保留旧URL正则遗漏记录，第6份转换 |
+| 系统例外、App广告、HTTP/JS、自检与Adobe官方补充 | 项目固定审查源；有需求或证据时改动，未启用自动签到 |
+| 策略组、规则顺序与主配置结构 | 原Stash主订阅；Clash Jimmy全自动主订阅1440分钟刷新 |
+| 机场节点 | 设备本地私人provider，24小时尝试更新；Clash下载出口300秒主动检查 |
 
-GitHub只托管本项目已核准的版本。电脑检查上游、验证并发布，客户端才能取得新版；客户端间隔不保证iOS后台准点、关机执行或断网成功。旧完整私人合成文件和离线包保留作兼容快照，不作为自动更新入口。
+AI、社交和Adobe拆成相邻规则集，目标策略与匹配优先级不变。原21业务组、四地区ai、TikTok统一社交和Clash隐藏下载回退组不变。Stash27份、Clash自动入口25份规则集，其中每端17份直订；数量增加来自拆分，不是增加业务策略组。
 
-Stash首次刷新原链接并确认ROUTE-20261029.3与#SUBSCRIBED；Clash按[远程订阅教程](CLASH-VERGE.md)迁移一次。旧Clash本地扩展脚本若未换新版仍内嵌旧规则；即使用新版，其结构仍不会自行更新，所以推荐完整远程主配置。
+云端工作流[必要规则云端更新](../.github/workflows/refresh-rules.yml)每天北京时间12:17计划运行，避开整点；也支持Actions页面Run workflow。每次只读取6份转换输入及许可，异常/大幅变化停止；有实际变化才构建、验证、精确提交和推送。验证在同一工作流内完成，失败不发布；GITHUB_TOKEN推送不另触发push CI，不需要私人PAT。无变化不提交。依赖固定SHA，write权限只给此发布作业。
 
-依据：[Stash规则集](https://stash.wiki/rules/rule-set)、[托管配置](https://stash.wiki/features/service-provider-subscription)、[脚本管理](https://stash.wiki/en/script/manage-script)、[Clash订阅响应头](https://www.clashverge.dev/guide/url_schemes.html)。电脑配置及日志见[维护教程](MAINTENANCE.md)。
+GitHub定时执行可能延迟；公开仓库长期60天无活动可能停用schedule，需在Actions页面恢复。不能承诺每天精确到分钟。依据：[GitHub schedule说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)。
+
+旧Windows脚本保留用于明确回退或人工排障，不再是推荐日常路径。旧本地Merge结构仍须换版本；使用完整远程主订阅才能自动取得新结构。私人订阅、节点和证书留在设备，不进入GitHub。
 
 ## 日常最少操作
 

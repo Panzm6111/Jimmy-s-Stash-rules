@@ -99,9 +99,9 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
-        self.assertEqual(len(clash['rule-providers']),21)
-        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),21)
-        self.assertTrue(all(p['type']=='http' and p['interval']==86400 for p in clash['rule-providers'].values()))
+        self.assertEqual(len(clash['rule-providers']),27)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),27)
+        self.assertTrue(all(p['type']=='http' and p['behavior'] in {'classical','domain'} and p['interval']==86400 for p in clash['rule-providers'].values()))
         self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 
     def test_nodes_protocol_fields_and_providers_preserved(self):
@@ -179,12 +179,12 @@ class ClashChecks(unittest.TestCase):
         self.assertFalse(download['lazy'])
         self.assertEqual(download['use'],['机场'])
         self.assertNotIn('proxies',download)
-        self.assertEqual(len(full['rule-providers']),19)
+        self.assertEqual(len(full['rule-providers']),25)
         removed={'广告路径例外','App广告域名'}
         expected=[r for r in overlay['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
         self.assertEqual(full['rules'],expected)
         self.assertNotIn('http',full);self.assertNotIn('script-providers',full)
-        self.assertTrue(full['rule-providers']['基础广告']['url'].endswith('/rules/vendor/clash-ads-community.yaml'))
+        self.assertTrue(full['rule-providers']['基础广告']['url'].endswith('/meta/geo/geosite/category-ads.yaml'))
         self.assertEqual(full['proxy-providers']['机场']['proxy'],'Jimmy · 订阅更新')
         self.assertEqual(full['proxy-providers']['机场']['header'],{'User-Agent':['clash-verge/v2.5.8']})
         self.assertEqual(full['proxy-providers']['机场']['interval'],86400)

@@ -1,5 +1,7 @@
 # Jimmy 的 iPhone Stash 项目
 
+当前ROUTE-20261029.5：每端17份规则直订维护上游，6份必要转换由GitHub执行；21业务策略组与原分流逻辑保留。[更新链路与电脑任务状态](docs/UPDATES.md)。
+
 2026-10-29分流版本 `ROUTE-20261029.2`：已接入维护中的TikTok、AI、其他常用社交及通用海外完整分类，两端19个远程规则集。先刷新主配置，再刷新规则集并重连；[来源、优先级和边界](docs/COMMUNITY-SOURCES.md)。
 
 Clash推荐[完整自动订阅](config/clash-verge-auto.yaml)：Jimmy前缀、原20业务组加自动下载回退组、规则顺序和18规则集声明随主订阅更新，私人机场留在本机。按[迁移教程](docs/CLASH-VERGE.md#完整自动订阅推荐)接入一次，开启1440分钟自动更新，以后无需复制Merge。旧全局Merge/脚本保留兼容。

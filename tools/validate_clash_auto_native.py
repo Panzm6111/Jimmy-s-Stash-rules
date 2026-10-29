@@ -35,7 +35,7 @@ def main():
                 names=['美国','日本','台湾','TikTok','US-synthetic' if state['airport_version']==1 else 'US-updated']
                 obj={'proxies':[node(n) for n in names]}
             elif self.path.startswith('/rules/'):
-                obj={'payload':['DOMAIN,one.example.invalid']+(['DOMAIN,two.example.invalid'] if state['rule_version']==2 else [])}
+                idx=int(self.path.rsplit('/',1)[1]);behavior=state['rule_behaviors'][idx];prefix='DOMAIN,' if behavior=='classical' else '';obj={'payload':[prefix+'one.example.invalid']+([prefix+'two.example.invalid'] if state['rule_version']==2 else [])}
             else:self.send_error(404);return
             body=yaml.safe_dump(obj,allow_unicode=True).encode()
             self.send_response(200);self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
@@ -57,6 +57,7 @@ def main():
         config['proxy-providers']['机场'].update(url=private_url,path='./airport.yaml',proxy='DIRECT')
         config['proxy-providers']['机场']['payload']=[node(n) for n in ['跳转域名{请勿连接}:example.invalid','美国','日本','台湾','TikTok','US-synthetic']]
         for i,p in enumerate(config['rule-providers'].values()):
+            state.setdefault('rule_behaviors',{})[i]=p['behavior']
             p.update(url=f'http://127.0.0.1:{fixture.server_port}/rules/{i}',path=f'./rules/{i}.yaml',proxy='DIRECT')
         return config
     path=runtime/'config.yaml'
@@ -75,7 +76,7 @@ def main():
                 except (OSError,ValueError):pass
                 if process.poll() is not None or time.monotonic()>deadline:raise RuntimeError('Fixture initialization failed; inspect local log')
                 time.sleep(.2)
-            check(len(providers)==19,'all 19 remote rule providers load')
+            check(len(providers)==25,'all 25 remote rule providers load')
             check(state['airport_requests']>0 and not (runtime/'airport.yaml').exists(),
                   'private fallback supplies nodes with failed first download and no cache')
             check('跳转域名{请勿连接}:example.invalid' not in groups['Jimmy · 手动节点']['all'],
@@ -101,7 +102,9 @@ def main():
             groups=api('/proxies')['proxies']
             check('Jimmy · remote-update-fixture' in groups,'new group arrives after complete profile reload')
             check(api('/rules')['rules'][0]['proxy']=='Jimmy · remote-update-fixture','new rule priority takes effect')
-            check('remote-update-fixture' in api('/providers/rules')['providers'],'new provider declaration takes effect')
+            deadline=time.monotonic()+10
+            while api('/providers/rules')['providers'].get('remote-update-fixture',{}).get('ruleCount')!=1 and time.monotonic()<deadline:time.sleep(.1)
+            check(api('/providers/rules')['providers'].get('remote-update-fixture',{}).get('ruleCount')==1,'new provider declaration loads rules after reload')
             check(next_config['proxy-providers']['机场']['url']==private_url,'private airport URL survives public structural update')
             check(groups['Jimmy · 海外AI']['now']=='Jimmy · ai','selected AI pool survives reload')
             state['airport_version']=2

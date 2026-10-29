@@ -1,0 +1,31 @@
+# Mechanically adapted maintained rules; no locally authored domains.
+# Sources and original licenses: research/community-sources.json; Adobe official endpoint snapshot
+payload:
+- DOMAIN-SUFFIX,adobe.com
+- DOMAIN-SUFFIX,adobe.io
+- DOMAIN-SUFFIX,adobecc.com
+- DOMAIN-SUFFIX,adobecces.com
+- DOMAIN-SUFFIX,adobeccstatic.com
+- DOMAIN-SUFFIX,adobedtm.com
+- DOMAIN-SUFFIX,adobeexchange.com
+- DOMAIN-SUFFIX,adobegenuine.com
+- DOMAIN-SUFFIX,adobegov.com
+- DOMAIN-SUFFIX,adobe-identity.com
+- DOMAIN-SUFFIX,adobejanus.com
+- DOMAIN-SUFFIX,adobelogin.com
+- DOMAIN-SUFFIX,adobedc.net
+- DOMAIN-SUFFIX,adobeoobe.com
+- DOMAIN-SUFFIX,adobeprojectm.com
+- DOMAIN-SUFFIX,adobesc.com
+- DOMAIN-SUFFIX,adobe-services.com
+- DOMAIN-SUFFIX,adobess.com
+- DOMAIN-SUFFIX,adobesunbreak.com
+- DOMAIN-SUFFIX,adobetag.com
+- DOMAIN-SUFFIX,frame.io
+- DOMAIN-SUFFIX,f.io
+- DOMAIN,frameio-assets.s3.amazonaws.com
+- DOMAIN,frameio-application-production.s3-accelerate.amazonaws.com
+- DOMAIN,frameio-assets-production.s3-accelerate.amazonaws.com
+- DOMAIN,frameio-uploads-production.s3-accelerate.amazonaws.com
+- DOMAIN,pre-signed-firefly-prod.s3-accelerate.amazonaws.com
+- DOMAIN,pre-signed-firefly-prod.s3.amazonaws.com

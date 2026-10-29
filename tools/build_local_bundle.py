@@ -37,8 +37,7 @@ def flatten(config, keep_providers=()):
                 rules.append(rule)
                 continue
             provider = providers[fields[1]]
-            if not provider['url'].startswith(RAW): raise ValueError('non-project rule source')
-            for entry in load(provider['url'][len(RAW):])['payload']:
+            for entry in load(local_public_path(provider['url']))['payload']:
                 parts = entry.split(',')
                 if parts[0] not in RULE_KINDS: raise ValueError('unsupported classical rule')
                 # A payload's optional no-resolve follows the policy in flat rules.

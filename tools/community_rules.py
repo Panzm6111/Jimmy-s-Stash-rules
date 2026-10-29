@@ -38,7 +38,7 @@ def parse(raw, fmt):
 
 def document(rules, sources):
     return ('# Mechanically adapted maintained rules; no locally authored domains.\n'
-            '# Sources and original licenses: research/community-sources.json; '+', '.join(sources)+'\n'
+            '# Sources and original licenses: research/community-sources.json; '+(', '.join(sources) or 'Adobe official endpoint snapshot')+'\n'
             +yaml.safe_dump({'payload':rules},allow_unicode=True,sort_keys=False,width=120))
 
 def generated_documents(root=ROOT, manifest=None):

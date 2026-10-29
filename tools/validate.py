@@ -23,7 +23,10 @@ RULE_KINDS = {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'IP-CIDR', 'IP-CIDR6'
 
 def local_public_path(url):
     """Resolve only this project's public files and reviewed JS revision queries."""
-    assert isinstance(url, str) and url.startswith(RAW), 'unexpected public URL'
+    assert isinstance(url, str), 'unexpected public URL'
+    if not url.startswith(RAW):
+        from provider_sources import reference_path
+        return reference_path(url)
     path, separator, query = url[len(RAW):].partition('?')
     assert path and '..' not in path and '#' not in path and '\\' not in path and not path.startswith('/'), 'unsafe public path'
     if separator:
@@ -83,9 +86,7 @@ def provider_rules(config):
     result = {}
     for name, provider in config.get('rule-providers', {}).items():
         url = provider['url']
-        if not url.startswith(RAW):
-            raise ValueError('unexpected rule URL')
-        path = url[len(RAW):]
+        path = local_public_path(url)
         stat = (ROOT / path).stat()
         # Each caller gets its own list so adversarial-fixture mutations cannot
         # contaminate another route or module combination.

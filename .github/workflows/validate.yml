@@ -26,4 +26,5 @@ jobs:
       - run: python -m unittest discover -s tests -p test_clash.py -v
       - run: python -m unittest discover -s tests -p test_auto_update.py -v
       - run: python -m unittest discover -s tests -p test_community.py -v
+      - run: python -m unittest discover -s tests -p test_subscriptions.py -v
       - run: python tools/validate.py
