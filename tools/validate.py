@@ -647,7 +647,7 @@ class ProjectChecks(unittest.TestCase):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
         defaults = {'总代理':'REJECT', '手动节点':'REJECT', '海外AI':'美国',
                     'TikTok':'美国', 'Netflix':'总代理', 'YouTube':'总代理',
-                    'Telegram':'总代理', 'Apple':'DIRECT', 'Microsoft':'DIRECT',
+                    'Telegram':'总代理', 'Apple':'DIRECT', 'Microsoft':'DIRECT', 'Adobe':'美国',
                     '未匹配流量':'总代理', '国内直连':'DIRECT', '广告拦截':'REJECT'}
         for config in [self.config, load('config/stash.yaml')]:
             validate_structure(config)
