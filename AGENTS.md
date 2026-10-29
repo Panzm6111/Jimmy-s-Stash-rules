@@ -14,4 +14,4 @@
 - Git只纳入交付、复现和接续必要文件；逐项核对再暂存，禁止无差别全量添加。提交、推送、发布、替换Hook或新增定时任务须符合当次任务及既有授权范围，整理文档不自动触发这些操作。
 - 结束回执说明实际变更、验证结果、主文件是否更新、提交/推送状态和下一步。
 
-- 已确认扩展：Clash Verge沿用完整分流，去广告仅域名规则；生成器tools/build_clash.py。海外AI包含日本+美国池，统一TikTok组覆盖TikTok/Instagram/X。用户已明确授权Windows中午任务执行auto_update.py：有实际变化且验证通过才自动提交并推送原main，无变化零提交零推送；保护其他会话内容。
+- 已确认扩展：Clash Verge沿用完整分流，去广告仅域名规则；生成器tools/build_clash.py。两端共享四地区ai池（日本、美国、新加坡、台湾），各业务select组可选；Clash前缀入口显示Jimmy · ai，统一TikTok组覆盖TikTok/Instagram/X。用户已明确授权Windows中午任务执行auto_update.py：有实际变化且验证通过才自动提交并推送原main，无变化零提交零推送；保护其他会话内容。

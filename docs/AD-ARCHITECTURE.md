@@ -231,6 +231,7 @@ proxy-groups:
   proxies:
   - REJECT
   - DIRECT
+  - ai
 rule-providers:
   基础广告:
     type: http
@@ -605,8 +606,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `250b027e0342b6924636a099c96374e5c956930a974c66fc62ff78eb280cda2c` |
-| [config/core.stoverride](../config/core.stoverride) | `78a87e202b791ec305bb820307464191db3da748b911903f6b4b44279df963a0` |
+| [config/stash.yaml](../config/stash.yaml) | `9f37e85051eac9480389de62225c01fdd653e1c3c7dfe0a692065d1f37ebb194` |
+| [config/core.stoverride](../config/core.stoverride) | `4c7f389a61d55fec11ca1c5cb96f308c2282f5310576f7276325d6f057070272` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |

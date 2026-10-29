@@ -2,7 +2,7 @@
 
 2026-10-29起，两端的 `海外AI` 直接使用社区维护的完整分类：MetaCubeX 的 `category-ai-!cn` 与 Sukka 的 `Source/non_ip/ai.conf`，只做兼容格式转换和去重。当前两份来源分别213条、55条，合并为231条；原 [rules/openai.yaml](../rules/openai.yaml) 地址保持不变。来源、提交、许可和逐文件哈希见 [community-sources.json](../research/community-sources.json)。
 
-`海外AI` 默认美国，保留日本、其他地区、手动节点和“日本+美国”等已有选项。“日本+美国”只在这两国的节点间测速；测速地址成功不代表账号、地区和平台风控一定通过。AI分流不需要MITM，不解密聊天正文。
+`海外AI` 默认美国。两端将原“日本+美国”改为 `ai`，在日本、美国、新加坡、台湾节点间自动测速选优，各业务select组都可选择；其他选项及默认值保留。Clash带前缀入口显示为 `Jimmy · ai`；测速地址成功不代表账号、地区和平台风控一定通过。AI分流不需要MITM，不解密聊天正文。
 
 ## 覆盖与边界
 

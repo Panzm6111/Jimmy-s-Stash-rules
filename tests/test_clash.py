@@ -1,5 +1,6 @@
 """Synthetic subscription conversion regressions; no personal data or network."""
 import copy
+import re
 import json
 from pathlib import Path
 import subprocess
@@ -56,6 +57,27 @@ class ClashChecks(unittest.TestCase):
         clash = yaml.safe_load((ROOT/'config/clash-verge.yaml').read_text(encoding='utf-8'))
         self.assertEqual(clash['rules'], stash['rules'])
         self.assertEqual(clash['proxy-groups'], stash['proxy-groups'])
+        for filename in ('config/clash-verge.yaml', 'config/clash-verge-merge.yaml', 'config/clash-verge-auto.yaml'):
+            config = yaml.safe_load((ROOT/filename).read_text(encoding='utf-8'))
+            prefix = '' if filename == 'config/clash-verge.yaml' else 'Jimmy · '
+            groups = {g['name']:g for g in config['proxy-groups']}
+            self.assertNotIn(prefix+'日本+美国', groups)
+            pool = groups[prefix+'ai']
+            self.assertEqual(pool['type'], 'url-test')
+            self.assertEqual(pool['interval'], 1800)
+            self.assertEqual(pool['url'], 'https://www.gstatic.com/generate_204')
+            for name, expected in [('US01',True),('JP01',True),('SG01',True),('TW01',True),('HK01',False),('DIRECT',False)]:
+                self.assertEqual(bool(re.search(pool['filter'],name)),expected)
+            for group in groups.values():
+                self.assertEqual(group.get('proxies',[]).count(prefix+'ai'), int(group['type']=='select' and group['name']!=prefix+'手动节点'))
+                self.assertNotIn(prefix+'日本+美国', group.get('proxies',[]))
+            self.assertEqual(groups[prefix+'手动节点'].get('proxies',[]), ['REJECT'] if not prefix else [])
+            self.assertEqual(groups[prefix+'总代理']['proxies'][0], 'REJECT' if not prefix else prefix+'自动节点')
+            self.assertEqual(groups[prefix+'海外AI']['proxies'][0], prefix+'美国')
+            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'美国')
+            for name in ('Apple','Microsoft','国内直连'):
+                self.assertEqual(groups[prefix+name]['proxies'][0], 'DIRECT')
+            self.assertEqual(groups[prefix+'广告拦截']['proxies'][0], 'REJECT')
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
@@ -75,8 +97,8 @@ class ClashChecks(unittest.TestCase):
         self.assertEqual(out['proxy-providers']['original'], source['proxy-providers']['original'])
         self.assertEqual(out['proxy-providers']['Jimmy-inline-nodes']['payload'], source['proxies'])
         groups = {g['name']:g for g in out['proxy-groups']}
-        self.assertIn('日本+美国', groups['海外AI']['proxies'])
-        self.assertEqual(groups['日本+美国']['use'], ['original','Jimmy-inline-nodes'])
+        self.assertIn('ai', groups['海外AI']['proxies'])
+        self.assertEqual(groups['ai']['use'], ['original','Jimmy-inline-nodes'])
         self.assertEqual(out['rules'][-1], 'MATCH,未匹配流量')
 
     def test_no_nodes_and_conflicts_fail_explicitly(self):
@@ -121,7 +143,7 @@ class ClashChecks(unittest.TestCase):
             if group.get('include-all'):self.assertEqual(group['empty-fallback'],'REJECT')
         groups={g['name']:g for g in overlay['proxy-groups']}
         self.assertEqual(groups['Jimmy · 总代理']['proxies'][0],'Jimmy · 自动节点')
-        self.assertIn('Jimmy · 日本+美国',groups['Jimmy · 海外AI']['proxies'])
+        self.assertIn('Jimmy · ai',groups['Jimmy · 海外AI']['proxies'])
 
     def test_merge_refuses_unknown_route_syntax(self):
         source=yaml.safe_load((ROOT/'config/clash-verge.yaml').read_text(encoding='utf-8'))

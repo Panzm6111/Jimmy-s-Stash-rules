@@ -89,9 +89,9 @@ def main():
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
             check(groups['Jimmy · 总代理']['now']=='Jimmy · 自动节点','initial default is automatic pool')
-            check('Jimmy · 日本+美国' in groups['Jimmy · 海外AI']['all'],'AI Japan plus US option retained')
+            check('Jimmy · ai' in groups['Jimmy · 海外AI']['all'],'four-region ai option exposed')
             check(groups['Jimmy · 新加坡']['all']==['REJECT'],'empty region rejects instead of direct fallback')
-            api('/proxies/'+urllib.parse.quote('Jimmy · 海外AI',safe=''),'PUT',{'name':'Jimmy · 日本+美国'})
+            api('/proxies/'+urllib.parse.quote('Jimmy · 海外AI',safe=''),'PUT',{'name':'Jimmy · ai'})
             next_public=copy.deepcopy(public)
             next_public['proxy-groups'].append({'name':'Jimmy · remote-update-fixture','type':'select','proxies':['Jimmy · 美国']})
             next_public['rule-providers']['remote-update-fixture']=copy.deepcopy(public['rule-providers']['海外AI'])
@@ -103,7 +103,7 @@ def main():
             check(api('/rules')['rules'][0]['proxy']=='Jimmy · remote-update-fixture','new rule priority takes effect')
             check('remote-update-fixture' in api('/providers/rules')['providers'],'new provider declaration takes effect')
             check(next_config['proxy-providers']['机场']['url']==private_url,'private airport URL survives public structural update')
-            check(groups['Jimmy · 海外AI']['now']=='Jimmy · 日本+美国','selected AI pool survives reload')
+            check(groups['Jimmy · 海外AI']['now']=='Jimmy · ai','selected AI pool survives reload')
             state['airport_version']=2
             api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
             members=api('/proxies')['proxies']['Jimmy · 手动节点']['all']
