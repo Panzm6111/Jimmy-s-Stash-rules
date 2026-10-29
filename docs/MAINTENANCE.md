@@ -16,9 +16,11 @@
 
 2026-10-29自动同步范围扩展为12份blackmatrix7输入（增加Apple、Microsoft、GitHub）和10份MetaCubeX/Sukka完整社区分类，包含TikTok功能/广告、AI、常用社交与通用海外规则。只做格式转换和去重，退出原人工精选AI生成链；只改注释时不提交。来源清单、许可和兼容遗漏见[社区规则说明](COMMUNITY-SOURCES.md)。本地白名单、私人接入、策略组与HTTP专项保持原样。
 
+本次另接入cn和eastmoney两份完整社区源，当前共13份社区输入；下载自动回退和24小时主订阅设置见[Clash教程](CLASH-VERGE.md)。
+
 ## 一次性准备
 
-2026-10-29审查后新增第11份社区输入：MetaCubeX完整基础广告category-ads，仅用于新的Clash自动订阅，Stash现行规则保持不变。`config/clash-verge-auto.yaml`已加入生成器和自动发布白名单；原中午任务同时维护Stash与Clash公开产物，无需新增计划任务。Clash客户端须启用主订阅360分钟自动更新，才会取得策略组等结构变化。来源审查证据见[审查记录](../research/source-health-review-20261029.json)。
+2026-10-29审查后新增第11份社区输入：MetaCubeX完整基础广告category-ads，仅用于新的Clash自动订阅，Stash现行规则保持不变。`config/clash-verge-auto.yaml`已加入生成器和自动发布白名单；原中午任务同时维护Stash与Clash公开产物，无需新增计划任务。Clash客户端须启用主订阅1440分钟自动更新，才会取得策略组等结构变化。来源审查证据见[审查记录](../research/source-health-review-20261029.json)。
 
 电脑安装以下软件，使用各软件官方网站的安装包：
 

@@ -1,6 +1,14 @@
 # 社区规则接入与维护
 
-2026-10-29按已确认需求，从手工补域名转为接入持续维护的完整分类。Stash与Clash共享19个远程规则集、20个策略组和8个测速池；保留既有地区、应用及私人机场接入。Stash的HTTP改写和脚本保持现状，Clash继续只采用域名广告层。
+2026-10-29按已确认需求，从手工补域名转为接入持续维护的完整分类。当前Stash20个远程规则集、Clash自动入口18个；共享20个业务策略组和8个测速池，Clash另加1个隐藏下载回退组。保留既有地区、应用及私人机场接入。Stash的HTTP改写和脚本保持现状，Clash继续只采用域名广告层。
+
+## 本次国内应用改善（2026-10-29）
+
+新增MetaCubeX完整cn（110177条）及eastmoney（8条）分类，固定数据提交74246501fd12b938b73482f406a6163d1e4a460f；cn文件最新提交为2026-10-29 01:56:58 UTC。对照blackmatrix7 ChinaMaxNoIP同期110178条，覆盖接近；选择已接入的MetaCubeX维护链，复用GPL-3.0许可、哈希和异常差量保护，不并列堆叠两套高度重复大集合。
+
+旧国内集合3721条，虽然包含eastmoney.com和dfcfw.com，但缺少部分相关服务；旧Stash广告集合还会拦截push2.eastmoney.com。新国内集合放在通用海外之前；东方财富保护集放在明确App广告规则之后、大广告集合之前。旧china.yaml保留兼容，现行国内provider改指向china-direct-community.yaml。原20业务策略组和HTTP实现保留。
+
+更新后Stash20个规则集，Clash自动入口18个；社区源共13份（MetaCubeX12份、Sukka1份），全部纳入原每日维护工具。完整上游集合只作机械转换，不手写国内域名补丁。[当前客户端操作](CLASH-VERGE.md)。
 
 ## 已采用来源
 
@@ -17,14 +25,14 @@ Netflix/YouTube/Instagram/GitHub等部分文件较久未修改；单凭时间不
 | 来源 | 完整采用范围 | 维护与许可 |
 |---|---|---|
 | [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script) | Netflix、YouTube、Telegram、国内、扩展广告、TikTok、Instagram、Twitter，新增整份Apple、Microsoft、GitHub；原基础广告SDK兼容子集仍保留 | 12份规则输入，固定提交与SHA256见 [sources.lock.json](../research/sources.lock.json)；GPL-2.0 |
-| [MetaCubeX/meta-rules-dat](https://github.com/MetaCubeX/meta-rules-dat) | TikTok功能与广告独立分类；AI；海外社交、Discord、WhatsApp、LINE、Signal；通用海外域名 | 9份完整domain YAML；跟踪生成数据的 `meta` 分支，许可独立跟踪 `master`；[GPL-3.0原文](../licenses/MetaCubeX-GPL-3.0.txt) |
+| [MetaCubeX/meta-rules-dat](https://github.com/MetaCubeX/meta-rules-dat) | TikTok功能与广告独立分类；AI；海外社交、Discord、WhatsApp、LINE、Signal；通用海外域名 | 12份完整domain YAML（含Clash基础广告、国内与东方财富）；跟踪生成数据的 `meta` 分支，许可独立跟踪 `master`；[GPL-3.0原文](../licenses/MetaCubeX-GPL-3.0.txt) |
 | [SukkaW/Surge](https://github.com/SukkaW/Surge) | 完整AI源的可通用域名规则，与MetaCubeX去重合并 | 1份源；[AGPL-3.0原文](../licenses/SukkaW-AGPL-3.0.txt)，保留归属和对应源代码 |
 
 完整接入是集合层面的采用：不再人工挑选其中哪些域名属于某个服务。转换仅处理 `+.` 到 `DOMAIN-SUFFIX`、精确域名到 `DOMAIN`、重复项合并及明确不兼容的规则类型。Apple/Microsoft/GitHub源中的进程匹配不适合两端通用规则集，按既有基本类型过滤器记录遗漏；Sukka的一条URL正则明确未采用。现行完整清单、两份聚合关系、遗漏及每份输入/输出哈希见 [community-sources.json](../research/community-sources.json)。
 
 当前AI聚合231条，社交聚合694条，通用海外27,271条；这些数量是当前快照，会随维护源更新。MetaCubeX的域名分类也来自v2fly/domain-list-community等维护体系，不能把两个发布地址当作完全独立的数据证据。
 
-## TikTok规则优先级
+## TikTok规则优先级（原接入阶段，国内顺序以本次改善为准）
 
 核查发现旧版在8个公开上游TikTok主机上漏分流或误拦截。新顺序为：系统/已审查路径例外 → 上游TikTok广告分类 → 上游TikTok功能分类 → 其他广告 → AI → 各平台 → 社交补充 → Apple/GitHub/Microsoft → 通用海外 → 国内/GeoIP/兜底。
 

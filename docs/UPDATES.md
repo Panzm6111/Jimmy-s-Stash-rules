@@ -1,12 +1,12 @@
 # 更新机制与日常使用
 
-2026-10-29：Stash保留19个规则集及HTTP层；Clash新的完整自动订阅保留全部非广告分流和20组，采用17个规则集、基础社区广告分类。策略组和规则顺序也随主订阅更新，详见[迁移教程](CLASH-VERGE.md#完整自动订阅推荐)与[来源审查](COMMUNITY-SOURCES.md)。
+2026-10-29：Stash采用20个规则集并保留HTTP层；Clash完整自动订阅保留20个业务组，新增1个隐藏的订阅更新回退组，采用18个规则集、基础社区广告分类。策略组和规则顺序也随主订阅更新，详见[迁移教程](CLASH-VERGE.md#完整自动订阅推荐)与[来源审查](COMMUNITY-SOURCES.md)。
 
 | 内容 | 更新方式 |
 |---|---|
 | AI、TikTok/Instagram/X、其他软件、国内分流、域名广告及例外 | rule-providers的URL，各自86400秒尝试刷新，无需复制代码 |
 | Stash主配置、策略组与HTTP声明结构 | 原URL首行#SUBSCRIBED，官方默认每12小时检查，可在配置页修改 |
-| Clash主配置与策略组结构 | 从config/clash-verge-auto.yaml远程订阅导入，首次开启自动更新，设为360分钟；不是刷新机场订阅 |
+| Clash主配置与策略组结构 | 从config/clash-verge-auto.yaml远程订阅导入，首次开启自动更新，设为1440分钟；不是刷新机场订阅 |
 | Clash全局Merge | 保留原机场自动更新节点；规则集URL按24小时刷新，结构变化需换入config/clash-verge-merge.yaml新版，文件由同一生成/每日维护链发布 |
 | Stash 12份广告/自检JS | 原URL的script-providers，86400秒尝试刷新；新增主机或handler仍需要主配置更新 |
 | 机场节点 | 本机私人proxy-provider，每24小时尝试刷新；URL变更需本人修改本机覆写 |
@@ -15,7 +15,7 @@
 
 GitHub只托管本项目已核准的版本。电脑检查上游、验证并发布，客户端才能取得新版；客户端间隔不保证iOS后台准点、关机执行或断网成功。旧完整私人合成文件和离线包保留作兼容快照，不作为自动更新入口。
 
-Stash首次刷新原链接并确认ROUTE-20261029.1与#SUBSCRIBED；Clash按[远程订阅教程](CLASH-VERGE.md)迁移一次。旧Clash本地扩展脚本若未换新版仍内嵌旧规则；即使用新版，其结构仍不会自行更新，所以推荐完整远程主配置。
+Stash首次刷新原链接并确认ROUTE-20261029.2与#SUBSCRIBED；Clash按[远程订阅教程](CLASH-VERGE.md)迁移一次。旧Clash本地扩展脚本若未换新版仍内嵌旧规则；即使用新版，其结构仍不会自行更新，所以推荐完整远程主配置。
 
 依据：[Stash规则集](https://stash.wiki/rules/rule-set)、[托管配置](https://stash.wiki/features/service-provider-subscription)、[脚本管理](https://stash.wiki/en/script/manage-script)、[Clash订阅响应头](https://www.clashverge.dev/guide/url_schemes.html)。电脑配置及日志见[维护教程](MAINTENANCE.md)。
 

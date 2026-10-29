@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-28",
+  "checked_at": "2026-10-29",
   "policy": "Use whole maintained sets; only mechanical supported-format conversion and deduplication. No manual host additions or selection lists.",
   "resources": [
     {
@@ -171,6 +171,36 @@
       "consumers": [
         "config/clash-verge-auto.yaml"
       ]
+    },
+    {
+      "id": "china-direct-meta",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "74246501fd12b938b73482f406a6163d1e4a460f",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/cn.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/74246501fd12b938b73482f406a6163d1e4a460f/geo/geosite/cn.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "f03c301bc6ef21349da52b377e164aa1518f5549188575bc08b4e4436651b620",
+      "output": "rules/vendor/china-direct-community.yaml",
+      "output_sha256": "424230d9bbafc8c2bd609a37707b4d51e22474086c950bba124fe9c2c90333b5",
+      "retained": 110177,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "eastmoney-direct-meta",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "74246501fd12b938b73482f406a6163d1e4a460f",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/eastmoney.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/74246501fd12b938b73482f406a6163d1e4a460f/geo/geosite/eastmoney.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "051fa34a181ef3c21b1aa0a49c6b09836745346e6ff9db043926aa3a712dedaf",
+      "output": "rules/vendor/eastmoney-community.yaml",
+      "output_sha256": "9ad1a1efb4409cd317e701c074de3dcf5ac84ed5020906d86ff57f2f544b84cf",
+      "retained": 8,
+      "omitted": [],
+      "license": "GPL-3.0"
     }
   ],
   "licenses": [

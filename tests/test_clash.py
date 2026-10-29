@@ -13,13 +13,29 @@ from build_clash import render,global_merge,remote_profile
 from prepare_clash_bootstrap import prepare
 
 class ClashChecks(unittest.TestCase):
+    def test_maintained_domestic_routes_override_broad_proxy_and_keep_foreign_services(self):
+        from validate import route, load
+        stash=load('config/stash.yaml')
+        clash=load('config/clash-verge-auto.yaml')
+        for config, domestic, ai, social in [(stash,'国内直连','海外AI','TikTok'),
+                                              (clash,'Jimmy · 国内直连','Jimmy · 海外AI','Jimmy · TikTok')]:
+            for host in ['eastmoneysec.com','eastmoneyloans.com','api.weixin.qq.com',
+                         'api.bilibili.com','api.m.jd.com','api.m.taobao.com',
+                         'alibabacloud.com','quote.10jqka.com.cn']:
+                self.assertEqual(route(config,host,country='ZZ'),domestic,host)
+            self.assertEqual(route(config,'push2.eastmoney.com',country='ZZ'),'DIRECT')
+            self.assertEqual(route(config,'push2his.eastmoney.com',country='ZZ'),'DIRECT')
+            self.assertEqual(route(config,'api.openai.com',country='ZZ'),ai)
+            self.assertEqual(route(config,'www.tiktok.com',country='ZZ'),social)
+        self.assertEqual(route(stash,'emdcadvertise.eastmoney.com'), '广告拦截')
+
     def test_private_bootstrap_preserves_settings_and_removes_null_node_fields(self):
         node={'name':'US fixture','type':'vless','flow':None,'port':443,'tls':False}
         private={'dns':{'enable':True},'proxy-providers':{'机场':{'url':'https://airport.example/fixture'}}}
         result=prepare({'proxies':[node]},private)
         self.assertEqual(result['dns'],private['dns'])
         provider=result['proxy-providers']['机场']
-        self.assertEqual(provider['proxy'],'Jimmy · 手动节点')
+        self.assertNotIn('proxy',provider)
         self.assertNotIn('flow',provider['payload'][0])
         self.assertFalse(provider['payload'][0]['tls'])
         self.assertNotIn('payload',private['proxy-providers']['机场'])
@@ -43,8 +59,8 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
-        self.assertEqual(len(clash['rule-providers']),19)
-        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),19)
+        self.assertEqual(len(clash['rule-providers']),20)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),20)
         self.assertTrue(all(p['type']=='http' and p['interval']==86400 for p in clash['rule-providers'].values()))
         self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 
@@ -116,17 +132,27 @@ class ClashChecks(unittest.TestCase):
         source=yaml.safe_load(render()['config/clash-verge.yaml'])
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         overlay=global_merge(source)
-        self.assertEqual(full['proxy-groups'],overlay['proxy-groups'])
-        self.assertEqual(len(full['proxy-groups']),20)
-        self.assertEqual(len(full['rule-providers']),17)
+        self.assertEqual(full['proxy-groups'][:-1],overlay['proxy-groups'])
+        self.assertEqual(len(full['proxy-groups']),21)
+        download=full['proxy-groups'][-1]
+        self.assertEqual(download['type'],'fallback')
+        self.assertFalse(download['lazy'])
+        self.assertEqual(download['use'],['机场'])
+        self.assertNotIn('proxies',download)
+        self.assertEqual(len(full['rule-providers']),18)
         removed={'广告路径例外','App广告域名'}
         expected=[r for r in overlay['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
         self.assertEqual(full['rules'],expected)
         self.assertNotIn('http',full);self.assertNotIn('script-providers',full)
         self.assertTrue(full['rule-providers']['基础广告']['url'].endswith('/rules/vendor/clash-ads-community.yaml'))
-        self.assertEqual(full['proxy-providers']['机场']['proxy'],'DIRECT')
+        self.assertEqual(full['proxy-providers']['机场']['proxy'],'Jimmy · 订阅更新')
         self.assertEqual(full['proxy-providers']['机场']['header'],{'User-Agent':['clash-verge/v2.5.8']})
         self.assertEqual(full['proxy-providers']['机场']['interval'],86400)
+        health=full['proxy-providers']['机场']['health-check']
+        self.assertTrue(health['enable'])
+        self.assertFalse(health['lazy'])
+        self.assertEqual(health['interval'],300)
+        self.assertEqual(health['timeout'],5000)
         self.assertEqual(full['proxy-providers']['机场']['url'],'https://example.invalid/REPLACE_ON_DEVICE')
 
     def test_new_remote_structure_is_not_frozen_in_local_private_merge(self):

@@ -295,6 +295,7 @@ rules:
 - RULE-SET,TikTok广告,广告拦截
 - RULE-SET,TikTok核心,TikTok
 - RULE-SET,App广告域名,广告拦截
+- RULE-SET,东方财富直连,DIRECT
 - RULE-SET,基础广告,广告拦截
 - RULE-SET,海外AI,海外AI
 - RULE-SET,TikTok,TikTok
@@ -303,12 +304,12 @@ rules:
 - RULE-SET,Netflix,Netflix
 - RULE-SET,YouTube,YouTube
 - RULE-SET,Telegram,Telegram
-- RULE-SET,海外社交,TikTok
 - RULE-SET,Apple服务,Apple
 - RULE-SET,GitHub,总代理
 - RULE-SET,Microsoft服务,Microsoft
-- RULE-SET,通用代理,总代理
 - RULE-SET,国内服务,国内直连
+- RULE-SET,海外社交,TikTok
+- RULE-SET,通用代理,总代理
 - GEOIP,CN,国内直连
 - MATCH,未匹配流量
 rule-providers:
@@ -361,10 +362,17 @@ rule-providers:
     interval: 86400
     format: yaml
     path: ./ruleset/jimmy-f232f1259912.yaml
+  东方财富直连:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/eastmoney-community.yaml
+    interval: 86400
+    format: yaml
+    path: ./ruleset/jimmy-e9d3c7116ba7.yaml
   国内服务:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china.yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china-direct-community.yaml
     interval: 86400
     format: yaml
     path: ./ruleset/jimmy-998cddb7fad7.yaml

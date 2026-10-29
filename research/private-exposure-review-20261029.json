@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-29",
+  "private_sources": 3,
+  "pattern_variants": 11,
+  "current_files": 211,
+  "published_git_objects": 1116,
+  "public_actions_logs_scanned": 37,
+  "findings": [],
+  "scope": "Known current private subscription URL/tokens, node credentials and private DNS path tokens; published origin/main history, no private Codex refs; patterns never sent to an external search service",
+  "public_inventory": {
+    "runs": 37,
+    "jobs": 37,
+    "logs": 37,
+    "errors": 0,
+    "artifacts": 0,
+    "releases": 0,
+    "issues": 0,
+    "comments": 0
+  },
+  "boundary": "Known private values compared locally. Does not prove absence in unrelated websites, deleted unreachable content, private chats or unknown credentials.",
+  "prior_chat_output": "A previous diagnostic tool output displayed a private subscription URL in this chat; no matching publication found in audited GitHub surfaces. No full URL or token included in this report."
+}

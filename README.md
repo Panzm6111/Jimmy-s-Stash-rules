@@ -1,8 +1,8 @@
 # Jimmy 的 iPhone Stash 项目
 
-2026-10-29分流版本 `ROUTE-20261029.1`：已接入维护中的TikTok、AI、其他常用社交及通用海外完整分类，两端19个远程规则集。先刷新主配置，再刷新规则集并重连；[来源、优先级和边界](docs/COMMUNITY-SOURCES.md)。
+2026-10-29分流版本 `ROUTE-20261029.2`：已接入维护中的TikTok、AI、其他常用社交及通用海外完整分类，两端19个远程规则集。先刷新主配置，再刷新规则集并重连；[来源、优先级和边界](docs/COMMUNITY-SOURCES.md)。
 
-Clash推荐[完整自动订阅](config/clash-verge-auto.yaml)：Jimmy前缀、全部20策略组、规则顺序和17规则集声明随主订阅更新，私人机场留在本机。按[迁移教程](docs/CLASH-VERGE.md#完整自动订阅推荐)接入一次，开启360分钟自动更新，以后无需复制Merge。旧全局Merge/脚本保留兼容。
+Clash推荐[完整自动订阅](config/clash-verge-auto.yaml)：Jimmy前缀、原20业务组加自动下载回退组、规则顺序和18规则集声明随主订阅更新，私人机场留在本机。按[迁移教程](docs/CLASH-VERGE.md#完整自动订阅推荐)接入一次，开启1440分钟自动更新，以后无需复制Merge。旧全局Merge/脚本保留兼容。
 
 项目接续先读 [PROGRESS.md](PROGRESS.md) 顶部的当前SOP总览；协作约束见 [AGENTS.md](AGENTS.md)。现有Stash HTTP去广告继续保留；另提供[Clash Verge完整分流版](docs/CLASH-VERGE.md)，广告层只用域名规则。
 
@@ -73,7 +73,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 |---|---|
 | 全部19个远程规则集（AI/社交/软件/广告/例外） | 每24小时自动尝试刷新一次，现为`interval: 86400` |
 | 机场节点 | 每24小时自动尝试刷新一次，现为`interval: 86400`；机场通知变更或节点失效时手动刷新 |
-| 公共主配置 | Stash已加入首行#SUBSCRIBED，官方默认12小时检查；Clash完整自动订阅首次开启360分钟自动更新，策略组和分流结构随之更新 |
+| 公共主配置 | Stash已加入首行#SUBSCRIBED，官方默认12小时检查；Clash完整自动订阅首次开启1440分钟自动更新，策略组和分流结构随之更新 |
 | 远程广告脚本 | 由主配置引用，现为`interval: 86400`；新增主机或handler时必须同时更新主配置 |
 | 节点测速 | 保留30分钟，现为`interval: 1800`；这是HTTPS延迟探测，不是规则更新或服务解锁检测 |
 

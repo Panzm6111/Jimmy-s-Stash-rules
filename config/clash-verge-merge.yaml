@@ -308,10 +308,18 @@ rule-providers:
     format: yaml
     path: ./ruleset/jimmy-merge-f232f1259912.yaml
     proxy: Jimmy · 自动节点
+  东方财富直连:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/eastmoney-community.yaml
+    interval: 86400
+    format: yaml
+    path: ./ruleset/jimmy-merge-e9d3c7116ba7.yaml
+    proxy: Jimmy · 自动节点
   国内服务:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china.yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china-direct-community.yaml
     interval: 86400
     format: yaml
     path: ./ruleset/jimmy-merge-998cddb7fad7.yaml
@@ -410,6 +418,7 @@ rules:
 - RULE-SET,TikTok广告,Jimmy · 广告拦截
 - RULE-SET,TikTok核心,Jimmy · TikTok
 - RULE-SET,App广告域名,Jimmy · 广告拦截
+- RULE-SET,东方财富直连,DIRECT
 - RULE-SET,基础广告,Jimmy · 广告拦截
 - RULE-SET,海外AI,Jimmy · 海外AI
 - RULE-SET,TikTok,Jimmy · TikTok
@@ -418,11 +427,11 @@ rules:
 - RULE-SET,Netflix,Jimmy · Netflix
 - RULE-SET,YouTube,Jimmy · YouTube
 - RULE-SET,Telegram,Jimmy · Telegram
-- RULE-SET,海外社交,Jimmy · TikTok
 - RULE-SET,Apple服务,Jimmy · Apple
 - RULE-SET,GitHub,Jimmy · 总代理
 - RULE-SET,Microsoft服务,Jimmy · Microsoft
-- RULE-SET,通用代理,Jimmy · 总代理
 - RULE-SET,国内服务,Jimmy · 国内直连
+- RULE-SET,海外社交,Jimmy · TikTok
+- RULE-SET,通用代理,Jimmy · 总代理
 - GEOIP,CN,Jimmy · 国内直连
 - MATCH,Jimmy · 未匹配流量

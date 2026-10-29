@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-29",
+  "download_failover": {
+    "passed": 7,
+    "checks": [
+      "cold start downloads through first available proxy automatically",
+      "both proxies receive scheduled health checks",
+      "scheduled subscription refresh fails over after first proxy outage",
+      "new subscription nodes propagate without manual selection or reload",
+      "download pool chooses the remaining live proxy",
+      "all exits failing does not discard last valid nodes",
+      "scheduled refresh resumes after an exit recovers"
+    ],
+    "manual_proxy_selection_calls": 0,
+    "manual_provider_refresh_calls": 0,
+    "production_network_changed": false,
+    "test_intervals": {
+      "health_seconds": 1,
+      "provider_seconds": 2
+    },
+    "production_intervals": {
+      "health_seconds": 300,
+      "provider_seconds": 86400
+    }
+  },
+  "real_wlan_isolated": [
+    {
+      "explicit_clash_ua": true,
+      "initial_nodes": 59,
+      "refreshed_nodes": 59,
+      "selectable_nodes": 59,
+      "cache_protocols": [
+        "ss",
+        "vless"
+      ],
+      "interval": 86400,
+      "rule_counts": {
+        "Apple服务": 1579,
+        "GitHub": 31,
+        "Instagram": 4,
+        "Microsoft服务": 668,
+        "Netflix": 1156,
+        "Telegram": 35,
+        "TikTok": 34,
+        "TikTok广告": 1,
+        "TikTok核心": 36,
+        "Twitter": 33,
+        "YouTube": 183,
+        "东方财富直连": 8,
+        "国内服务": 110177,
+        "基础广告": 844,
+        "海外AI": 231,
+        "海外社交": 694,
+        "系统直连例外": 26,
+        "通用代理": 27271
+      },
+      "jimmy_manual_nodes": 56
+    }
+  ],
+  "domestic_sources": {
+    "repository": "MetaCubeX/meta-rules-dat",
+    "revision": "74246501fd12b938b73482f406a6163d1e4a460f",
+    "cn_rules": 110177,
+    "eastmoney_rules": 8,
+    "cn_file_last_commit_utc": "2026-10-29T01:56:58Z",
+    "comparison": "blackmatrix7 ChinaMaxNoIP at 0b6897dc17e0c513d25449c935a9694818e32f0c: 110178 rules"
+  },
+  "before": {
+    "push2.eastmoney.com": "Stash 广告拦截",
+    "eastmoneysec.com": "未匹配流量",
+    "eastmoneyloans.com": "未匹配流量"
+  },
+  "after": {
+    "push2.eastmoney.com": "DIRECT",
+    "eastmoneysec.com": "国内直连",
+    "eastmoneyloans.com": "国内直连"
+  },
+  "application_groups": 20,
+  "hidden_download_groups": 1,
+  "stash_rule_providers": 20,
+  "clash_auto_rule_providers": 18,
+  "main_profile_interval_requested_minutes": 1440,
+  "client_migration": "Pending user action: delete old local provider proxy override and refresh remote profile; stored timer already 1440 minutes, actual timer execution not tested",
+  "tests": {
+    "clash": 11,
+    "structure_native": 19,
+    "download_failover_native": 7,
+    "project": 42,
+    "javascript": 88,
+    "community": 9
+  },
+  "public_network_app_acceptance": "Not tested; domain routing model plus native config/source loading only",
+  "download_health_check_owner": "proxy-providers.机场.health-check; group use inherits provider checks",
+  "main_profile_interval_observed_minutes": 1440
+}

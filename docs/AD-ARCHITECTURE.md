@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 21 |
+| public_main_rules | 22 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -267,10 +267,15 @@ rule-providers:
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/microsoft.yaml
     interval: 86400
+  东方财富直连:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/eastmoney-community.yaml
+    interval: 86400
   国内服务:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china.yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/china-direct-community.yaml
     interval: 86400
   TikTok:
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok.yaml
@@ -600,8 +605,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `9ebbcef831e928ea15338bf6f3f0d5674d9a748ed02de8de1f104f44f8e76e80` |
-| [config/core.stoverride](../config/core.stoverride) | `a6b9c771c73de6fb692fe38a056dfcd3d97ebf2cfe4fa03876198c62a8d21efe` |
+| [config/stash.yaml](../config/stash.yaml) | `250b027e0342b6924636a099c96374e5c956930a974c66fc62ff78eb280cda2c` |
+| [config/core.stoverride](../config/core.stoverride) | `78a87e202b791ec305bb820307464191db3da748b911903f6b4b44279df963a0` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |

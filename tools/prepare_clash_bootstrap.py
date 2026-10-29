@@ -31,10 +31,13 @@ def prepare(airport, private_merge):
         raise ValueError('Private airport URL is required')
     # Mihomo payload decoding rejects null fields accepted in some downloaded YAML.
     provider['payload'] = without_nulls(nodes)
-    provider['proxy'] = 'Jimmy · 手动节点'
-    provider['header'] = {'User-Agent': ['clash-verge/v2.5.8']}
-    existing = provider.get('exclude-filter')
-    provider['exclude-filter'] = f'(?:{existing})|(?:{AIRPORT_INFO_EXCLUDE})' if existing else AIRPORT_INFO_EXCLUDE
+    # The public profile owns the download strategy, so future changes propagate.
+    provider.pop('proxy', None)
+    # Remove only the known previous generated overrides; retain custom credentials.
+    if provider.get('header') == {'User-Agent': ['clash-verge/v2.5.8']}:
+        provider.pop('header')
+    if provider.get('exclude-filter') == AIRPORT_INFO_EXCLUDE:
+        provider.pop('exclude-filter')
     result['proxy-providers']['机场'] = provider
     return result
 
@@ -50,7 +53,7 @@ def main():
     # Exclusive creation protects existing private files from accidental overwrite.
     with args.output.open('x', encoding='utf-8', newline='\n') as output:
         yaml.safe_dump(result, output, allow_unicode=True, sort_keys=False)
-    print('Private Merge prepared; keep output local. Select a working manual node before refreshing the airport.')
+    print('Private Merge prepared; keep output local. The public download pool selects available nodes automatically.')
 
 
 if __name__ == '__main__':
