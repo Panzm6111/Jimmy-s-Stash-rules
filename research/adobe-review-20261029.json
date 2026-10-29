@@ -50,7 +50,41 @@
   "official_source": "https://helpx.adobe.com/business/enterprise/manage-services/configure-services/network-endpoints.html",
   "aggregate_rules": 273,
   "default_exit": "美国",
-  "routing_version": "ROUTE-20261029.3",
-  "status": "Implemented; 42 project checks, 88 JS checks, 12 Clash regressions, 10 community regressions and 19 native checks passed; publication pending",
-  "boundary": "Network routing only; no real Adobe login, subscription, Firefly generation, sync or transfer acceptance. Whole Adobe category includes marketing endpoints and takes precedence over generic domain ads; official supplemental snapshot requires review on change."
+  "routing_version": "ROUTE-20261029.4",
+  "status": "Published; final merged local and GitHub checks passed; actual clients and Adobe services not accepted",
+  "boundary": "Network routing only; no real Adobe login, subscription, Firefly generation, sync or transfer acceptance. Whole Adobe category includes marketing endpoints and takes precedence over generic domain ads; official supplemental snapshot requires review on change.",
+  "published_commit": "2ecaec68ded9154ed15e19cf1422e60bdbc459cd",
+  "native_checks": 19,
+  "clash_regressions": 12,
+  "community_regressions": 10,
+  "premerge_private_synthetic": 13,
+  "public_files": [
+    {
+      "file": "config/stash.yaml",
+      "status": 200,
+      "hash_matches": true
+    },
+    {
+      "file": "config/clash-verge-auto.yaml",
+      "status": 200,
+      "hash_matches": true
+    },
+    {
+      "file": "rules/adobe.yaml",
+      "status": 200,
+      "hash_matches": true
+    },
+    {
+      "file": "rules/vendor/adobe-community.yaml",
+      "status": 200,
+      "hash_matches": true
+    }
+  ],
+  "client_refresh": "Not applied this turn: automatic approval rejected starting Clash due to TUN/network risk; existing full-profile auto update remains the delivery path",
+  "merge_regression": "Merged ai default map initially omitted new Adobe group; Adobe=US expectation added; final 42 project checks plus 88 JS passed",
+  "merged_ai_and_other_routes_preserved": true,
+  "ci_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40883453069",
+  "ci_result": "success",
+  "merged_project_checks": 42,
+  "merged_javascript_checks": 88
 }
