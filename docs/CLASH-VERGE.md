@@ -43,7 +43,7 @@ python -X utf8 tools/prepare_clash_bootstrap.py --airport <原机场本地YAML> 
 
 [原生自动回退测试](../tools/validate_clash_download_native.py)覆盖冷启动、首个节点失效、定时更新经备用节点成功、节点增删及全部节点失败后恢复；没有调用手动选节点或手动刷新API，测试使用缩短的定时间隔。真实物理WLAN隔离测试也通过自动选择出口刷新59条节点（过滤1个提示项），最终18份规则原生加载成功。
 
-[完整结构测试](../tools/validate_clash_auto_native.py)覆盖19项结构/后备/更新检查。最后的本机迁移由用户操作，状态和证据见[PROGRESS](../PROGRESS.md)。恢复时切回原机场卡片，并按需恢复原全局Merge备份。
+[完整结构测试](../tools/validate_clash_auto_native.py)覆盖19项结构/后备/更新检查。2026-10-29已按用户最新授权完成本机迁移：实际机场重新下载成功59节点，18份规则加载，1440分钟自动更新开启；下一次定时触发和实际App体验仍待验收。状态和证据见[PROGRESS](../PROGRESS.md)。恢复时切回原机场卡片，并按需恢复原全局Merge备份。
 
 机制依据：[Mihomo自动回退](https://wiki.metacubex.one/config/proxy-groups/fallback/)、[代理组检查参数](https://wiki.metacubex.one/config/proxy-groups/)、[机场payload后备](https://wiki.metacubex.one/config/proxy-providers/)、[Clash扩展合并](https://www.clashverge.dev/guide/extend.html)。
 

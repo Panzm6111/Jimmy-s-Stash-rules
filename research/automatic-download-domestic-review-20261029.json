@@ -80,7 +80,7 @@
   "stash_rule_providers": 20,
   "clash_auto_rule_providers": 18,
   "main_profile_interval_requested_minutes": 1440,
-  "client_migration": "Pending user action: delete old local provider proxy override and refresh remote profile; stored timer already 1440 minutes, actual timer execution not tested",
+  "client_migration": "Completed with latest explicit user authorization; private fixed proxy override removed, active public profile refreshed, real HTTP airport download and domestic rule refresh confirmed",
   "tests": {
     "clash": 11,
     "structure_native": 19,
@@ -91,5 +91,97 @@
   },
   "public_network_app_acceptance": "Not tested; domain routing model plus native config/source loading only",
   "download_health_check_owner": "proxy-providers.机场.health-check; group use inherits provider checks",
-  "main_profile_interval_observed_minutes": 1440
+  "main_profile_interval_observed_minutes": 1440,
+  "client_verification": {
+    "before": {
+      "nodes": 59,
+      "updatedAt": "2026-10-29T10:46:27.2661969+08:00"
+    },
+    "refreshes": [
+      {
+        "name": "机场",
+        "success": true
+      },
+      {
+        "name": "国内服务",
+        "success": true
+      },
+      {
+        "name": "东方财富直连",
+        "success": true
+      }
+    ],
+    "after": {
+      "nodes": 59,
+      "updatedAt": "2026-10-29T11:44:53.0334977+08:00",
+      "vehicleType": "HTTP"
+    },
+    "new_download_confirmed": true,
+    "rule_counts": {
+      "Apple服务": 1579,
+      "GitHub": 31,
+      "Instagram": 4,
+      "Microsoft服务": 668,
+      "Netflix": 1156,
+      "Telegram": 35,
+      "TikTok": 34,
+      "TikTok广告": 1,
+      "TikTok核心": 36,
+      "Twitter": 33,
+      "YouTube": 183,
+      "东方财富直连": 8,
+      "国内服务": 110177,
+      "基础广告": 844,
+      "海外AI": 231,
+      "海外社交": 694,
+      "系统直连例外": 26,
+      "通用代理": 27271
+    },
+    "download_group": {
+      "type": "Fallback",
+      "candidates": 56,
+      "selected_found_in_provider": true,
+      "selected_available": true,
+      "selected_last_delay": 199
+    },
+    "domestic_policy": "DIRECT",
+    "checked_at": "2026-10-29T11:44:55.973510",
+    "main_profile_current": true,
+    "main_interval": 1440,
+    "auto_update_enabled": true,
+    "public_profile_matches": true
+  },
+  "private_backup": "Ignored .local/client-migration-* directory; no private values published",
+  "publication": {
+    "functional_commit": "36b1b910169ef1b91c6ea641ca09ea7d7f89cda3",
+    "ci_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40813504124",
+    "ci_result": "success",
+    "public_files": [
+      {
+        "file": "config/clash-verge-auto.yaml",
+        "status": 200,
+        "sha256_matches": true
+      },
+      {
+        "file": "config/stash.yaml",
+        "status": 200,
+        "sha256_matches": true
+      },
+      {
+        "file": "rules/vendor/china-direct-community.yaml",
+        "status": 200,
+        "sha256_matches": true
+      },
+      {
+        "file": "rules/vendor/eastmoney-community.yaml",
+        "status": 200,
+        "sha256_matches": true
+      }
+    ]
+  },
+  "not_tested": [
+    "Next 24-hour timer execution",
+    "iPhone Stash refreshed configuration",
+    "Real domestic App speed and ad outcomes"
+  ]
 }
