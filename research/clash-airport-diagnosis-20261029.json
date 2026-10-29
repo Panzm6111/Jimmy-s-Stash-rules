@@ -47,8 +47,23 @@
     "initial_update_timestamp_was_empty": true,
     "informational_entry_selected_initially": true,
     "user_selected_working_node": true,
-    "switch_performed_by_user": true
+    "switch_performed_by_user": true,
+    "active": true,
+    "rule_providers_loaded": 17,
+    "groups": 20,
+    "main_auto_update": true,
+    "main_interval_minutes": 360,
+    "airport_interval_seconds": 86400,
+    "global_merge_empty": true
   },
   "public_info_filter": "Exclude redirect / do-not-connect informational entries",
-  "validation_boundary": "Real client node fetch verified; application-specific connectivity and ad effects not tested"
+  "validation_boundary": "Real client node fetch verified; application-specific connectivity and ad effects not tested",
+  "publication": {
+    "commit": "b472a632fcb2035dbded7c45e7751b5fe909f1b5",
+    "raw_http": 200,
+    "raw_bytes_match": true,
+    "ci": "success",
+    "ci_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40808548776"
+  },
+  "daily_task_unchanged": true
 }
