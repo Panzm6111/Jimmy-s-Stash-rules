@@ -4,6 +4,7 @@ import argparse, copy, json, hashlib
 from pathlib import Path
 import yaml
 ROOT=Path(__file__).resolve().parents[1]
+AIRPORT_INFO_EXCLUDE=r'(?i)(请勿连接|跳转域名)'
 
 def remote_profile(source):
     """Full remotely replaceable structure; only the airport URL belongs in local Merge."""
@@ -18,6 +19,10 @@ def remote_profile(source):
     result['profile']={'store-selected':True}
     # The airport provider must bootstrap without depending on one of its own nodes.
     result['proxy-providers']['机场']['proxy']='DIRECT'
+    # Airports may vary subscription format by User-Agent.
+    # Request the same Clash YAML representation as the supported desktop client.
+    result['proxy-providers']['机场']['header']={'User-Agent':['clash-verge/v2.5.8']}
+    result['proxy-providers']['机场']['exclude-filter']=AIRPORT_INFO_EXCLUDE
     return result
 
 def global_merge(source):

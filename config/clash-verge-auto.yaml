@@ -13,6 +13,10 @@ proxy-providers:
       interval: 1800
     path: ./providers/jimmy-airport.yaml
     proxy: DIRECT
+    header:
+      User-Agent:
+      - clash-verge/v2.5.8
+    exclude-filter: (?i)(请勿连接|跳转域名)
 mode: rule
 log-level: warning
 ipv6: false

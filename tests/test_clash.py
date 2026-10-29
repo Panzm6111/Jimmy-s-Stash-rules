@@ -10,8 +10,23 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 from build_clash import render,global_merge,remote_profile
+from prepare_clash_bootstrap import prepare
 
 class ClashChecks(unittest.TestCase):
+    def test_private_bootstrap_preserves_settings_and_removes_null_node_fields(self):
+        node={'name':'US fixture','type':'vless','flow':None,'port':443,'tls':False}
+        private={'dns':{'enable':True},'proxy-providers':{'机场':{'url':'https://airport.example/fixture'}}}
+        result=prepare({'proxies':[node]},private)
+        self.assertEqual(result['dns'],private['dns'])
+        provider=result['proxy-providers']['机场']
+        self.assertEqual(provider['proxy'],'Jimmy · 手动节点')
+        self.assertNotIn('flow',provider['payload'][0])
+        self.assertFalse(provider['payload'][0]['tls'])
+        self.assertNotIn('payload',private['proxy-providers']['机场'])
+        self.assertIsNone(node['flow'])
+        with self.assertRaises(ValueError):prepare({'proxies':[]},private)
+        with self.assertRaises(ValueError):prepare({'proxies':[node]},{})
+
     def transform(self, source):
         runner = 'const fs=require("fs"),vm=require("vm");const c=vm.createContext({});vm.runInContext(fs.readFileSync("config/clash-verge.js","utf8"),c);process.stdout.write(JSON.stringify(c.main(JSON.parse(fs.readFileSync(0,"utf8")))));'
         result = subprocess.run(['node', '-e', runner], input=json.dumps(source), text=True,
@@ -110,6 +125,7 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http',full);self.assertNotIn('script-providers',full)
         self.assertTrue(full['rule-providers']['基础广告']['url'].endswith('/rules/vendor/clash-ads-community.yaml'))
         self.assertEqual(full['proxy-providers']['机场']['proxy'],'DIRECT')
+        self.assertEqual(full['proxy-providers']['机场']['header'],{'User-Agent':['clash-verge/v2.5.8']})
         self.assertEqual(full['proxy-providers']['机场']['interval'],86400)
         self.assertEqual(full['proxy-providers']['机场']['url'],'https://example.invalid/REPLACE_ON_DEVICE')
 

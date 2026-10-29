@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-29",
+  "scope": "Airport loading diagnosis after user reported no nodes in Clash Verge",
+  "public_change": "Explicit airport User-Agent plus private bootstrap preparation helper and cold-start regressions",
+  "native_version": "Mihomo 1.19.32",
+  "real_airport": {
+    "initial_nodes": 60,
+    "nodes_after_forced_refresh": 60,
+    "manual_group_nodes": 57,
+    "protocols": [
+      "ss",
+      "vless"
+    ],
+    "provider_interval_seconds": 86400,
+    "rule_providers_loaded": 17,
+    "real_dns_and_groups_used": true,
+    "isolated_process": true
+  },
+  "default_native_user_agent_also_succeeded": true,
+  "synthetic_native_checks_passed": 19,
+  "clash_unit_tests_passed": 10,
+  "client_acceptance": "Passed: user activated profile and explicitly selected a valid node; live core reports successful HTTP airport refresh",
+  "current_network_modified": false,
+  "service_directory_read": "Windows access denied; no ownership or ACL changes attempted",
+  "stash_changed": false,
+  "physical_network_test": {
+    "interface": "WLAN",
+    "direct_download_nodes": 0,
+    "direct_error": "timeout",
+    "private_fallback_nodes": 60,
+    "explicit_working_manual_selection": true,
+    "proxied_refresh_nodes": 60,
+    "tun_dependency_removed": true
+  },
+  "private_install": {
+    "inactive_profile_only": true,
+    "current_profile_and_runtime_byte_unchanged": true,
+    "backup": ".local/clash-airport-bootstrap-20261029"
+  },
+  "earlier_test_limitation": "Initial successful isolated tests could use current TUN; later WLAN-bound test establishes cold-start download failure and proxied refresh success",
+  "project_checks_passed": 42,
+  "javascript_tests_passed": 88,
+  "actual_client": {
+    "vehicle_type": "HTTP",
+    "nodes": 60,
+    "successful_update_at": "2026-10-29T10:46:27.2661969+08:00",
+    "initial_update_timestamp_was_empty": true,
+    "informational_entry_selected_initially": true,
+    "user_selected_working_node": true,
+    "switch_performed_by_user": true
+  },
+  "public_info_filter": "Exclude redirect / do-not-connect informational entries",
+  "validation_boundary": "Real client node fetch verified; application-specific connectivity and ad effects not tested"
+}

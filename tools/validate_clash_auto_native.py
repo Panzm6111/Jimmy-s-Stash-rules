@@ -15,7 +15,7 @@ def main():
     base=ROOT/'.local/clash-auto-native-check';base.mkdir(parents=True,exist_ok=True)
     runtime=Path(tempfile.mkdtemp(prefix='fixture-',dir=base))
     shutil.copyfile(args.country_mmdb,runtime/'Country.mmdb')
-    state={'airport_version':1,'rule_version':1,'airport_requests':0}
+    state={'airport_version':1,'rule_version':1,'airport_requests':0,'airport_ua_matched':0,'airport_available':False}
     checks=[]
     def check(ok,label):
         if not ok:raise AssertionError(label)
@@ -26,6 +26,12 @@ def main():
         def do_GET(self):
             if self.path=='/airport.yaml':
                 state['airport_requests']+=1
+                if not state['airport_available']:
+                    self.send_error(503);return
+                if self.headers.get('User-Agent')!='clash-verge/v2.5.8':
+                    body=b'dmxlc3M6Ly9zeW50aGV0aWMtaW52YWxpZA=='
+                    self.send_response(200);self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body);return
+                state['airport_ua_matched']+=1
                 names=['美国','日本','台湾','TikTok','US-synthetic' if state['airport_version']==1 else 'US-updated']
                 obj={'proxies':[node(n) for n in names]}
             elif self.path.startswith('/rules/'):
@@ -49,6 +55,7 @@ def main():
         config.update({'external-controller':f'127.0.0.1:{api_port}','mixed-port':0,'mode':'rule',
                        'tun':{'enable':False},'dns':{'enable':False},'log-level':'warning'})
         config['proxy-providers']['机场'].update(url=private_url,path='./airport.yaml')
+        config['proxy-providers']['机场']['payload']=[node(n) for n in ['跳转域名{请勿连接}:example.invalid','美国','日本','台湾','TikTok','US-synthetic']]
         for i,p in enumerate(config['rule-providers'].values()):
             p.update(url=f'http://127.0.0.1:{fixture.server_port}/rules/{i}',path=f'./rules/{i}.yaml',proxy='DIRECT')
         return config
@@ -69,6 +76,15 @@ def main():
                 if process.poll() is not None or time.monotonic()>deadline:raise RuntimeError('Fixture initialization failed; inspect local log')
                 time.sleep(.2)
             check(len(providers)==17,'all 17 remote rule providers load')
+            check(state['airport_requests']>0 and not (runtime/'airport.yaml').exists(),
+                  'private fallback supplies nodes with failed first download and no cache')
+            check('跳转域名{请勿连接}:example.invalid' not in groups['Jimmy · 手动节点']['all'],
+                  'airport informational redirect entry is excluded from selectable nodes')
+            api('/proxies/'+urllib.parse.quote('Jimmy · 手动节点',safe=''),'PUT',{'name':'US-synthetic'})
+            state['airport_available']=True
+            api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
+            check((runtime/'airport.yaml').exists(),'successful later download replaces startup fallback with a cache')
+            check(state['airport_ua_matched']>0,'airport fetch requests Clash YAML through explicit client user agent')
             check(len([n for n in groups if n.startswith('Jimmy · ')])==20,'all 20 namespaced groups load')
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')

@@ -32,9 +32,20 @@ proxy-providers:
 
 客户端关闭、电脑休眠、断网时不能保证准点更新。私人URL变化仍需改本机地址。以后调整本项目策略结构并发布后，客户端下一次主订阅更新就会取得，不能把“自动更新”理解为自动设计新策略。
 
+### 首次启用只有策略组、没有节点
+
+机场URL如果需要代理才能访问，空缓存下的DIRECT下载会失败。此时使用本机已有节点作为启动后备，机场仍通过HTTP订阅自动更新：
+
+1. 保留原机场卡片的已下载配置，备份新卡片私人Merge。用 `tools/prepare_clash_bootstrap.py --airport <原机场本地YAML> --merge <私人Merge> --output <新的本地私人文件>` 生成启动后备；输出包含节点凭据，只保存本机，不能提交或上传。
+2. 将输出放入“Jimmy 全自动”的私人扩展配置。工具保留原URL/DNS/hosts，新增provider的payload，下载代理设为 `Jimmy · 手动节点`。公共URL不变。
+3. 启用后，在“Jimmy · 手动节点”明确选一次原来可用的节点，再刷新“代理集 → 机场”。初始空组可能保留REJECT，看到节点后仍须完成这次选择。新版自动入口过滤“请勿连接/跳转域名”提示项；它们不是真实节点。正常业务可继续使用各自地区组。
+4. 确认刷新成功后，节点继续按86400秒自动更新；公开结构仍每360分钟更新。只有机场URL失效或所有已保存节点都不可用时，需要恢复原机场并重新取得有效接入信息。启动payload只作兜底，不能据此声称远程刷新成功。
+
+2026-10-29物理WLAN隔离测试：DIRECT冷启动0节点；私人后备60节点，选择同一个已可用节点后通过代理刷新60节点成功。私人扩展已写入本机，用户启用并选中有效节点后，实际内核在2026-10-29 10:46:27成功刷新60节点；实际客户端验收见[PROGRESS](../PROGRESS.md)，不能用独立内核结果替代。详见[排查证据](../research/clash-airport-diagnosis-20261029.json)。[Mihomo官方payload与下载代理说明](https://wiki.metacubex.one/config/proxy-providers/)。
+
 恢复：保留新卡片，切回原机场卡片并恢复备份的全局Merge。不要把私人最终配置上传用于排障。
 
-2026-10-29独立Mihomo测试通过15项：完整结构新组/新provider/新顺序生效、私人URL与AI选择保留、机场节点增删、广告集刷新、无效配置拒绝和旧结构恢复。复现入口为[validate_clash_auto_native.py](../tools/validate_clash_auto_native.py)。这组模拟本身不代表Clash界面定时器或真实业务效果通过；本机迁移结果另记[PROGRESS](../PROGRESS.md)。
+2026-10-29独立Mihomo测试通过19项（含机场请求格式兼容、首次失败后备、提示项过滤和恢复刷新）：完整结构新组/新provider/新顺序生效、私人URL与AI选择保留、机场节点增删、广告集刷新、无效配置拒绝和旧结构恢复。复现入口为[validate_clash_auto_native.py](../tools/validate_clash_auto_native.py)。这组模拟本身不代表Clash界面定时器或真实业务效果通过；本机迁移结果另记[PROGRESS](../PROGRESS.md)。
 
 机制依据：[官方扩展合并顺序](https://www.clashverge.dev/guide/extend.html)、[v2.5.8远程订阅定时器](https://github.com/clash-verge-rev/clash-verge-rev/blob/v2.5.8/src-tauri/src/core/timer.rs)、[更新后重载逻辑](https://github.com/clash-verge-rev/clash-verge-rev/blob/v2.5.8/src-tauri/src/feat/profile.rs)。
 
