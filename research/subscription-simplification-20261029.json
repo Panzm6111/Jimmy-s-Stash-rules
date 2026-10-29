@@ -259,7 +259,57 @@
     "clash": 12,
     "subscriptions": 6
   },
-  "cloud_status": "Prepared; hosted run not verified yet",
-  "windows_task": "Still enabled; disable only after hosted workflow succeeds and public files verify",
-  "device_acceptance": "Not run; no client activated or network settings changed"
+  "cloud_status": "Verified on GitHub; both initial and final hosted cloud runs succeeded; six sources checked with no semantic changes, no automatic commit/push created",
+  "windows_task": {
+    "name": "Jimmy-Stash-Rules-Noon-Check",
+    "enabled": false,
+    "state": "Disabled",
+    "backedUp": true,
+    "removed": false,
+    "cloudVerifiedBeforeDisable": true,
+    "checkedAt": "2026-10-29T23:00:39+08:00"
+  },
+  "device_acceptance": "Not run; no client activated or network settings changed",
+  "hosted_verification": {
+    "cloud": "success",
+    "validation": "success",
+    "workflowState": "active",
+    "publicFilesVerified": true,
+    "runs": [
+      {
+        "id": 40896300394,
+        "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40896300394",
+        "conclusion": "success",
+        "head": "109a059780ff122e7c1778817b963fad2b0debfd"
+      },
+      {
+        "id": 40896300584,
+        "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40896300584",
+        "conclusion": "success",
+        "head": "109a059780ff122e7c1778817b963fad2b0debfd"
+      }
+    ]
+  },
+  "publication": {
+    "functional_commit": "df929f1c85566452a64fe9bcb6cae1ff6d3d9cb1",
+    "final_code_commit": "109a059780ff122e7c1778817b963fad2b0debfd",
+    "public_files": [
+      {
+        "file": "config/stash.yaml",
+        "status": 200,
+        "matches": true
+      },
+      {
+        "file": "config/clash-verge-auto.yaml",
+        "status": 200,
+        "matches": true
+      },
+      {
+        "file": "rules/adobe-official.yaml",
+        "status": 200,
+        "matches": true
+      }
+    ]
+  },
+  "remaining": "Clients receive new upstream URLs at next full profile refresh; iPhone/native Stash and real application behavior not accepted this turn"
 }

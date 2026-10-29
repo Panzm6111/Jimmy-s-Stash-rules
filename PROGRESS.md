@@ -37,7 +37,7 @@
 | 诊断不泄露隐私 | 手动开启15分钟自检；只在设备保存固定状态、版本、时间和有限计数，不记录正文、凭据、完整URL或外传；无记录原因仍待区分 |
 | 保护正常业务与权益 | 精确主机和已审查路径；不全域解密、不粗暴封共享网关、不增加会员/水印/下载权限修改 |
 | 自动签到 | 原24个平台研究范围保留；用户要求暂停，未启用、未创建运行脚本/cron、未收集凭据，不自动恢复 |
-| 维护与更新 | 本地程序按需检查公开上游；自动更新扩展为12份blackmatrix7输入和14份MetaCubeX/Sukka社区输入，含AI、社交、软件、通用海外及国内，异常停止；本次已按用户要求安装每天12点Windows检查任务；本轮明确授权立即更新并推送 |
+| 维护与更新 | 每端17份规则由客户端直订上游，GitHub每天北京时间12:17处理6份必要转换；验证通过且有实际变化才提交推送。Windows旧任务已在云端验收后禁用，保留备份与人工工具 |
 
 新增社交需求：统一TikTok策略组接管TikTok、Instagram、X及上游其他常用社交平台，默认美国，不拆平台组；Telegram原组保留。TikTok功能集前置于通用广告，AI仍早于普通Twitter/社交分类。
 
@@ -59,7 +59,7 @@
 | [research](research/) | 源锁、调查数据、历史验证及本次整理核验；历史结果保留原日期 |
 | [tools](tools/)、[modules](modules/)、[scripts](scripts/)、[rules](rules/)、[config](config/) | 生成器、维护源、生成运行文件和配置；不绕过生成链只改产物 |
 
-Clash当前推荐[完整自动订阅](config/clash-verge-auto.yaml)，主订阅每1440分钟刷新全部公开结构（本机配置已保存该间隔，运行定时触发待验收）；本机仅保存私人机场和个人设置，机场/19个规则集每24小时尝试刷新。21个业务组（新增Adobe），另有1个隐藏下载回退组，均采用Jimmy前缀。旧[全局Merge](config/clash-verge-merge.yaml)仍为兼容快照；全部入口共享build_clash.py，由既有每日维护链校验发布。
+Clash当前推荐[完整自动订阅](config/clash-verge-auto.yaml)，主订阅每1440分钟刷新全部公开结构（本机配置已保存该间隔，运行定时触发待验收）；本机仅保存私人机场和个人设置，机场/25个规则集每24小时尝试刷新。21个业务组（新增Adobe），另有1个隐藏下载回退组，均采用Jimmy前缀。旧[全局Merge](config/clash-verge-merge.yaml)仍为兼容快照；全部入口共享build_clash.py，由既有每日维护链校验发布。
 
 生成链：ad-catalog.json → generate_ad_modules.py → 35款专项（另5款沿用原模块）；ad_transforms 与观察模板 → build_ad_scripts.py / build_ad_diagnostics.py → JS；build_subscription.py → 整合入口。build_ads.py 汇总检查/构建，render_app_research.py 更新两份 App 目录，render_ad_architecture.py 更新技术附录及其哈希记录。
 
@@ -114,7 +114,7 @@ Clash当前推荐[完整自动订阅](config/clash-verge-auto.yaml)，主订阅�
 - 已实现：两端每端17份直订，共18个不同URL（MetaCubeX domain及blackmatrix7兼容classical）；AI/社交/Adobe拆分后相邻同策略匹配。原21业务组、四地区ai、HTTP/JS、DNS与私人接入不改。Stash27集、Clash自动入口25集；原隐藏回退组保留。运行源和离线验证快照映射见research/subscription-plan.json。
 - GitHub新工作流每天北京时间12:17计划执行6份转换：Netflix、Telegram、TikTok、Apple、Microsoft、Sukka AI补充。来源/许可/未知类型/差量/生成/回归/精确暂存均通过才自动发布，无变化零提交；无私人机场数据、无新PAT。GitHub schedule可能延迟或因60天无活动停用。固定HTTP/JS和Adobe官网补充仍需审查，不伪称自动追踪。
 - 已验证：42项项目、88项JS、12项Clash、6项订阅迁移回归；其中临时真实裸仓库模拟提交推送及第二次无变化通过。18个不同实时上游URL HTTP成功、兼容格式通过（首次批量下载暂时断连，重试后全部成功）；真实内容在独立Mihomo加载27/25集，19项混合格式结构/刷新检查通过；不是iPhone或实际业务验收。[本轮核验](research/subscription-simplification-20261029.json)。
-- 待验证：真实GitHub工作流、发布端点；电脑旧任务仍启用，须以上述云端验证通过为停用前提。未启动或切换现用客户端。主订阅刷新后确认ROUTE-20261029.5。
+- **迁移通过**：新云端[最终运行](https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40896300394)和[常规CI](https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40896300584)均全部成功，schedule工作流state为active。真实6份来源检查无语义变化，按设计零自动提交/推送；真实差量发布用临时裸仓库验证，没有为测试造线上差量。两个主订阅和新增补充集HTTP200且字节一致。2026-10-29 23:00:39（北京时间）已导出任务XML备份，再禁用唯一Windows旧任务，Enabled=false、State=Disabled；含中午/登录补跑触发均停用，未删除旧脚本。最终代码109a059已推送。未启动/切换现用客户端；两端下次刷新主配置后确认ROUTE-20261029.5，真机App仍待验收。
 
 ### Adobe系列适配（2026-10-29，当前）
 

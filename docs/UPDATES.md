@@ -1,13 +1,13 @@
 # 更新机制与日常使用
 
-当前版本ROUTE-20261029.5。客户端直订兼容上游；只有必须过滤/转换的规则交给GitHub Actions。电脑不再需要承担日常同步，Windows旧任务在云端验收通过后停用，实际状态以[PROGRESS](../PROGRESS.md)为准。
+当前版本ROUTE-20261029.5。客户端直订兼容上游；只有必须过滤/转换的规则交给GitHub Actions。电脑不再需要承担日常同步，Windows旧任务已在云端验收通过后禁用并备份（2026-10-29），实际状态以[PROGRESS](../PROGRESS.md)为准。
 
 | 内容 | 执行位置和更新方式 |
 |---|---|
 | 国内、东方财富、TikTok功能/广告、通用海外、AI主集、社交、Adobe主集 | 客户端直接订阅MetaCubeX的meta分支，domain YAML，86400秒刷新 |
 | YouTube、Instagram、Twitter、GitHub、Stash大广告集 | 客户端直接订阅blackmatrix7完整兼容classical YAML，86400秒刷新 |
 | Clash基础去广告 | 直接订阅MetaCubeX category-ads；保留仅基础域名广告的范围 |
-| Netflix、Telegram、TikTok、Apple、Microsoft | GitHub过滤既有不兼容PROCESS-NAME/IP-ASN后发布，共5份转换 |
+| Netflix、Telegram、TikTok、Apple、Microsoft | GitHub过滤既有PROCESS-NAME/IP-ASN后发布，保持两端原有基本规则语义，共5份转换 |
 | Sukka AI补充 | GitHub转为classical YAML，保留旧URL正则遗漏记录，第6份转换 |
 | 系统例外、App广告、HTTP/JS、自检与Adobe官方补充 | 项目固定审查源；有需求或证据时改动，未启用自动签到 |
 | 策略组、规则顺序与主配置结构 | 原Stash主订阅；Clash Jimmy全自动主订阅1440分钟刷新 |

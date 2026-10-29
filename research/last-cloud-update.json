@@ -1,4 +1,8 @@
 {
-  "status": "not_run_yet",
-  "note": "Cloud workflow will update this evidence only when actual converted rule content changes."
+  "status": "initial_hosted_checks_no_changes",
+  "checked_sources": 6,
+  "changed_files": 0,
+  "automatic_commits": 0,
+  "run_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40896300394",
+  "note": "This receipt records migration acceptance; future automatic runs only update this file when converted rules have actual changes."
 }
