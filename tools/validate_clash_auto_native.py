@@ -75,7 +75,7 @@ def main():
                 except (OSError,ValueError):pass
                 if process.poll() is not None or time.monotonic()>deadline:raise RuntimeError('Fixture initialization failed; inspect local log')
                 time.sleep(.2)
-            check(len(providers)==18,'all 18 remote rule providers load')
+            check(len(providers)==19,'all 19 remote rule providers load')
             check(state['airport_requests']>0 and not (runtime/'airport.yaml').exists(),
                   'private fallback supplies nodes with failed first download and no cache')
             check('跳转域名{请勿连接}:example.invalid' not in groups['Jimmy · 手动节点']['all'],
@@ -85,7 +85,7 @@ def main():
             api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
             check((runtime/'airport.yaml').exists(),'successful later download replaces startup fallback with a cache')
             check(state['airport_ua_matched']>0,'airport fetch requests Clash YAML through explicit client user agent')
-            check(len([n for n in groups if n.startswith('Jimmy · ')])==21,'20 application groups and one download failover group load')
+            check(len([n for n in groups if n.startswith('Jimmy · ')])==22,'21 application groups and one download failover group load')
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
             check(groups['Jimmy · 总代理']['now']=='Jimmy · 自动节点','initial default is automatic pool')

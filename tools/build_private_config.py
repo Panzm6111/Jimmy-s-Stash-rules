@@ -75,7 +75,7 @@ def verify(config, template, expected_nodes):
     groups = config['proxy-groups']
     names = [g['name'] for g in groups]
     node_names = {n['name'] for n in expected_nodes}
-    require(len(names) == len(set(names)) == 20, '策略组数量或唯一性异常。')
+    require(len(names) == len(set(names)) == 21, '策略组数量或唯一性异常。')
     require(not (set(names) & node_names), '节点与策略重名。')
     targets = set(names) | node_names | BUILTINS
     graph = {}

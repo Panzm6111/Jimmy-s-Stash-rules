@@ -201,6 +201,21 @@
       "retained": 8,
       "omitted": [],
       "license": "GPL-3.0"
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "74246501fd12b938b73482f406a6163d1e4a460f",
+      "path": "geo/geosite/adobe.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/74246501fd12b938b73482f406a6163d1e4a460f/geo/geosite/adobe.yaml",
+      "source_sha256": "7ee5c5815a4706bd242fd8b218edfd431eea5d5348e34f17905ff3576b584fc6",
+      "id": "adobe-meta",
+      "ref": "refs/heads/meta",
+      "source_format": "domain_yaml",
+      "output": "rules/vendor/adobe-community.yaml",
+      "output_sha256": "9148fba4923450d0541ad19f377f6a2125f8fad26743bb10a93c623a8051f6da",
+      "retained": 260,
+      "omitted": [],
+      "license": "GPL-3.0"
     }
   ],
   "licenses": [
@@ -242,6 +257,13 @@
         "social-line",
         "social-signal"
       ]
+    },
+    {
+      "output": "rules/adobe.yaml",
+      "sources": [
+        "adobe-meta"
+      ],
+      "official_supplement": "research/adobe-official-endpoints.json"
     }
   ]
 }

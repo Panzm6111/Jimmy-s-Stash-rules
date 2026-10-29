@@ -391,7 +391,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_other_and_all_nodes_do_not_hide_connection_candidates(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
-        self.assertEqual(len(self.groups), 20)
+        self.assertEqual(len(self.groups), 21)
         other = self.groups['其他地区']
         all_nodes = self.groups['自动节点']
         self.assertEqual(other['type'], 'url-test')

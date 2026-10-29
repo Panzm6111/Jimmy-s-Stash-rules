@@ -106,7 +106,7 @@ def verify(files):
     main, enhanced, expanded = configs[MAIN], configs[ADS], configs[EXPANDED]
     assert 'http' not in main and 'script-providers' not in main
     assert main['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
-    assert len(main['proxy-groups']) == 20
+    assert len(main['proxy-groups']) == 21
     assert main['rules'][-1] == 'MATCH,未匹配流量'
     source_by_name = {}
     addon_paths = []

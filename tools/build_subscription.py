@@ -12,6 +12,7 @@ OUTPUT = 'config/stash.yaml'
 URL = RAW + OUTPUT
 VERSION = 'AD-20261020.5'
 PROTECTED = 'RULE-SET,东方财富直连,DIRECT'
+ADOBE = 'RULE-SET,Adobe服务,Adobe'
 
 def integrated():
     """The user-facing integrated entry; module files remain maintained sources."""
@@ -27,7 +28,7 @@ def integrated():
     # Meituan material working, and let reviewed native fixed replies own their
     # paths instead of introducing a competing route-level rejection.
     exceptions = load('modules/ads/expanded.stoverride').get('rules', [])
-    config['rules'] = [r for r in core_rules[:slot] if r != PROTECTED] + exceptions + special + [PROTECTED] + core_rules[slot:]
+    config['rules'] = [r for r in core_rules[:slot] if r not in {PROTECTED, ADOBE}] + exceptions + special + [PROTECTED, ADOBE] + core_rules[slot:]
     return config
 
 def remote_payload_documents():
@@ -45,7 +46,7 @@ def remote_payload_documents():
             result.append(','.join(parts[:2] + parts[3:]))
         return '# Generated from reviewed project sources; preserve SOURCES.md licenses.\n' + dump({'payload':list(dict.fromkeys(result))})
     return {
-        'rules/system-direct.yaml':payload([r for r in core['rules'][:slot] if r != PROTECTED], 'DIRECT'),
+        'rules/system-direct.yaml':payload([r for r in core['rules'][:slot] if r not in {PROTECTED, ADOBE}], 'DIRECT'),
         'rules/ad-exceptions.yaml':payload(exceptions, 'DIRECT'),
         'rules/app-ads.yaml':payload(special, '广告拦截'),
     }
@@ -60,7 +61,8 @@ def remote_integrated():
              ('TikTok广告','rules/vendor/tiktok-tracking.yaml','广告拦截'),
              ('TikTok核心','rules/vendor/tiktok-core.yaml','TikTok'),
              ('App广告域名','rules/app-ads.yaml','广告拦截'),
-             ('东方财富直连','rules/vendor/eastmoney-community.yaml','DIRECT')]
+             ('东方财富直连','rules/vendor/eastmoney-community.yaml','DIRECT'),
+             ('Adobe服务','rules/adobe.yaml','Adobe')]
     for name, path, policy in extra:
         config['rule-providers'][name] = {'type':'http','behavior':'classical','url':RAW+path,'interval':86400}
     for provider in config['rule-providers'].values():
@@ -79,8 +81,8 @@ def render():
     return ('#SUBSCRIBED ' + URL + '\n'
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
-            '# JIMMY-STASH ' + VERSION + '；20个策略组（含日本+美国、TikTok）、DNS、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261029.2；20个社区维护的远程规则集按24小时刷新，保留20个策略组。\n'
+            '# JIMMY-STASH ' + VERSION + '；21个策略组（含日本+美国、TikTok）、DNS、私人订阅接入保留。\n'
+            '# JIMMY-ROUTING ROUTE-20261029.3；21个社区维护的远程规则集按24小时刷新，保留21个策略组。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
             '# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。\n'
@@ -99,7 +101,7 @@ def verify(text):
     config = yaml.safe_load(text)
     validate_structure(config)
     assert set(config['rule-providers']) == set(remote_integrated()['rule-providers'])
-    assert len(config['rule-providers']) == 20
+    assert len(config['rule-providers']) == 21
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
     assert config['rule-providers']['基础广告']['url'] == RAW + 'rules/vendor/ads-expanded.yaml'
     assert len(config['http']['url-rewrite']) == 43
@@ -110,7 +112,7 @@ def verify(text):
     for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider
         assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
-    assert len(config['proxy-groups']) == 20
+    assert len(config['proxy-groups']) == 21
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()
     for key in ('proxy-groups', 'proxy-providers', 'dns'):

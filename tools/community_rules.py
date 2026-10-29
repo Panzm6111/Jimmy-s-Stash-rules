@@ -49,6 +49,12 @@ def generated_documents(root=ROOT, manifest=None):
         for source_id in aggregate['sources']:
             item=next(x for x in manifest['resources'] if x['id']==source_id)
             rules+=yaml.safe_load((root/item['output']).read_text(encoding='utf-8'))['payload']
+        if aggregate.get('official_supplement'):
+            official=json.loads((root/aggregate['official_supplement']).read_text(encoding='utf-8'))
+            additions=['DOMAIN-SUFFIX,'+h for h in official['suffixes']]+['DOMAIN,'+h for h in official['exact_hosts']]
+            from maintain import validate_rule
+            for rule in additions:validate_rule(rule)
+            rules+=additions
         result[aggregate['output']]=document(list(dict.fromkeys(rules)),aggregate['sources'])
     return result
 

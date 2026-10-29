@@ -16,6 +16,22 @@ from scan_secrets import inspect
 
 
 class MaintainedRules(unittest.TestCase):
+    def test_adobe_official_supplement_survives_community_refresh_and_rejects_bad_hosts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            (root/'source.yaml').write_text('payload: ["DOMAIN,new.example.invalid"]',encoding='utf-8')
+            supplement={'suffixes':['frame.example.invalid'],'exact_hosts':['media.storage.example.invalid']}
+            (root/'official.json').write_text(json.dumps(supplement),encoding='utf-8')
+            manifest={'resources':[{'id':'vendor','output':'source.yaml'}],
+                      'aggregates':[{'output':'adobe.yaml','sources':['vendor'],'official_supplement':'official.json'}]}
+            generated=c.generated_documents(root,manifest)['adobe.yaml']
+            self.assertIn('DOMAIN,new.example.invalid',generated)
+            self.assertIn('DOMAIN-SUFFIX,frame.example.invalid',generated)
+            self.assertIn('DOMAIN,media.storage.example.invalid',generated)
+            supplement['exact_hosts']=['unsafe.invalid,DIRECT']
+            (root/'official.json').write_text(json.dumps(supplement),encoding='utf-8')
+            with self.assertRaises(m.MaintenanceError):c.generated_documents(root,manifest)
+
     def test_domain_conversion_keeps_whole_set_and_exact_semantics(self):
         rules,omitted=c.parse(b'payload:\n - +.example.invalid\n - api.example.invalid\n - api.example.invalid\n','domain_yaml')
         self.assertEqual(rules,['DOMAIN-SUFFIX,example.invalid','DOMAIN,api.example.invalid'])

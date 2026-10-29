@@ -1,0 +1,38 @@
+{
+  "source": "https://helpx.adobe.com/business/enterprise/manage-services/configure-services/network-endpoints.html",
+  "checked_at": "2026-10-29",
+  "page_updated": "2026-10-21",
+  "policy": "Official supplemental endpoints; changes require review, not blind scraping of third-party analytics. No shared AWS/CloudFront suffixes.",
+  "suffixes": [
+    "adobe.com",
+    "adobe.io",
+    "adobecc.com",
+    "adobecces.com",
+    "adobeccstatic.com",
+    "adobedtm.com",
+    "adobeexchange.com",
+    "adobegenuine.com",
+    "adobegov.com",
+    "adobe-identity.com",
+    "adobejanus.com",
+    "adobelogin.com",
+    "adobedc.net",
+    "adobeoobe.com",
+    "adobeprojectm.com",
+    "adobesc.com",
+    "adobe-services.com",
+    "adobess.com",
+    "adobesunbreak.com",
+    "adobetag.com",
+    "frame.io",
+    "f.io"
+  ],
+  "exact_hosts": [
+    "frameio-assets.s3.amazonaws.com",
+    "frameio-application-production.s3-accelerate.amazonaws.com",
+    "frameio-assets-production.s3-accelerate.amazonaws.com",
+    "frameio-uploads-production.s3-accelerate.amazonaws.com",
+    "pre-signed-firefly-prod.s3-accelerate.amazonaws.com",
+    "pre-signed-firefly-prod.s3.amazonaws.com"
+  ]
+}

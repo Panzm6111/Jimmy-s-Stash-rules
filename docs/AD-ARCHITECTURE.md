@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 22 |
+| public_main_rules | 23 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -232,6 +232,11 @@ proxy-groups:
   - REJECT
   - DIRECT
 rule-providers:
+  Adobe服务:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/adobe.yaml
+    interval: 86400
   基础广告:
     type: http
     behavior: classical
@@ -605,8 +610,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `250b027e0342b6924636a099c96374e5c956930a974c66fc62ff78eb280cda2c` |
-| [config/core.stoverride](../config/core.stoverride) | `78a87e202b791ec305bb820307464191db3da748b911903f6b4b44279df963a0` |
+| [config/stash.yaml](../config/stash.yaml) | `ca1d4a5c8a1b76a9bc56981b1a620f3fc35967b6cabad4aa575fc508bfdbfcd7` |
+| [config/core.stoverride](../config/core.stoverride) | `9ff31c5a2d48753e97c970012d955c44f07efb0bf337d87da412c52642e1a7eb` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |

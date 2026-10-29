@@ -62,3 +62,13 @@ Apple：APNs、iCloud、证书状态与部分系统更新精确域名直接直�
 测试模型覆盖代表性目标、误杀放行，以及扩展包错误包含局域网/指定系统服务时的优先级；这些只是结构与规则优先级证据，不是 DNS、IP 库、实际 App 流量或真实出口的实测。
 
 更新建议：广告规则集和机场节点每24小时尝试刷新；主配置每周手动刷新或修复发布后立即刷新。30分钟测速不是规则更新。完整机制见[更新教程](UPDATES.md#建议更新频率)。
+
+## Adobe 系列（2026-10-29）
+
+两端新增Adobe统一策略组，默认美国，也可改为DIRECT、其他地区或具体节点。整份接入MetaCubeX Adobe分类260条，许可与固定SHA见community-sources.json；每天中午维护任务按原规则同步上游，客户端规则集24小时刷新。
+
+同时依据[Adobe官方网络要求](https://helpx.adobe.com/business/enterprise/manage-services/configure-services/network-endpoints.html)核对完整最小Adobe域名白名单、Frame.io服务/专用存储端点及Firefly专用S3端点，28项官方事实保存在research/adobe-official-endpoints.json，与社区集机械去重生成rules/adobe.yaml。官方补充是2026-10-29审查快照，变化需人工审查，不声称它会自动抓取官网。未扩大到整个amazonaws.com、cloudfront.net或第三方登录/支付服务。
+
+Adobe服务前置于通用广告和国内/海外聚合规则，防止授权、字体或云服务被误拦；原Stash广告集会拦截activate.adobe.com等授权主机。完整Adobe类别也包含营销/统计域名，因此这些命中流量同样优先走Adobe策略。这是正常业务优先的明确取舍，其他广告规则继续生效。
+
+范围覆盖Photoshop、Lightroom、Illustrator、Premiere、After Effects、Acrobat等共享的登录、授权、更新、素材、字体与云服务域名，以及Firefly和Frame.io的上述端点。域名分流验证不等于各产品真实业务验收；账号地区、订阅权限、地区限制和第三方集成仍由对应服务决定。不拦截授权、不改响应或MITM。

@@ -13,6 +13,24 @@ from build_clash import render,global_merge,remote_profile
 from prepare_clash_bootstrap import prepare
 
 class ClashChecks(unittest.TestCase):
+    def test_adobe_functional_endpoints_precede_ads_without_claiming_shared_clouds(self):
+        from validate import route, load
+        hosts=['ims-na1.adobelogin.com','activate.adobe.com','lm.licenses.adobe.com',
+               'ccmdls.adobe.com','assets.adobe.com','use.typekit.net','p.typekit.net',
+               'firefly.adobe.io','stock.adobe.com','acrobat.adobe.com','lightroom.adobe.com',
+               'api.frame.io','f.io','frameio-assets.s3.amazonaws.com',
+               'pre-signed-firefly-prod.s3-accelerate.amazonaws.com','adobegenuine.com',
+               'adobe-services.com','adobe-identity.com','adobesunbreak.com']
+        for path,target in [('config/stash.yaml','Adobe'),('config/clash-verge-auto.yaml','Jimmy · Adobe')]:
+            config=load(path)
+            for host in hosts:self.assertEqual(route(config,host,country='CN'),target,host)
+            for host in ['unrelated.s3.amazonaws.com','notadobe.com']:
+                self.assertNotEqual(route(config,host,country='ZZ'),target,host)
+            self.assertEqual(route(config,'push2.eastmoney.com',country='ZZ'),'DIRECT')
+            self.assertEqual(route(config,'analytics.tiktok.com'),target.replace('Adobe','广告拦截'))
+            group=next(g for g in config['proxy-groups'] if g['name']==target)
+            self.assertEqual(group['proxies'][0],target.replace('Adobe','美国'))
+
     def test_maintained_domestic_routes_override_broad_proxy_and_keep_foreign_services(self):
         from validate import route, load
         stash=load('config/stash.yaml')
@@ -59,8 +77,8 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
-        self.assertEqual(len(clash['rule-providers']),20)
-        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),20)
+        self.assertEqual(len(clash['rule-providers']),21)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),21)
         self.assertTrue(all(p['type']=='http' and p['interval']==86400 for p in clash['rule-providers'].values()))
         self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 
@@ -97,7 +115,7 @@ class ClashChecks(unittest.TestCase):
         for key in ['proxies','proxy-providers','dns','tun','mixed-port']:
             self.assertEqual(merged[key],airport[key])
         names={g['name'] for g in merged['proxy-groups']}
-        self.assertEqual(len(names),20)
+        self.assertEqual(len(names),21)
         self.assertTrue(all(name.startswith('Jimmy · ') for name in names))
         self.assertNotIn('台湾',names)
 
@@ -133,13 +151,13 @@ class ClashChecks(unittest.TestCase):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         overlay=global_merge(source)
         self.assertEqual(full['proxy-groups'][:-1],overlay['proxy-groups'])
-        self.assertEqual(len(full['proxy-groups']),21)
+        self.assertEqual(len(full['proxy-groups']),22)
         download=full['proxy-groups'][-1]
         self.assertEqual(download['type'],'fallback')
         self.assertFalse(download['lazy'])
         self.assertEqual(download['use'],['机场'])
         self.assertNotIn('proxies',download)
-        self.assertEqual(len(full['rule-providers']),18)
+        self.assertEqual(len(full['rule-providers']),19)
         removed={'广告路径例外','App广告域名'}
         expected=[r for r in overlay['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
         self.assertEqual(full['rules'],expected)
