@@ -28,7 +28,7 @@
 
 | 已确认目标 / 约束 | 当前落点与状态 |
 |---|---|
-| Stash保留原整合入口，Clash保留完整分流并融合全局Merge | [config/stash.yaml](config/stash.yaml)；现行 AD-20261020.5；不另建项目或更换链接 |
+| Stash保留原整合入口，Clash全部公开结构订阅更新 | [config/stash.yaml](config/stash.yaml)保持现行 AD-20261020.5；Clash推荐[完整自动订阅](config/clash-verge-auto.yaml)，旧Merge入口保留兼容 |
 | 地区选择与自动测速，保留手动选节点 | 20 策略组、8 个 url-test 池（新增日本+美国）；HTTPS 204 探测，间隔 1800 秒；各地区不配置跨国或 DIRECT 后备。空池/全失效的原生行为待手机验收 |
 | 软件独立选择与 AI 覆盖 | 海外AI默认美国、Apple/Microsoft默认DIRECT，其余按既有组配置；当前改用完整社区分类，AI聚合231条；旧25类/126条为历史人工方案，已退出生成链；服务实测仍待验收 |
 | 保留私人机场接入、协议与节点 | 设备本地私人覆写；初始总代理 REJECT 须用户选择；不提交订阅、不交第三方转换、不关闭 TLS 验证 |
@@ -59,7 +59,7 @@
 | [research](research/) | 源锁、调查数据、历史验证及本次整理核验；历史结果保留原日期 |
 | [tools](tools/)、[modules](modules/)、[scripts](scripts/)、[rules](rules/)、[config](config/) | 生成器、维护源、生成运行文件和配置；不绕过生成链只改产物 |
 
-Clash正式生成入口另含 [全局Merge](config/clash-verge-merge.yaml)，保留原机场订阅节点更新、使用Jimmy前缀、include-all和指定规则下载代理；与完整配置/扩展脚本共享build_clash.py，由既有维护链校验和发布。
+Clash当前推荐[完整自动订阅](config/clash-verge-auto.yaml)，主订阅每360分钟刷新全部公开结构；本机仅保存私人机场和个人设置，机场/17个规则集每24小时尝试刷新。20组采用Jimmy前缀。旧[全局Merge](config/clash-verge-merge.yaml)仍为兼容快照；全部入口共享build_clash.py，由既有每日维护链校验发布。
 
 生成链：ad-catalog.json → generate_ad_modules.py → 35款专项（另5款沿用原模块）；ad_transforms 与观察模板 → build_ad_scripts.py / build_ad_diagnostics.py → JS；build_subscription.py → 整合入口。build_ads.py 汇总检查/构建，render_app_research.py 更新两份 App 目录，render_ad_architecture.py 更新技术附录及其哈希记录。
 
@@ -107,6 +107,13 @@ Clash正式生成入口另含 [全局Merge](config/clash-verge-merge.yaml)，保
 5. 旧资料原文和未提交内容保留。不替换Git Hook；本次用户明确授权设置Windows任务及提交推送。用户于本对话明确确认：每日任务有实际变化且验证通过后自动提交并推送原main；无变化不提交不推送。
 
 ## 6. 问题、阻塞与下一步
+
+### 当前：来源复核与Clash完整自动订阅（2026-10-29）
+
+- 已完成公开上游审查：三家主要规则库未归档/禁用，实际文件日期逐项记录；旧AdvertisingLite停在2025-12-21，Clash新入口改用MetaCubeX完整category-ads（844条），不叠加Stash专项广告及HTTP路径例外。其他应用/IP分流、20个组、日本+美国与统一TikTok保留；旧文件长期未变不直接判定失效。详见[来源审查](research/source-health-review-20261029.json)。
+- 新增config/clash-verge-auto.yaml：完整公开配置从订阅更新，策略组、顺序、新增规则集均在远程文件中；本机只需私人URL与个人设置。build_clash.py生成并纳入原每日发布白名单；新增广告源纳入原社区源锁/许可/差量保护。Stash、旧Clash三个入口及原有规则字节保持原样。
+- 本地通过：9项Clash、9项社区、11项自动发布、42项项目、88项JS、31项维护（30通过、Windows符号链接1跳过）；独立Mihomo15项含结构更新、私人设置与AI选择保留、机场增删、无效重载拒绝及恢复。测试中的沙箱临时目录/回环连接受限，正常本地权限复测通过。不是iPhone广告或TikTok播放验收。
+- 本机现用旧18集Merge已检查并备份.local/clash-auto-migration-20261029，私人迁移覆写已在本机准备。当前代码等待发布与Linux CI，本机Clash切换/自动定时器验收待完成；未把可生成文件称为已安装。原中午任务保留，不新增任务。完整交付证据见[自动订阅核验](research/clash-auto-review-20261029.json)。
 
 上一阶段2026-10-28立即更新记录：54项来源全部读取成功，普通规则没有内容差量（53未变、1项fmz待审查），因此没有伪造普通规则更新。AI已补3个精确主机，另新增TikTok/Instagram/Twitter共71条来源规则。刷新Stash原链接后确认头部ROUTE-20261028.2，在海外AI选日本+美国；社交组统一选TikTok。Clash按新教程接入原机场，真实TikTok/INS/X可用性需设备与节点验证。
 

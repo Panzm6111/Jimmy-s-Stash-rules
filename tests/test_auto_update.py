@@ -65,7 +65,12 @@ class AutoPublicationChecks(unittest.TestCase):
         self.assertTrue((self.root/'PROGRESS.md').read_bytes().endswith(b'HISTORY\n'))
 
     def test_verified_merge_output_is_published_with_rule_update(self):
-        file='config/clash-verge-merge.yaml'
+        self.verify_generated_output_publication('config/clash-verge-merge.yaml')
+
+    def test_verified_full_remote_profile_is_published_with_rule_update(self):
+        self.verify_generated_output_publication('config/clash-verge-auto.yaml')
+
+    def verify_generated_output_publication(self,file):
         write(self.root/file,'rules: []\n')
         run(self.root,'add','--',file);run(self.root,'commit','-m','Simulated Merge baseline')
         run(self.root,'push','origin','main')

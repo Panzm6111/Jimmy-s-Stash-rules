@@ -4,6 +4,16 @@
 
 ## 已采用来源
 
+### 2026-10-29复核结论
+
+已读取仓库状态、实际采用文件的最新提交以及公开源内容。三家主要规则库均未归档或禁用：blackmatrix7最近提交为北京时间10月28日，MetaCubeX生成分支为10月28日，Sukka最近提交为10月29日，AI源文件最后修改于10月12日。MetaCubeX主分支六月的提交是构建代码，不代表生成规则停更。
+
+发现blackmatrix7的AdvertisingLite实际文件最后修改于2025-12-21；当前Clash新自动订阅改用MetaCubeX完整`category-ads`（844条，10月28日生成）。其v2fly分类入口9月22日有更新，并继续引用社区维护的服务广告子分类；没有把生成日期等同于每个域名最近修改日期。选择范围较窄的category-ads，未选连广告商业务域名也包含的category-ads-all。不再叠加本项目Stash的App广告域名和HTTP路径例外。去广告强度与旧38066条快照不同，符合基础域名去广告要求，广告和跟踪在上游分类中并不完全可分。
+
+Netflix/YouTube/Instagram/GitHub等部分文件较久未修改；单凭时间不足以判定失效。现有媒体IP分流和应用策略保留，海外社交、通用海外与AI由活跃完整社区集补充。没有用仅含域名的新集合静默替换含IP的旧集合。Stash专项来源app2smile更新较少，fmz仍活跃且存在1项需人工审查变化；本轮没有真机失败新证据，不替换HTTP实现，也不宣布Stash广告效果已完善。
+
+逐文件日期、完整提交及来源决策见[source-health-review-20261029.json](../research/source-health-review-20261029.json)。新Clash广告源单独输出`rules/vendor/clash-ads-community.yaml`，进入既有许可/哈希/差量/隔离测试维护链；Stash及旧兼容入口的规则字节不受此次选择影响。
+
 | 来源 | 完整采用范围 | 维护与许可 |
 |---|---|---|
 | [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script) | Netflix、YouTube、Telegram、国内、扩展广告、TikTok、Instagram、Twitter，新增整份Apple、Microsoft、GitHub；原基础广告SDK兼容子集仍保留 | 12份规则输入，固定提交与SHA256见 [sources.lock.json](../research/sources.lock.json)；GPL-2.0 |

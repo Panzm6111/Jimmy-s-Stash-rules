@@ -153,6 +153,24 @@
       "retained": 1,
       "omitted": [],
       "license": "GPL-3.0"
+    },
+    {
+      "id": "clash-basic-ads",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/category-ads.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/category-ads.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "d0eab450c31463cfd686e4800537bc8b8e6fa539adb241dd24595ffbc747932e",
+      "output": "rules/vendor/clash-ads-community.yaml",
+      "output_sha256": "74809018c63619e59c618f2125b26a4256b1ac2159a98203f03f63557b41c1d9",
+      "retained": 844,
+      "omitted": [],
+      "license": "GPL-3.0",
+      "consumers": [
+        "config/clash-verge-auto.yaml"
+      ]
     }
   ],
   "licenses": [

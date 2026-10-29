@@ -1,12 +1,12 @@
 # 更新机制与日常使用
 
-2026-10-29更新为19个远程规则集，两端共享相同有序分流；Stash继续有HTTP层，Clash只做域名去广告。本轮接入完整社区分类，扩展TikTok、AI、其他社交和通用海外覆盖，详见[来源与维护](COMMUNITY-SOURCES.md)。
+2026-10-29：Stash保留19个规则集及HTTP层；Clash新的完整自动订阅保留全部非广告分流和20组，采用17个规则集、基础社区广告分类。策略组和规则顺序也随主订阅更新，详见[迁移教程](CLASH-VERGE.md#完整自动订阅推荐)与[来源审查](COMMUNITY-SOURCES.md)。
 
 | 内容 | 更新方式 |
 |---|---|
 | AI、TikTok/Instagram/X、其他软件、国内分流、域名广告及例外 | rule-providers的URL，各自86400秒尝试刷新，无需复制代码 |
 | Stash主配置、策略组与HTTP声明结构 | 原URL首行#SUBSCRIBED，官方默认每12小时检查，可在配置页修改 |
-| Clash主配置与策略组结构 | 从config/clash-verge.yaml远程订阅导入，首次开启自动更新，设为一天；不是刷新机场订阅 |
+| Clash主配置与策略组结构 | 从config/clash-verge-auto.yaml远程订阅导入，首次开启自动更新，设为360分钟；不是刷新机场订阅 |
 | Clash全局Merge | 保留原机场自动更新节点；规则集URL按24小时刷新，结构变化需换入config/clash-verge-merge.yaml新版，文件由同一生成/每日维护链发布 |
 | Stash 12份广告/自检JS | 原URL的script-providers，86400秒尝试刷新；新增主机或handler仍需要主配置更新 |
 | 机场节点 | 本机私人proxy-provider，每24小时尝试刷新；URL变更需本人修改本机覆写 |

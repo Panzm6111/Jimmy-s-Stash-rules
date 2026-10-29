@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-29",
+  "baseline": "ad21eddd3f6f1d76b6bfbe10cf3ab110c70be8c1",
+  "unchanged_existing_runtime": {
+    "config/stash.yaml": true,
+    "config/clash-verge.yaml": true,
+    "config/clash-verge.js": true,
+    "config/clash-verge-merge.yaml": true
+  },
+  "history_suffix_preserved": true,
+  "checks": {
+    "clash": 9,
+    "community": 9,
+    "auto_publication": 11,
+    "project": 42,
+    "javascript": 88,
+    "maintenance_pass": 30,
+    "maintenance_skip": 1
+  },
+  "native": {
+    "passed": 15,
+    "checks": [
+      "all 17 remote rule providers load",
+      "all 20 namespaced groups load",
+      "same-name airport nodes coexist with groups",
+      "initial default is automatic pool",
+      "AI Japan plus US option retained",
+      "empty region rejects instead of direct fallback",
+      "new group arrives after complete profile reload",
+      "new rule priority takes effect",
+      "new provider declaration takes effect",
+      "private airport URL survives public structural update",
+      "selected AI pool survives reload",
+      "airport node refresh propagates without profile replacement",
+      "advertising rules refresh independently",
+      "core rejects invalid reload and keeps running configuration",
+      "previous profile can be restored"
+    ],
+    "actual_client_modified": false,
+    "boundary": "Native fixture checks only; does not test Clash Verge timer or real airport connectivity."
+  },
+  "client_migration": "pending",
+  "publication": "pending",
+  "ci": "pending"
+}

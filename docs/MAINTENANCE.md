@@ -18,6 +18,8 @@
 
 ## 一次性准备
 
+2026-10-29审查后新增第11份社区输入：MetaCubeX完整基础广告category-ads，仅用于新的Clash自动订阅，Stash现行规则保持不变。`config/clash-verge-auto.yaml`已加入生成器和自动发布白名单；原中午任务同时维护Stash与Clash公开产物，无需新增计划任务。Clash客户端须启用主订阅360分钟自动更新，才会取得策略组等结构变化。来源审查证据见[审查记录](../research/source-health-review-20261029.json)。
+
 电脑安装以下软件，使用各软件官方网站的安装包：
 
 - [Python](https://www.python.org/downloads/)：建议3.12；Windows安装时勾选添加到PATH。

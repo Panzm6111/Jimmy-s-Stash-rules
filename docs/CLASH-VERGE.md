@@ -1,8 +1,46 @@
 # Clash Verge 使用方法
 
-已经导入机场订阅的用户，使用下方全局Merge方式即可保留原节点更新。另保留完整远程配置和旧扩展脚本作为兼容入口。三者共享完整分流、20个策略组、海外AI的日本+美国池及统一TikTok社交组。Clash只做域名去广告，Stash继续保留HTTP层。
+当前推荐 **完整自动订阅**：规则内容、策略组、规则顺序和规则集声明都从远程更新。保留20个策略组、海外AI的日本+美国池及统一TikTok社交组；仅采用基础域名去广告。旧Merge、旧完整配置和脚本保留兼容，不再作为免维护方案。
+
+## 完整自动订阅（推荐）
+
+```text
+https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-auto.yaml
+```
+
+首次迁移一次，之后无需复制Merge：
+
+1. 保留原机场订阅卡片，并备份全局Merge与私人扩展。导入上面的公开URL，命名为“Jimmy 全自动”。
+2. 在新卡片的“编辑信息”开启自动更新，间隔 **360分钟**。这是Clash Verge的远程订阅定时器；YAML里的86400不是主订阅的更新开关。
+3. 在新卡片的“编辑扩展配置”只保留私人机场和必要的个人设置。最小内容如下；URL仅在本机填写，不能放进GitHub。现有DNS、hosts等自定义设置可以保存在这里，不能复制旧的Jimmy策略组、rules或rule-providers。
+
+```yaml
+proxy-providers:
+  机场:
+    url: "在本机填写原机场的Clash订阅URL"
+```
+
+4. 将旧Jimmy全局Merge停用；如果全局Merge只有本项目的三项内容，备份后设为 `{}`。若包含个人设置，仅移除旧Jimmy路由结构。旧订阅扩展脚本也不能重复接管新卡片。激活“Jimmy 全自动”，使用规则模式。
+5. 确认20个 `Jimmy · ` 组、17个规则集和机场节点已载入。海外AI/TikTok默认美国；原有可用的具体节点选择可保留或重选。基础广告源为完整MetaCubeX `category-ads`，本轮844条；不带Stash专项脚本、专项广告域名或HTTP路径例外。
+
+| 内容 | 谁自动更新 |
+|---|---|
+| 策略组、新增组、组内选项、规则顺序、规则集声明及公开默认配置 | Clash Verge每360分钟下载完整远程订阅，并重新应用；私人覆写与应用自身管理的设置优先 |
+| 广告、AI、社交与其他分流规则正文 | Mihomo的17个HTTP规则集，每86400秒尝试更新 |
+| 机场节点增删与协议参数 | 本机机场proxy-provider，每86400秒尝试更新；从原机场直接获取 |
+| 公开上游同步、生成与发布 | 原Windows每天12点任务；有实际变化且验证通过才提交推送 |
+
+客户端关闭、电脑休眠、断网时不能保证准点更新。私人URL变化仍需改本机地址。以后调整本项目策略结构并发布后，客户端下一次主订阅更新就会取得，不能把“自动更新”理解为自动设计新策略。
+
+恢复：保留新卡片，切回原机场卡片并恢复备份的全局Merge。不要把私人最终配置上传用于排障。
+
+2026-10-29独立Mihomo测试通过15项：完整结构新组/新provider/新顺序生效、私人URL与AI选择保留、机场节点增删、广告集刷新、无效配置拒绝和旧结构恢复。复现入口为[validate_clash_auto_native.py](../tools/validate_clash_auto_native.py)。这组模拟本身不代表Clash界面定时器或真实业务效果通过；本机迁移结果另记[PROGRESS](../PROGRESS.md)。
+
+机制依据：[官方扩展合并顺序](https://www.clashverge.dev/guide/extend.html)、[v2.5.8远程订阅定时器](https://github.com/clash-verge-rev/clash-verge-rev/blob/v2.5.8/src-tauri/src/core/timer.rs)、[更新后重载逻辑](https://github.com/clash-verge-rev/clash-verge-rev/blob/v2.5.8/src-tauri/src/feat/profile.rs)。
 
 ## 保留原机场订阅：全局Merge
+
+本节为旧兼容方案，结构仍需手动更新；新用户和希望全部自动更新的用户使用上面的完整自动订阅。
 
 正式文件：[config/clash-verge-merge.yaml](../config/clash-verge-merge.yaml)。它已将侧对话v3方案纳入生成器和每日维护，不再依赖.local临时文件。
 

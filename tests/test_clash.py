@@ -9,7 +9,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
-from build_clash import render,global_merge
+from build_clash import render,global_merge,remote_profile
 
 class ClashChecks(unittest.TestCase):
     def transform(self, source):
@@ -96,6 +96,48 @@ class ClashChecks(unittest.TestCase):
         source=yaml.safe_load((ROOT/'config/clash-verge.yaml').read_text(encoding='utf-8'))
         source['rules'].append('AND,unknown,REJECT')
         with self.assertRaises(ValueError):global_merge(source)
+
+    def test_full_remote_profile_has_all_structure_and_basic_maintained_ads(self):
+        source=yaml.safe_load(render()['config/clash-verge.yaml'])
+        full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
+        overlay=global_merge(source)
+        self.assertEqual(full['proxy-groups'],overlay['proxy-groups'])
+        self.assertEqual(len(full['proxy-groups']),20)
+        self.assertEqual(len(full['rule-providers']),17)
+        removed={'广告路径例外','App广告域名'}
+        expected=[r for r in overlay['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
+        self.assertEqual(full['rules'],expected)
+        self.assertNotIn('http',full);self.assertNotIn('script-providers',full)
+        self.assertTrue(full['rule-providers']['基础广告']['url'].endswith('/rules/vendor/clash-ads-community.yaml'))
+        self.assertEqual(full['proxy-providers']['机场']['proxy'],'DIRECT')
+        self.assertEqual(full['proxy-providers']['机场']['interval'],86400)
+        self.assertEqual(full['proxy-providers']['机场']['url'],'https://example.invalid/REPLACE_ON_DEVICE')
+
+    def test_new_remote_structure_is_not_frozen_in_local_private_merge(self):
+        source=yaml.safe_load(render()['config/clash-verge.yaml'])
+        private={'proxy-providers':{'机场':{'url':'https://airport.example.invalid/private'}},'dns':{'enable':False}}
+        # Simulate a later published structural revision, including a new group/provider/order.
+        source['proxy-groups'].append({'name':'新增测试组','type':'select','proxies':['美国']})
+        source['rule-providers']['新增测试集']=copy.deepcopy(source['rule-providers']['海外AI'])
+        source['rules'].insert(0,'RULE-SET,新增测试集,新增测试组')
+        updated=remote_profile(source)
+        updated['proxy-providers']['机场'].update(private['proxy-providers']['机场'])
+        updated['dns'].update(private['dns'])
+        self.assertEqual(updated['rules'][0],'RULE-SET,新增测试集,Jimmy · 新增测试组')
+        self.assertIn('Jimmy · 新增测试组',{g['name'] for g in updated['proxy-groups']})
+        self.assertEqual(updated['proxy-providers']['机场']['url'],private['proxy-providers']['机场']['url'])
+        self.assertFalse(updated['dns']['enable'])
+
+    def test_remote_profile_keeps_social_functional_routes_ahead_of_basic_ads(self):
+        from validate import route
+        config=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
+        for host in ['ttcdn-us.com','ttlivecdn.com','ttoverseaus.net','ttwstatic.com',
+                     'roovza-launches.appsflyersdk.com','roovza.inapps.appsflyersdk.com',
+                     'roovza.launches.appsflyersdk.com','roovza.skadsdk.appsflyersdk.com',
+                     'www.instagram.com','x.com','www.facebook.com','discord.com','web.whatsapp.com']:
+            self.assertEqual(route(config,host,country='CN'),'Jimmy · TikTok',host)
+        self.assertEqual(route(config,'analytics.tiktok.com'),'Jimmy · 广告拦截')
+        self.assertEqual(route(config,'github.com'),'Jimmy · 总代理')
 
 if __name__ == '__main__':
     unittest.main()

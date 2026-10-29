@@ -1,0 +1,428 @@
+{
+  "checked_at_utc": "2026-10-29T01:42:15.992731+00:00",
+  "repositories": [
+    {
+      "repository": "Maasea/sgmodule",
+      "archived": false,
+      "disabled": false,
+      "default_branch": "master",
+      "pushed_at": "2026-07-19T08:34:04Z",
+      "recent_commits": [
+        {
+          "sha": "65075cdb388fc5e3094afd7e7314c67b243f3525",
+          "date": "2026-07-19T08:33:52Z",
+          "subject": "#100 fix ad judgment"
+        },
+        {
+          "sha": "bbd30c9318e06e129a71abae1be3812f25f43e3f",
+          "date": "2026-07-12T14:46:15Z",
+          "subject": "chore: rm log"
+        },
+        {
+          "sha": "6cf162114f46d8232b375fb1c94aa633ef0f73c0",
+          "date": "2026-07-12T13:50:48Z",
+          "subject": "fix:log_event content-encoding"
+        }
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "archived": false,
+      "disabled": false,
+      "default_branch": "master",
+      "pushed_at": "2026-10-28T01:34:50Z",
+      "recent_commits": [
+        {
+          "sha": "4178770badecb1b349fbcd62c737e0d7a2079729",
+          "date": "2026-06-05T04:22:43Z",
+          "subject": "Update README.md"
+        },
+        {
+          "sha": "58212bb83ef4a06d36d754b3f98ac22f8ef61955",
+          "date": "2026-06-05T04:12:03Z",
+          "subject": "Rename to BundleMRS.7z"
+        },
+        {
+          "sha": "1fc2eb65762dd29c55129e949d45a6be472a7a9f",
+          "date": "2026-06-03T12:58:37Z",
+          "subject": "Replace meta-ruleset-mrs.zip with 7z"
+        }
+      ]
+    },
+    {
+      "repository": "NobyDa/Script",
+      "archived": false,
+      "disabled": false,
+      "default_branch": "master",
+      "pushed_at": "2026-08-12T18:06:49Z",
+      "recent_commits": [
+        {
+          "sha": "0b8d083d444f4476700cb9d5d059c07b42da85eb",
+          "date": "2026-08-12T17:55:26Z",
+          "subject": "Minor improvements."
+        },
+        {
+          "sha": "7f8b309f8d943806b90c6ff25d8b8aa0c59b0c03",
+          "date": "2025-12-19T03:18:17Z",
+          "subject": "Refactoring bili checkin/points scripts."
+        },
+        {
+          "sha": "42f36ab009949dd51246690832ad7f3f0a9b1f36",
+          "date": "2025-07-17T16:38:58Z",
+          "subject": "Update disney+ rating regex."
+        }
+      ]
+    },
+    {
+      "repository": "SukkaW/Surge",
+      "archived": false,
+      "disabled": false,
+      "default_branch": "master",
+      "pushed_at": "2026-10-28T16:04:10Z",
+      "recent_commits": [
+        {
+          "sha": "33830e0c4efdedd34c71e5b9ef1e487c9fcbee84",
+          "date": "2026-10-28T16:04:07Z",
+          "subject": "Update CDN Hosts"
+        },
+        {
+          "sha": "4d3fd8fed137159305427af377349b3c52664315",
+          "date": "2026-10-26T16:05:38Z",
+          "subject": "Validate URL-REGEX Source During Build Process"
+        },
+        {
+          "sha": "2b3f4e28950b09fe54b49d319627d6d422cc4a41",
+          "date": "2026-10-26T15:57:43Z",
+          "subject": "Fix Reject URL Regex: 避免 URL-REGEX 中使用逗号 (#114)"
+        }
+      ]
+    },
+    {
+      "repository": "app2smile/rules",
+      "archived": false,
+      "disabled": false,
+      "default_branch": "master",
+      "pushed_at": "2026-03-04T09:07:36Z",
+      "recent_commits": [
+        {
+          "sha": "df6366a7024e0b3f0aa3510c5b791eea6f3cba89",
+          "date": "2026-03-04T09:07:19Z",
+          "subject": "test"
+        },
+        {
+          "sha": "ffc1ef76fa42cdbb79d853273525e8515aaa8fd6",
+          "date": "2026-02-26T10:09:22Z",
+          "subject": "test"
+        },
+        {
+          "sha": "10c7224f8e0076764e0afeb90f45ba35ea6faf40",
+          "date": "2026-02-26T10:03:16Z",
+          "subject": "test"
+        }
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "archived": false,
+      "disabled": false,
+      "default_branch": "master",
+      "pushed_at": "2026-10-27T21:45:44Z",
+      "recent_commits": [
+        {
+          "sha": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+          "date": "2026-10-27T21:45:18Z",
+          "subject": "2026-10-28 05:45:14"
+        },
+        {
+          "sha": "9b29c945b9164a02c7018ed333cb9b5bc1bcb417",
+          "date": "2026-10-25T20:20:30Z",
+          "subject": "2026-10-26 04:20:25"
+        },
+        {
+          "sha": "00d82f6c6c374abb947fabc9c1b69f2a22e71dbc",
+          "date": "2026-10-23T21:02:32Z",
+          "subject": "2026-10-24 05:02:26"
+        }
+      ]
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "archived": false,
+      "disabled": false,
+      "default_branch": "main",
+      "pushed_at": "2026-10-25T14:44:37Z",
+      "recent_commits": [
+        {
+          "sha": "c3f8128dd03c6b3cb35821c347968282cc45b34f",
+          "date": "2026-10-25T14:44:30Z",
+          "subject": "feature：1、小红书规则合并进各个大合集，2、增加联掌门户去广告"
+        },
+        {
+          "sha": "a3ac59c19a78d6fe1c0d6a5b782ab607427b75b1",
+          "date": "2026-10-25T14:32:11Z",
+          "subject": "fix:增加小红书的国外域名"
+        },
+        {
+          "sha": "83c47dd02e4bc7ceb2b2605f40ae904786658560",
+          "date": "2026-10-25T14:27:25Z",
+          "subject": "feature：监控TF是否可加入脚本增加请求超时时间"
+        }
+      ]
+    }
+  ],
+  "adopted_rules": [
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/category-ai-!cn.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/ai-metacubex.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/category-social-media-!cn.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/social-metacubex.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/discord.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/social-discord.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/geolocation-!cn.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/proxy-community.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/line.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/social-line.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/signal.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/social-signal.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/tiktok@!cn.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/tiktok-core.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/tiktok@ads.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/tiktok-tracking.yaml"
+      ]
+    },
+    {
+      "repository": "MetaCubeX/meta-rules-dat",
+      "path": "geo/geosite/whatsapp.yaml",
+      "ref": "refs/heads/meta",
+      "last_change": "2026-10-28T01:34:29Z",
+      "sha": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+      "outputs": [
+        "rules/vendor/social-whatsapp.yaml"
+      ]
+    },
+    {
+      "repository": "SukkaW/Surge",
+      "path": "Source/non_ip/ai.conf",
+      "ref": "HEAD",
+      "last_change": "2026-10-12T11:45:24Z",
+      "sha": "7c67f6c8f0eb0e990097f3f94b39992151644d88",
+      "outputs": [
+        "rules/vendor/ai-sukka.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-12-21T16:23:05Z",
+      "sha": "a75313d36b049b8aca5b26beffafb1b0ec8c564d",
+      "outputs": [
+        "rules/vendor/ads-expanded.yaml",
+        "rules/ads-basic.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/Apple/Apple_Classical.yaml",
+      "ref": "HEAD",
+      "last_change": "2026-10-27T21:45:18Z",
+      "sha": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "outputs": [
+        "rules/apple.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/China/China_Classical.yaml",
+      "ref": "HEAD",
+      "last_change": "2026-06-21T18:41:08Z",
+      "sha": "4448e02fd1149a51f9291ba89e259d8d1ed512a7",
+      "outputs": [
+        "rules/vendor/china.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/GitHub/GitHub.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-06-17T07:19:38Z",
+      "sha": "0fa60782abfe70f58da510e90d9086136cf0d855",
+      "outputs": [
+        "rules/vendor/github.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/Instagram/Instagram.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-06-17T07:19:38Z",
+      "sha": "0fa60782abfe70f58da510e90d9086136cf0d855",
+      "outputs": [
+        "rules/vendor/instagram.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/Microsoft/Microsoft.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-12-21T16:23:05Z",
+      "sha": "a75313d36b049b8aca5b26beffafb1b0ec8c564d",
+      "outputs": [
+        "rules/microsoft.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/Netflix/Netflix_Classical.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-06-17T07:19:38Z",
+      "sha": "0fa60782abfe70f58da510e90d9086136cf0d855",
+      "outputs": [
+        "rules/vendor/netflix.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/Telegram/Telegram.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-12-21T16:23:05Z",
+      "sha": "a75313d36b049b8aca5b26beffafb1b0ec8c564d",
+      "outputs": [
+        "rules/vendor/telegram.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/TikTok/TikTok.yaml",
+      "ref": "HEAD",
+      "last_change": "2026-10-15T20:55:51Z",
+      "sha": "933875d42861a7fdfd9f945cd18605d74fa7e943",
+      "outputs": [
+        "rules/vendor/tiktok.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/Twitter/Twitter.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-12-21T16:23:05Z",
+      "sha": "a75313d36b049b8aca5b26beffafb1b0ec8c564d",
+      "outputs": [
+        "rules/vendor/twitter.yaml"
+      ]
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "path": "rule/Clash/YouTube/YouTube.yaml",
+      "ref": "HEAD",
+      "last_change": "2025-06-17T07:19:38Z",
+      "sha": "0fa60782abfe70f58da510e90d9086136cf0d855",
+      "outputs": [
+        "rules/vendor/youtube.yaml"
+      ]
+    }
+  ],
+  "advertising_replacement": {
+    "repository": "MetaCubeX/meta-rules-dat",
+    "revision": "9f2b7462c7508ad85a1137e70d502b783c89794d",
+    "generated_at": "2026-10-28T01:34:29Z",
+    "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/9f2b7462c7508ad85a1137e70d502b783c89794d/geo/geosite/category-ads.yaml",
+    "source_sha256": "d0eab450c31463cfd686e4800537bc8b8e6fa539adb241dd24595ffbc747932e",
+    "retained": 844,
+    "omitted": [],
+    "underlying_source_history": [
+      {
+        "path": "data/category-ads",
+        "sha": "5a8b23fb9ea0b4e6dac587a02fead6dd0cc7d3b5",
+        "date": "2026-09-22T11:29:39Z",
+        "subject": "category-ads-all: add sigmob.cn"
+      },
+      {
+        "path": "data/amazon",
+        "sha": "9a46bff5f3e0202aba2d0318eadbf0df432f14e8",
+        "date": "2026-02-25T06:18:09Z",
+        "subject": "amazon: add more domains (#3304)"
+      },
+      {
+        "path": "data/meta",
+        "sha": "420c0e7b880c107aa984b3b061997a815c1a0d62",
+        "date": "2026-10-27T05:55:33Z",
+        "subject": "meta: add metaaiusercontent.com (#4195)"
+      },
+      {
+        "path": "data/google",
+        "sha": "76b366368478ccadd50eb0cde4dfc3bfa8648fe6",
+        "date": "2026-08-01T15:31:00Z",
+        "subject": "google: add more domains (#3897)"
+      }
+    ]
+  },
+  "decisions": {
+    "main_maintainers": "retain: unarchived, recent commits/data; actual file dates listed separately",
+    "clash_basic_ads": "replace older AdvertisingLite snapshot with complete MetaCubeX category-ads only in full auto profile",
+    "other_vendor_rules": "retain stable application semantics and IP rules; older file dates alone do not prove malfunction; whole maintained community sets supplement overseas domains",
+    "stash": "no runtime changes; older script sources and pending fmz adaptation are not device acceptance",
+    "manual_hosts_added": false
+  }
+}
