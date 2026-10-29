@@ -113,7 +113,9 @@ Clash当前推荐[完整自动订阅](config/clash-verge-auto.yaml)，主订阅�
 - 已完成公开上游审查：三家主要规则库未归档/禁用，实际文件日期逐项记录；旧AdvertisingLite停在2025-12-21，Clash新入口改用MetaCubeX完整category-ads（844条），不叠加Stash专项广告及HTTP路径例外。其他应用/IP分流、20个组、日本+美国与统一TikTok保留；旧文件长期未变不直接判定失效。详见[来源审查](research/source-health-review-20261029.json)。
 - 新增config/clash-verge-auto.yaml：完整公开配置从订阅更新，策略组、顺序、新增规则集均在远程文件中；本机只需私人URL与个人设置。build_clash.py生成并纳入原每日发布白名单；新增广告源纳入原社区源锁/许可/差量保护。Stash、旧Clash三个入口及原有规则字节保持原样。
 - 本地通过：9项Clash、9项社区、11项自动发布、42项项目、88项JS、31项维护（30通过、Windows符号链接1跳过）；独立Mihomo15项含结构更新、私人设置与AI选择保留、机场增删、无效重载拒绝及恢复。测试中的沙箱临时目录/回环连接受限，正常本地权限复测通过。不是iPhone广告或TikTok播放验收。
-- 本机现用旧18集Merge已检查并备份.local/clash-auto-migration-20261029，私人迁移覆写已在本机准备。当前代码等待发布与Linux CI，本机Clash切换/自动定时器验收待完成；未把可生成文件称为已安装。原中午任务保留，不新增任务。完整交付证据见[自动订阅核验](research/clash-auto-review-20261029.json)。
+- 代码81e8b5b已推送原main；18/18公开主订阅与规则文件HTTP200、字节一致；[Linux CI通过](https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40803315689)。原publish入口已立即运行，54项来源检查成功（53未变、1项fmz待审查），no_relevant_changes、无额外提交推送；原中午任务保留。
+- 本机Clash Verge 2.5.8已导入“Jimmy 全自动”，启用360分钟自动更新，私人机场URL与原卡片一致；DNS/hosts/端口/TUN等设置只读核对保持一致。曾用临时1分钟间隔在未激活的新卡片验证定时器自行刷新，未点手动更新；已设回360分钟。旧配置及Merge备份在.local/clash-auto-migration-20261029。
+- **本机最终切换未验收，交由用户操作**：已尝试选择新卡片，随后用户要求停止界面操作、由本人完成以免断网；立即停止。最新只读核对新卡片不是当前选中项，旧全局Merge仍存在并会覆盖公开结构，不能宣称已全自动生效。用户需备份后将只有Jimmy路由的全局Merge设为`{}`，保存并启用“Jimmy 全自动”；不重填私人URL。恢复时还原备份Merge并选原机场。完整证据见[自动订阅核验](research/clash-auto-review-20261029.json)。
 
 上一阶段2026-10-28立即更新记录：54项来源全部读取成功，普通规则没有内容差量（53未变、1项fmz待审查），因此没有伪造普通规则更新。AI已补3个精确主机，另新增TikTok/Instagram/Twitter共71条来源规则。刷新Stash原链接后确认头部ROUTE-20261028.2，在海外AI选日本+美国；社交组统一选TikTok。Clash按新教程接入原机场，真实TikTok/INS/X可用性需设备与节点验证。
 

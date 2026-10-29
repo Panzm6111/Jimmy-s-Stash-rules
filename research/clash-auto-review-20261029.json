@@ -39,7 +39,156 @@
     "actual_client_modified": false,
     "boundary": "Native fixture checks only; does not test Clash Verge timer or real airport connectivity."
   },
-  "client_migration": "pending",
-  "publication": "pending",
-  "ci": "pending"
+  "client_migration": {
+    "client_version": "2.5.8",
+    "new_profile_imported": true,
+    "new_profile_current": false,
+    "auto_update": true,
+    "update_interval_minutes": 360,
+    "timer_verified_while_inactive": {
+      "before": {
+        "updated": 1793239267,
+        "observed": 1793239298.8297474,
+        "current": false
+      },
+      "after": {
+        "updated": 1793239393,
+        "observed": 1793239397.9335515,
+        "current": false
+      },
+      "manual_refresh_used": false
+    },
+    "private_merge_matches_prepared": true,
+    "private_url_matches_original": true,
+    "preserved_runtime_settings": {
+      "dns": true,
+      "hosts": true,
+      "mixed-port": true,
+      "tun": true,
+      "allow-lan": true,
+      "unified-delay": true,
+      "tcp-concurrent": true
+    },
+    "old_global_merge_still_present": true,
+    "runtime_matches_public_routing": false,
+    "current_provider_count": 28,
+    "expected_provider_count": 17,
+    "client_acceptance": "incomplete: user takes over removing old global Merge and reapplying the new profile",
+    "user_takeover_requested": true,
+    "further_ui_changes_stopped": true
+  },
+  "publication": {
+    "commit": "81e8b5bd99eb97675a98dc2b5f8198dbdbe7d15b",
+    "public_files": [
+      {
+        "file": "config/clash-verge-auto.yaml",
+        "status": 200,
+        "sha256": "66ee7ae92ea99c20fe28b7ee5c9838c5152ec15d801d42835547db09e4e18397"
+      },
+      {
+        "file": "rules/vendor/clash-ads-community.yaml",
+        "status": 200,
+        "sha256": "74809018c63619e59c618f2125b26a4256b1ac2159a98203f03f63557b41c1d9"
+      },
+      {
+        "file": "rules/openai.yaml",
+        "status": 200,
+        "sha256": "9a0d7a075cc3ae40a5a37ee8812c7364864c25959de6618938b599f9c147325f"
+      },
+      {
+        "file": "rules/vendor/netflix.yaml",
+        "status": 200,
+        "sha256": "0ae31c92c380e78aabebb252349715f243e845b9430f84d9dfe61b0845962f8d"
+      },
+      {
+        "file": "rules/vendor/youtube.yaml",
+        "status": 200,
+        "sha256": "4e5591c1438ed993cc743d87dd301d1c78bb35259016854948658bbeb0e09a2f"
+      },
+      {
+        "file": "rules/vendor/telegram.yaml",
+        "status": 200,
+        "sha256": "596e37cd54f0af5f19001e7c4e100d30060812709c8635b90c809c5b93880973"
+      },
+      {
+        "file": "rules/apple.yaml",
+        "status": 200,
+        "sha256": "dd282e776234a4ad56bcfce89b310e804635050791ff612d906b48e40a5978c6"
+      },
+      {
+        "file": "rules/microsoft.yaml",
+        "status": 200,
+        "sha256": "5d97835b04c9d0d28ba50bc8518b518e082d19c87cc68a3c220e06f2c10a77da"
+      },
+      {
+        "file": "rules/vendor/china.yaml",
+        "status": 200,
+        "sha256": "d1c118ed502aaaec17d08a2b28d3d29ec35f9cbd84ac0327bdc682c51e6bab0c"
+      },
+      {
+        "file": "rules/vendor/tiktok.yaml",
+        "status": 200,
+        "sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f"
+      },
+      {
+        "file": "rules/vendor/instagram.yaml",
+        "status": 200,
+        "sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917"
+      },
+      {
+        "file": "rules/vendor/twitter.yaml",
+        "status": 200,
+        "sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3"
+      },
+      {
+        "file": "rules/vendor/github.yaml",
+        "status": 200,
+        "sha256": "a40b30900dc605bb37af83074977083d2e72bae8ca7720d197557e8cbc6b2c74"
+      },
+      {
+        "file": "rules/vendor/social-community.yaml",
+        "status": 200,
+        "sha256": "1a4f05cf920d1580dc23854255b0cf5771dbbf315cbc518e6b8831aee2402123"
+      },
+      {
+        "file": "rules/vendor/proxy-community.yaml",
+        "status": 200,
+        "sha256": "d46e9f8b6b582ee1da6f39629dc06be4573bcf83c495c2f5c9d8ca8e20d39749"
+      },
+      {
+        "file": "rules/system-direct.yaml",
+        "status": 200,
+        "sha256": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f"
+      },
+      {
+        "file": "rules/vendor/tiktok-tracking.yaml",
+        "status": 200,
+        "sha256": "27d8c1ce9f323a951ea7c622c37f9390b7d727543d415844f02d7ba1ecb1cfe1"
+      },
+      {
+        "file": "rules/vendor/tiktok-core.yaml",
+        "status": 200,
+        "sha256": "8f7d7c86857f06e94eb5d1bb3502a2f12a04f678953ca4fb2a86b0f8db0a59dd"
+      }
+    ],
+    "origin_main_verified": true
+  },
+  "ci": {
+    "run_id": 40803315689,
+    "conclusion": "success",
+    "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40803315689"
+  },
+  "immediate_maintenance": {
+    "summary": {
+      "unchanged": 53,
+      "rules-update": 0,
+      "review-required": 1,
+      "reference-changed": 0,
+      "error": 0
+    },
+    "ok": true,
+    "result": "no_relevant_changes",
+    "committed": false,
+    "pushed": false
+  }
 }
