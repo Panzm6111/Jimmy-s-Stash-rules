@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 29 |
+| public_main_rules | 32 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -387,6 +387,24 @@ rule-providers:
     interval: 86400
     behavior: classical
     url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/app-ads.yaml
+  小红书直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/xiaohongshu.yaml
+  抖音直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/douyin.yaml
+  抖音补充:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DouYin/DouYin.yaml
 rules:
 - RULE-SET,TikTok广告,广告拦截
 - RULE-SET,App广告域名,广告拦截
@@ -660,7 +678,7 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `4a43bae38c835de20e072ace04baaf44ca9ebc7db620747affe92e947db34bf0` |
+| [config/stash.yaml](../config/stash.yaml) | `e7d2c8f9f0bdcd039014e6377ea561bb8221c5a6da5d45da00ecb19c6d75c373` |
 | [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `218c56405a63c3e35321e793bf3b71b6d6a9ba6f32931990c7e9b75f4ee8f4ab` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |

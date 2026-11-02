@@ -95,8 +95,8 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
-        self.assertEqual(len(clash['rule-providers']),27)
-        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),27)
+        self.assertEqual(len(clash['rule-providers']),30)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),30)
         self.assertTrue(all(p['type']=='http' and p['behavior'] in {'classical','domain'} and p['interval']==86400 for p in clash['rule-providers'].values()))
         self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 
@@ -158,7 +158,7 @@ class ClashChecks(unittest.TestCase):
         self.assertFalse(download['lazy'])
         self.assertEqual(download['use'],['机场'])
         self.assertNotIn('proxies',download)
-        self.assertEqual(len(full['rule-providers']),25)
+        self.assertEqual(len(full['rule-providers']),28)
         removed={'广告路径例外','App广告域名'}
         expected=[r for r in overlay['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
         self.assertEqual(full['rules'],expected)
@@ -172,7 +172,24 @@ class ClashChecks(unittest.TestCase):
         self.assertFalse(health['lazy'])
         self.assertEqual(health['interval'],300)
         self.assertEqual(health['timeout'],5000)
+        self.assertEqual(health['expected-status'],204)
         self.assertEqual(full['proxy-providers']['机场']['url'],'https://example.invalid/REPLACE_ON_DEVICE')
+
+    def test_automatic_pool_ui_guard_and_explicit_manual_entry(self):
+        full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
+        pools=[g for g in full['proxy-groups'] if g['type']=='url-test']
+        self.assertEqual(len(pools),8)
+        for g in pools:
+            self.assertTrue(g['hidden']);self.assertTrue(g['include-all'])
+            self.assertEqual(g['tolerance'],50);self.assertEqual(g['expected-status'],204)
+        for g in full['proxy-groups']:
+            if g['type']!='select':continue
+            if g['name']=='Jimmy · 手动节点':self.assertTrue(g['include-all'])
+            else:
+                self.assertFalse(g.get('include-all',False));self.assertNotIn('use',g)
+        groups={g['name']:g for g in full['proxy-groups']}
+        for name in ('海外AI','TikTok','Adobe','总代理'):
+            self.assertIn('Jimmy · 手动节点',groups['Jimmy · '+name]['proxies'])
 
     def test_new_remote_structure_is_not_frozen_in_local_private_merge(self):
         source=base_profile()

@@ -714,7 +714,7 @@ def update(root, report=None):
         run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_private_config.py'], 'private_builder', timeout=600)
         if (candidate / 'tests/test_maintenance.py').is_file():
             run_step(candidate, [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_maintenance.py'], 'maintenance_tests')
-        for pattern in ('test_clash.py', 'test_community.py', 'test_subscriptions.py'):
+        for pattern in ('test_clash.py', 'test_community.py', 'test_subscriptions.py', 'test_subscription_health.py'):
             if (candidate / 'tests' / pattern).is_file():
                 run_step(candidate,[sys.executable,'-m','unittest','discover','-s','tests','-p',pattern],pattern)
         backup_id = apply_verified_changes(root, candidate, allowed, base_head)

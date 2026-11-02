@@ -29,7 +29,8 @@ def remote_profile(source):
     result['proxy-providers']['机场']['proxy']=DOWNLOAD_GROUP
     # Groups using `use` rely on provider health checks, not their own timer.
     result['proxy-providers']['机场']['health-check'].update(
-        enable=True, interval=300, lazy=False, timeout=5000)
+        enable=True, interval=300, lazy=False, timeout=5000, **{'expected-status':204})
+    result['proxy-groups'][-1]['expected-status']=204
     # Airports may vary subscription format by User-Agent.
     # Request the same Clash YAML representation as the supported desktop client.
     result['proxy-providers']['机场']['header']={'User-Agent':['clash-verge/v2.5.8']}
@@ -50,6 +51,13 @@ def global_merge(source):
                 if not group['proxies']:del group['proxies']
         if original=='总代理':
             group['proxies']=['自动节点']+[name for name in group['proxies'] if name!='自动节点']
+        if group['type']=='url-test':
+            # UI guard only: Mihomo's API can still pin a URLTest pool.
+            group.update(hidden=True, tolerance=50, **{'expected-status':204})
+        elif group['type']=='select' and original!='手动节点':
+            # Raw airport nodes have one explicit manual entry point.
+            for key in ('include-all','empty-fallback','filter'):
+                group.pop(key,None)
         group['name']=names[original]
         if 'proxies' in group:group['proxies']=[names.get(name,name) for name in group['proxies']]
     for index,rule in enumerate(overlay['rules']):

@@ -26,4 +26,18 @@ jobs:
       - run: python -m unittest discover -s tests -p test_clash.py -v
       - run: python -m unittest discover -s tests -p test_community.py -v
       - run: python -m unittest discover -s tests -p test_subscriptions.py -v
+      - run: python -m unittest discover -s tests -p test_subscription_health.py -v
       - run: python tools/validate.py
+      - name: Check live public sources and representative app routes
+        if: always()
+        run: python tools/verify_subscriptions.py
+      - name: Retain public health receipt even on failure
+        if: always() && hashFiles('.local/direct-source-health.json') != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: public-subscription-health
+          path: |
+            .local/direct-source-health.json
+            .local/direct-source-health.md
+          include-hidden-files: true
+          retention-days: 30

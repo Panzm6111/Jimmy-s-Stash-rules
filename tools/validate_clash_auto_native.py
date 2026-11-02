@@ -76,7 +76,7 @@ def main():
                 except (OSError,ValueError):pass
                 if process.poll() is not None or time.monotonic()>deadline:raise RuntimeError('Fixture initialization failed; inspect local log')
                 time.sleep(.2)
-            check(len(providers)==25,'all 25 remote rule providers load')
+            check(len(providers)==28,'all 28 remote rule providers load')
             check(state['airport_requests']>0 and not (runtime/'airport.yaml').exists(),
                   'private fallback supplies nodes with failed first download and no cache')
             check('跳转域名{请勿连接}:example.invalid' not in groups['Jimmy · 手动节点']['all'],
@@ -91,6 +91,8 @@ def main():
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
             check(groups['Jimmy · 总代理']['now']=='Jimmy · 自动节点','initial default is automatic pool')
             check('Jimmy · ai' in groups['Jimmy · 海外AI']['all'],'three-region ai option exposed')
+            check(groups['Jimmy · ai']['hidden'],'automatic pool exposes hidden flag')
+            check('US-synthetic' not in groups['Jimmy · 海外AI']['all'],'business selector contains policies, not raw nodes')
             check(groups['Jimmy · 新加坡']['all']==['REJECT'],'empty region rejects instead of direct fallback')
             api('/proxies/'+urllib.parse.quote('Jimmy · 海外AI',safe=''),'PUT',{'name':'Jimmy · ai'})
             next_public=copy.deepcopy(public)

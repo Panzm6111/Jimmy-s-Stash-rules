@@ -22,6 +22,13 @@ def parse(raw, fmt):
             else:kind,host='DOMAIN',item
             if not re.fullmatch(r'[a-zA-Z0-9_.-]+',host):raise ValueError('unsupported maintained domain syntax')
             rules.append(kind+','+host)
+    elif fmt=='classical_yaml':
+        value=yaml.load(raw, Loader=UniqueLoader)
+        if not isinstance(value,dict) or set(value)!={'payload'} or not isinstance(value['payload'],list):
+            raise ValueError('invalid maintained payload')
+        rules=value['payload']
+        if any(not isinstance(rule,str) or rule.split(',')[0] not in KINDS for rule in rules):
+            raise ValueError('unreviewed maintained rule kind')
     elif fmt=='classical_text':
         rules=[]
         for line in raw.decode('utf-8-sig').splitlines():

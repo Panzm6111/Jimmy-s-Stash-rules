@@ -1,0 +1,194 @@
+{
+  "date": "2026-11-02",
+  "route_version": "ROUTE-20261102.2",
+  "base_commit": "aed62d885b59b5786476d134d4ae8c0cb368b055",
+  "scope": [
+    "Clash automatic selection UI guard",
+    "204 health checks and 50ms tolerance",
+    "maintained domestic comment routing",
+    "public source health monitoring"
+  ],
+  "stash_node_incident": "User explicitly declined further investigation; no fix claimed.",
+  "routing_fix": {
+    "before": "aweme.snssdk.com and aweme-eagle.snssdk.com -> TikTok",
+    "after": "DIRECT via whole blackmatrix7 DouYin upstream; dedicated TikTok set remains earlier",
+    "maintained_additions": [
+      {
+        "repository": "MetaCubeX/meta-rules-dat",
+        "revision": "dc60743738b8c81d45b61773d585b97d5c3f428d",
+        "categories": [
+          "xiaohongshu",
+          "douyin"
+        ],
+        "counts": [
+          12,
+          71
+        ]
+      },
+      {
+        "repository": "blackmatrix7/ios_rule_script",
+        "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+        "category": "DouYin",
+        "count": 13
+      }
+    ]
+  },
+  "validation": {
+    "python": {
+      "total": 77,
+      "passed": 76,
+      "skipped": 1,
+      "note": "One Windows symlink permission skip. Initial overbroad test expectation repaired; affected 11 Clash tests re-run successfully."
+    },
+    "project": 41,
+    "javascript": 88,
+    "live_public_sources": 21,
+    "live_app_route_checks": 88,
+    "native_selection": {
+      "passed": 9,
+      "checks": [
+        "HTTP 200 is rejected for this test URL despite transport success",
+        "HTTP 204 probe succeeds on both healthy fixtures",
+        "healthy lowest-latency node selected automatically",
+        "hidden and expected-status fields loaded",
+        "previously invalid node recovers on a new 204 response",
+        "50ms tolerance prevents switching for a small improvement",
+        "improvement greater than tolerance switches automatically",
+        "hidden is not a hard API manual-selection lock",
+        "explicit unpin restores automatic selection"
+      ],
+      "actual_client_modified": false,
+      "private_nodes_used": false,
+      "first_member_tolerance_boundary": {
+        "former_first_member": "JP-fixture",
+        "selected_after_small_improvement": "US-fixture",
+        "note": "v1.19.32 may ignore tolerance when the current node is the first member; not a hard switching guarantee."
+      },
+      "boundary": "Synthetic Mihomo test; no Clash UI or real AI/TikTok acceptance."
+    },
+    "native_subscription_reload": {
+      "passed": 21,
+      "checks": [
+        "all 28 remote rule providers load",
+        "private fallback supplies nodes with failed first download and no cache",
+        "airport informational redirect entry is excluded from selectable nodes",
+        "successful later download replaces startup fallback with a cache",
+        "airport fetch requests Clash YAML through explicit client user agent",
+        "21 application groups and one download failover group load",
+        "same-name airport nodes coexist with groups",
+        "initial default is automatic pool",
+        "three-region ai option exposed",
+        "automatic pool exposes hidden flag",
+        "business selector contains policies, not raw nodes",
+        "empty region rejects instead of direct fallback",
+        "new group arrives after complete profile reload",
+        "new rule priority takes effect",
+        "new provider declaration loads rules after reload",
+        "private airport URL survives public structural update",
+        "selected AI pool survives reload",
+        "airport node refresh propagates without profile replacement",
+        "advertising rules refresh independently",
+        "core rejects invalid reload and keeps running configuration",
+        "previous profile can be restored"
+      ],
+      "actual_client_modified": false,
+      "boundary": "Native fixture checks only; does not test Clash Verge timer or real airport connectivity."
+    },
+    "native_download_failover": {
+      "passed": 7,
+      "source": "native command receipt"
+    },
+    "real_upstream_native_load": [
+      {
+        "configuration": "Stash routing model (not native Stash)",
+        "providers": 30,
+        "counts": {
+          "Adobe服务": 260,
+          "Adobe官方补充": 28,
+          "基础广告": 38066,
+          "海外AI": 213,
+          "海外AI补充": 55,
+          "Netflix": 1156,
+          "YouTube": 183,
+          "Telegram": 35,
+          "Apple服务": 1579,
+          "Microsoft服务": 668,
+          "东方财富直连": 8,
+          "国内服务": 110177,
+          "TikTok": 34,
+          "Instagram": 4,
+          "Twitter": 33,
+          "GitHub": 31,
+          "海外社交": 627,
+          "社交Discord": 28,
+          "社交WhatsApp": 11,
+          "社交LINE": 20,
+          "社交Signal": 8,
+          "通用代理": 27291,
+          "系统直连例外": 26,
+          "广告路径例外": 2,
+          "TikTok广告": 1,
+          "TikTok核心": 39,
+          "App广告域名": 19,
+          "小红书直连": 12,
+          "抖音直连": 71,
+          "抖音补充": 13
+        },
+        "source_bytes_verified": true,
+        "current_client_modified": false
+      },
+      {
+        "configuration": "config/clash-verge-auto.yaml",
+        "providers": 28,
+        "counts": {
+          "Adobe服务": 260,
+          "Adobe官方补充": 28,
+          "基础广告": 844,
+          "海外AI": 213,
+          "海外AI补充": 55,
+          "Netflix": 1156,
+          "YouTube": 183,
+          "Telegram": 35,
+          "Apple服务": 1579,
+          "Microsoft服务": 668,
+          "东方财富直连": 8,
+          "国内服务": 110177,
+          "TikTok": 34,
+          "Instagram": 4,
+          "Twitter": 33,
+          "GitHub": 31,
+          "海外社交": 627,
+          "社交Discord": 28,
+          "社交WhatsApp": 11,
+          "社交LINE": 20,
+          "社交Signal": 8,
+          "通用代理": 27291,
+          "系统直连例外": 26,
+          "TikTok广告": 1,
+          "TikTok核心": 39,
+          "小红书直连": 12,
+          "抖音直连": 71,
+          "抖音补充": 13
+        },
+        "source_bytes_verified": true,
+        "current_client_modified": false
+      }
+    ],
+    "public_pattern_scan_files": 227,
+    "public_pattern_findings": 0,
+    "current_local_links_checked": 327,
+    "historical_suffix_unchanged": true
+  },
+  "client_pin_migration": {
+    "checkedAt": "2026-11-02T07:30:14.141Z",
+    "cleared": [],
+    "automaticPools": 8,
+    "allUnpinned": true,
+    "businessSelectionsUnchanged": true,
+    "scope": "Only DELETE existing manual pins in eight named URLTest pools; no profile/provider/routing writes."
+  },
+  "device_acceptance": "No iPhone/live app comment loading, posting, IP display or service-unlock acceptance.",
+  "publication": {
+    "status": "prepared; push and Linux CI pending"
+  }
+}

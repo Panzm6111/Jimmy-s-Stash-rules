@@ -216,6 +216,51 @@
       "retained": 260,
       "omitted": [],
       "license": "GPL-3.0"
+    },
+    {
+      "id": "xiaohongshu-direct",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "dc60743738b8c81d45b61773d585b97d5c3f428d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/xiaohongshu.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/dc60743738b8c81d45b61773d585b97d5c3f428d/geo/geosite/xiaohongshu.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "1b987318108487c2ed51a0a017207bd842ae4ad42dd6e814ce8190c53a69aa90",
+      "output": "rules/vendor/xiaohongshu-community.yaml",
+      "output_sha256": "58cc063a3bf633111a43ce67b6bd30ee6eb4a433a7dc948b847d17b6042738c4",
+      "retained": 12,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "douyin-direct",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "dc60743738b8c81d45b61773d585b97d5c3f428d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/douyin.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/dc60743738b8c81d45b61773d585b97d5c3f428d/geo/geosite/douyin.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "ee34242fcfadf1740978e8a952021ea74ce3dc7a5e22367b70b781fa67fc9a9f",
+      "output": "rules/vendor/douyin-community.yaml",
+      "output_sha256": "6441d8d5e19ca06c0e7430fe5d3d74e14ec07178be1df79d0eecf0b2dc239683",
+      "retained": 71,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "douyin-bm7",
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "ref": "refs/heads/master",
+      "path": "rule/Clash/DouYin/DouYin.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/DouYin/DouYin.yaml",
+      "source_format": "classical_yaml",
+      "source_sha256": "fdfe20393b17988455f7715a8be15166b097c071551b938049874d39675dee41",
+      "output": "rules/vendor/douyin-bm7.yaml",
+      "output_sha256": "5be083182bedaaf072e158fd82012ee36a5c1140b36735783fba531ae96f26ae",
+      "retained": 13,
+      "omitted": [],
+      "license": "GPL-2.0"
     }
   ],
   "licenses": [
@@ -238,6 +283,16 @@
       "file": "licenses/SukkaW-AGPL-3.0.txt",
       "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
       "license": "AGPL-3.0"
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "ref": "refs/heads/master",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/LICENSE",
+      "file": "licenses/blackmatrix7-GPL-2.0.txt",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "license": "GPL-2.0"
     }
   ],
   "aggregates": [
