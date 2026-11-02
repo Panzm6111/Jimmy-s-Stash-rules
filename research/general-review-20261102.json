@@ -196,7 +196,7 @@
     "PROGRESS.md audit entry",
     "research/general-review-20261102.json"
   ],
-  "git_delivery": "Local audit documentation only; not committed or pushed.",
+  "git_delivery": "Initial audit was local only; authorized follow-up code and documentation published to main. See follow_up.publication for same-commit CI evidence.",
   "privacy": "No private subscription, proxy nodes, certificate, controller secret or app account payload read or retained.",
   "follow_up": {
     "updated_at": "2026-11-02T09:51:38.954476+00:00",
@@ -415,7 +415,48 @@
       "changed_docs_local_links_valid": 216
     },
     "publication": {
-      "status": "local checks passed; pending commit, push and Linux CI"
-    }
+      "code_commit": "63a538a31c85637409a78985d0f0018e1e8373fc",
+      "ci_run_id": 41424413926,
+      "ci_job_id": 125207421897,
+      "remote_public_profiles_match_git_blobs": {
+        "config/stash.yaml": "fa8f2ec153832258ca1cc4178ad0d97937d9b1a4",
+        "config/clash-verge-auto.yaml": "e740925801f1d2a17e34ee7e1a16e5fc0ec3f55c"
+      },
+      "remote_source_check": {
+        "cache64": true,
+        "public_scope_helper": true,
+        "obsolete_bundle_argument_absent": true,
+        "schedule_evidence_documented": true
+      },
+      "status": "Code pushed to main; same-commit Linux CI completed successfully.",
+      "ci": {
+        "run_id": 41424413926,
+        "job_id": 125207421897,
+        "head_sha": "63a538a31c85637409a78985d0f0018e1e8373fc",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-02T09:54:13Z",
+        "updated_at": "2026-11-02T09:58:27Z",
+        "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41424413926",
+        "python_tests_passed": 81,
+        "project_checks_passed": 41,
+        "js_tests_passed": 88,
+        "source_health": {
+          "checked_at": "2026-11-02T09:57:52.700976+00:00",
+          "ok": true,
+          "sources": 25,
+          "review_required": 0,
+          "errors": 0,
+          "app_routes_passed": 150
+        },
+        "secret_scan": {
+          "current_files": 236,
+          "historical_blobs": 316,
+          "findings": 0
+        }
+      },
+      "boundary": "Existing push validation workflow only; no conversion workflow manually dispatched and no runtime configuration change."
+    },
+    "completed_at": "2026-11-02T09:59:52.757488+00:00"
   }
 }
