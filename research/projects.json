@@ -1,0 +1,465 @@
+{
+  "checked_at": "2026-10-18",
+  "projects": [
+    {
+      "repository": "chavyleung/scripts",
+      "url": "https://github.com/chavyleung/scripts",
+      "revision": "fb6da3e746488c3ead3fe790ac5875284bdb149d",
+      "repository_last_commit_at": "2026-10-14T15:08:49+08:00",
+      "license_observed": "GPL-3.0",
+      "inspected_files": [
+        {
+          "path": "bilibili/bilibili.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/bilibili/bilibili.js",
+          "sha256": "c5477a0b97f10ddd7d2cad6b969279e890a5a548e07b04e153e0de7a42730cc2"
+        },
+        {
+          "path": "bilibili/bilibili.cookie.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/bilibili/bilibili.cookie.js",
+          "sha256": "9b606003d381ad93cff57a49c0524ce9f5683c670c7f2d39827cea0ba7a48f11"
+        },
+        {
+          "path": "neteasemusic/neteasemusic.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/neteasemusic/neteasemusic.js",
+          "sha256": "768ebfd38c2c1cd410b44968ddcf5bc2acaa2ec86286e400b18313dbfdabe8eb"
+        },
+        {
+          "path": "qqmusic/qqmusic.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/qqmusic/qqmusic.js",
+          "sha256": "bce56475fd5145f318f7d2a8ab54abcceb4fa8866464ed94e96460a3ab5ca5b1"
+        },
+        {
+          "path": "videoqq/videoqq.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/videoqq/videoqq.js",
+          "sha256": "92b403bc24c5ae93c3c0aeb771e31e1fa52ae58ff702cdabd46a81835e91d66e"
+        },
+        {
+          "path": "videoqq/README.md",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/videoqq/README.md",
+          "sha256": "baaf5b0aba195a900ace00ad78fa7ad4f6083057e190b8a345212c7aa72b0e6e"
+        },
+        {
+          "path": "10010/10010.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/10010/10010.js",
+          "sha256": "f7cba8157dc2167f4d0069bbfaa7d150acd147854ddcb3ee73865bd3123f4803"
+        },
+        {
+          "path": "10000/10000.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/10000/10000.js",
+          "sha256": "a6ed79c4bcc2bf88b233d12ed3922bec01eb8616c1d4cfb7809790b0e2ccef62"
+        },
+        {
+          "path": "sfexpress/sfexpress.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/sfexpress/sfexpress.js",
+          "sha256": "7cdeea544f8e0d5458932bab4d63c0c34f8f1c60f13335dc3b4e2f4336e04e1b"
+        },
+        {
+          "path": "wmmeituan/wmmeituan.js",
+          "url": "https://github.com/chavyleung/scripts/blob/fb6da3e746488c3ead3fe790ac5875284bdb149d/wmmeituan/wmmeituan.js",
+          "sha256": "3fbf2ba918f040a32133d9beacbc8ade65ccb52ee4d20ec4344afae69c12b6f9"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "NobyDa/Script",
+      "url": "https://github.com/NobyDa/Script",
+      "revision": "0b8d083d444f4476700cb9d5d059c07b42da85eb",
+      "repository_last_commit_at": "2026-08-13T01:55:26+08:00",
+      "license_observed": "GPL-3.0",
+      "inspected_files": [
+        {
+          "path": "Ctrip-DailyBonus/Ctrip.js",
+          "url": "https://github.com/NobyDa/Script/blob/0b8d083d444f4476700cb9d5d059c07b42da85eb/Ctrip-DailyBonus/Ctrip.js",
+          "sha256": "11a7bab79147a1ff287157d2ee1f6518e9cf5bb7112e31da5131bf23a2927309"
+        },
+        {
+          "path": "JD-DailyBonus/JD_DailyBonus.js",
+          "url": "https://github.com/NobyDa/Script/blob/0b8d083d444f4476700cb9d5d059c07b42da85eb/JD-DailyBonus/JD_DailyBonus.js",
+          "sha256": "21dc2ffeef61c15682ae25a4c7f478ae8706bbd452babf7bc15c28e6cefc3bb6"
+        },
+        {
+          "path": "iQIYI-DailyBonus/iQIYI.js",
+          "url": "https://github.com/NobyDa/Script/blob/0b8d083d444f4476700cb9d5d059c07b42da85eb/iQIYI-DailyBonus/iQIYI.js",
+          "sha256": "d89c064a84fb3e17e19eac30dbe39969dc321b57ff1a485fb526ec785fc431a7"
+        },
+        {
+          "path": "Bilibili-DailyBonus/Manga.js",
+          "url": "https://github.com/NobyDa/Script/blob/0b8d083d444f4476700cb9d5d059c07b42da85eb/Bilibili-DailyBonus/Manga.js",
+          "sha256": "149d53f4bd92eaa50678c04a5d35be68ee5573e10c6e9b5317f0d602a476e9a1"
+        },
+        {
+          "path": "QuantumultX/File/Wechat.js",
+          "url": "https://github.com/NobyDa/Script/blob/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js",
+          "sha256": "f661257b7bdedf5de63c6a9272f4e646829d8b95607f60faecd9ced39afa2c24"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。",
+      "ad_catalog_checked_at": "2026-10-19"
+    },
+    {
+      "repository": "Wenmoux/checkbox",
+      "url": "https://github.com/Wenmoux/checkbox",
+      "revision": "a22d8650ae69224c18c4856afdf9fbdf8622c54f",
+      "repository_last_commit_at": "2026-06-19T21:00:10+08:00",
+      "license_observed": "MIT",
+      "inspected_files": [
+        {
+          "path": "scripts/mcdonald.js",
+          "url": "https://github.com/Wenmoux/checkbox/blob/a22d8650ae69224c18c4856afdf9fbdf8622c54f/scripts/mcdonald.js",
+          "sha256": "f4d49b6ab3cd9ec7114be2607c6b4a966330e855449e4963717a5e30eaf5809d"
+        },
+        {
+          "path": "scripts/mtmc.js",
+          "url": "https://github.com/Wenmoux/checkbox/blob/a22d8650ae69224c18c4856afdf9fbdf8622c54f/scripts/mtmc.js",
+          "sha256": "db0f94a35f4eb3734264b23acb3d607e3da248e05d89e3d58c7966ed315840ac"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "Sitoi/dailycheckin",
+      "url": "https://github.com/Sitoi/dailycheckin",
+      "revision": "135cc236e59ac4f14bcddc44acb3cbb3ed6010b5",
+      "repository_last_commit_at": "2026-07-09T16:56:15+08:00",
+      "license_observed": "MIT",
+      "inspected_files": [
+        {
+          "path": "dailycheckin/iqiyi/main.py",
+          "url": "https://github.com/Sitoi/dailycheckin/blob/135cc236e59ac4f14bcddc44acb3cbb3ed6010b5/dailycheckin/iqiyi/main.py",
+          "sha256": "278f75e204a32bbec9c30cb7099001d2c9a0a65644c2318da7ed98a3aa3ad857"
+        },
+        {
+          "path": "dailycheckin/bilibili/main.py",
+          "url": "https://github.com/Sitoi/dailycheckin/blob/135cc236e59ac4f14bcddc44acb3cbb3ed6010b5/dailycheckin/bilibili/main.py",
+          "sha256": "c5160563cae1def89dee8064f17a63d440a53e6101ba457b72338c5e36b03449"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "yupaiLy/cmcc-auto-checkin",
+      "url": "https://github.com/yupaiLy/cmcc-auto-checkin",
+      "revision": "f136786ef160aa854f36812537ec8d4afca68d93",
+      "repository_last_commit_at": "2026-10-18T00:06:10+08:00",
+      "license_observed": "未发现仓库许可证",
+      "inspected_files": [
+        {
+          "path": "cmcc_sign.py",
+          "url": "https://github.com/yupaiLy/cmcc-auto-checkin/blob/f136786ef160aa854f36812537ec8d4afca68d93/cmcc_sign.py",
+          "sha256": "34c59a2f2b24d3975fb00fdd93d08fdabece06b2d9e6c18ced13c2caa4fc9df1"
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/yupaiLy/cmcc-auto-checkin/blob/f136786ef160aa854f36812537ec8d4afca68d93/README.md",
+          "sha256": "ac353a9a39aa7d6aa9cfa9d240d3dca7acfee837a35b0dd990e038b204746674"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "Litre-WU/Sign",
+      "url": "https://github.com/Litre-WU/Sign",
+      "revision": "bca86312a9d407e5e2de1a06186606d1c3320450",
+      "repository_last_commit_at": "2025-07-04T17:34:37+08:00",
+      "license_observed": "未发现仓库许可证",
+      "inspected_files": [
+        {
+          "path": "sign.py",
+          "url": "https://github.com/Litre-WU/Sign/blob/bca86312a9d407e5e2de1a06186606d1c3320450/sign.py",
+          "sha256": "b6e1b90bae4729aafc7b1f699b805671f5e7aa8270f8f6daf1ae11b860d4dec5"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "linbailo/zyqinglong",
+      "url": "https://github.com/linbailo/zyqinglong",
+      "revision": "ad8f871d988d08290b8802cc3de88be3064abcde",
+      "repository_last_commit_at": "2025-06-03T12:08:50+08:00",
+      "license_observed": "未发现仓库许可证",
+      "inspected_files": [
+        {
+          "path": "hdl.py",
+          "url": "https://github.com/linbailo/zyqinglong/blob/ad8f871d988d08290b8802cc3de88be3064abcde/hdl.py",
+          "sha256": "d4a3efcd8bf5ce099cb7f7098702e6806aebf37d69cf094cd06fad4bd99bad94"
+        },
+        {
+          "path": "dddc.py",
+          "url": "https://github.com/linbailo/zyqinglong/blob/ad8f871d988d08290b8802cc3de88be3064abcde/dddc.py",
+          "sha256": "d0ce4af4d391304cc2deb055b81e1377c4913821a79d9074f9bb5b30e5e6ba0c"
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/linbailo/zyqinglong/blob/ad8f871d988d08290b8802cc3de88be3064abcde/README.md",
+          "sha256": "f75a0be88fe308523201f8f12410b44abfae870019dbc5c0bbe9fe8fda7cef19"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "Dimlitter/huazhu-auto-checkin",
+      "url": "https://github.com/Dimlitter/huazhu-auto-checkin",
+      "revision": "c4a4497cbb52274cf1b2251f30342e447c48e08d",
+      "repository_last_commit_at": "2026-09-16T20:44:10+08:00",
+      "license_observed": "GPL-3.0",
+      "inspected_files": [
+        {
+          "path": "checkin.py",
+          "url": "https://github.com/Dimlitter/huazhu-auto-checkin/blob/c4a4497cbb52274cf1b2251f30342e447c48e08d/checkin.py",
+          "sha256": "e39e7a9e7af98a2fca611fbe8cce976039429bdc5250af974bad1ff237331516"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "openmartin/haidilao_check",
+      "url": "https://github.com/openmartin/haidilao_check",
+      "revision": "b164e6c3db4a51055b75b8fd37a4421c5b6dc8ee",
+      "repository_last_commit_at": "2016-03-26T16:02:30+08:00",
+      "license_observed": "GPL-3.0",
+      "inspected_files": [
+        {
+          "path": "haidilao.py",
+          "url": "https://github.com/openmartin/haidilao_check/blob/b164e6c3db4a51055b75b8fd37a4421c5b6dc8ee/haidilao.py",
+          "sha256": "768c68be637b89df1683fab249d5ceacc9baaaf67fb7d48ce5b5ad6b17fc0bca"
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/openmartin/haidilao_check/blob/b164e6c3db4a51055b75b8fd37a4421c5b6dc8ee/README.md",
+          "sha256": "058dcb52922c4718605b4bed8ace41e54f39a0c2e23ea32382c28f344c35a55b"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "yowiv08/heybox",
+      "url": "https://github.com/yowiv08/heybox",
+      "revision": "15f7fb8bffd2f6d58b1e38755002939fc919b055",
+      "repository_last_commit_at": "2026-10-07T23:44:08+08:00",
+      "license_observed": "未发现仓库许可证",
+      "inspected_files": [
+        {
+          "path": "heybox_sign.js",
+          "url": "https://github.com/yowiv08/heybox/blob/15f7fb8bffd2f6d58b1e38755002939fc919b055/heybox_sign.js",
+          "sha256": "8a517cbfd61e11170a58f4343eaa277f63492d75827717f42b71841a301a4b0d"
+        },
+        {
+          "path": "src/heybox/signature.js",
+          "url": "https://github.com/yowiv08/heybox/blob/15f7fb8bffd2f6d58b1e38755002939fc919b055/src/heybox/signature.js",
+          "sha256": "af1b7d27f12aadfacae7e1ff1dee37ec8e38186086cc9bc7cd79ce6e837ed21d"
+        },
+        {
+          "path": "src/heybox/api.js",
+          "url": "https://github.com/yowiv08/heybox/blob/15f7fb8bffd2f6d58b1e38755002939fc919b055/src/heybox/api.js",
+          "sha256": "c92ac042b30998f7789fa85ff92b99dd6cf7060a94c8790883fe14518c44746f"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "bjc5233/autojs",
+      "url": "https://github.com/bjc5233/autojs",
+      "revision": "a81dbcb0d476254f83c93c3a0dee92176aef6bf6",
+      "repository_last_commit_at": "2019-05-22T18:19:10+08:00",
+      "license_observed": "未发现仓库许可证",
+      "inspected_files": [
+        {
+          "path": "淘宝-淘金币.js",
+          "url": "https://github.com/bjc5233/autojs/blob/a81dbcb0d476254f83c93c3a0dee92176aef6bf6/淘宝-淘金币.js",
+          "sha256": "39b3f009a4011e370b794b8488e35a5f6d4044fec0f2cdecc94bc7a94816ff94"
+        },
+        {
+          "path": "拼多多-签到.js",
+          "url": "https://github.com/bjc5233/autojs/blob/a81dbcb0d476254f83c93c3a0dee92176aef6bf6/拼多多-签到.js",
+          "sha256": "49a0b33c6b8bd12491767b8e390a59850ba4ee0cff5869a2306c03bfd791e01f"
+        },
+        {
+          "path": "云闪付-签到.js",
+          "url": "https://github.com/bjc5233/autojs/blob/a81dbcb0d476254f83c93c3a0dee92176aef6bf6/云闪付-签到.js",
+          "sha256": "99b2b7aaecbac7cf330146fcccb05bf7170c75cfb032044d79ac0b14e78bd6fd"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "brazhao110/surge-scripts",
+      "url": "https://github.com/brazhao110/surge-scripts",
+      "revision": "2dfd534c758c9dd7fdff6772b5417c6f67134af4",
+      "repository_last_commit_at": "2026-04-16T16:52:19+08:00",
+      "license_observed": "未发现仓库许可证",
+      "inspected_files": [
+        {
+          "path": "TB_Coin.js",
+          "url": "https://github.com/brazhao110/surge-scripts/blob/2dfd534c758c9dd7fdff6772b5417c6f67134af4/TB_Coin.js",
+          "sha256": "dd1432fb48f6f499c05297f24e0a7eb67a767a3c8673279d5af8621bf1eed012"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "app2smile/rules",
+      "url": "https://github.com/app2smile/rules",
+      "revision": "df6366a7024e0b3f0aa3510c5b791eea6f3cba89",
+      "repository_last_commit_at": "2026-03-04T17:07:19+08:00",
+      "license_observed": "MIT",
+      "inspected_files": [
+        {
+          "path": "module/bilibili.stoverride",
+          "url": "https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/module/bilibili.stoverride",
+          "sha256": "2fa1b1214d9eff40192838e2a0a0034c180f2e55f768b68fc8d7de1ad3713bf4"
+        },
+        {
+          "path": "module/tieba.stoverride",
+          "url": "https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/module/tieba.stoverride",
+          "sha256": "e1661be4e61164944f6ce40bcae35050652f9b8bc0fa7fc825b7cddb9be08420"
+        },
+        {
+          "path": "js/bilibili-json.js",
+          "url": "https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/bilibili-json.js",
+          "sha256": "748ad16a92532bde2c439a8b9975f465381d20e24328cf2a58ff3a2a27328d84"
+        },
+        {
+          "path": "js/tieba-json.js",
+          "url": "https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/tieba-json.js",
+          "sha256": "91040c0d5bf906357829d8df344a3bdce00b59e6c24f255e54a2ef7a46d04c69"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。"
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "url": "https://github.com/blackmatrix7/ios_rule_script",
+      "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+      "repository_last_commit_at": "2026-10-17T20:04:20Z",
+      "license_observed": "GPL-2.0",
+      "inspected_files": [
+        {
+          "path": "rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+          "url": "https://github.com/blackmatrix7/ios_rule_script/blob/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+          "sha256": "f1273a862ad8ca3f930ba5286a935cb78e710ff4184055431b49c957b4379c02"
+        },
+        {
+          "path": "rule/Clash/AdvertisingLite/AdvertisingLite_Domain.yaml",
+          "url": "https://github.com/blackmatrix7/ios_rule_script/blob/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Domain.yaml",
+          "sha256": "a14191c99336e91daf0b8ddb156dfa070c1fea9972c1581ab8cde0b93f28d2b5"
+        },
+        {
+          "path": "rewrite/Stash/Advertising/Advertising.stoverride",
+          "url": "https://github.com/blackmatrix7/ios_rule_script/blob/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/Advertising/Advertising.stoverride",
+          "sha256": "77de1e89d6c666c6734874f37baf6e34e29b806a0f3c6409ca9ff946a6c17e27"
+        },
+        {
+          "path": "script/startup/startup.js",
+          "url": "https://github.com/blackmatrix7/ios_rule_script/blob/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
+          "sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c"
+        }
+      ],
+      "note": "仓库最新提交不代表此平台脚本近期有效；浅克隆不能确认每个文件的最后维护日。未运行第三方代码。",
+      "ad_catalog_checked_at": "2026-10-19"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "url": "https://github.com/fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "repository_last_commit_at": null,
+      "checked_at": "2026-10-19",
+      "license_observed": "GPL-3.0",
+      "inspected_files": [
+        {
+          "path": "Scripts/xiaohongshu/xiaohongshu.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/xiaohongshu/xiaohongshu.js",
+          "sha256": "318d89bce1117edb26a93b383804e195649ec4674a04efa9e3ddb4ef7f34b498"
+        },
+        {
+          "path": "Scripts/myBlockAds.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/myBlockAds.js",
+          "sha256": "4cf62100424886068a5470daecec319e93ccd034c647d79a9daaa72bbbc341bb"
+        },
+        {
+          "path": "QuantumultX/rewrite/weibo.snippet",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/weibo.snippet",
+          "sha256": "c8b47d5f2e990f065d98cac2d70d5866c97443d23d96a8393607b13a464e9b29"
+        },
+        {
+          "path": "QuantumultX/rewrite/rewrite.snippet",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
+          "sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/LICENSE",
+          "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+        },
+        {
+          "path": "Stash/readme.md",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Stash/readme.md",
+          "sha256": "72d4c5b5db5420d4a9bdcc5c34a9ddc801e932be9b07f1455cfeebd83bf7151a"
+        },
+        {
+          "path": "Scripts/adrive/adrive.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js",
+          "sha256": "9d31582028a31ea605e69d09aa9e33949e57050006a8e0f3deb79b1c89933acd"
+        },
+        {
+          "path": "Scripts/cainiao/cainiao.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js",
+          "sha256": "76fe899db1e045aaff2d71d6ff3c58cb665bac52a5996ff20e56079a02a6451c"
+        },
+        {
+          "path": "Scripts/didi/didiAds.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/didi/didiAds.js",
+          "sha256": "c4f17a8ca8b27e15b7332460c83b5ba19aeded4c21e8f31beff8cefc54425ab7"
+        },
+        {
+          "path": "Scripts/quark.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/quark.js",
+          "sha256": "a80632f4308d8971f2ee1b42cb1b2c3b72c90ec5619ed33849fcc0fcbf0f1bcc"
+        },
+        {
+          "path": "Scripts/umetrip/umetrip_ads.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/umetrip/umetrip_ads.js",
+          "sha256": "7a0f7976a4b8f47649684cc382832e425610e924e0fdc11ea2e06b1ebd2cbacf"
+        },
+        {
+          "path": "Scripts/jingdong/jingdong.js",
+          "url": "https://github.com/fmz200/wool_scripts/blob/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/jingdong/jingdong.js",
+          "sha256": "3e7cc975f8985a4d2dbdbdefc405d0e3e6c9c07bf3c5361da1ecae206b6c04a1"
+        }
+      ],
+      "note": "未查询仓库提交日期；脚本文件头日期仅说明来源版本，不能代表App实测。仅适配广告，未读取或实现签到模块。",
+      "ad_catalog_checked_at": "2026-10-19"
+    },
+    {
+      "repository": "Maasea/sgmodule",
+      "url": "https://github.com/Maasea/sgmodule",
+      "revision": "65075cdb388fc5e3094afd7e7314c67b243f3525",
+      "repository_last_commit_at": null,
+      "checked_at": "2026-10-19",
+      "license_observed": "Apache-2.0",
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/Maasea/sgmodule/blob/65075cdb388fc5e3094afd7e7314c67b243f3525/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        {
+          "path": "YouTube.Enhance.sgmodule",
+          "url": "https://github.com/Maasea/sgmodule/blob/65075cdb388fc5e3094afd7e7314c67b243f3525/YouTube.Enhance.sgmodule",
+          "sha256": "9c7464733c54417da36aff09482d1287cee5ecd531ad856842912704b5b3f64d"
+        },
+        {
+          "path": "Script/Youtube/youtube.response.js",
+          "url": "https://github.com/Maasea/sgmodule/blob/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.response.js",
+          "sha256": "f98483d5f5017514f82502253c0db5ce2d4ffb7839887aa2cadc22666f5a7f12"
+        },
+        {
+          "path": "WeRead.sgmodule",
+          "url": "https://github.com/Maasea/sgmodule/blob/65075cdb388fc5e3094afd7e7314c67b243f3525/WeRead.sgmodule",
+          "sha256": "38f5cf3b3b7cd4c63b1e5b0e5b7b54248f6018a4389c2a0a4d775d083c226a63"
+        }
+      ],
+      "note": "读取实际YouTube打包代码、Surge原模块、WeRead和许可；未复制到运行项目，未运行原脚本；暂缓Stash适配。"
+    }
+  ]
+}

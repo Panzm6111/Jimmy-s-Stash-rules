@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-29",
+  "scope": "Promote side-conversation Clash global Merge into tracked generation and maintenance",
+  "baseline_commit": "5948a023e8093dc561de4ef620f48bb3c362beb0",
+  "source": "tools/build_clash.py:global_merge",
+  "output": "config/clash-verge-merge.yaml",
+  "sha256": "f2d95408b1cc4387d86ba71263e1593be876c2526308179329ee1deb36e068ae",
+  "semantically_equal_to_local_v3": true,
+  "prior_local_deliveries_preserved": true,
+  "existing_public_outputs_byte_identical": [
+    "config/stash.yaml",
+    "config/clash-verge.yaml",
+    "config/clash-verge.js"
+  ],
+  "counts": {
+    "groups": 20,
+    "rule_providers": 19
+  },
+  "validation": {
+    "clash_regressions": 6,
+    "project": 42,
+    "javascript": 88,
+    "maintenance": {
+      "passed": 30,
+      "skipped": 1
+    },
+    "automatic_publication": 10,
+    "documentation_local_links": 356
+  },
+  "native": {
+    "native_core": "Mihomo",
+    "checks": [
+      "overlay contains no airport credentials, node or app settings",
+      "all rule URLs have daily interval and explicit download proxy",
+      "airport node protocol fields preserved v1",
+      "airport providers preserved v1",
+      "airport rules replaced v1",
+      "previous overlay reproduces exact Taiwan duplicate-name error",
+      "all remote rule providers loaded",
+      "rule HTTP downloads passed through selected test proxy",
+      "inline and provider nodes included; quota marker excluded",
+      "Japan+US pool filters both node sources",
+      "new master group starts with automatic nodes",
+      "AI exposes Japan+US choice",
+      "empty region falls back to rejection",
+      "airport nodes and namespaced custom groups coexist",
+      "rule URL refresh changes content without reload",
+      "airport node protocol fields preserved v2",
+      "airport providers preserved v2",
+      "airport rules replaced v2",
+      "airport URL refresh plus reload incorporates added and removed nodes",
+      "airport strategy groups replaced"
+    ],
+    "passed": 20,
+    "providers": 19,
+    "fixture_rule_requests": 20,
+    "fixture_proxy_connects": 39,
+    "client_acceptance": "pending: actual Clash Verge UI, private airport and real service connectivity",
+    "actual_client_modified": false,
+    "system_proxy_modified": false
+  },
+  "publication": {
+    "commit": "ffd044366fd91f133b26a23901f05f00c5650b41",
+    "resource": {
+      "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-merge.yaml",
+      "http_status": 200,
+      "sha256": "f2d95408b1cc4387d86ba71263e1593be876c2526308179329ee1deb36e068ae",
+      "matches": true
+    },
+    "status": "pushed and verified",
+    "ci": {
+      "conclusion": "success",
+      "run_id": 40731494044,
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40731494044"
+    }
+  },
+  "limits": [
+    "Global Merge is a local structure snapshot; URL payload updates automatically, structural updates need replacing overlay",
+    "No current Clash settings, system proxy or private subscription changed",
+    "Actual client UI and TikTok service acceptance pending"
+  ],
+  "actual_maintenance_entry": {
+    "status": "no_relevant_changes",
+    "committed": false,
+    "pushed": false,
+    "review_required": 1
+  },
+  "scheduled_task": {
+    "Count": 1,
+    "Arguments": "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File \"D:\\Codex workspace\\VPN rules\\tools\\Run-Maintenance.ps1\" -Mode publish -Scheduled",
+    "NextRun": "2026-10-29T12:00:00.0000000+08:00",
+    "StartWhenAvailable": true,
+    "WakeToRun": false
+  },
+  "source_check": {
+    "checked_at_utc": "2026-10-28T17:01:09.129305+00:00",
+    "ok": true,
+    "summary": {
+      "unchanged": 52,
+      "rules-update": 0,
+      "review-required": 1,
+      "reference-changed": 0,
+      "error": 0
+    }
+  },
+  "existing_output_sha256": {
+    "config/stash.yaml": "9ebbcef831e928ea15338bf6f3f0d5674d9a748ed02de8de1f104f44f8e76e80",
+    "config/clash-verge.yaml": "b846d08a0a9b3e83f2c9117eeb0db8f794c9b6f2a93a0d7cdf9b2bba558fbcb2",
+    "config/clash-verge.js": "8cedfc79d72d6dab6663e74aa095e07cb08d2a9be0409bf9741f90ccf4144218"
+  }
+}

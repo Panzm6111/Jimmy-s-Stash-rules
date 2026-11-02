@@ -1,0 +1,6 @@
+# 仅是公开占位模板。实际填写后的文件只保存在 iPhone，不上传。
+name: 本机私人订阅
+desc: 替换下面一行，保留名称“机场”；关闭此覆写会失去私人订阅。
+proxy-providers:
+  机场:
+    url: https://example.invalid/REPLACE_ON_DEVICE

@@ -1,0 +1,31 @@
+# 维护用启动源与旧分层安装兼容模板。当前日常入口为config/stash.yaml。
+# 构建时搭配core.stoverride；私人订阅只在设备设置，不要在GitHub填写。
+# 未启用 core 时默认拒绝，防止误以为已启用分流。
+mode: rule
+log-level: warning
+ipv6: false
+allow-lan: false
+
+# 保守使用国内加密 DNS。DNS 服务商仍可看到 DNS 查询。
+# 不套用其他内核的 tun/sniffer/geodata/experimental 等配置。
+dns:
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+
+proxy-providers:
+  机场:
+    type: http
+    url: https://example.invalid/REPLACE_ON_DEVICE
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 1800
+
+proxy-groups: []
+rules:
+  - MATCH,REJECT

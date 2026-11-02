@@ -1,0 +1,734 @@
+#SUBSCRIBED https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
+# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
+# 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
+# JIMMY-STASH AD-20261020.5；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。
+# JIMMY-ROUTING ROUTE-20261102.1；27个远程规则集，兼容规则直订上游，必要转换由GitHub执行；保留21个策略组。
+# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
+# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。
+# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。
+# 脚本URL带公开版本参数以区分旧缓存，首次加载仍需联网。
+# 请在客户端启用本远程配置的自动更新；规则内容/机场/JS按24小时尝试刷新。
+# 策略组、匹配顺序、HTTP主机或handler结构的变化仍由主配置刷新取得。
+# 不需另加App或expanded覆写；停用已额外添加的广告覆写，保留私人订阅/白名单。
+# 当前需求统一为整合入口，不再要求逐App开关；原模块保留作维护来源与旧安装兼容。
+# 各独立模块/JS保持原许可；来源与完整源码：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md
+# 私人机场URL只在设备本地覆写，不放到GitHub。总代理首次REJECT，需选择出口。
+# 当前仅离线验证；真实Stash解析、MITM、脚本执行与广告效果待iPhone验收。
+proxy-providers:
+  机场:
+    type: http
+    url: https://example.invalid/REPLACE_ON_DEVICE
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 1800
+mode: rule
+log-level: warning
+ipv6: false
+allow-lan: false
+dns:
+  default-nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+  nameserver:
+  - https://dns.alidns.com/dns-query
+  - https://doh.pub/dns-query
+proxy-groups:
+- name: 总代理
+  type: select
+  proxies:
+  - REJECT
+  - 美国
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  - ai
+- name: 手动节点
+  type: select
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: 自动节点
+  type: url-test
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+- name: 美国
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
+    _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)
+- name: 日本
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)
+- name: ai
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(?:(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
+    _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)|(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)|(台湾|台灣|臺灣|台北|臺北|🇹🇼|taiwan|taipei|(^|[^a-z])tw([^a-z]|$)|^REJECT$))
+- name: 香港
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(香港|🇭🇰|hong[ _-]*kong|(^|[^a-z])hkg?([^a-z]|$)|^REJECT$)
+- name: 新加坡
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(新加坡|狮城|獅城|🇸🇬|singapore|(^|[^a-z])sg([^a-z]|$)|^REJECT$)
+- name: 台湾
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(台湾|台灣|臺灣|台北|臺北|🇹🇼|taiwan|taipei|(^|[^a-z])tw([^a-z]|$)|^REJECT$)
+- name: 其他地区
+  type: url-test
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)(韩国|韓國|首尔|首爾|加拿大|英国|英國|德国|德國|法国|法國|澳大利亚|澳大利亞|澳洲|俄罗斯|俄羅斯|荷兰|荷蘭|印度|泰国|泰國|越南|马来西亚|馬來西亞|印尼|印度尼西亚|菲律賓|菲律宾|土耳其|巴西|阿根廷|阿联酋|阿聯酋|迪拜|南非|意大利|義大利|西班牙|瑞士|瑞典|挪威|波兰|波蘭|芬兰|芬蘭|丹麦|丹麥|爱尔兰|愛爾蘭|新西兰|紐西蘭|墨西哥|以色列|沙特|沙烏地|其他|其它|未知|未分类|未分類|🇰🇷|🇨🇦|🇬🇧|🇩🇪|🇫🇷|🇦🇺|🇷🇺|🇳🇱|🇮🇳|🇹🇭|🇻🇳|🇲🇾|🇮🇩|🇵🇭|🇹🇷|🇧🇷|🇦🇷|🇦🇪|🇿🇦|🇮🇹|🇪🇸|🇨🇭|🇸🇪|🇳🇴|🇵🇱|🇫🇮|🇩🇰|🇮🇪|🇳🇿|🇲🇽|🇮🇱|🇸🇦|korea|seoul|canada|toronto|vancouver|united[
+    _-]*kingdom|britain|london|germany|frankfurt|france|paris|australia|sydney|russia|moscow|netherlands|amsterdam|india|thailand|bangkok|vietnam|malaysia|indonesia|philippines|turkey|brazil|argentina|dubai|south[
+    _-]*africa|italy|spain|switzerland|sweden|norway|poland|finland|denmark|ireland|new[ _-]*zealand|mexico|israel|saudi|other|unknown|(^|[^a-z])(kr|ca|uk|de|fr|au|ru|nl|in|th|vn|my|id|ph|tr|br|ar|ae|za|it|es|ch|se|no|pl|fi|dk|ie|nz|mx|il|sa)([^a-z]|$)|^gb([
+    _-]*[0-9]+)?$|^REJECT$)
+  url: https://www.gstatic.com/generate_204
+  interval: 1800
+- name: 海外AI
+  type: select
+  proxies:
+  - 美国
+  - 总代理
+  - 日本
+  - ai
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: TikTok
+  type: select
+  proxies:
+  - 美国
+  - 总代理
+  - 日本
+  - ai
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: Netflix
+  type: select
+  proxies:
+  - 总代理
+  - 美国
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: YouTube
+  type: select
+  proxies:
+  - 总代理
+  - 美国
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: Telegram
+  type: select
+  proxies:
+  - 总代理
+  - 美国
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: Apple
+  type: select
+  proxies:
+  - DIRECT
+  - 总代理
+  - 美国
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: Microsoft
+  type: select
+  proxies:
+  - DIRECT
+  - 总代理
+  - 美国
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: 未匹配流量
+  type: select
+  proxies:
+  - 总代理
+  - 美国
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - DIRECT
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: 国内直连
+  type: select
+  proxies:
+  - DIRECT
+  - ai
+- name: 广告拦截
+  type: select
+  proxies:
+  - REJECT
+  - DIRECT
+  - ai
+- name: Adobe
+  type: select
+  proxies:
+  - 美国
+  - DIRECT
+  - 总代理
+  - 日本
+  - 香港
+  - 新加坡
+  - 台湾
+  - 其他地区
+  - 自动节点
+  - 手动节点
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
+    ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
+    ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
+    ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+rules:
+- RULE-SET,系统直连例外,DIRECT
+- RULE-SET,广告路径例外,DIRECT
+- RULE-SET,TikTok广告,广告拦截
+- RULE-SET,TikTok核心,TikTok
+- RULE-SET,App广告域名,广告拦截
+- RULE-SET,东方财富直连,DIRECT
+- RULE-SET,Adobe服务,Adobe
+- RULE-SET,Adobe官方补充,Adobe
+- RULE-SET,基础广告,广告拦截
+- RULE-SET,海外AI,海外AI
+- RULE-SET,海外AI补充,海外AI
+- RULE-SET,TikTok,TikTok
+- RULE-SET,Instagram,TikTok
+- RULE-SET,Twitter,TikTok
+- RULE-SET,Netflix,Netflix
+- RULE-SET,YouTube,YouTube
+- RULE-SET,Telegram,Telegram
+- RULE-SET,Apple服务,Apple
+- RULE-SET,GitHub,总代理
+- RULE-SET,Microsoft服务,Microsoft
+- RULE-SET,国内服务,国内直连
+- RULE-SET,海外社交,TikTok
+- RULE-SET,社交Discord,TikTok
+- RULE-SET,社交WhatsApp,TikTok
+- RULE-SET,社交LINE,TikTok
+- RULE-SET,社交Signal,TikTok
+- RULE-SET,通用代理,总代理
+- GEOIP,CN,国内直连
+- MATCH,未匹配流量
+rule-providers:
+  Adobe服务:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/adobe.yaml
+  Adobe官方补充:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/adobe-official.yaml
+  基础广告:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml
+  海外AI:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.yaml
+  海外AI补充:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ai-sukka.yaml
+  Netflix:
+    type: http
+    interval: 86400
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/netflix.yaml
+  YouTube:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml
+  Telegram:
+    type: http
+    interval: 86400
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/telegram.yaml
+  Apple服务:
+    type: http
+    interval: 86400
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/apple.yaml
+  Microsoft服务:
+    type: http
+    interval: 86400
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/microsoft.yaml
+  东方财富直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/eastmoney.yaml
+  国内服务:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml
+  TikTok:
+    interval: 86400
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/tiktok.yaml
+  Instagram:
+    interval: 86400
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Instagram/Instagram.yaml
+  Twitter:
+    interval: 86400
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml
+  GitHub:
+    type: http
+    interval: 86400
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml
+  海外社交:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-social-media-!cn.yaml
+  社交Discord:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/discord.yaml
+  社交WhatsApp:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/whatsapp.yaml
+  社交LINE:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/line.yaml
+  社交Signal:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/signal.yaml
+  通用代理:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.yaml
+  系统直连例外:
+    type: http
+    interval: 86400
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/system-direct.yaml
+  广告路径例外:
+    type: http
+    interval: 86400
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/ad-exceptions.yaml
+  TikTok广告:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@ads.yaml
+  TikTok核心:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@!cn.yaml
+  App广告域名:
+    type: http
+    interval: 86400
+    behavior: classical
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/app-ads.yaml
+http:
+  mitm:
+  - example.com
+  - api.zhihu.com
+  - api.xiaoyuzhoufm.com
+  - edith.xiaohongshu.com
+  - rec.xiaohongshu.com
+  - www.xiaohongshu.com
+  - acs.m.goofish.com
+  - api.xiachufang.com
+  - ios.wps.cn
+  - mobile-pic.cache.iciba.com
+  - bootrealtime.uve.weibo.com
+  - bootpreload.uve.weibo.com
+  - api.weibo.cn
+  - mapi.weibo.cn
+  - api.weibo.com
+  - mapi.weibo.com
+  - mp.weixin.qq.com
+  - m.client.10010.com
+  - oss.umetrip.com
+  - tiebac.baidu.com
+  - acs.m.taobao.com
+  - guide-acs.m.taobao.com
+  - api.pinduoduo.com
+  - api.yangkeduo.com
+  - interface.music.163.com
+  - interface3.music.163.com
+  - ipv4.music.163.com
+  - interface1.music.163.com
+  - interface2.music.163.com
+  - interface4.music.163.com
+  - interface5.music.163.com
+  - interface6.music.163.com
+  - interface7.music.163.com
+  - interface8.music.163.com
+  - interface9.music.163.com
+  - appconf.mail.163.com
+  - client.mail.163.com
+  - home.mi.com
+  - wmapi.meituan.com
+  - img.meituan.net
+  - s3plus.meituan.net
+  - flowplus.meituan.net
+  - api.mcd.cn
+  - open.taou.com
+  - h3.open.taou.com
+  - capi.lkcoffee.com
+  - api-ac.liepin.com
+  - res.kfc.com.cn
+  - api.m.jd.com
+  - appapi.huazhu.com
+  - mapi.dianping.com
+  - client.app.coc.10086.cn
+  - cn-acs.m.cainiao.com
+  - app.bilibili.com
+  - pan.baidu.com
+  - m5.amap.com
+  - amap-aos-info-nogw.amap.com
+  - member.alipan.com
+  - app.58.com
+  url-rewrite:
+  - ^https://api\.zhihu\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\?|$) - reject-dict
+  - ^https://api\.zhihu\.com/ad-style-service/request/?(?:\?|$) - reject-dict
+  - ^https://api\.zhihu\.com/commercial_api/(?:answer|article)/\d+/bottom-v2/?(?:\?|$) - reject-dict
+  - ^https?://api\.xiaoyuzhoufm\.com/v\d+/flash/?(?:\?|$) - reject-dict
+  - ^https?://www\.xiaohongshu\.com/api/sns/v\d+/ads/resource/?(?:\?|$) - reject-dict
+  - ^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-dict
+  - ^https?://api\.xiachufang\.com/v\d+/ad/[^?#]*(?:\?|$) - reject
+  - ^https?://ios\.wps\.cn/ad-statistics-service(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https?://mobile\-pic\.cache\.iciba\.com/feeds_ad/[^?#]*(?:\?|$) - reject-200
+  - ^https?://bootrealtime\.uve\.weibo\.com/v\d+/ad/realtime/?(?:\?|$) - reject-dict
+  - ^https?://bootpreload\.uve\.weibo\.com/v\d+/ad/preload/?(?:\?|$) - reject-dict
+  - ^https?://m\.client\.10010\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\.htm)?/?(?:\?|$)
+    - reject-img
+  - ^https?://m\.client\.10010\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\?|$) - reject-img
+  - ^https://oss\.umetrip\.com/fs/advert/polite(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.film\.mtopadvertiseapi\.queryloadingbanner(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) -
+    reject
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.alibaba\.advertisementservice\.getadv(?:/\d+(?:\.\d+)*/?)?(?:\?|$) - reject-dict
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.etao\.noah\.query/(?:[0-9.]+/?)?\?[^#]*(?:%22|%27|[^A-Za-z0-9_])tao_splash(?:%22|%27|[^A-Za-z0-9_]|$)[^#]*$
+    - reject-dict
+  - ^https?://api\.pinduoduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
+  - ^https?://api\.yangkeduo\.com/api/cappuccino/splash/?(?:\?|$) - reject
+  - ^https?://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://interface[124-9]\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://appconf\.mail\.163\.com/mmad/[^?#]*(?:\?|$) - reject-200
+  - ^https?://client\.mail\.163\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\?|$) - reject
+  - ^https?://home\.mi\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\?|$) - reject-dict
+  - ^https?://wmapi\.meituan\.com/api/v7/(?:openscreen|startpicture)/?(?:\?|$) - reject-dict
+  - ^https?://img\.meituan\.net/bizad/bizad_brandCpt_\d+\.jpg(?:\?|$) - reject-img
+  - ^https?://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.(?:gif|jpg)(?:\?|$) - reject-img
+  - ^https?://(?:s3plus|flowplus)\.meituan\.net/v\d+/\w+/linglong/\w+\.mp4(?:\?|$) - reject-200
+  - ^https?://api\.mcd\.cn/bff/portal/home/splash/?(?:\?|$) - reject-200
+  - ^https://open\.taou\.com/maimai/adshow/?(?:\?|$) - reject-dict
+  - ^https://h3\.open\.taou\.com/maimai/adshow/?(?:\?|$) - reject-dict
+  - ^https?://api\-ac\.liepin\.com/api/com\.liepin\.cyclops\.live\.get-ad-cards/?(?:\?|$) - reject-dict
+  - ^https?://res\.kfc\.com\.cn/advertisement/[^?#]*(?:\?|$) - reject
+  - ^https?://appapi\.huazhu\.com(?::\d+)?/client/app/getAppStartPage/(?:\?|$) - reject
+  - ^https?://mapi\.dianping\.com/mapi/operating/loadsplashconfig/?(?:\?|$) - reject
+  - ^https?://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$) - reject-200
+  - ^https?://client\.app\.coc\.10086\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\?|$) - reject
+  - ^https?://pan\.baidu\.com/rest/\d+\.\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\?|$) - reject
+  - ^https?://m5\.amap\.com/ws/shield/dsp/app/startup/init/?(?:\?|$) - reject-dict
+  - ^https?://amap\-aos\-info\-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt/?(?:\?|$) - reject
+  - ^https?://app\.58\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\?|$) - reject
+  script:
+  - match: ^https?://example\.com(?::(?:80|443))?/jimmy-stash-check/?(?:\?[^#]*)?$
+    name: jimmy_ads_self_check
+    type: request
+    require-body: false
+    timeout: 5
+  - match: ^https?://(?:edith\.xiaohongshu\.com/api/sns/v\d+/system_service/(?:splash_config|config)|(?:edith|rec|www)\.xiaohongshu\.com/api/sns/v6/homefeed)/?(?:\?|$)
+    name: jimmy_xiaohongshu_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https?://m?api\.weibo\.c(?:n|om)/2/(?:searchall|page|flowpage|comments/mix_comments|statuses/container_(?:timeline_topic(?:page)?|detail_comment|detail_mix))/?(?:\?|$)
+    name: jimmy_weibo_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https://mp\.weixin\.qq\.com/mp/getappmsgad/?(?:\?|$)
+    name: jimmy_wechat_articles_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https:\/\/tiebac\.baidu\.com\/c\/f\/ad\/getSplashAd(\?|$)
+    name: jimmy_tieba_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(\/\d+(\.\d+)*\/?)?(\?|$)
+    name: jimmy_taobao_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https?://wmapi\.meituan\.com/api/v\d+/loadInfo/?(?:\?|$)
+    name: jimmy_meituan_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https://capi\.lkcoffee\.com/resource/m/sys/app/adposNew/?(?:\?|$)
+    name: jimmy_luckin_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https://api\.m\.jd\.com/client\.action\?(?:[^#&]*&)*functionId=start(?:&|$)
+    name: jimmy_jingdong_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https://cn-acs\.m\.cainiao\.com/gw/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.show\.cn(?:/[0-9]+(?:\.[0-9]+)*)?/?(?:\?|$)
+    name: jimmy_cainiao_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/(splash\/(list|show)|feed\/index)(\?|$)
+    name: jimmy_bilibili_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+  - match: ^https://member\.alipan\.com/v1/users/onboard_list/?(?:\?|$)
+    name: jimmy_alipan_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+script-providers:
+  jimmy_alipan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/alipan.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_bilibili_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/bilibili.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_cainiao_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/cainiao.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_jingdong_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/jingdong.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_luckin_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/luckin.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_meituan_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/meituan.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_taobao_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/taobao.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_tieba_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/tieba.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_wechat_articles_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/wechat-articles.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_weibo_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/weibo.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_xiaohongshu_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js?v=AD-20261020.5
+    interval: 86400
+  jimmy_ads_self_check:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/self-check.js?v=AD-20261020.5
+    interval: 86400

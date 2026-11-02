@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-02",
+  "timezone": "Asia/Shanghai",
+  "base_commit": "bb8451a2b2cc2f9dbcfb35dedc6c92a7968d76d0",
+  "request": "Remove Singapore from the shared ai pool in Stash and Clash",
+  "routing_version": "ROUTE-20261102.1",
+  "ad_version": "AD-20261020.5",
+  "ai_regions": ["日本", "美国", "台湾"],
+  "removed_region": "新加坡",
+  "group_names": ["ai", "Jimmy · ai"],
+  "maintained_sources": ["config/core.stoverride", "tools/build_private_config.py", "tools/build_subscription.py"],
+  "generated_runtime_files": ["config/stash.yaml", "config/clash-verge.yaml", "config/clash-verge-auto.yaml", "config/clash-verge-merge.yaml", "config/clash-verge.js"],
+  "preservation": {
+    "runtime_yaml_compared_to_base": 5,
+    "yaml_only_semantic_change": "ai.filter",
+    "clash_javascript_only_ai_filter_changed": true,
+    "singapore_independent_group_preserved": true,
+    "all_other_groups_defaults_and_choices_preserved": true,
+    "private_provider_dns_rules_http_scripts_preserved": true,
+    "no_private_subscriptions_or_node_credentials_read": true,
+    "progress_historical_suffix_unchanged": true
+  },
+  "validation": {
+    "isolated_public_git_copy": true,
+    "project_checks_passed": 42,
+    "javascript_checks_passed": 88,
+    "affected_python_regressions_passed": 32,
+    "failures": 0,
+    "skipped": 0,
+    "native_mihomo_checks_passed": 20,
+    "native_rule_providers_loaded": 27,
+    "native_boundary": "Synthetic inline/provider nodes, loopback HTTP sources and isolated Mihomo; no system TUN, proxy or DNS change",
+    "selectors": "US/JP/TW names retained, common Chinese/English/SG/flag Singapore names excluded; independent Singapore and manual candidates retained",
+    "secret_pattern_findings": 0,
+    "local_evidence": ".local/ai-no-sg-20261102/",
+    "native_stash_or_iphone_tested": false,
+    "real_node_connectivity_or_geolocation_tested": false
+  },
+  "publication": {
+    "status": "published; hosted CI completed successfully",
+    "functional_commit": "b77ea2354a05ca7793809c83156defe6a14dba34",
+    "public_stash_and_clash_auto_read_successful": true,
+    "public_stash_routing_version_confirmed": "ROUTE-20261102.1",
+    "public_ai_filters_exclude_singapore_branch": true,
+    "ci_run": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41370381005",
+    "ci_status": "completed",
+    "ci_conclusion": "success",
+    "ci_head_sha_verified": true,
+    "ci_updated_at": "2026-11-02T01:06:46Z"
+  },
+  "client_update": "Refresh the original Stash main profile and Clash Jimmy full remote profile; refreshing rule sets alone does not update the ai selector. Replace legacy local Merge/script when used. Keep private overrides.",
+  "separate_incident": "The prior Stash 3.6.5 transient missing-node incident remains undiagnosed; this change does not claim to fix it"
+}

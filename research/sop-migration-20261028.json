@@ -1,0 +1,248 @@
+{
+  "date": "2026-10-28",
+  "purpose": "Existing Stash project continuation and project-standard v1 documentation reconciliation",
+  "baseline_commit": "8276bc8ce3ea9e091b2091a906d02c2b84ff67df",
+  "branch": "main",
+  "remote": "https://github.com/Panzm6111/Jimmy-s-Stash-rules.git",
+  "project_main": "PROGRESS.md",
+  "project_sources_page_count": 0,
+  "context_scope": "Six available read_thread results retained locally; not a complete original-chat export. Non-Stash business scopes excluded.",
+  "context_chats": [
+    {
+      "title": "stash 规则",
+      "returned_turns": 5,
+      "page": {
+        "order": "newest_first",
+        "limit": 8,
+        "nextCursor": null,
+        "hasMore": false
+      }
+    },
+    {
+      "title": "调查去除开屏广告",
+      "returned_turns": 4,
+      "page": {
+        "order": "newest_first",
+        "limit": 4,
+        "nextCursor": null,
+        "hasMore": false
+      }
+    },
+    {
+      "title": "新手开发软件流程探讨",
+      "returned_turns": 5,
+      "page": {
+        "order": "newest_first",
+        "limit": 10,
+        "nextCursor": null,
+        "hasMore": false
+      }
+    },
+    {
+      "title": "接管Lightroom筛片修图",
+      "returned_turns": 2,
+      "page": {
+        "order": "newest_first",
+        "limit": 10,
+        "nextCursor": null,
+        "hasMore": false
+      }
+    },
+    {
+      "title": "快捷指令制作反思",
+      "returned_turns": 5,
+      "page": {
+        "order": "newest_first",
+        "limit": 10,
+        "nextCursor": null,
+        "hasMore": false
+      }
+    },
+    {
+      "title": "创建网站主题",
+      "returned_turns": 5,
+      "page": {
+        "order": "newest_first",
+        "limit": 10,
+        "nextCursor": null,
+        "hasMore": false
+      }
+    }
+  ],
+  "original_tracked_files": 157,
+  "original_markdown_files": [
+    {
+      "path": "PROGRESS.md",
+      "bytes": 49246,
+      "sha256": "b432059de05a3673dd51b903804a83764a07d08ba7028c6ad6535031fe836bf5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 12267,
+      "sha256": "2b429c4934bb447919c3e67a0250fa420d0b2caa17bbf675500de5b3b0d20d7c"
+    },
+    {
+      "path": "docs/AD-ARCHITECTURE.md",
+      "bytes": 151780,
+      "sha256": "053c59c6fa13a6f6021fa8182b1a72d0e9453c5c6549a60e56c36c724a58894b"
+    },
+    {
+      "path": "docs/AD-MODULES.md",
+      "bytes": 18077,
+      "sha256": "8770ecb4674729152c9267b1bc6de326cf4272530d83f2e90355cbf683b13dbc"
+    },
+    {
+      "path": "docs/ADBLOCKING.md",
+      "bytes": 9780,
+      "sha256": "f8d73c5fc75e47ecc9be695ba1582796e80a03e7756242c50f7ceadd5e969cc0"
+    },
+    {
+      "path": "docs/AI-COVERAGE.md",
+      "bytes": 5996,
+      "sha256": "b38de99625f1eb7622e1c2085096195a7ae871a9da9e39869fa033fb40b3024e"
+    },
+    {
+      "path": "docs/APP-INVENTORY.md",
+      "bytes": 43431,
+      "sha256": "937ab2c5d673bd4cb36ca354a96c24cdf7671339c3809757db3602c3507f5c98"
+    },
+    {
+      "path": "docs/APP-SPLASH.md",
+      "bytes": 3634,
+      "sha256": "27728996a092bcad6c67564d818519bf9d1bbdbb875b673d65c3e2d4fc7af6be"
+    },
+    {
+      "path": "docs/CHECKIN-RESEARCH.md",
+      "bytes": 17657,
+      "sha256": "66d846135fca0dc65fc4130a5a0c0e5f5a782e92152e073b3fdfefbdc467962b"
+    },
+    {
+      "path": "docs/FMZ-INTEGRATION.md",
+      "bytes": 9203,
+      "sha256": "6af7dfef9cfe9342d38ce4ad67c3195519fd8871bf1c84aeb8061588ee3b4d34"
+    },
+    {
+      "path": "docs/LOCAL-IMPORT.md",
+      "bytes": 3565,
+      "sha256": "86f19835692483d07f7bcb7260eeb15566ca8df4d372ce992867f54b75447c18"
+    },
+    {
+      "path": "docs/MAINTENANCE.md",
+      "bytes": 11150,
+      "sha256": "af740761628d5297d2a779326d1e729e73d384299f83ab3640fa21fa46311709"
+    },
+    {
+      "path": "docs/PHONE-CHECKLIST.md",
+      "bytes": 7994,
+      "sha256": "78ee89dd69fc402e247702022cd6c12fd6bb27351d9f114077683e84c1b40bbe"
+    },
+    {
+      "path": "docs/QUICKSTART.md",
+      "bytes": 5419,
+      "sha256": "d6b4ccb285dc825f0db318989216b445990311b9b57dfbb275941662251fb93c"
+    },
+    {
+      "path": "docs/ROUTING.md",
+      "bytes": 9417,
+      "sha256": "96de597cb02844127bb8dcf93d008387b898ff8afd49030fd1297e18615412ab"
+    },
+    {
+      "path": "docs/SOURCES.md",
+      "bytes": 15957,
+      "sha256": "7483ab998c2f34d9c15fa87e69914dbfe7748e1d13d9fd68cdd3c9097daed40c"
+    },
+    {
+      "path": "docs/STASH-CAPABILITIES.md",
+      "bytes": 10357,
+      "sha256": "b1d20081ce8753eca8b3a2cbe231b8de3e49d36192ccd7cc430582f5e47e7c0b"
+    },
+    {
+      "path": "docs/SUBSCRIBE.md",
+      "bytes": 14446,
+      "sha256": "dc8124351ab21ff99e092678234d75dfdd3da7d53485123efc683fca75bc62f9"
+    },
+    {
+      "path": "docs/SUBSCRIPTION.md",
+      "bytes": 7537,
+      "sha256": "09bf3c03a1545c0d39a5c707c69598ef2534af5ac08191a49f225a16fc69b9fd"
+    },
+    {
+      "path": "docs/UPDATES.md",
+      "bytes": 10783,
+      "sha256": "b5b157b9c73b796d9fabb1b7f061b22161dabc623769c782293a7c141da60b31"
+    }
+  ],
+  "changed_existing_files": [
+    "PROGRESS.md",
+    "README.md",
+    "docs/APP-INVENTORY.md",
+    "docs/QUICKSTART.md",
+    "docs/UPDATES.md",
+    "research/app-inventory.json"
+  ],
+  "new_delivery_files": [
+    "AGENTS.md",
+    "research/sop-migration-20261028.json"
+  ],
+  "unchanged_existing_files": 151,
+  "runtime_configuration_rules_modules_scripts_unchanged": true,
+  "original_main_history_bytes_preserved": true,
+  "historical_attachment": {
+    "path": ".local/sop-migration-20261028/context/AD-ARCHITECTURE-d8ea21e-original.md",
+    "sha256": "d18dbb995dc3062a90b36d9702cffd9a7fdb4122a4de10d98ff42af3f6cf277e",
+    "matches_current": false
+  },
+  "checks": {
+    "markdown_files": 21,
+    "local_markdown_links": 321,
+    "broken_local_links": [],
+    "render_app_research_drift": 0,
+    "existing_architecture_input_hashes_verified": 85,
+    "existing_architecture_document_hash_verified": true,
+    "embedded_js_matches": 13,
+    "parsed_current_counts": {
+      "proxy_groups": 18,
+      "url_test_pools": 7,
+      "public_main_rules": 5287,
+      "expanded_ad_payload": 38066,
+      "native_url_rewrites": 43,
+      "response_handlers": 11,
+      "request_handlers": 1,
+      "runtime_js_providers": 12,
+      "mitm_exact_hosts": 59,
+      "app_modules": 40
+    },
+    "visible_apps": 135,
+    "pictured_apps_with_modules": 39,
+    "deferred_apps": 8,
+    "paused_checkin_scope": 24,
+    "git_diff_check": "passed",
+    "git_index_staged_changes": [],
+    "git_index_bytes_changed": false,
+    "head_unchanged": true,
+    "local_context_and_venv_ignored": true
+  },
+  "not_run": [
+    "full functional test suite",
+    "native Stash",
+    "iPhone ad and normal-business acceptance",
+    "public runtime URL re-audit",
+    "current GitHub Actions status",
+    "Windows maintenance update transaction",
+    "new upstream source review"
+  ],
+  "delivery_file_sha256": {
+    "AGENTS.md": "26a81b94933b4c10fa51ef417461713a00c00ff8cf1a9fd744d32a576c5c66a0",
+    "PROGRESS.md": "d0ec672ebe03ce3ea72c702bc112342ac8aaf2ec8f9f6541a383e8e7b13b7db9",
+    "README.md": "f8809d8b5fab084656d31195507fd42f71a21338c02752d64438fb95060ce264",
+    "docs/APP-INVENTORY.md": "560c57214a55308d55e2f9d7b71387924b3360ee71afa1a6324c8c8f7e7174a3",
+    "docs/QUICKSTART.md": "ea09459ab375fa58786d14d4386c981b6bb2d9f73f7146542d60a4987ef49311",
+    "docs/UPDATES.md": "c4dcc1be607f54dc493ab9b0928ab37a9ea1db7d06f9c3346048b582c80ae8ea",
+    "research/app-inventory.json": "8a6b4c4c37ca16311a29e6046b77493bc113f2194fc280e48922e83aec7f117a"
+  },
+  "commit_created": false,
+  "push_performed": false,
+  "hooks_replaced": false,
+  "schedule_created": false,
+  "public_export_note": "Conversation identifiers removed before publication; full read results retained only in ignored .local context."
+}

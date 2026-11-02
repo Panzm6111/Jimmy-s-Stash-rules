@@ -1,0 +1,6 @@
+# 下载到设备，改为真实误杀域名后启用，保持最高规则优先级。
+# 不要把业务主域全部直连作为通用解决办法。
+name: 本机手动放行
+desc: 查看合并预览，确认这些规则出现在广告规则与 MATCH 之前。
+rules:
+  - DOMAIN,replace-with-actual-domain.example,DIRECT

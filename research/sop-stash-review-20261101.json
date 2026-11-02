@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-01",
+  "timezone": "Asia/Shanghai",
+  "base_commit": "593b4f60f9ee529de8ab8928bee7e2aeb313179a",
+  "scope": "SOP review and investigation of a reported transient missing Stash proxy provider; documentation changes only",
+  "authority": {
+    "file": "PROGRESS.md",
+    "unique": true,
+    "six_current_sections": true,
+    "historical_suffix_preserved": true,
+    "baseline_historical_suffix_sha256": "b3e3d8cb197c2d93bcbfa918afdefca6b2a39d1b377cd784166784a2f9fae571"
+  },
+  "runtime": {
+    "modified": false,
+    "private_phone_configuration_read": false,
+    "client_started_or_switched": false,
+    "stash_groups": 21,
+    "stash_rule_providers": 27,
+    "clash_auto_groups_including_hidden": 22,
+    "clash_auto_rule_providers": 25,
+    "stash_airport_interval_seconds": 86400,
+    "stash_airport_explicit_cache_path": false,
+    "missing_explicit_path_does_not_prove_missing_default_cache": true
+  },
+  "sop_corrections": [
+    "README described retired computer automation and denied the existing GitHub schedule; corrected to the current update chain",
+    "README contained stale group and provider counts; corrected from actual generated files",
+    "SUBSCRIBE referenced routing .3 and eleven AI-enabled business selects; aligned to .5 and twelve",
+    "SUBSCRIPTION recommended weekly manual main-profile refresh; aligned to the documented hosted profile mechanism",
+    "Legacy computer maintenance instructions explicitly labeled historical/manual recovery"
+  ],
+  "reported_incident": {
+    "source": "user report in this session",
+    "observations": ["Groups visible but no nodes after an automatic update", "Manual update restored nodes"],
+    "root_cause": "undetermined",
+    "phone_version": "3.6.5 (user confirmed)",
+    "automatic_update_kind": "configuration update (user confirmed, not App Store upgrade)",
+    "manual_update_scope": "not yet provided",
+    "failure_time_log_or_provider_state_available": false,
+    "failure_log": "user confirmed unavailable",
+    "old_version_missing_3_4_0_fix_explanation_supported": false,
+    "hypotheses_not_proven": ["Provider fetch/load failure", "Cached resource or UI refresh failure", "Private override association or merge issue", "Network, DNS, TLS, HTTP or invalid/empty provider response"],
+    "public_rule_change_deployed_as_fix": false,
+    "optional_mitigation": "Documented device-local explicit provider path for iOS 3.3.0+ only; first successful refresh required, no failure-retention guarantee",
+    "native_stash_or_iphone_reproduction": false,
+    "status": "version and update kind confirmed; failure-time provider state and manual update scope unknown; no root cause or fix proven",
+    "follow_up_decision": "Keep recovered runtime unchanged. Explicit path remains optional because a new path needs initial download and missing explicit path does not prove cache failure",
+    "follow_up_official_fetch": "Two web calls failed to connect; no newly verified 3.6.5 documentation or release notes"
+  },
+  "official_sources_checked": [
+    {"url": "https://stash.wiki/proxy-protocols/proxy-providers", "supports": "Explicit provider cache path, startup cache read and successful update replacement"},
+    {"url": "https://stash.wiki/release-notes/ios", "supports": "3.3.0 provider path support; 3.4.0 remote-resource failure-to-zero and proxy-page display fixes; no proof that this user incident is the same bug"},
+    {"url": "https://stash.wiki/features/service-provider-subscription", "supports": "Hosted configuration updates are distinct from proxy provider updates; default main profile check is twelve hours"}
+  ],
+  "validation": {
+    "public_files_only_isolated_git_copy": true,
+    "markdown_files_reviewed_for_local_file_links": 23,
+    "local_file_links_checked": 386,
+    "broken_local_file_targets": 0,
+    "external_and_fragment_links_not_exhaustively_validated": true,
+    "project_checks": {"passed": 42, "failed": 0},
+    "javascript_checks": {"passed": 88, "failed": 0},
+    "python_regression_suite": {
+      "total": 84,
+      "final_passed": 83,
+      "skipped": 1,
+      "skip_reason": "Windows symlink permission unavailable",
+      "first_run_errors": 1,
+      "first_run_error_reason": "Audit TEMP was inside the outer repository; the private output guard correctly rejected that location",
+      "targeted_recheck": "The one failed test passed using the default system temporary directory; no test or protection weakened"
+    },
+    "baseline_secret_pattern_scan": {"current_files": 226, "reachable_historical_blobs": 998, "findings": 0, "limitation": "Generic pattern scan only; not a new exact comparison with phone credentials"},
+    "local_evidence_directory": ".local/sop-audit-20261101/"
+  },
+  "automation": {
+    "windows_task": {"name": "Jimmy-Stash-Rules-Noon-Check", "registered": false, "count": 0, "checked_at": "2026-11-01T18:52:39+08:00"},
+    "latest_observed_hosted_run": {"id": 41192407710, "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41192407710", "event": "schedule", "created_at": "2026-10-31T10:21:15Z", "conclusion": "success", "converted_sources": 6, "semantic_changes": 0, "automatic_commits": 0},
+    "november_first_run_observed_at_query": false,
+    "schedule_punctuality_not_guaranteed": true,
+    "new_task_or_manual_workflow_dispatch": false
+  }
+}

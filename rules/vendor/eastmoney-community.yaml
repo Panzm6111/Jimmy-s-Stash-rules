@@ -1,0 +1,11 @@
+# Mechanically adapted maintained rules; no locally authored domains.
+# Sources and original licenses: research/community-sources.json; eastmoney-direct-meta
+payload:
+- DOMAIN-SUFFIX,18.cn
+- DOMAIN-SUFFIX,dfcfw.com
+- DOMAIN-SUFFIX,eastmoney.com
+- DOMAIN-SUFFIX,eastmoneyfutures.com
+- DOMAIN-SUFFIX,1234567.com.cn
+- DOMAIN-SUFFIX,18.com.cn
+- DOMAIN-SUFFIX,guba.com.cn
+- DOMAIN-SUFFIX,emsec.hk

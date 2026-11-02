@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Reviewed source: https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet
+# License: licenses/fmz200-GPL-3.0.txt
+# Generated from research/ad-catalog.json; edit the catalog, then regenerate.
+name: 网易云音乐广告专项（维护源）
+desc: AD-20261020.5；interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文。已纳入整合入口，无需单独导入；需设备验收。
+http:
+  mitm:
+  - interface.music.163.com
+  - interface3.music.163.com
+  - ipv4.music.163.com
+  - interface1.music.163.com
+  - interface2.music.163.com
+  - interface4.music.163.com
+  - interface5.music.163.com
+  - interface6.music.163.com
+  - interface7.music.163.com
+  - interface8.music.163.com
+  - interface9.music.163.com
+  url-rewrite:
+  - ^https?://interface\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://interface3\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://ipv4\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict
+  - ^https?://interface[124-9]\.music\.163\.com/e?api/ad(?:/[^?#]*)?(?:\?|$) - reject-dict

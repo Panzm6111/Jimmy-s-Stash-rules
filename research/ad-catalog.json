@@ -1,0 +1,1557 @@
+{
+  "checked_at": "2026-10-20",
+  "purpose": "图片135款App调查对应的人工审核候选专项；已采用的专项作为原config/stash.yaml整合入口的维护来源，无需用户逐个导入。用户曾反馈旧版整体去广告效果不足，当前整合版尚无逐款设备命中证据，不能按模块数量宣称有效覆盖。",
+  "native_rewrite_reference": "bm-native",
+  "rewrite_adaptation": "依据用户提供的当前官方文档调查采用 http.url-rewrite 动作；保留 reject/reject-200/reject-dict/reject-img/reject-array 的不同语义。记录的官方站访问受环境网络403限制，最低版本和旧rewrite别名待原生核实。固定空响应不再使用请求脚本。",
+  "sources": {
+    "fmz-rewrite": {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "QuantumultX/rewrite/rewrite.snippet",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "header_date": "2026-09-10",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
+      "sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d"
+    },
+    "bm-native": {
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+      "path": "rewrite/Stash/Advertising/Advertising.stoverride",
+      "license": "GPL-2.0",
+      "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
+      "header_date": "2025-08-26",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/Advertising/Advertising.stoverride",
+      "sha256": "77de1e89d6c666c6734874f37baf6e34e29b806a0f3c6409ca9ff946a6c17e27"
+    },
+    "bm-startup": {
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+      "path": "script/startup/startup.js",
+      "license": "GPL-2.0",
+      "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
+      "sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c"
+    },
+    "adrive": {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/adrive/adrive.js",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js",
+      "sha256": "9d31582028a31ea605e69d09aa9e33949e57050006a8e0f3deb79b1c89933acd"
+    },
+    "cainiao": {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/cainiao/cainiao.js",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js",
+      "sha256": "76fe899db1e045aaff2d71d6ff3c58cb665bac52a5996ff20e56079a02a6451c"
+    },
+    "didi": {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/didi/didiAds.js",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/didi/didiAds.js",
+      "sha256": "c4f17a8ca8b27e15b7332460c83b5ba19aeded4c21e8f31beff8cefc54425ab7"
+    },
+    "quark": {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/quark.js",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/quark.js",
+      "sha256": "a80632f4308d8971f2ee1b42cb1b2c3b72c90ec5619ed33849fcc0fcbf0f1bcc"
+    },
+    "umetrip": {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/umetrip/umetrip_ads.js",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/umetrip/umetrip_ads.js",
+      "sha256": "7a0f7976a4b8f47649684cc382832e425610e924e0fdc11ea2e06b1ebd2cbacf"
+    },
+    "jingdong-source": {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "path": "Scripts/jingdong/jingdong.js",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/jingdong/jingdong.js",
+      "sha256": "3e7cc975f8985a4d2dbdbdefc405d0e3e6c9c07bf3c5361da1ecae206b6c04a1"
+    },
+    "nobyda-wechat": {
+      "repository": "NobyDa/Script",
+      "revision": "0b8d083d444f4476700cb9d5d059c07b42da85eb",
+      "path": "QuantumultX/File/Wechat.js",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/NobyDa-GPL-3.0.txt",
+      "header_date": null,
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js",
+      "sha256": "f661257b7bdedf5de63c6a9272f4e646829d8b95607f60faecd9ced39afa2c24"
+    }
+  },
+  "modules": [
+    {
+      "id": "baidu-netdisk",
+      "app": "百度网盘",
+      "file": "modules/ads/baidu-netdisk.stoverride",
+      "scope": "网盘独立 ad/adx 广告接口；不拦福利、会员、下载、分享",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "pan.baidu.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://pan\\.baidu\\.com/rest/\\d+\\.\\d+/pcs/(?:adx|ad)(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://pan.baidu.com/rest/2.0/pcs/adx?x=1",
+          "negative": [
+            "https://pan.baidu.com/rest/2.0/pcs/file?method=download",
+            "https://pan.baidu.com/rest/2.0/pcs/advertiser",
+            "https://pan.baidu.com/pmall/order/privilege/info"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "fmz另列issuecdn广告素材目录，但现有扩展域名包已覆盖该主机，不重复加入MITM与路径拒绝。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 870,
+          "text": "^https?:\\/\\/pan\\.baidu\\.com\\/rest\\/\\d\\.\\d\\/pcs\\/adx url reject"
+        },
+        {
+          "line": 871,
+          "text": "^https?:\\/\\/pan\\.baidu\\.com\\/rest\\/2\\.0\\/pcs\\/ad url reject"
+        },
+        {
+          "line": 883,
+          "text": "^https?:\\/\\/issuecdn\\.baidupcs\\.com\\/issue\\/netdisk\\/guanggao url reject"
+        }
+      ]
+    },
+    {
+      "id": "damai",
+      "app": "大麦",
+      "file": "modules/ads/damai.stoverride",
+      "scope": "专用 home.welcome 开屏；不屏蔽 HTTPDNS、票务或下单",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "acs.m.taobao.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.damai\\.wireless\\.home\\.welcome(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+          "positive": "https://acs.m.taobao.com/gw/mtop.damai.wireless.home.welcome/1.0/?x=1",
+          "negative": [
+            "https://acs.m.taobao.com/gw/mtop.damai.trade.order.create/1.0/",
+            "https://acs.m.taobao.com/gw/mtop.damai.wireless.home.welcomeExtra/1.0/"
+          ],
+          "upstream_action": "reject-200"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 1280,
+          "text": "^https?:\\/\\/acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.damai\\.wireless\\.home\\.welcome url reject-200"
+        }
+      ]
+    },
+    {
+      "id": "dianping",
+      "app": "大众点评",
+      "file": "modules/ads/dianping.stoverride",
+      "scope": "仅 loadsplashconfig 开屏配置；不删普通首页、优惠或评价",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "mapi.dianping.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://mapi\\.dianping\\.com/mapi/operating/loadsplashconfig/?(?:\\?|$)",
+          "positive": "https://mapi.dianping.com/mapi/operating/loadsplashconfig?x=1",
+          "negative": [
+            "https://mapi.dianping.com/mapi/operating/indexopsmodules",
+            "https://mapi.dianping.com/mapi/coupon/list",
+            "https://mapi.dianping.com/mapi/operating/loadsplashconfigExtra"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 1299,
+          "text": "^https?:\\/\\/mapi\\.dianping\\.com\\/mapi\\/operating\\/(?>indexopsmodules|loadsplashconfig) url reject"
+        }
+      ]
+    },
+    {
+      "id": "amap",
+      "app": "高德地图",
+      "file": "modules/ads/amap.stoverride",
+      "scope": "两个独立启动广告接口及 optimus 广告域名；保留路线、定位和普通地图图片",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "m5.amap.com",
+        "amap-aos-info-nogw.amap.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://m5\\.amap\\.com/ws/shield/dsp/app/startup/init/?(?:\\?|$)",
+          "positive": "https://m5.amap.com/ws/shield/dsp/app/startup/init?x=1",
+          "negative": [
+            "https://m5.amap.com/ws/shield/search/poi",
+            "https://m5.amap.com/ws/shield/dsp/app/startup/initExtra"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https?://amap\\-aos\\-info\\-nogw\\.amap\\.com/ws/aos/alimama/splash_screen_rt/?(?:\\?|$)",
+          "positive": "https://amap-aos-info-nogw.amap.com/ws/aos/alimama/splash_screen_rt?x=1",
+          "negative": [
+            "https://amap-aos-info-nogw.amap.com/ws/aos/route",
+            "https://amap-aos-info-nogw.amap.com/ws/aos/alimama/splash_screen_rtExtra"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [
+        "optimus-ads.amap.com",
+        "optimus-ads.amap.com.w.alikunlun.com"
+      ],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 1812,
+          "text": "host-suffix, optimus-ads.amap.com, reject"
+        },
+        {
+          "line": 1815,
+          "text": "host, optimus-ads.amap.com.w.alikunlun.com, reject"
+        },
+        {
+          "line": 1820,
+          "text": "^https?:\\/\\/m5\\.amap\\.com\\/ws\\/shield\\/dsp\\/app\\/startup\\/init\\? url reject-dict"
+        },
+        {
+          "line": 1824,
+          "text": "^https?:\\/\\/amap-aos-info-nogw\\.amap\\.com\\/ws\\/aos\\/alimama\\/splash_screen_rt url reject"
+        }
+      ]
+    },
+    {
+      "id": "umetrip",
+      "app": "航旅纵横",
+      "file": "modules/ads/umetrip.stoverride",
+      "scope": "仅 fs/advert/polite 广告素材候选；不包含开屏展示控制或航班业务",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "oss.umetrip.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https://oss\\.umetrip\\.com/fs/advert/polite(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://oss.umetrip.com/fs/advert/polite/banner.jpg",
+          "negative": [
+            "https://oss.umetrip.com/fs/boarding-pass",
+            "https://oss.umetrip.com/fs/advert/politeExtra"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "素材请求失败仍可能出现缓存、空白或倒计时。上游 gateway 脚本依赖请求头且规则/运行类型有疑点，未采用；不能据此承诺航旅纵横完整开屏去除。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 2063,
+          "text": "^https:\\/\\/oss\\.umetrip\\.com\\/fs\\/advert\\/polite url reject"
+        }
+      ]
+    },
+    {
+      "id": "huazhu",
+      "app": "华住会",
+      "file": "modules/ads/huazhu.stoverride",
+      "scope": "仅 getAppStartPage 开屏；保留酒店优惠、新客权益、更新和预订",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "appapi.huazhu.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://appapi\\.huazhu\\.com(?::\\d+)?/client/app/getAppStartPage/(?:\\?|$)",
+          "positive": "https://appapi.huazhu.com:443/client/app/getAppStartPage/?x=1",
+          "negative": [
+            "https://appapi.huazhu.com/client/app/hotel/search",
+            "https://appapi.huazhu.com/client/app/getAppStartPage/other"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 2220,
+          "text": "^https?:\\/\\/appapi\\.huazhu\\.com:\\d+\\/client\\/app\\/getAppStartPage\\/ url reject"
+        }
+      ]
+    },
+    {
+      "id": "kfc",
+      "app": "肯德基",
+      "file": "modules/ads/kfc.stoverride",
+      "scope": "仅 advertisement 路径广告素材候选；不包含完整开屏控制、菜单或优惠券",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "res.kfc.com.cn"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://res\\.kfc\\.com\\.cn/advertisement/[^?#]*(?:\\?|$)",
+          "positive": "https://res.kfc.com.cn/advertisement/splash.jpg",
+          "negative": [
+            "https://res.kfc.com.cn/CRM/kfcad/apphome6/config.json",
+            "https://res.kfc.com.cn/menu/item.jpg"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "修正上游域名拼写；不拦整个 apphome5/6，因为可能混有正常活动。素材拒绝不等于取消展示，仍可能等待、读缓存或出现空白；当前完整开屏没有已验证方案。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 2554,
+          "text": "^https?:\\/\\/res\\.kfc\\.com.\\cn\\/advertisement\\/ url reject"
+        }
+      ]
+    },
+    {
+      "id": "mcdonalds",
+      "app": "麦当劳",
+      "file": "modules/ads/mcdonalds.stoverride",
+      "scope": "专用 portal/home/splash；保留点餐、支付、领券",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "api.mcd.cn"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://api\\.mcd\\.cn/bff/portal/home/splash/?(?:\\?|$)",
+          "positive": "https://api.mcd.cn/bff/portal/home/splash?x=1",
+          "negative": [
+            "https://api.mcd.cn/bff/portal/home/coupons",
+            "https://api.mcd.cn/bff/order/create",
+            "https://api.mcd.cn/bff/portal/home/splashExtra"
+          ],
+          "upstream_action": "reject-200"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 3043,
+          "text": "^https?:\\/\\/api\\.mcd\\.cn\\/bff\\/portal\\/home\\/splash url reject-200"
+        }
+      ]
+    },
+    {
+      "id": "maimai",
+      "app": "脉脉",
+      "file": "modules/ads/maimai.stoverride",
+      "scope": "仅 adshow；保留礼物、消息和普通推荐",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "open.taou.com",
+        "h3.open.taou.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https://open\\.taou\\.com/maimai/adshow/?(?:\\?|$)",
+          "positive": "https://open.taou.com/maimai/adshow?x=1",
+          "negative": [
+            "https://open.taou.com/maimai/pay/v5/check_gift",
+            "https://open.taou.com/maimai/feed/v6/focus_feed",
+            "https://open.taou.com/maimai/adshowExtra"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https://h3\\.open\\.taou\\.com/maimai/adshow/?(?:\\?|$)",
+          "positive": "https://h3.open.taou.com/maimai/adshow?x=1",
+          "negative": [
+            "https://h3.open.taou.com/maimai/pay/v5/check_gift",
+            "https://h3.open.taou.com/maimai/feed/v6/focus_feed",
+            "https://h3.open.taou.com/maimai/adshowExtra"
+          ],
+          "upstream_action": "reject-dict"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 3047,
+          "text": "^https:\\/\\/(h3\\.)?open\\.taou\\.com\\/maimai\\/adshow\\? url reject-dict"
+        }
+      ]
+    },
+    {
+      "id": "liepin",
+      "app": "猎聘",
+      "file": "modules/ads/liepin.stoverride",
+      "scope": "明确命名的 live.get-ad-cards；不拦职位推荐或投递",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "api-ac.liepin.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://api\\-ac\\.liepin\\.com/api/com\\.liepin\\.cyclops\\.live\\.get-ad-cards/?(?:\\?|$)",
+          "positive": "https://api-ac.liepin.com/api/com.liepin.cyclops.live.get-ad-cards?x=1",
+          "negative": [
+            "https://api-ac.liepin.com/api/job/search",
+            "https://api-ac.liepin.com/api/resume/send",
+            "https://api-ac.liepin.com/api/com.liepin.cyclops.live.get-ad-cardsExtra"
+          ],
+          "upstream_action": "reject-dict"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 2882,
+          "text": "^https?:\\/\\/api-ac\\.liepin\\.com\\/api\\/com\\.liepin\\.cyclops\\.live\\.get-ad-cards url reject-dict"
+        }
+      ]
+    },
+    {
+      "id": "mijia",
+      "app": "米家",
+      "file": "modules/ads/mijia.stoverride",
+      "scope": "仅 openingBanner 两个端点；保留设备控制、普通推荐和自动化",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "home.mi.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://home\\.mi\\.com/cgi-op/api/v1/(?:recommendation|resource/realtime)/openingBanner/?(?:\\?|$)",
+          "positive": "https://home.mi.com/cgi-op/api/v1/resource/realtime/openingBanner?x=1",
+          "negative": [
+            "https://home.mi.com/cgi-op/api/v1/recommendation/myTab",
+            "https://home.mi.com/cgi-op/api/v1/device/control",
+            "https://home.mi.com/cgi-op/api/v1/recommendation/openingBannerExtra"
+          ],
+          "upstream_action": "reject-dict"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 3265,
+          "text": "^https?:\\/\\/home\\.mi\\.com\\/cgi-op\\/api\\/v1\\/recommendation\\/(banner|carousel\\/banners|myTab|openingBanner) url reject-dict"
+        },
+        {
+          "line": 3267,
+          "text": "^https?:\\/\\/home\\.mi\\.com\\/cgi-op\\/api\\/v1\\/resource\\/realtime\\/openingBanner url reject-dict"
+        }
+      ]
+    },
+    {
+      "id": "pinduoduo",
+      "app": "拼多多",
+      "file": "modules/ads/pinduoduo.stoverride",
+      "scope": "仅 cappuccino/splash；保留首页、买菜、红包和领券",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "api.pinduoduo.com",
+        "api.yangkeduo.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://api\\.pinduoduo\\.com/api/cappuccino/splash/?(?:\\?|$)",
+          "positive": "https://api.pinduoduo.com/api/cappuccino/splash?x=1",
+          "negative": [
+            "https://api.pinduoduo.com/api/aquarius/hungary/global/homepage",
+            "https://api.pinduoduo.com/api/coupon/list",
+            "https://api.pinduoduo.com/api/cappuccino/splashExtra"
+          ],
+          "upstream_action": "reject"
+        },
+        {
+          "match": "^https?://api\\.yangkeduo\\.com/api/cappuccino/splash/?(?:\\?|$)",
+          "positive": "https://api.yangkeduo.com/api/cappuccino/splash?x=1",
+          "negative": [
+            "https://api.yangkeduo.com/api/aquarius/hungary/global/homepage",
+            "https://api.yangkeduo.com/api/coupon/list",
+            "https://api.yangkeduo.com/api/cappuccino/splashExtra"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 3523,
+          "text": "^https?:\\/\\/api\\.(pinduoduo|yangkeduo)\\.com\\/api\\/cappuccino\\/splash url reject"
+        }
+      ]
+    },
+    {
+      "id": "taopiaopiao",
+      "app": "淘票票",
+      "file": "modules/ads/taopiaopiao.stoverride",
+      "scope": "仅 queryloadingbanner 启动广告；保留普通活动、选座和购票",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "acs.m.taobao.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+          "positive": "https://acs.m.taobao.com/gw/mtop.film.mtopadvertiseapi.queryloadingbanner/1.0/?x=1",
+          "negative": [
+            "https://acs.m.taobao.com/gw/mtop.film.mtopadvertiseapi.queryadvertise/1.0/",
+            "https://acs.m.taobao.com/gw/mtop.film.order.create/1.0/"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 4442,
+          "text": "^https?:\\/\\/acs\\.m\\.taobao\\.com\\/gw\\/mtop\\.film\\.mtopadvertiseapi\\.(queryadvertise|queryloadingbanner)\\/ url reject"
+        }
+      ]
+    },
+    {
+      "id": "netease-mail",
+      "app": "网易邮箱大师",
+      "file": "modules/ads/netease-mail.stoverride",
+      "scope": "mmad 素材和 searchMultiAds/showAds；保留邮件、搜索和同步",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "appconf.mail.163.com",
+        "client.mail.163.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://appconf\\.mail\\.163\\.com/mmad/[^?#]*(?:\\?|$)",
+          "positive": "https://appconf.mail.163.com/mmad/splash.json",
+          "negative": [
+            "https://appconf.mail.163.com/mail/inbox",
+            "https://appconf.mail.163.com/mmadExtra/splash"
+          ],
+          "upstream_action": "reject-200"
+        },
+        {
+          "match": "^https?://client\\.mail\\.163\\.com/apptrack/confinfo/(?:searchMultiAds|showAds)/?(?:\\?|$)",
+          "positive": "https://client.mail.163.com/apptrack/confinfo/showAds?x=1",
+          "negative": [
+            "https://client.mail.163.com/apptrack/confinfo/search",
+            "https://client.mail.163.com/apptrack/confinfo/showAdsExtra"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 5149,
+          "text": "^https?:\\/\\/appconf\\.mail\\.163\\.com\\/mmad\\/ url reject-200"
+        },
+        {
+          "line": 5150,
+          "text": "^https?:\\/\\/client\\.mail\\.163\\.com\\/apptrack\\/confinfo\\/(searchMultiAds|showAds) url reject"
+        }
+      ]
+    },
+    {
+      "id": "netease-music",
+      "app": "网易云音乐",
+      "file": "modules/ads/netease-music.stoverride",
+      "scope": "interface、interface1–9及ipv4精确主机的api/ad和eapi/ad；不解密EAPI正文",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "interface.music.163.com",
+        "interface3.music.163.com",
+        "ipv4.music.163.com",
+        "interface1.music.163.com",
+        "interface2.music.163.com",
+        "interface4.music.163.com",
+        "interface5.music.163.com",
+        "interface6.music.163.com",
+        "interface7.music.163.com",
+        "interface8.music.163.com",
+        "interface9.music.163.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://interface\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://interface.music.163.com/eapi/ad/get?x=1",
+          "negative": [
+            "https://interface.music.163.com/eapi/song/enhance/player/url",
+            "https://interface.music.163.com/eapi/yunbei/account/entrance/get",
+            "https://interface.music.163.com/eapi/address"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https?://interface3\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://interface3.music.163.com/eapi/ad/get?x=1",
+          "negative": [
+            "https://interface3.music.163.com/eapi/song/enhance/player/url",
+            "https://interface3.music.163.com/eapi/yunbei/account/entrance/get",
+            "https://interface3.music.163.com/eapi/address"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https?://ipv4\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://ipv4.music.163.com/eapi/ad/get?x=1",
+          "negative": [
+            "https://ipv4.music.163.com/eapi/song/enhance/player/url",
+            "https://ipv4.music.163.com/eapi/yunbei/account/entrance/get",
+            "https://ipv4.music.163.com/eapi/address"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https?://interface[124-9]\\.music\\.163\\.com/e?api/ad(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://interface2.music.163.com/eapi/ad/get?x=1",
+          "negative": [
+            "https://interface2.music.163.com/eapi/address",
+            "https://interface2.music.163.com/eapi/song/enhance/player/url",
+            "https://interface10.music.163.com/eapi/ad/get"
+          ],
+          "upstream_action": "reject-dict"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "按上游interface加一位数字补齐1–9，使用精确MITM主机。EAPI加密正文不能假定接受空JSON；效果待设备确认。不改音乐权限、云贝或会员状态。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 5188,
+          "text": "https?:\\/\\/(ipv4|interface\\d?)\\.music\\.163.com\\/e?api\\/ad url reject-dict"
+        },
+        {
+          "line": 5188,
+          "text": "https?:\\/\\/(ipv4|interface\\d?)\\.music\\.163.com\\/e?api\\/ad url reject-dict"
+        }
+      ]
+    },
+    {
+      "id": "xiachufang",
+      "app": "下厨房",
+      "file": "modules/ads/xiachufang.stoverride",
+      "scope": "仅 vN/ad/ 专用广告路径；保留菜谱、购物和内容图片",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "api.xiachufang.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://api\\.xiachufang\\.com/v\\d+/ad/[^?#]*(?:\\?|$)",
+          "positive": "https://api.xiachufang.com/v2/ad/splash?x=1",
+          "negative": [
+            "https://api.xiachufang.com/v2/recipes/1",
+            "https://api.xiachufang.com/v2/advice",
+            "https://api.xiachufang.com/v2/coupon/list"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 5408,
+          "text": "^https?:\\/\\/api\\.xiachufang\\.com\\/v\\d\\/ad/ url reject"
+        }
+      ]
+    },
+    {
+      "id": "xianyu",
+      "app": "闲鱼",
+      "file": "modules/ads/xianyu.stoverride",
+      "scope": "仅 idlecommerce.splash.ads；保留聊天、交易、闲鱼币和搜索",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "acs.m.goofish.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https://acs\\.m\\.goofish\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+          "positive": "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.ads/1.0/?x=1",
+          "negative": [
+            "https://acs.m.goofish.com/gw/mtop.taobao.idle.item.buy.feeds/1.0/",
+            "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.adsExtra/1.0/",
+            "https://acs.m.goofish.com/gw/mtop.taobao.idle.trade.order/1.0/"
+          ],
+          "upstream_action": "reject-dict"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 5425,
+          "text": "^https:\\/\\/acs\\.m\\.goofish\\.com\\/gw\\/mtop\\.taobao\\.idlecommerce\\.splash\\.ads url reject-dict"
+        }
+      ]
+    },
+    {
+      "id": "xiaoyuzhou",
+      "app": "小宇宙",
+      "file": "modules/ads/xiaoyuzhou.stoverride",
+      "scope": "仅 flash 开屏；保留节目推荐、AI总结、搜索和播客音频",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "api.xiaoyuzhoufm.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://api\\.xiaoyuzhoufm\\.com/v\\d+/flash/?(?:\\?|$)",
+          "positive": "https://api.xiaoyuzhoufm.com/v1/flash?x=1",
+          "negative": [
+            "https://api.xiaoyuzhoufm.com/v1/discovery-feed/list",
+            "https://api.xiaoyuzhoufm.com/v1/ai/summary",
+            "https://api.xiaoyuzhoufm.com/v1/flashExtra"
+          ],
+          "upstream_action": "reject-dict"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 5701,
+          "text": "^https?:\\/\\/api\\.xiaoyuzhoufm\\.com\\/v\\d\\/flash url reject-dict"
+        }
+      ]
+    },
+    {
+      "id": "wps",
+      "app": "WPS Office",
+      "file": "modules/ads/wps.stoverride",
+      "scope": "仅广告统计请求与 feeds_ad 素材；没有完整开屏或文档内广告去除证据",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "ios.wps.cn",
+        "mobile-pic.cache.iciba.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://ios\\.wps\\.cn/ad-statistics-service(?:/[^?#]*)?(?:\\?|$)",
+          "positive": "https://ios.wps.cn/ad-statistics-service/report?x=1",
+          "negative": [
+            "https://ios.wps.cn/document/sync",
+            "https://ios.wps.cn/ad-statistics-serviceExtra"
+          ],
+          "upstream_action": "reject"
+        },
+        {
+          "match": "^https?://mobile\\-pic\\.cache\\.iciba\\.com/feeds_ad/[^?#]*(?:\\?|$)",
+          "positive": "https://mobile-pic.cache.iciba.com/feeds_ad/banner.jpg",
+          "negative": [
+            "https://mobile-pic.cache.iciba.com/dictionary/word.jpg"
+          ],
+          "upstream_action": "reject-200"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "ad-statistics-service 拦截主要影响统计，不能证明界面广告消失；素材拒绝仍可能留下空白或等待。不处理会员、文档和云同步，当前覆盖不等于 WPS 整体去广告。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 5323,
+          "text": "^https?:\\/\\/ios\\.wps\\.cn\\/ad-statistics-service url reject"
+        },
+        {
+          "line": 5324,
+          "text": "^https?:\\/\\/mobile-pic\\.cache\\.iciba\\.com\\/feeds_ad\\/ url reject-200"
+        }
+      ]
+    },
+    {
+      "id": "58tongcheng",
+      "app": "58同城",
+      "file": "modules/ads/58tongcheng.stoverride",
+      "scope": "仅 home/advertising 和 appadv；保留职位、联系与发布",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "app.58.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://app\\.58\\.com/api/home/(?:advertising|appadv)/[^?#]*(?:\\?|$)",
+          "positive": "https://app.58.com/api/home/advertising/splash?x=1",
+          "negative": [
+            "https://app.58.com/api/home/jobs",
+            "https://app.58.com/api/home/advertisingExtra/",
+            "https://app.58.com/api/publish/create"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 203,
+          "text": "^https?:\\/\\/app\\.58\\.com\\/api\\/home\\/(advertising|appadv)\\/ url reject"
+        }
+      ]
+    },
+    {
+      "id": "cmcc",
+      "app": "中国移动",
+      "file": "modules/ads/cmcc.stoverride",
+      "scope": "仅 explorePage/getAdverList 候选广告接口；没有完整启动广告去除证据",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "client.app.coc.10086.cn"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/explorePage/getAdverList/?(?:\\?|$)",
+          "positive": "https://client.app.coc.10086.cn/biz-orange/DN/explorePage/getAdverList?x=1",
+          "negative": [
+            "https://client.app.coc.10086.cn/biz-orange/DN/init/startInit",
+            "https://client.app.coc.10086.cn/biz-orange/DN/explorePage/getAdverListExtra",
+            "https://client.app.coc.10086.cn/biz-orange/DN/coupon/get"
+          ],
+          "upstream_action": "reject"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "上游 startInit 是混合业务启动接口，不能整体阻断来换取开屏消失；本模块只保留窄广告端点，不包含全部开屏，不碰账号、缴费与权益。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 6727,
+          "text": "^https?:\\/\\/client\\.app\\.coc\\.10086\\.cn\\/biz-orange\\/DN\\/explorePage\\/getAdverList url reject"
+        }
+      ]
+    },
+    {
+      "id": "unicom",
+      "app": "中国联通",
+      "file": "modules/ads/unicom.stoverride",
+      "scope": "专用启动/广告接口；保留 accountListData、客户端配置和缴费",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "m.client.10010.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://m\\.client\\.10010\\.com/mobileService/(?:activity|customer)/(?:get_client_adv|get_startadv)(?:\\.htm)?/?(?:\\?|$)",
+          "positive": "https://m.client.10010.com/mobileService/customer/get_startadv.htm?x=1",
+          "negative": [
+            "https://m.client.10010.com/mobileService/customer/accountListData.htm",
+            "https://m.client.10010.com/mobileService/customer/getclientconfig.htm",
+            "https://m.client.10010.com/mobileService/customer/get_startadvExtra"
+          ],
+          "upstream_action": "reject-img"
+        },
+        {
+          "match": "^https?://m\\.client\\.10010\\.com/uniAdmsInterface/(?:getHomePageAd|getWelcomeAd)/?(?:\\?|$)",
+          "positive": "https://m.client.10010.com/uniAdmsInterface/getWelcomeAd?x=1",
+          "negative": [
+            "https://m.client.10010.com/uniAdmsInterface/getWelcomeAdExtra"
+          ],
+          "upstream_action": "reject-img"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 6686,
+          "text": "^https?:\\/\\/m\\.client\\.10010\\.com\\/mobileService\\/(activity|customer)\\/(accountListData|get_client_adv|get_startadv) url reject-img"
+        },
+        {
+          "line": 6689,
+          "text": "^https?:\\/\\/m\\.client\\.10010\\.com\\/uniAdmsInterface\\/(getHomePageAd|getWelcomeAd) url reject-img"
+        }
+      ]
+    },
+    {
+      "id": "eastmoney",
+      "app": "东方财富",
+      "file": "modules/ads/eastmoney.stoverride",
+      "scope": "仅 emdcadvertise 独立广告主机；不代表行情页面全部推广",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [],
+      "rewrite": [],
+      "domains": [
+        "emdcadvertise.eastmoney.com"
+      ],
+      "script": null,
+      "notes": "独立广告请求可按域名拦截；没有当前App请求与开屏效果的设备证据，不解密行情、交易或登录。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 1472,
+          "text": "# hostname = emdcadvertise.eastmoney.com"
+        },
+        {
+          "line": 1477,
+          "text": "^https?:\\/\\/emdcadvertise\\.eastmoney\\.com\\/infoService\\/v\\d url reject"
+        }
+      ]
+    },
+    {
+      "id": "ctrip",
+      "app": "携程旅行",
+      "file": "modules/ads/ctrip.stoverride",
+      "scope": "仅 ma-adx 主机的广告/统计请求；没有完整开屏去除证据",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [],
+      "rewrite": [],
+      "domains": [
+        "ma-adx.ctrip.com"
+      ],
+      "script": null,
+      "notes": "上游证据仅 _ma.gif 端点，拦截可能主要减少统计，不能据此判断可见广告消失；将路径扩为主机需设备排除误杀。未采用 tripAds，因为上游明确警告8.47.0以上版本部分图片可能无法加载；不解密预订或支付。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 5769,
+          "text": "^https?:\\/\\/ma-adx\\.ctrip\\.com\\/_ma\\.gif url reject"
+        },
+        {
+          "line": 5770,
+          "text": "# 8.47.0以上版本会有部分图片加载不出来"
+        },
+        {
+          "line": 5771,
+          "text": "^https?:\\/\\/m\\.ctrip\\.com\\/restapi\\/soa2\\/13916\\/json\\/tripAds url reject-200"
+        }
+      ]
+    },
+    {
+      "id": "railway12306",
+      "app": "铁路12306",
+      "file": "modules/ads/railway12306.stoverride",
+      "scope": "仅 ad.12306.cn 独立广告主机；不保证取消客户端缓存开屏",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [],
+      "rewrite": [],
+      "domains": [
+        "ad.12306.cn"
+      ],
+      "script": null,
+      "notes": "只使用公开广告端点的主机事实，未复制外链脚本，不解密车票、身份信息或支付。广告请求被阻断后客户端是否读缓存或等待仍需设备确认。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 54,
+          "text": "# hostname = ad.12306.cn"
+        },
+        {
+          "line": 55,
+          "text": "^https?:\\/\\/ad\\.12306\\.cn\\/ad\\/ser\\/getAdList url script-analyze-echo-response https://raw.githubusercontent.com/kokoryh/Script/master/js/12306.js"
+        }
+      ]
+    },
+    {
+      "id": "unionpay",
+      "app": "云闪付",
+      "file": "modules/ads/unionpay.stoverride",
+      "scope": "仅 ads.95516.com 和 ads.cup.com.cn 广告请求；不代表云闪付全界面去广告",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [],
+      "rewrite": [],
+      "domains": [
+        "ads.95516.com",
+        "ads.cup.com.cn"
+      ],
+      "script": null,
+      "notes": "两个独立广告主机与扩展包重叠，已随整合入口接入，不额外增加拦截次数。保留推送和安全SDK，不解密支付；缓存和其他同域业务推广不在已知覆盖范围。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 6400,
+          "text": "host, ads.95516.com, reject"
+        },
+        {
+          "line": 6406,
+          "text": "host, ads.cup.com.cn, reject"
+        }
+      ]
+    },
+    {
+      "id": "uc",
+      "app": "UC浏览器",
+      "file": "modules/ads/uc.stoverride",
+      "scope": "仅 ads.uc.cn、adslot.uc.cn 独立广告主机；不包含网页同域广告",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [],
+      "rewrite": [],
+      "domains": [
+        "ads.uc.cn",
+        "adslot.uc.cn"
+      ],
+      "script": null,
+      "notes": "只拦独立广告请求，不提供网页元素隐藏，也不能清除与正文同域的广告；保留反诈、安全、语音和网页正文。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 4884,
+          "text": "host-suffix, ads.uc.cn, reject"
+        },
+        {
+          "line": 4885,
+          "text": "host-suffix, adslot.uc.cn, reject"
+        }
+      ]
+    },
+    {
+      "id": "jingdong-finance",
+      "app": "京东金融",
+      "file": "modules/ads/jingdong-finance.stoverride",
+      "scope": "仅 bdsp-x/dsp-x 广告主机候选；不包含金融网关或完整开屏",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [],
+      "rewrite": [],
+      "domains": [
+        "bdsp-x.jd.com",
+        "dsp-x.jd.com"
+      ],
+      "script": null,
+      "notes": "上游证据只匹配这两个主机的 /adx/ 路径，本模块提升为整主机拦截，范围更大且需要排除误杀。不解密金融、登录或支付，不屏蔽普通图片或邮箱。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 2500,
+          "text": "^https?:\\/\\/(bdsp-x|dsp-x)\\.jd\\.com\\/adx\\/ url reject-200"
+        }
+      ]
+    },
+    {
+      "id": "zhihu",
+      "app": "知乎",
+      "file": "modules/ads/zhihu.stoverride",
+      "scope": "开屏、顶部横幅、回答/文章底部commercial_api广告与ad-style-service；不包含全部信息流广告",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "api.zhihu.com"
+      ],
+      "rewrite": [
+        {
+          "match": "^https://api\\.zhihu\\.com/commercial_api/(?:launch_v2|real_time_launch_v2|banners_v3/app_topstory_banner)/?(?:\\?|$)",
+          "positive": "https://api.zhihu.com/commercial_api/real_time_launch_v2?x=1",
+          "negative": [
+            "https://api.zhihu.com/topstory/recommend",
+            "https://api.zhihu.com/commercial_api/real_time_launch_v2Extra",
+            "https://api.zhihu.com/answers/123"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https://api\\.zhihu\\.com/ad-style-service/request/?(?:\\?|$)",
+          "positive": "https://api.zhihu.com/ad-style-service/request?x=1",
+          "negative": [
+            "https://api.zhihu.com/ad-style-service/requestExtra"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https://api\\.zhihu\\.com/commercial_api/(?:answer|article)/\\d+/bottom-v2/?(?:\\?|$)",
+          "positive": "https://api.zhihu.com/commercial_api/answer/123/bottom-v2?x=1",
+          "negative": [
+            "https://api.zhihu.com/answers/123",
+            "https://api.zhihu.com/commercial_api/article/123/bottom-v2Extra"
+          ],
+          "upstream_action": "reject-dict"
+        }
+      ],
+      "domains": [],
+      "script": null,
+      "notes": "新增回答/文章底部商业广告专用接口；不拦正常answers/articles内容与推荐流。上游其他界面净化及会员相关修改不导入。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 6565,
+          "text": "^https:\\/\\/api\\.zhihu\\.com\\/commercial_api\\/(answer\\/\\d+\\/bottom-v2|article\\/\\d+\\/bottom-v2|banners_v3\\/app_topstory_banner|launch_v2|real_time_launch_v2) url reject-dict"
+        },
+        {
+          "line": 6591,
+          "text": "^https:\\/\\/api\\.zhihu\\.com\\/ad-style-service\\/request url reject-dict"
+        },
+        {
+          "line": 6565,
+          "text": "^https:\\/\\/api\\.zhihu\\.com\\/commercial_api\\/(answer\\/\\d+\\/bottom-v2|article\\/\\d+\\/bottom-v2|banners_v3\\/app_topstory_banner|launch_v2|real_time_launch_v2) url reject-dict"
+        }
+      ]
+    },
+    {
+      "id": "alipan",
+      "app": "阿里云盘",
+      "file": "modules/ads/alipan.stoverride",
+      "scope": "仅 onboard_list 的4种推广banner；不宣称阿里云盘开屏或全界面去广告",
+      "license": "GPL-3.0-only",
+      "source": "adrive",
+      "mitm": [
+        "member.alipan.com"
+      ],
+      "rewrite": [],
+      "domains": [],
+      "script": {
+        "name": "jimmy_alipan_ads",
+        "path": "scripts/ads/alipan.js",
+        "match": "^https://member\\.alipan\\.com/v1/users/onboard_list/?(?:\\?|$)",
+        "positive": "https://member.alipan.com/v1/users/onboard_list?x=1",
+        "negative": [
+          "https://api.alipan.com/adrive/v1/file/get",
+          "https://member.alipan.com/v2/activity/sign_in_luckyBottle"
+        ],
+        "argument": "diagnostic=0"
+      },
+      "notes": "这是推广横幅处理，不是完整开屏控制；保留备份、功能入口、新闻、签到和权益。不应把四种横幅候选扩大成整App有效覆盖。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 8,
+          "text": "  if (obj.result?.length > 0) {"
+        },
+        {
+          "line": 13,
+          "text": "          \"backup_top_banner\","
+        },
+        {
+          "line": 15,
+          "text": "          \"home_top_banner\","
+        },
+        {
+          "line": 16,
+          "text": "          \"resource_top_banner\","
+        },
+        {
+          "line": 17,
+          "text": "          \"video_top_banner\""
+        }
+      ]
+    },
+    {
+      "id": "cainiao",
+      "app": "菜鸟",
+      "file": "modules/ads/cainiao.stoverride",
+      "scope": "仅 ads.show 的明确 adItemDetail 广告项；不包含 mshow 或完整首页净化",
+      "license": "GPL-3.0-only",
+      "source": "cainiao",
+      "mitm": [
+        "cn-acs.m.cainiao.com"
+      ],
+      "rewrite": [],
+      "domains": [],
+      "script": {
+        "name": "jimmy_cainiao_ads",
+        "path": "scripts/ads/cainiao.js",
+        "match": "^https://cn-acs\\.m\\.cainiao\\.com/gw/mtop\\.cainiao\\.guoguo\\.nbnetflow\\.ads\\.show\\.cn(?:/[0-9]+(?:\\.[0-9]+)*)?/?(?:\\?|$)",
+        "positive": "https://cn-acs.m.cainiao.com/gw/mtop.cainiao.guoguo.nbnetflow.ads.show.cn/1.0/?x=1",
+        "negative": [
+          "https://cn-acs.m.cainiao.com/gw/mtop.cainiao.guoguo.nbnetflow.ads.mshow.cn/1.0/",
+          "https://cn-acs.m.cainiao.com/gw/mtop.nbfriend.message.conversation.list.cn/1.0/"
+        ],
+        "argument": "diagnostic=0"
+      },
+      "notes": "上游同时处理 ads.show 与 mshow，且删除部分券、裹酱积分、寄件和消息入口；本模块不采用这些业务删改，不能据此称菜鸟全广告已覆盖。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 47,
+          "text": "    obj.data.result = obj.data.result.filter("
+        },
+        {
+          "line": 55,
+          "text": "          [\"29338\", \"29339\", \"32103\", \"33927\", \"36649\"]?.includes(i?.id)"
+        }
+      ]
+    },
+    {
+      "id": "jingdong",
+      "app": "京东",
+      "file": "modules/ads/jingdong.stoverride",
+      "scope": "仅 URL 中 functionId=start 的历史开屏展示字段；不包含全部京东广告",
+      "license": "GPL-2.0",
+      "source": "bm-startup",
+      "mitm": [
+        "api.m.jd.com"
+      ],
+      "rewrite": [],
+      "domains": [],
+      "script": {
+        "name": "jimmy_jingdong_ads",
+        "path": "scripts/ads/jingdong.js",
+        "match": "^https://api\\.m\\.jd\\.com/client\\.action\\?(?:[^#&]*&)*functionId=start(?:&|$)",
+        "positive": "https://api.m.jd.com/client.action?client=ios&functionId=start&x=1",
+        "negative": [
+          "https://api.m.jd.com/client.action?functionId=startExtra",
+          "https://api.m.jd.com/client.action?functionId=myOrderInfo"
+        ],
+        "argument": "diagnostic=0"
+      },
+      "notes": "已核对源码实际 images/showTimes/showTimesDaily 分支；原证据摘录曾错误指向其他App，现已更正。POST正文中的 functionId 不捕获；未知结构放行，不拦整个 client.action，也不处理订单、京豆和券。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 111,
+          "text": "      // 京东"
+        },
+        {
+          "line": 112,
+          "text": "      case /^https?:\\/\\/api\\.m\\.jd\\.com\\/client\\.action\\?functionId=start/.test($.request.url):"
+        },
+        {
+          "line": 115,
+          "text": "          for (let i = 0; i < obj.images.length; i++) {"
+        },
+        {
+          "line": 116,
+          "text": "            for (let j = 0; j < obj.images[i].length; j++) {"
+        },
+        {
+          "line": 117,
+          "text": "              if (obj.images[i][j].showTimes) {"
+        },
+        {
+          "line": 118,
+          "text": "                obj.images[i][j].showTimes = 0;"
+        },
+        {
+          "line": 121,
+          "text": "                obj.images[i][j].time = 0;"
+        },
+        {
+          "line": 126,
+          "text": "          obj.showTimesDaily = 0;"
+        }
+      ]
+    },
+    {
+      "id": "meituan",
+      "app": "美团",
+      "file": "modules/ads/meituan.stoverride",
+      "scope": "外卖loadInfo已知startpicture广告数组；v7 openscreen/startpicture专用接口与限定开屏图片素材；不是主App完整覆盖；同一linglong广告目录MP4空正文",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "wmapi.meituan.com",
+        "img.meituan.net",
+        "s3plus.meituan.net",
+        "flowplus.meituan.net"
+      ],
+      "rewrite": [
+        {
+          "match": "^https?://wmapi\\.meituan\\.com/api/v7/(?:openscreen|startpicture)/?(?:\\?|$)",
+          "positive": "https://wmapi.meituan.com/api/v7/openscreen?x=1",
+          "negative": [
+            "https://wmapi.meituan.com/api/v7/openscreenExtra",
+            "https://wmapi.meituan.com/api/v7/coupon/list"
+          ],
+          "upstream_action": "reject-dict"
+        },
+        {
+          "match": "^https?://img\\.meituan\\.net/bizad/bizad_brandCpt_\\d+\\.jpg(?:\\?|$)",
+          "positive": "https://img.meituan.net/bizad/bizad_brandCpt_123.jpg",
+          "negative": [
+            "https://img.meituan.net/product/123.jpg",
+            "https://img.meituan.net/goodsawardpic/abc.png.webp"
+          ],
+          "upstream_action": "reject-img"
+        },
+        {
+          "match": "^https?://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.(?:gif|jpg)(?:\\?|$)",
+          "positive": "https://s3plus.meituan.net/v1/test/linglong/ad.jpg",
+          "negative": [
+            "https://s3plus.meituan.net/v1/test/product/ad.jpg",
+            "https://s3plus.meituan.net/v1/test/product/ad.mp4"
+          ],
+          "upstream_action": "reject-img"
+        },
+        {
+          "match": "^https?://(?:s3plus|flowplus)\\.meituan\\.net/v\\d+/\\w+/linglong/\\w+\\.mp4(?:\\?|$)",
+          "positive": "https://flowplus.meituan.net/v1/test/linglong/ad.mp4",
+          "negative": [
+            "https://flowplus.meituan.net/v1/test/product/ad.mp4",
+            "https://flowplus.meituan.net/v1/test/linglong/ad.mp4extra"
+          ],
+          "upstream_action": "reject-200"
+        }
+      ],
+      "domains": [],
+      "script": {
+        "name": "jimmy_meituan_ads",
+        "path": "scripts/ads/meituan.js",
+        "match": "^https?://wmapi\\.meituan\\.com/api/v\\d+/loadInfo/?(?:\\?|$)",
+        "positive": "https://wmapi.meituan.com/api/v7/loadInfo?x=1",
+        "negative": [
+          "https://wmapi.meituan.com/api/v7/loadInfoExtra",
+          "https://wmapi.meituan.com/api/v7/coupon/list"
+        ],
+        "argument": "diagnostic=0"
+      },
+      "notes": "覆写新增原生路径取自fmz200（GPL-3.0-only）；独立meituan.js响应资源仍源于blackmatrix7并保持GPL-2.0，只通过provider引用，不拼接代码。 AD-20261020.5另将上游linglong MP4从reject-img改为reject-200，避免视频收到GIF；是否回退重试待设备验证，不扩到商品视频或goodsawardpic领券素材。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 76,
+          "text": "      // 美团外卖",
+          "source": "bm-startup"
+        },
+        {
+          "line": 77,
+          "text": "      case /^https?:\\/\\/wmapi\\.meituan\\.com\\/api\\/v\\d+\\/loadInfo?/.test($.request.url):",
+          "source": "bm-startup"
+        },
+        {
+          "line": 80,
+          "text": "          if (obj.data.startpicture.hasOwnProperty(\"ad\")) {",
+          "source": "bm-startup"
+        },
+        {
+          "line": 81,
+          "text": "            obj.data.startpicture.ad = [];",
+          "source": "bm-startup"
+        },
+        {
+          "line": 82,
+          "text": "          } else if (obj.data.startpicture.hasOwnProperty(\"mk\")) {",
+          "source": "bm-startup"
+        },
+        {
+          "line": 83,
+          "text": "            obj.data.startpicture.mk = [];",
+          "source": "bm-startup"
+        },
+        {
+          "line": 3179,
+          "text": "^https?:\\/\\/wmapi\\.meituan\\.com\\/api\\/v7\\/(loadInfo|openscreen|startpicture)\\? url reject-dict",
+          "source": "fmz-rewrite"
+        },
+        {
+          "line": 3180,
+          "text": "^https?:\\/\\/(s3plus|flowplus)\\.meituan\\.net\\/v\\d\\/\\w+\\/linglong\\/\\w+\\.(gif|jpg|mp4) url reject-img",
+          "source": "fmz-rewrite"
+        },
+        {
+          "line": 3181,
+          "text": "^https?:\\/\\/img\\.meituan\\.net\\/bizad\\/bizad_brandCpt_\\d+\\.jpg url reject-img",
+          "source": "fmz-rewrite"
+        },
+        {
+          "line": 3180,
+          "text": "^https?:\\/\\/(s3plus|flowplus)\\.meituan\\.net\\/v\\d\\/\\w+\\/linglong\\/\\w+\\.(gif|jpg|mp4) url reject-img"
+        }
+      ]
+    },
+    {
+      "id": "luckin",
+      "app": "瑞幸咖啡",
+      "file": "modules/ads/luckin.stoverride",
+      "scope": "仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券",
+      "license": "GPL-3.0-only",
+      "source": "fmz-rewrite",
+      "mitm": [
+        "capi.lkcoffee.com"
+      ],
+      "rewrite": [],
+      "domains": [],
+      "script": {
+        "name": "jimmy_luckin_ads",
+        "path": "scripts/ads/luckin.js",
+        "match": "^https://capi\\.lkcoffee\\.com/resource/m/sys/app/adposNew/?(?:\\?|$)",
+        "positive": "https://capi.lkcoffee.com/resource/m/sys/app/adposNew?x=1",
+        "negative": [
+          "https://capi.lkcoffee.com/resource/m/eorder/product/popAppTagProductList",
+          "https://capi.lkcoffee.com/resource/m/sys/app/adposNewExtra"
+        ],
+        "argument": "diagnostic=0"
+      },
+      "notes": "只在已成功 status=SUCCESS 的JSON上返回同源参考的空广告结果；不采用兑换页/商品弹窗过滤。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 3919,
+          "text": "^https?:\\/\\/capi\\.lkcoffee\\.com\\/resource\\/m\\/sys\\/app\\/adposNew url response-body \\{.+\\} response-body {\"status\":\"SUCCESS\"}"
+        }
+      ]
+    },
+    {
+      "id": "wechat-articles",
+      "app": "微信",
+      "file": "modules/ads/wechat-articles.stoverride",
+      "scope": "仅历史公众号 getappmsgad 的广告字段；不包含朋友圈、视频号或聊天",
+      "license": "GPL-3.0-only",
+      "source": "nobyda-wechat",
+      "mitm": [
+        "mp.weixin.qq.com"
+      ],
+      "rewrite": [],
+      "domains": [],
+      "script": {
+        "name": "jimmy_wechat_articles_ads",
+        "path": "scripts/ads/wechat-articles.js",
+        "match": "^https://mp\\.weixin\\.qq\\.com/mp/getappmsgad/?(?:\\?|$)",
+        "positive": "https://mp.weixin.qq.com/mp/getappmsgad?x=1",
+        "negative": [
+          "https://mp.weixin.qq.com/s/article",
+          "https://mp.weixin.qq.com/mp/getappmsgadExtra",
+          "https://mp.weixin.qq.com/mp/cps_product_info?action=1"
+        ],
+        "argument": "diagnostic=0"
+      },
+      "notes": "公开源仍保留这个历史端点，但没有当前微信版本调用证据；只能作为公众号候选，不称微信整体去广告。保留原 appid 与其他文章字段。",
+      "device_tested": false,
+      "default_enabled": false,
+      "source_evidence": [
+        {
+          "line": 24,
+          "text": "var obj = JSON.parse($response.body);"
+        },
+        {
+          "line": 25,
+          "text": "obj.advertisement_num = 0;"
+        },
+        {
+          "line": 26,
+          "text": "obj.advertisement_info = [];"
+        }
+      ]
+    }
+  ],
+  "coverage_evidence": "静态核对仅证明源文件、规则和处理逻辑存在。接口是否仍被当前iOS App调用、MITM是否实际接管、缓存广告是否继续展示、正常功能是否受影响，均需设备观察；尚未确认某一款已有效。"
+}

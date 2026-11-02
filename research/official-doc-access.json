@@ -1,0 +1,51 @@
+{
+  "checked_at": "2026-10-18T23:02:03.576525+08:00",
+  "official_url": "https://stash.wiki/",
+  "observed_result": "HTTPS CONNECT denied by cloud proxy: 403 Forbidden; official page body not read",
+  "runtime_spec_revision": "1",
+  "runtime_custom_allowed_hosts": [],
+  "network_draft_saved": true,
+  "draft_additions": [
+    "stash.wiki",
+    "www.stash.wiki",
+    "api.github.com"
+  ],
+  "draft_applied": false,
+  "required_next_action": "环境设置中审核保存并按界面要求发布，随后重试官方文档。",
+  "historical_example_review": {
+    "repository": "jinzaizhichi/stash-example",
+    "revision_observed": "c0f273b8539b0aa648e0cab90cae7e5b4922a098",
+    "readme_url": "https://github.com/jinzaizhichi/stash-example/blob/c0f273b8539b0aa648e0cab90cae7e5b4922a098/README.md",
+    "config_url": "https://github.com/jinzaizhichi/stash-example/blob/c0f273b8539b0aa648e0cab90cae7e5b4922a098/config.yaml",
+    "config_sha256": "05541eb4de2573cb0f9f2884be55fc59be4bbecba66ae26c40d39e18d9d7f98f",
+    "notice": "文件明确已不再维护，README指向 https://stash.wiki/features/example-config；未复制代码，不视为当前官方验证。",
+    "license_observed": "未发现LICENSE，不复制",
+    "original_org_example_http_status": 404
+  },
+  "routing_review_2026_10_19": {
+    "official_retry": "HTTPS CONNECT denied by cloud proxy: 403; official body not read",
+    "native_reference": "historical_example_review.config_url lines 434-452",
+    "observed": "url-test selects shortest URL test delay; fallback uses candidate order; only type/url/interval adopted",
+    "unverified": [
+      "current minimum version",
+      "default tolerance and switching timing",
+      "REJECT health treatment",
+      "empty and all-failed provider groups",
+      "runtime choice persistence"
+    ],
+    "not_adopted": [
+      "tolerance",
+      "lazy"
+    ],
+    "configuration": "7 url-test pools, interval 1800, fixed per-country membership; no DIRECT or other pool inside automatic pools"
+  },
+  "ad_repair_2026_10_20": {
+    "official_url": "https://stash.wiki/features/http-engine",
+    "observed_result": "normal and escalated HTTPS read both denied with HTTP403; body not read",
+    "basis_for_native_change": "User supplied current-official-document findings: http.url-rewrite and five native reject actions; not represented as independently downloaded documentation",
+    "legacy_rewrite_alias": "unverified; not declared cause of all failures",
+    "script_argument_reference": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+    "minimum_stash_version": "unverified; target user will update to latest",
+    "http3": "User-supplied official finding: current HTTP/3 bypasses rewriting; actual transport not observed, no UDP block added"
+  }
+}

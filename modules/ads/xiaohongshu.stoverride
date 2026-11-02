@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Source pins and independent licenses: docs/SOURCES.md
+name: 小红书开屏广告处理（维护源）
+desc: AD-20261020.5；开屏时间、启动配置splash、专用广告素材、edith/rec/www的v6首页明确赞助项及www独立ads/resource；不改下载/水印/画质/用户信息。已纳入整合入口，无需单独导入；待真机验收。
+http:
+  mitm:
+  - edith.xiaohongshu.com
+  - rec.xiaohongshu.com
+  - www.xiaohongshu.com
+  url-rewrite:
+  - ^https?://www\.xiaohongshu\.com/api/sns/v\d+/ads/resource/?(?:\?|$) - reject-dict
+  script:
+  - match: ^https?://(?:edith\.xiaohongshu\.com/api/sns/v\d+/system_service/(?:splash_config|config)|(?:edith|rec|www)\.xiaohongshu\.com/api/sns/v6/homefeed)/?(?:\?|$)
+    name: jimmy_xiaohongshu_ads
+    type: response
+    require-body: true
+    timeout: 5
+    argument: diagnostic=0
+script-providers:
+  jimmy_xiaohongshu_ads:
+    url: https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/scripts/ads/xiaohongshu.js
+    interval: 86400
+rules:
+- DOMAIN,ads-img-qc.xhscdn.com,广告拦截
+- DOMAIN,ads-img-al.xhscdn.com,广告拦截
+- DOMAIN,ads-video-al.xhscdn.com,广告拦截
+- DOMAIN,ads-video-qc.xhscdn.com,广告拦截

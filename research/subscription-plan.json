@@ -1,0 +1,204 @@
+{
+  "schema": 1,
+  "policy": "Direct compatible whole upstream lists; preserve policy targets and order; cloud converts only unsupported syntax. Snapshots are offline validation references, not runtime URLs.",
+  "providers": {
+    "YouTube": [
+      {
+        "name": "YouTube",
+        "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml",
+        "behavior": "classical",
+        "format": "yaml",
+        "snapshot": "rules/vendor/youtube.yaml"
+      }
+    ],
+    "Instagram": [
+      {
+        "name": "Instagram",
+        "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Instagram/Instagram.yaml",
+        "behavior": "classical",
+        "format": "yaml",
+        "snapshot": "rules/vendor/instagram.yaml"
+      }
+    ],
+    "Twitter": [
+      {
+        "name": "Twitter",
+        "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml",
+        "behavior": "classical",
+        "format": "yaml",
+        "snapshot": "rules/vendor/twitter.yaml"
+      }
+    ],
+    "GitHub": [
+      {
+        "name": "GitHub",
+        "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml",
+        "behavior": "classical",
+        "format": "yaml",
+        "snapshot": "rules/vendor/github.yaml"
+      }
+    ],
+    "基础广告": [
+      {
+        "name": "基础广告",
+        "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+        "behavior": "classical",
+        "format": "yaml",
+        "snapshot": "rules/vendor/ads-expanded.yaml"
+      }
+    ],
+    "国内服务": [
+      {
+        "name": "国内服务",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/china-direct-community.yaml"
+      }
+    ],
+    "东方财富直连": [
+      {
+        "name": "东方财富直连",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/eastmoney.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/eastmoney-community.yaml"
+      }
+    ],
+    "TikTok核心": [
+      {
+        "name": "TikTok核心",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@!cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/tiktok-core.yaml"
+      }
+    ],
+    "TikTok广告": [
+      {
+        "name": "TikTok广告",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok@ads.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/tiktok-tracking.yaml"
+      }
+    ],
+    "通用代理": [
+      {
+        "name": "通用代理",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/proxy-community.yaml"
+      }
+    ],
+    "海外AI": [
+      {
+        "name": "海外AI",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/ai-metacubex.yaml"
+      },
+      {
+        "name": "海外AI补充",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/vendor/ai-sukka.yaml",
+        "behavior": "classical",
+        "format": "yaml",
+        "snapshot": "rules/vendor/ai-sukka.yaml"
+      }
+    ],
+    "海外社交": [
+      {
+        "name": "海外社交",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-social-media-!cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/social-metacubex.yaml"
+      },
+      {
+        "name": "社交Discord",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/discord.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/social-discord.yaml"
+      },
+      {
+        "name": "社交WhatsApp",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/whatsapp.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/social-whatsapp.yaml"
+      },
+      {
+        "name": "社交LINE",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/line.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/social-line.yaml"
+      },
+      {
+        "name": "社交Signal",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/signal.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/social-signal.yaml"
+      }
+    ],
+    "Adobe服务": [
+      {
+        "name": "Adobe服务",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/adobe.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/adobe-community.yaml"
+      },
+      {
+        "name": "Adobe官方补充",
+        "url": "https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/rules/adobe-official.yaml",
+        "behavior": "classical",
+        "format": "yaml",
+        "snapshot": "rules/adobe-official.yaml"
+      }
+    ]
+  },
+  "clash_basic_ads": {
+    "name": "基础广告",
+    "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads.yaml",
+    "behavior": "domain",
+    "format": "yaml",
+    "snapshot": "rules/vendor/clash-ads-community.yaml"
+  },
+  "cloud_sources": [
+    {
+      "manifest": "research/sources.lock.json",
+      "output": "rules/vendor/netflix.yaml",
+      "format": "classical_yaml"
+    },
+    {
+      "manifest": "research/sources.lock.json",
+      "output": "rules/vendor/telegram.yaml",
+      "format": "classical_yaml"
+    },
+    {
+      "manifest": "research/sources.lock.json",
+      "output": "rules/vendor/tiktok.yaml",
+      "format": "classical_yaml"
+    },
+    {
+      "manifest": "research/sources.lock.json",
+      "output": "rules/apple.yaml",
+      "format": "classical_yaml"
+    },
+    {
+      "manifest": "research/sources.lock.json",
+      "output": "rules/microsoft.yaml",
+      "format": "classical_yaml"
+    },
+    {
+      "manifest": "research/community-sources.json",
+      "output": "rules/vendor/ai-sukka.yaml",
+      "format": "classical_text"
+    }
+  ]
+}

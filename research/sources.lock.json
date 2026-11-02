@@ -1,0 +1,433 @@
+{
+  "checked_at": "2026-10-20",
+  "repository": "Panzm6111/Jimmy-s-Stash-rules",
+  "branch": "main",
+  "upstream": {
+    "repository": "blackmatrix7/ios_rule_script",
+    "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+    "license": "GPL-2.0",
+    "license_file": "licenses/blackmatrix7-GPL-2.0.txt"
+  },
+  "resources": [
+    {
+      "source_path": "rule/Clash/Netflix/Netflix_Classical.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/Netflix/Netflix_Classical.yaml",
+      "source_sha256": "82962baecece6de61b21e7eb51cb4c4f14f33d5023611ad63e885b24740bb721",
+      "output": "rules/vendor/netflix.yaml",
+      "output_sha256": "0ae31c92c380e78aabebb252349715f243e845b9430f84d9dfe61b0845962f8d",
+      "retained": 1156,
+      "omitted": [
+        "PROCESS-NAME,com.netflix.mediaclient"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/YouTube/YouTube.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/YouTube/YouTube.yaml",
+      "source_sha256": "2f84cc9d35c8559ebea4c43aa9b30bb43b36313d70684f23a359f1acabb879bb",
+      "output": "rules/vendor/youtube.yaml",
+      "output_sha256": "4e5591c1438ed993cc743d87dd301d1c78bb35259016854948658bbeb0e09a2f",
+      "retained": 183,
+      "omitted": []
+    },
+    {
+      "source_path": "rule/Clash/Telegram/Telegram.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/Telegram/Telegram.yaml",
+      "source_sha256": "e78efc3f18069f1f1e3f88c15cd55f85424367b58ce8474af08c2fdf054704e0",
+      "output": "rules/vendor/telegram.yaml",
+      "output_sha256": "596e37cd54f0af5f19001e7c4e100d30060812709c8635b90c809c5b93880973",
+      "retained": 35,
+      "omitted": [
+        "PROCESS-NAME,Telegram.exe",
+        "PROCESS-NAME,nekox.messenger",
+        "PROCESS-NAME,org.telegram.messenger",
+        "PROCESS-NAME,telegram-desktop",
+        "PROCESS-NAME,tw.nekomimi.nekogram",
+        "PROCESS-NAME,xyz.nextalone.nagram",
+        "IP-ASN,211157",
+        "IP-ASN,44907",
+        "IP-ASN,59930",
+        "IP-ASN,62014",
+        "IP-ASN,62041"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/China/China_Classical.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/China/China_Classical.yaml",
+      "source_sha256": "cb64153decc75931336fa836a5f898295c13ca51992c745e292a2c7b8d36c0fd",
+      "output": "rules/vendor/china.yaml",
+      "output_sha256": "d1c118ed502aaaec17d08a2b28d3d29ec35f9cbd84ac0327bdc682c51e6bab0c",
+      "retained": 3721,
+      "omitted": []
+    },
+    {
+      "source_path": "rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "source_sha256": "f1273a862ad8ca3f930ba5286a935cb78e710ff4184055431b49c957b4379c02",
+      "output": "rules/vendor/ads-expanded.yaml",
+      "output_sha256": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
+      "retained": 38066,
+      "omitted": []
+    },
+    {
+      "source_path": "rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rule/Clash/AdvertisingLite/AdvertisingLite_Classical.yaml",
+      "source_sha256": "f1273a862ad8ca3f930ba5286a935cb78e710ff4184055431b49c957b4379c02",
+      "output": "rules/ads-basic.yaml",
+      "output_sha256": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
+      "retained": 38,
+      "selection": [
+        "DOMAIN-SUFFIX,pangle.io",
+        "DOMAIN-SUFFIX,pangolin.snssdk.com",
+        "DOMAIN-SUFFIX,mobads-logs.baidu.cn",
+        "DOMAIN-SUFFIX,mobads-logs.baidu.com",
+        "DOMAIN-SUFFIX,mobads.baidu.cn",
+        "DOMAIN-SUFFIX,c.gdt.qq.com",
+        "DOMAIN-SUFFIX,d.gdt.qq.com",
+        "DOMAIN-SUFFIX,mi.gdt.qq.com",
+        "DOMAIN-SUFFIX,nc.gdt.qq.com",
+        "DOMAIN-SUFFIX,s.gdt.qq.com",
+        "DOMAIN-SUFFIX,t.gdt.qq.com",
+        "DOMAIN-SUFFIX,v.gdt.qq.com",
+        "DOMAIN-SUFFIX,win.gdt.qq.com",
+        "DOMAIN-SUFFIX,xc.gdt.qq.com",
+        "DOMAIN,mobads-pre-config.cdn.bcebos.com",
+        "DOMAIN-SUFFIX,doubleclick.net",
+        "DOMAIN-SUFFIX,googlesyndication.com",
+        "DOMAIN-SUFFIX,admob.com",
+        "DOMAIN-SUFFIX,adsrvr.org",
+        "DOMAIN-SUFFIX,adnxs.com",
+        "DOMAIN-SUFFIX,adkwai.com",
+        "DOMAIN-KEYWORD,pangolin-sdk-toutiao",
+        "DOMAIN-KEYWORD,pglstatp-toutiao",
+        "DOMAIN-KEYWORD,mobads.baidu.com",
+        "DOMAIN,v2.gdt.qq.com",
+        "DOMAIN,vr.gdt.qq.com",
+        "DOMAIN,xs.gdt.qq.com",
+        "DOMAIN,adsmind.gdtimg.com",
+        "DOMAIN,qzs.gdtimg.com",
+        "DOMAIN-SUFFIX,canvas.gdt.qq.com",
+        "DOMAIN-SUFFIX,pgdt.gtimg.cn",
+        "DOMAIN-SUFFIX,pgdt.gtimg.com",
+        "DOMAIN-SUFFIX,q.i.gdt.qq.com",
+        "DOMAIN-SUFFIX,rm.gdt.qq.com",
+        "DOMAIN-SUFFIX,ugdtimg.com",
+        "DOMAIN-SUFFIX,unityads.unity3d.com",
+        "DOMAIN,unityads.unitychina.cn",
+        "DOMAIN,config.unityads.unitychina.cn"
+      ],
+      "review_notes": "2026-10-19: 21→38; add reviewed SDK domains/keywords from identical pinned Classical source, not full analytics list. No umeng keyword or business-gateway block."
+    },
+    {
+      "source_path": "rule/Clash/TikTok/TikTok.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/TikTok/TikTok.yaml",
+      "source_sha256": "71c372b476ff9b641bb619b74c1192dd1b831c374bcd8cd0ae8fa34374c9fff2",
+      "output": "rules/vendor/tiktok.yaml",
+      "output_sha256": "eae648a3edd80043db29dc0317ae60ac9c1aaf86fc9c18f40448f8c3b82d888f",
+      "retained": 34,
+      "omitted": [
+        "PROCESS-NAME,com.zhiliaoapp.musically"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/Instagram/Instagram.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Instagram/Instagram.yaml",
+      "source_sha256": "3ea6152876ff1c998b9434761898af1242bcc6bcaeaed74023910d9d08c64e39",
+      "output": "rules/vendor/instagram.yaml",
+      "output_sha256": "0f831492166408481374f417bf5e6f71b782e9829656253b0359f9de55284917",
+      "retained": 4,
+      "omitted": []
+    },
+    {
+      "source_path": "rule/Clash/Twitter/Twitter.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Twitter/Twitter.yaml",
+      "source_sha256": "67c46c3988da5cdc387eacee945c2950464691af0e2746929455cd9295c3ff2b",
+      "output": "rules/vendor/twitter.yaml",
+      "output_sha256": "2c9f2b17567c643f8c2c9093b1c2cfd823302161748383d8027f0bcaad63beb3",
+      "retained": 33,
+      "omitted": []
+    },
+    {
+      "source_path": "rule/Clash/Apple/Apple_Classical.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Apple/Apple_Classical.yaml",
+      "source_sha256": "635fa6c279ba3616e82a0334818fdeac99ac46c8d1a309490aefcce438cb6ea6",
+      "output": "rules/apple.yaml",
+      "output_sha256": "dd282e776234a4ad56bcfce89b310e804635050791ff612d906b48e40a5978c6",
+      "retained": 1579,
+      "omitted": [
+        "PROCESS-NAME,CoreLocationAgent",
+        "PROCESS-NAME,WeatherWidget",
+        "PROCESS-NAME,apsd",
+        "PROCESS-NAME,com.apple.Maps",
+        "PROCESS-NAME,findmydevice-user-agent",
+        "PROCESS-NAME,fmfd",
+        "PROCESS-NAME,mapspushd",
+        "PROCESS-NAME,netbiosd",
+        "PROCESS-NAME,trustd",
+        "PROCESS-NAME,com.apple.geod",
+        "PROCESS-NAME,Music",
+        "PROCESS-NAME,LookupViewService",
+        "PROCESS-NAME,TV"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/Microsoft/Microsoft.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/Microsoft/Microsoft.yaml",
+      "source_sha256": "a289a1d52394e92ceee26a5c83953cd292609717d39fb2970d189dc7877b2a4d",
+      "output": "rules/microsoft.yaml",
+      "output_sha256": "5d97835b04c9d0d28ba50bc8518b518e082d19c87cc68a3c220e06f2c10a77da",
+      "retained": 668,
+      "omitted": [
+        "PROCESS-NAME,OneDrive",
+        "PROCESS-NAME,OneDriveUpdater"
+      ]
+    },
+    {
+      "source_path": "rule/Clash/GitHub/GitHub.yaml",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/0b6897dc17e0c513d25449c935a9694818e32f0c/rule/Clash/GitHub/GitHub.yaml",
+      "source_sha256": "a2641ce2f10857831b600623f97d354e6f8db7b20dff175c5313c2c46e0b6867",
+      "output": "rules/vendor/github.yaml",
+      "output_sha256": "a40b30900dc605bb37af83074977083d2e72bae8ca7720d197557e8cbc6b2c74",
+      "retained": 31,
+      "omitted": []
+    }
+  ],
+  "ad_scripts": [
+    {
+      "repository": "app2smile/rules",
+      "revision": "df6366a7024e0b3f0aa3510c5b791eea6f3cba89",
+      "source_path": "js/bilibili-json.js",
+      "source_url": "https://raw.githubusercontent.com/app2smile/rules/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/bilibili-json.js",
+      "source_sha256": "748ad16a92532bde2c439a8b9975f465381d20e24328cf2a58ff3a2a27328d84",
+      "output": "scripts/ads/bilibili.js",
+      "license": "MIT",
+      "native_reference": "module/bilibili.stoverride",
+      "output_sha256": "6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232"
+    },
+    {
+      "repository": "app2smile/rules",
+      "revision": "df6366a7024e0b3f0aa3510c5b791eea6f3cba89",
+      "source_path": "js/tieba-json.js",
+      "source_url": "https://raw.githubusercontent.com/app2smile/rules/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/tieba-json.js",
+      "source_sha256": "91040c0d5bf906357829d8df344a3bdce00b59e6c24f255e54a2ef7a46d04c69",
+      "output": "scripts/ads/tieba.js",
+      "license": "MIT",
+      "native_reference": "module/tieba.stoverride",
+      "output_sha256": "058007aa16d18f35faf207c6bb22e67e8ea3f1fd31d7c7a400cb6668990dc830"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "source_path": "Scripts/xiaohongshu/xiaohongshu.js",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/xiaohongshu/xiaohongshu.js",
+      "source_sha256": "318d89bce1117edb26a93b383804e195649ec4674a04efa9e3ddb4ef7f34b498",
+      "output": "scripts/ads/xiaohongshu.js",
+      "output_sha256": "0104308f8d71e4b05201b9b1619ba852b80b4001efa905048f73e7fdffcd8431",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "native_reference": null,
+      "adaptation": "AD-20261020.5：仅splash_config时间、config.splash、edith/rec/www v6 homefeed非空ads_info赞助项；保留普通带货/直播、水印/下载/画质/用户字段。无业务正文日志、内容存储或外联；诊断仅本机限时固定状态。"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "source_path": "Scripts/myBlockAds.js",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/myBlockAds.js",
+      "source_sha256": "4cf62100424886068a5470daecec319e93ccd034c647d79a9daaa72bbbc341bb",
+      "output": "scripts/ads/taobao.js",
+      "output_sha256": "b42e18518196b86f5f40c2a45fd6e729ffc6dba403e2871ffe2217bd03f7537c",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "native_reference": null,
+      "adaptation": "原来源为其他客户端的响应处理/端点规则；仅提取明确开屏范围，重新制作 Stash 原生覆写和本地响应处理，不使用外部转换站。"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "source_path": "Scripts/weibo/weibo_ads.js",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/weibo/weibo_ads.js",
+      "source_sha256": "0f1f3eba5b2c96f4f089525ad033b578b6a18a2fd99eb95409e5b0816f4a4b34",
+      "output": "scripts/ads/weibo.js",
+      "output_sha256": "dff123fedef74faa1487dff0f4653b7b395cf356a00a79a214912928d372ff86",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "native_reference": null,
+      "adaptation": "AD-20261020.5：话题/搜索、page/flowpage热搜及mix_comments/container_detail_comment/container_detail_mix的明确广告标记；四个api/mapi精确主机与HTTP/HTTPS；原生开屏空JSON保留。不复制上游正文日志、导航/账号/会员修改；诊断仅记录本机限时固定状态。"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "source_path": "Scripts/adrive/adrive.js",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js",
+      "source_sha256": "9d31582028a31ea605e69d09aa9e33949e57050006a8e0f3deb79b1c89933acd",
+      "output": "scripts/ads/alipan.js",
+      "output_sha256": "5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "native_reference": null,
+      "adaptation": "仅 onboard_list 的4种推广banner；保留备份、更新、签到/权益入口"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "source_path": "Scripts/cainiao/cainiao.js",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js",
+      "source_sha256": "76fe899db1e045aaff2d71d6ff3c58cb665bac52a5996ff20e56079a02a6451c",
+      "output": "scripts/ads/cainiao.js",
+      "output_sha256": "08894302f66e98e5b4ff1f48d017dd8727e23c56b2ef139a3d8ccdfc4ed9e9b6",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "native_reference": null,
+      "adaptation": "仅 ads.show 返回中带明确 adItemDetail 的广告项；保留积分/券/消息/包裹"
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+      "source_path": "script/startup/startup.js",
+      "source_url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
+      "source_sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
+      "output": "scripts/ads/jingdong.js",
+      "output_sha256": "d6ef9c739a5c2abab83d7ae615299452fe8ef96f3db7e7d9a78a52381f245cd3",
+      "license": "GPL-2.0",
+      "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
+      "native_reference": "script/startup/startup.stoverride",
+      "adaptation": "仅URL唯一functionId=start的二维/平铺已知广告展示控制；正常订单、券、倒计时保留，POST正文函数和未知结构不猜测。"
+    },
+    {
+      "repository": "blackmatrix7/ios_rule_script",
+      "revision": "7dd06b44f5093dd5404e1e5f3bca5452d97146ef",
+      "source_path": "script/startup/startup.js",
+      "source_url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
+      "source_sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
+      "output": "scripts/ads/meituan.js",
+      "output_sha256": "b179202e6813d3d4cdf0768d9e9cf56e6d0b1a7392ddeb3dd4dc3ec76024e40d",
+      "license": "GPL-2.0",
+      "license_file": "licenses/blackmatrix7-GPL-2.0.txt",
+      "native_reference": "script/startup/startup.stoverride",
+      "adaptation": "仅外卖 loadInfo.startpicture.ad/mk 广告数组；保留其他启动数据与券"
+    },
+    {
+      "repository": "fmz200/wool_scripts",
+      "revision": "5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97",
+      "source_path": "QuantumultX/rewrite/rewrite.snippet",
+      "source_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
+      "source_sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d",
+      "output": "scripts/ads/luckin.js",
+      "output_sha256": "3b2f83671bc9b7b0d8c2cb676b6cf99f056757abd7e516cdc9216bd26c2c1d91",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/fmz200-GPL-3.0.txt",
+      "native_reference": null,
+      "adaptation": "仅 sys/app/adposNew 独立广告响应；保留点单、商品与优惠券"
+    },
+    {
+      "repository": "NobyDa/Script",
+      "revision": "0b8d083d444f4476700cb9d5d059c07b42da85eb",
+      "source_path": "QuantumultX/File/Wechat.js",
+      "source_url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js",
+      "source_sha256": "f661257b7bdedf5de63c6a9272f4e646829d8b95607f60faecd9ced39afa2c24",
+      "output": "scripts/ads/wechat-articles.js",
+      "output_sha256": "2002b5684925139744cb89e664e99f79ffa85a0d46a043aea4cd507a2205b8d3",
+      "license": "GPL-3.0-only",
+      "license_file": "licenses/NobyDa-GPL-3.0.txt",
+      "native_reference": null,
+      "adaptation": "仅公众号 getappmsgad 的广告数组/数量；不改朋友圈、视频号、好友聊天或安全链接"
+    }
+  ],
+  "ad_supporting_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "purpose": "GPL-3.0原文"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/QuantumultX/rewrite/rewrite.snippet",
+      "sha256": "45e06775655eebba32a2a816b9c44c5b11175e57ebcd2984d39a7b618a78243d",
+      "purpose": "淘宝/小红书端点出处；未整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/Advertising/Advertising.stoverride",
+      "sha256": "77de1e89d6c666c6734874f37baf6e34e29b806a0f3c6409ca9ff946a6c17e27",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/script/startup/startup.js",
+      "sha256": "431801d369b495d34b7a1c1d6cc43abdb1d159dd0d82491ee756c0ae834b625c",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/adrive/adrive.js",
+      "sha256": "9d31582028a31ea605e69d09aa9e33949e57050006a8e0f3deb79b1c89933acd",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/cainiao/cainiao.js",
+      "sha256": "76fe899db1e045aaff2d71d6ff3c58cb665bac52a5996ff20e56079a02a6451c",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/didi/didiAds.js",
+      "sha256": "c4f17a8ca8b27e15b7332460c83b5ba19aeded4c21e8f31beff8cefc54425ab7",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/quark.js",
+      "sha256": "a80632f4308d8971f2ee1b42cb1b2c3b72c90ec5619ed33849fcc0fcbf0f1bcc",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/umetrip/umetrip_ads.js",
+      "sha256": "7a0f7976a4b8f47649684cc382832e425610e924e0fdc11ea2e06b1ebd2cbacf",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/5d5f63fcf98bc69d5f8f1b1bae6f86a01ee4bb97/Scripts/jingdong/jingdong.js",
+      "sha256": "3e7cc975f8985a4d2dbdbdefc405d0e3e6c9c07bf3c5361da1ecae206b6c04a1",
+      "purpose": "图片App调查/原生格式参考；不整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "purpose": "YouTube来源许可审阅，未复制该运行脚本"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/YouTube.Enhance.sgmodule",
+      "sha256": "9c7464733c54417da36aff09482d1287cee5ecd531ad856842912704b5b3f64d",
+      "purpose": "YouTube/Music原模块：Surge二进制/请求响应/动态视频主机，暂缓"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.response.js",
+      "sha256": "f98483d5f5017514f82502253c0db5ce2d4ffb7839887aa2cadc22666f5a7f12",
+      "purpose": "YouTube实际打包代码审阅：无原生Stash适配分支，未整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/WeRead.sgmodule",
+      "sha256": "38f5cf3b3b7cd4c63b1e5b0e5b7b54248f6018a4389c2a0a4d775d083c226a63",
+      "purpose": "微信读书UI提示精简，非明确广告专项，未导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/QuantumultX/File/Wechat.js",
+      "sha256": "f661257b7bdedf5de63c6a9272f4e646829d8b95607f60faecd9ced39afa2c24",
+      "purpose": "135款App调查/原生格式参考；未整包导入"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "purpose": "公众号广告来源GPL-3.0许可"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/Stash/IPA-Installer.stoverride",
+      "sha256": "e2d7591df2182c80cd8f9cfc73a832ce62f9bc2b1cd33b4b2743af7d1ee2c90f",
+      "purpose": "Read-only native Stash request-handler response-envelope evidence; no IPA installer code included or executed."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NobyDa/Script/0b8d083d444f4476700cb9d5d059c07b42da85eb/IPA-Installer/IPA-Installer.js",
+      "sha256": "c7b2887cafcbe563f022488e04a7fafed9160465fc939f5d0cfa048232216499",
+      "purpose": "Read-only native Stash request-handler response-envelope evidence; no IPA installer code included or executed."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/7dd06b44f5093dd5404e1e5f3bca5452d97146ef/rewrite/Stash/AdvertisingScript/AdvertisingScript.stoverride",
+      "sha256": "eeed89b368eceaed7cd85d20c1f6b7cceeaa6becd8a62a59a758aca1af942ff7",
+      "purpose": "native http.script.argument declaration reference; historical upstream, not official version evidence"
+    }
+  ],
+  "ad_catalog_checked_at": "2026-10-19"
+}

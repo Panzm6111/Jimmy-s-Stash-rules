@@ -1,0 +1,11 @@
+# Mechanically adapted maintained rules; no locally authored domains.
+# Sources and original licenses: research/community-sources.json; social-signal
+payload:
+- DOMAIN-SUFFIX,signal.art
+- DOMAIN-SUFFIX,signal.group
+- DOMAIN-SUFFIX,signal.link
+- DOMAIN-SUFFIX,signal.me
+- DOMAIN-SUFFIX,signal.tube
+- DOMAIN-SUFFIX,signal.org
+- DOMAIN-SUFFIX,signalusers.org
+- DOMAIN-SUFFIX,whispersystems.org
