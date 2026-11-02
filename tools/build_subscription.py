@@ -13,6 +13,7 @@ URL = RAW + OUTPUT
 VERSION = 'AD-20261020.5'
 PROTECTED = 'RULE-SET,东方财富直连,DIRECT'
 ADOBE = 'RULE-SET,Adobe服务,Adobe'
+MOBILE_ADS = '手机广告补充'
 
 def integrated():
     """The user-facing integrated entry; module files remain maintained sources."""
@@ -84,6 +85,11 @@ def remote_integrated():
     config['rules'] = ['GEOIP,CN,DIRECT' if r == 'GEOIP,CN,国内直连' else r for r in config['rules']]
     terminal=next(i for i,r in enumerate(config['rules']) if r.startswith('MATCH,'))
     config['rules']=config['rules'][:terminal+1]
+    # Supplemental mobile ads may only replace MATCH. Every existing domain,
+    # service, private-network and China-IP decision retains higher priority.
+    config['rule-providers'][MOBILE_ADS] = {
+        'type':'http','behavior':'classical','url':RAW+'rules/vendor/mobile-ads-awa.yaml','interval':86400}
+    config['rules'].insert(-1, f'RULE-SET,{MOBILE_ADS},广告拦截')
     from provider_sources import apply
     return apply(config)
 
@@ -97,7 +103,8 @@ def render():
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261102.3；33个远程规则集，国内游戏/腾讯共用服务及中国IP直连；保留21个策略组。\n'
+            '# JIMMY-ROUTING ROUTE-20261102.4；34个远程规则集，原分流及中国IP直连优先；保留21个策略组。\n'
+            '# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
             '# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。\n'
@@ -116,7 +123,9 @@ def verify(text):
     config = yaml.safe_load(text)
     validate_structure(config)
     assert set(config['rule-providers']) == set(remote_integrated()['rule-providers'])
-    assert len(config['rule-providers']) == 33
+    assert len(config['rule-providers']) == 34
+    assert config['rules'][-2] == f'RULE-SET,{MOBILE_ADS},广告拦截'
+    assert config['rules'][-3] == 'GEOIP,CN,DIRECT'
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
     from provider_sources import plan
     assert config['rule-providers']['基础广告']['url'] == plan()['providers']['基础广告'][0]['url']

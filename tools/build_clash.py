@@ -13,7 +13,7 @@ def remote_profile(source):
     result.update(global_merge(source))
     # HTTP-specific exceptions and per-app ads belong to Stash. The Clash subscription
     # uses the whole maintained basic advertising set, not our per-app selections.
-    removed={'广告路径例外','App广告域名'}
+    removed={'广告路径例外','App广告域名','手机广告补充'}
     result['rules']=[r for r in result['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
     for name in removed:del result['rule-providers'][name]
     from provider_sources import plan

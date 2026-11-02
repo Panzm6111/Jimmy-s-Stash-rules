@@ -306,6 +306,21 @@
       "retained": 686,
       "omitted": [],
       "license": "GPL-3.0"
+    },
+    {
+      "id": "mobile-ads-awa",
+      "repository": "TG-Twilight/AWAvenue-Ads-Rule",
+      "revision": "72dd30fb6d5e2ff7b5bcdbecf164d288f41d9dfa",
+      "ref": "refs/heads/main",
+      "path": "Filters/AWAvenue-Ads-Rule-Clash-Only.Ads.yaml",
+      "url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/72dd30fb6d5e2ff7b5bcdbecf164d288f41d9dfa/Filters/AWAvenue-Ads-Rule-Clash-Only.Ads.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "9f4d94cb63249fce846bc1f1206aeec98da62b812cff1056df7bd76430965aaf",
+      "output": "rules/vendor/mobile-ads-awa.yaml",
+      "output_sha256": "7265d16dc95a001b3bca4f2fcd635629ca4edc120c44c62a34379093a8622924",
+      "retained": 661,
+      "omitted": [],
+      "license": "GPL-3.0"
     }
   ],
   "licenses": [
@@ -338,6 +353,16 @@
       "file": "licenses/blackmatrix7-GPL-2.0.txt",
       "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
       "license": "GPL-2.0"
+    },
+    {
+      "repository": "TG-Twilight/AWAvenue-Ads-Rule",
+      "revision": "72dd30fb6d5e2ff7b5bcdbecf164d288f41d9dfa",
+      "ref": "refs/heads/main",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/72dd30fb6d5e2ff7b5bcdbecf164d288f41d9dfa/LICENSE",
+      "file": "licenses/AWAvenue-GPL-3.0.txt",
+      "sha256": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2",
+      "license": "GPL-3.0"
     }
   ],
   "aggregates": [

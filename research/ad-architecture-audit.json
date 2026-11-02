@@ -5,7 +5,7 @@
   "before_repair_commit": "936fe457b0362d0dc439d769e9fa7faa29d56b5b",
   "counts": {
     "app_modules": 40,
-    "public_main_rules": 35,
+    "public_main_rules": 36,
     "basic_ad_payload": 38,
     "expanded_ad_payload": 38066,
     "app_domain_rules": 19,
@@ -21,7 +21,7 @@
     "optional_probe_js": 1
   },
   "input_sha256": {
-    "config/stash.yaml": "9bf470f9c98eea65c8451eb23514fe9445b962fd3a3ee39b9e35d591e828fd17",
+    "config/stash.yaml": "9a6c7062b20433c7060202f1cccb5ce609c2955e95f4de50a03ad90ad9849dec",
     "templates/stash-main.yaml": "dcf813dcfa62754c2bc1429ff3c1aab6367ae5402cb774e3f8b728fe116ff26b",
     "templates/stash-core.stoverride": "218c56405a63c3e35321e793bf3b71b6d6a9ba6f32931990c7e9b75f4ee8f4ab",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
@@ -37,7 +37,7 @@
     "tools/build_ad_scripts.py": "cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22",
     "tools/build_ad_diagnostics.py": "08225111d2793fb4aec5adb3af4c33fd9f9ac46151c0863ff468791876748bba",
     "tools/ad_observation_runtime.js": "a4aaec1eaaadbfbf523a5b1896ab798400349208fe2a67c0bb6912c2d32436dd",
-    "tools/build_subscription.py": "62a05cd9d15ef29256f524b974e3de4d12b45124a05c1a993049279e6ff2d0cc",
+    "tools/build_subscription.py": "33ae0aff616cba97ca46f48f4c03b8de4212bfe1b28f633cc70f5e0a29946a82",
     "tools/config_helpers.py": "9009f58c0fa2960e8a113c6b32efc8a43a7ebbe5af625ae999d5f54246b592bd",
     "tools/build_private_config.py": "aa79eb4ebd36beeed08ac32568a675a94619a4720877b14ac79ae074339a9b9b",
     "tools/render_ad_architecture.py": "538d00161d06f0375065d5ea51c0507b2a12c9b949160b133be8aff7dd8fcb76",
@@ -113,8 +113,8 @@
   "prose_prefix_sha256": "c39208a34c5285dda48bb24393bfca26899755416f42356fb5e96b86c919d254",
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
-    "bytes": 157241,
-    "sha256": "1925be243f1d80235d03c98ab079e12b04b5dfd155771e80537ad29814c8c69c",
+    "bytes": 157503,
+    "sha256": "95fe91285f674826c8527dfa55bde08272719caa025387fa0c4aae94b148afb2",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,

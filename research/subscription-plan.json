@@ -214,6 +214,15 @@
         "format": "yaml",
         "snapshot": "rules/vendor/tencent-direct.yaml"
       }
+    ],
+    "手机广告补充": [
+      {
+        "name": "手机广告补充",
+        "url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash-Only.Ads.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/mobile-ads-awa.yaml"
+      }
     ]
   },
   "clash_basic_ads": {

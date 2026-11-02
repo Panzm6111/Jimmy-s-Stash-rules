@@ -184,7 +184,26 @@
     "live_checked_at": "2026-11-02T08:03:15.817275+00:00"
   },
   "publication": {
-    "status": "pending"
+    "status": "published; Linux CI success; client acceptance incomplete",
+    "commit": "cfc739c9e225b18dacbd891c6bf8c2721b4d75a5",
+    "ci": {
+      "run_id": 41410944868,
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41410944868",
+      "conclusion": "success",
+      "rechecked_on": "2026-11-02"
+    },
+    "client": {
+      "last_observed_on": "2026-11-02",
+      "profile_updated": true,
+      "node_count": 56,
+      "new_game_provider_counts": [
+        0,
+        0,
+        0
+      ],
+      "interrupted_by_user": true,
+      "subsequent_state": "not rechecked"
+    }
   },
   "acceptance_boundary": "No real game login, matchmaking, voice chat, full-match latency or packet-loss test. DIRECT is routing, not application-level VPN exclusion. Shared Tencent non-game services may also be direct; earlier dedicated foreign application routes keep precedence."
 }

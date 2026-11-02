@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 35 |
+| public_main_rules | 36 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -423,10 +423,17 @@ rule-providers:
     behavior: domain
     format: yaml
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tencent.yaml
+  手机广告补充:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash-Only.Ads.yaml
 rules:
 - RULE-SET,TikTok广告,广告拦截
 - RULE-SET,App广告域名,广告拦截
 - RULE-SET,基础广告,广告拦截
+- RULE-SET,手机广告补充,广告拦截
 http:
   mitm:
   - example.com
@@ -696,7 +703,7 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `9bf470f9c98eea65c8451eb23514fe9445b962fd3a3ee39b9e35d591e828fd17` |
+| [config/stash.yaml](../config/stash.yaml) | `9a6c7062b20433c7060202f1cccb5ce609c2955e95f4de50a03ad90ad9849dec` |
 | [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `218c56405a63c3e35321e793bf3b71b6d6a9ba6f32931990c7e9b75f4ee8f4ab` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |

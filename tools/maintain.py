@@ -30,7 +30,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 PRIMARY = 'blackmatrix7/ios_rule_script'
 REPOSITORIES = frozenset({PRIMARY, 'fmz200/wool_scripts', 'app2smile/rules',
-                          'NobyDa/Script', 'Maasea/sgmodule', 'v2fly/domain-list-community', 'MetaCubeX/meta-rules-dat', 'SukkaW/Surge'})
+                          'NobyDa/Script', 'Maasea/sgmodule', 'v2fly/domain-list-community', 'MetaCubeX/meta-rules-dat', 'SukkaW/Surge',
+                          'TG-Twilight/AWAvenue-Ads-Rule'})
 SHA = re.compile(r'[0-9a-f]{40}\Z')
 DIGEST = re.compile(r'[0-9a-f]{64}\Z')
 LIMIT = 8 * 1024 * 1024

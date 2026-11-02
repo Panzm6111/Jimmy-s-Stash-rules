@@ -2,7 +2,8 @@
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # JIMMY-STASH AD-20261020.5；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。
-# JIMMY-ROUTING ROUTE-20261102.3；33个远程规则集，国内游戏/腾讯共用服务及中国IP直连；保留21个策略组。
+# JIMMY-ROUTING ROUTE-20261102.4；34个远程规则集，原分流及中国IP直连优先；保留21个策略组。
+# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
 # Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。
 # 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。
@@ -365,6 +366,7 @@ rules:
 - RULE-SET,社交Signal,TikTok
 - RULE-SET,通用代理,总代理
 - GEOIP,CN,DIRECT
+- RULE-SET,手机广告补充,广告拦截
 - MATCH,未匹配流量
 rule-providers:
   Adobe服务:
@@ -557,6 +559,12 @@ rule-providers:
     behavior: domain
     format: yaml
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tencent.yaml
+  手机广告补充:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash-Only.Ads.yaml
 http:
   mitm:
   - example.com

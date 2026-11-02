@@ -68,5 +68,48 @@ class HealthChecks(unittest.TestCase):
             for host,policy in [('www.steampowered.com','总代理'),('api.openai.com','海外AI'),('www.tiktok.com','TikTok')]:
                 self.assertEqual(v.route(config,host,'203.0.113.5','CN'),prefix+policy)
 
+    def test_mobile_supplement_cannot_capture_existing_app_and_comment_routes(self):
+        from urllib.parse import urlsplit
+        config=v.load('config/stash.yaml');sets=v.provider_rules(config)
+        cases=json.loads((ROOT/'tests/fixtures/app-routes.json').read_text(encoding='utf-8'))['cases']
+        # Fault injection: even if a future upstream mistakenly lists every
+        # protected business host, the original route and HTTP handling win.
+        # MATCH-only negative samples are intentionally eligible for new ads;
+        # the protection contract covers all earlier routing decisions.
+        protected=[case for case in cases if a.decision(config,sets,urlsplit(case['url']).hostname)[1]!='MATCH']
+        sets['手机广告补充']=['DOMAIN,'+urlsplit(case['url']).hostname for case in protected]
+        report=a.audit(config,sets,cases)
+        self.assertTrue(all(x['ok'] for x in report))
+        self.assertFalse(any(x['provider']=='手机广告补充' for x in report))
+        broken=copy.deepcopy(config)
+        broken['rules'].remove('RULE-SET,手机广告补充,广告拦截')
+        broken['rules'].insert(0,'RULE-SET,手机广告补充,广告拦截')
+        self.assertTrue(any(not x['ok'] for x in a.audit(broken,sets,cases)))
+
+    def test_mobile_supplement_yields_to_china_ip_and_device_allowlist(self):
+        config=v.load('config/stash.yaml');sets=v.provider_rules(config)
+        host='fixture-mobile-ad.example.invalid'
+        sets['手机广告补充']=['DOMAIN,'+host]
+        with patch.object(v,'provider_rules',return_value=sets):
+            self.assertEqual(v.route(config,host,country='JP'),'广告拦截')
+            for address in ['203.0.113.5','2001:db8::5']:
+                self.assertEqual(v.route(config,host,address,'CN'),'DIRECT')
+            allowed=v.merge_model(config,{'rules':['DOMAIN,'+host+',DIRECT']})
+            self.assertEqual(v.route(allowed,host,country='JP'),'DIRECT')
+            self.assertEqual(v.route(config,'normal-mobile.example.invalid',country='JP'),'未匹配流量')
+
+    def test_mobile_source_only_supplements_stash_and_keeps_exact_hosts(self):
+        stash=v.load('config/stash.yaml');clash=v.load('config/clash-verge-auto.yaml')
+        self.assertEqual(stash['rules'][-3:],['GEOIP,CN,DIRECT','RULE-SET,手机广告补充,广告拦截','MATCH,未匹配流量'])
+        self.assertNotIn('手机广告补充',clash['rule-providers'])
+        self.assertFalse(any('手机广告补充' in x for x in clash['rules']))
+        provider=stash['rule-providers']['手机广告补充']
+        self.assertTrue(provider['url'].endswith('/main/Filters/AWAvenue-Ads-Rule-Clash-Only.Ads.yaml'))
+        self.assertEqual(provider['interval'],86400)
+        self.assertEqual(provider['behavior'],'domain')
+        # These are public upstream examples, not new runtime rules authored here.
+        self.assertEqual(v.route(stash,'ad-splash.hktvmall.com',country='JP'),'广告拦截')
+        self.assertEqual(v.route(stash,'child.ad-splash.hktvmall.com',country='JP'),'未匹配流量')
+
 
 if __name__=='__main__':unittest.main()
