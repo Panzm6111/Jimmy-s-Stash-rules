@@ -11,14 +11,16 @@ Stash 当前版本ROUTE-20261102.4，手机补充MOBILE-AD-20261102.1（位于�
 | Netflix、Telegram、TikTok、Apple、Microsoft | GitHub过滤既有PROCESS-NAME/IP-ASN后发布，保持两端原有基本规则语义，共5份转换 |
 | Sukka AI补充 | GitHub转为classical YAML，保留旧URL正则遗漏记录，第6份转换 |
 | 系统例外、App广告、HTTP/JS、自检与Adobe官方补充 | 项目固定审查源；有需求或证据时改动，未启用自动签到 |
-| 策略组、规则顺序与主配置结构 | 原Stash主订阅；Clash Jimmy全自动主订阅1440分钟刷新 |
+| 策略组、规则顺序与主配置结构 | Stash托管主订阅按配置页设置自动检查（官方默认12小时）；Clash Jimmy全自动主订阅1440分钟刷新 |
 | 机场节点 | 设备本地私人provider，24小时尝试更新；Clash下载出口300秒主动检查 |
 
 AI、社交和Adobe拆成相邻规则集，目标策略与匹配优先级不变。21业务组、三地区ai、TikTok统一社交和Clash隐藏下载回退组保留。Stash34份、Clash自动入口31份规则集，其中分别24份、23份直订；未增加业务策略组。
 
-云端工作流[必要规则云端更新](../.github/workflows/refresh-rules.yml)每天北京时间12:17计划运行，避开整点；也支持Actions页面Run workflow。每次只读取6份转换输入及许可，异常/大幅变化停止；有实际变化才构建、验证、精确提交和推送。验证在同一工作流内完成，失败不发布；GITHUB_TOKEN推送不另触发push CI，不需要私人PAT。无变化不提交。依赖固定SHA，write权限只给此发布作业。
+云端工作流[必要规则云端更新](../.github/workflows/refresh-rules.yml)每天北京时间12:17计划运行，避开整点；也支持Actions页面Run workflow。每次转换范围仅为6份输入及许可，另检查25个直订URL和两端代表性分流；异常/大幅变化停止。有实际变化时构建，每次执行验证；只有内容变化且验证通过才精确提交和推送。验证在同一工作流内完成，失败不发布；GITHUB_TOKEN推送不另触发push CI，不需要私人PAT。无变化不提交。依赖固定SHA，write权限只给此发布作业。
 
 GitHub定时执行可能延迟；公开仓库长期60天无活动可能停用schedule，需在Actions页面恢复。不能承诺每天精确到分钟。依据：[GitHub schedule说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)。
+
+2026-11-02排查：最近三次定时运行比计划晚约6—7小时才创建，创建后2—3秒启动作业，执行134—223秒成功结束，延迟集中在GitHub创建运行之前。工作流已启用，UTC cron与北京时间换算正确；公开记录无法证明平台内部的具体调度原因。保留原计划，不新增调度系统。详细时间与边界见[审查证据](../research/general-review-20261102.json)；客户端直订上游不等待这6份转换任务。
 
 旧Windows脚本与旧Clash发布入口已删除；仅使用当前两份主订阅。私人订阅、节点和证书留在设备，不进入GitHub。
 
@@ -49,7 +51,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 | 远程规则集 | 由有效RULE-SET引用后参与路由，局域网/关键系统例外和本机白名单保持优先。实际误拦仍需手机排查 |
 | 本机临时诊断记录 | 仅手动开始后的15分钟内写固定状态、计数和时间；留在Stash设备存储，不随公共文件上传，不是账号凭据存储。新一轮仅展示当前轮次，停止或过期停止新增记录 |
 | 本地维护工具 | 检查公开上游；普通规则在隔离副本验证后写回项目。只在运行时工作，不操作机场、证书或账号，也不自动发布 |
-| 旧main.yaml＋core/App覆写 | 仅保留维护来源和已安装用户兼容；旧安装分别更新各文件，不能与整合入口重复叠加。当前需求不再包含逐App开关 |
+| templates及App模块 | 仅用于生成和来源审计；不再发布旧分层入口，不与整合入口重复叠加。当前需求不再包含逐App开关 |
 | 自动签到 | 仅保留调查备忘，没有脚本、Cookie捕获或定时任务，不参与更新 |
 
 <a id="本次测速与海外ai调整的迁移"></a>
@@ -82,7 +84,7 @@ DNS的`dot.pub / NotValidForName`、陌生`Google/NCloud`策略组等旧故障�
 
 主配置回退只恢复当时的声明；远程JS和规则集若仍指向main，会继续读取当前资源，脚本URL上的`?v=...`也不把main固定为历史字节。完整版本回退需配套脚本及规则集版本，不能只换一个旧YAML就声称所有资源一起回退。旧content-only版本已有解析失败反馈，不作为本次推荐回退目标。
 
-本地维护工具产生的规则更新可按[维护教程](MAINTENANCE.md)使用备份回退；已经发布的变化还需把回退结果重新提交到GitHub，手机才能通过原链接取得回退内容。其他手工修复需还原对应的源配置、规则、模块和脚本，运行`python tools/build_ads.py --write --bundle`，验证后提交到原main；稳定链接不变，不用破坏性重置清掉未保存修改。本机已设置每天12点任务；电脑和可用GitHub连接均是成功执行的条件。
+本地维护工具产生的规则更新可按[维护教程](MAINTENANCE.md)使用备份回退；已经发布的变化还需把回退结果重新提交到GitHub，手机才能通过原链接取得回退内容。其他手工修复需还原对应的源配置、规则、模块和脚本，运行`python -X utf8 tools/build_ads.py --write`，验证后提交到原main；稳定链接不变，不用破坏性重置清掉未保存修改。Windows旧每日任务已移除；日常转换由GitHub Actions执行，不依赖本机开机。手工维护仅在需要修改、验证或回退时运行。
 
 ## 私人信息误提交
 

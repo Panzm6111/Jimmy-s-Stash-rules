@@ -110,11 +110,11 @@
     "tools/ad_transforms/weibo.js": "348826ddb71b078f9302a48dffa290a78cd32e3d0bf8f9b6affb0f4b26c67a1b",
     "tools/ad_transforms/xiaohongshu.js": "12a25f1e2c658851683bc8eed2d1955e3cd38033b3f037ca43512968eafce671"
   },
-  "prose_prefix_sha256": "c39208a34c5285dda48bb24393bfca26899755416f42356fb5e96b86c919d254",
+  "prose_prefix_sha256": "b4d0db0f710041286eb690b4ffeebf5772778a5f2ac4d6fba12d3b2255bb59da",
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
-    "bytes": 157503,
-    "sha256": "95fe91285f674826c8527dfa55bde08272719caa025387fa0c4aae94b148afb2",
+    "bytes": 157651,
+    "sha256": "de4e3cddd6dc35d94568f90179d1bb909f4a21f5499ca72f34c968437d867e46",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,

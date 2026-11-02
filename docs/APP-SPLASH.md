@@ -21,6 +21,6 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/modules/ads/weibo.stoverride
 ```
 
-整合模式刷新原主配置会更新精确主机、handler及JS来源地址，脚本正文由Stash按URL联网取得。主配置建议每周手动刷新一次，发布修复后立即刷新；JS、广告规则集与机场节点分别保留24小时自动尝试刷新。纯JS修复可刷新脚本资源取得，新增主机或handler仍须更新主配置，详见[更新教程](UPDATES.md)。MITM解密的是列出整个主机，即使脚本只匹配广告路径也须理解这个范围。不解密全域或银行支付，不安装他人CA、不关闭TLS验证。
+整合模式刷新原主配置会更新精确主机、handler及JS来源地址，脚本正文由Stash按URL联网取得。主配置按Stash配置页的托管订阅设置自动检查更新；首次迁移或需要立即取得修复时刷新原URL；JS、广告规则集与机场节点分别保留24小时自动尝试刷新。纯JS修复可刷新脚本资源取得，新增主机或handler仍须更新主配置，详见[更新教程](UPDATES.md)。MITM解密的是列出整个主机，即使脚本只匹配广告路径也须理解这个范围。不解密全域或银行支付，不安装他人CA、不关闭TLS验证。
 
 预加载素材可保存在App私有目录，没有新请求也可能出现广告。先做多次冷启动、后台返回和使用后再启动的对照，优先App自带清缓存，网络规则不会删除本地文件。临时无敏感诊断、失败状态和最小反馈步骤见[去广告教程](ADBLOCKING.md)。自动签到继续暂停。

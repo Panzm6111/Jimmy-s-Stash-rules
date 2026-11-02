@@ -18,7 +18,7 @@
 
 | 能力 | 本项目采用的方式与证据 | 官方来源/版本要求状态 |
 |---|---|---|
-| 主配置 | `config/stash.yaml` 为当前统一整合入口；`templates/stash-main.yaml` 仅保留作维护和旧分层安装兼容模板。不放真实 URL，不假设任意 YAML 环境变量展开 | 官方入口 https://stash.wiki/；下载/编辑/更新行为仍待读取当前正文；不编造最低版本 |
+| 主配置 | `config/stash.yaml` 为当前统一整合入口；`templates/stash-main.yaml` 仅保留作生成维护模板，不是发布入口。不放真实 URL，不假设任意 YAML 环境变量展开 | 官方入口 https://stash.wiki/；下载/编辑/更新行为仍待读取当前正文；不编造最低版本 |
 | 覆写与深层映射 | 整合主配置 + 仅设备保存的私人 provider URL覆写；广告模块保留为构建源，有app2smile原生Stash源码参考 | 原生参考 `module/bilibili.stoverride`、`module/tieba.stoverride` 在锁定版本中实际存在。真实 map/list/rules 合并与覆写顺序需官方文档和合并预览复核 |
 | 代理集 | `proxy-providers`，固定名称“机场”，更新间隔 86400 秒；真实订阅仅设备填写 | `proxies:` 节点文件为本项目明确采用的目标结构；全配置/Base64/URI/不同 VLESS 传输的原生支持不能在本云机断言；须看当前官方代理集/协议文档 |
 | 软件选择地区池 | 软件 `select` 引用美国、日本、香港、新加坡、台湾5个 `url-test` 组；“自动节点”“其他地区”同样自动测速，“手动节点”保留select，共18组。海外AI默认美国，Apple默认DIRECT | select/use/filter/url-test 的当前官方语义和最低版本待复核。未使用未证实的exclude-filter或负向前瞻；公共“其他地区”是常见国家正向匹配，非严格补集。地区组的REJECT哨兵及正则已做结构检查，**真实空池/全失效行为仍需手机测试** |
@@ -32,7 +32,7 @@
 | 临时诊断探针 | 仅已审阅58个App精确主机的request handler，require-body:false；只记录URL是否命中预期，不改请求 | 字段形态有既有原生request参考；诊断覆写默认关闭，应与正式App专项隔离对照。没日志不能单独证明没进MITM |
 | 手动自检页与本机临时记录 | 整合入口增加example.com精确MITM及单独路径request handler，`$done({response:{status,headers,body}})`返回本机页面。`$persistentStore.read/write`仅存15分钟内的固定状态、计数和时间 | 已核对NobyDa锁定原生Stash IPA-Installer模块及其JS：request响应包装和read/write调用均存在；仅作API用法依据，不复制安装器业务。来源哈希见[SOURCES](SOURCES.md)。没有新增真机成功结论；HTTPS页只证明测试主机的执行，不证明App命中 |
 | HTTP/3 | 当前HTTP/3不进改写引擎，不能靠force-http-engine宣称解密 | 依据用户提供官方调查；当前无真实QUIC证据，未添加UDP阻断。不根据h3域名猜传输协议 |
-| 整合入口与本地包的脚本来源 | `script-providers.<name>.url` 指向本仓库原JS文件，`interval: 86400`；不再生成仅含content的provider | 用户实机报`provider: url,payload, path are all empty`；出错的旧配置中11个content-only脚本声明没有这些来源字段。恢复项目既有app2smile原生Stash覆写使用的URL写法；不据报错猜测payload正文类型或最低版本 |
+| 整合入口的脚本来源 | `script-providers.<name>.url` 指向本仓库原JS文件，`interval: 86400`；不再生成仅含content的provider | 用户实机报`provider: url,payload, path are all empty`；出错的旧配置中11个content-only脚本声明没有这些来源字段。恢复项目既有app2smile原生Stash覆写使用的URL写法；不据报错猜测payload正文类型或最低版本 |
 | 脚本更新 | 整合主入口包含URL声明，Stash联网加载JS；新增主机/handler须刷新主配置，不能只刷新JS。原路径加`?v=AD-20261020.5`区分新版资源请求 | URL/interval来自既有原生覆写；实际刷新和缓存时机待手机验证，不保证断网更新。配置和脚本当前均AD-20261020.5；版本参数不是Git固定提交或不可变快照 |
 | 策略选择保留 | 固定配置名称、策略组名、provider 名；不写未经核实的 profile.store-selected | native 持久化行为未验证。普通 YAML 合并不能保存 UI 的运行时选择；更新前记下选择，更新后核对，必要时重选 |
 | 定时签到（已暂停，仅备忘） | **不生成 cron**，用户已暂停此项 | 官方当前 cron 字段、时区、前后台语义、错过补跑及最低版本尚未查实；不能把 Surge cron 原样复制，也不承诺后台准点 |
@@ -52,4 +52,4 @@
 
 [research/projects.json](../research/projects.json) 与 [sources.lock.json](../research/sources.lock.json) 可以复查已读原生模块和脚本，而不是用另一个代理客户端代替 Stash。
 
-配置及脚本AD-20261020.5：真实实现、官方访问限制、脚本约定与待真机项统一见[详细规格](AD-ARCHITECTURE.md)。广告规则集、机场和远程JS均配置24小时尝试刷新，主配置每周手动刷新一次、修复发布后立即刷新；新主机或handler不能只刷新JS。测速30分钟不是规则更新。具体机制以[更新教程](UPDATES.md)为准，不承诺断网或iOS后台下准点执行。本轮补齐fmz200部分广告分支并保留自检和临时观察，地区策略及私人订阅机制保留，自动签到暂停。
+分流ROUTE-20261102.4、手机补充MOBILE-AD-20261102.1、HTTP/JS AD-20261020.5：真实实现、官方访问限制、脚本约定与待真机项统一见[详细规格](AD-ARCHITECTURE.md)。广告规则集、机场和远程JS均配置24小时尝试刷新，主配置按托管订阅设置自动检查，首次迁移或需要立即取得修复时手动刷新原URL；新主机或handler不能只刷新JS。测速30分钟不是规则更新。具体机制以[更新教程](UPDATES.md)为准，不承诺断网或iOS后台下准点执行。本轮补齐fmz200部分广告分支并保留自检和临时观察，地区策略及私人订阅机制保留，自动签到暂停。

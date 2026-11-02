@@ -1,0 +1,421 @@
+{
+  "reviewed_at": "2026-11-02T09:38:23.303895+00:00",
+  "base_commit": "d5cfb390a8e6c938bcd4eb00f7ddb626bfc83eb8",
+  "scope": "Overall audit only; no new features or runtime changes; findings remain pending.",
+  "verified": {
+    "generation_check": {
+      "command": "python -X utf8 tools/build_ads.py",
+      "exit_code": 0,
+      "generated_differences": 0
+    },
+    "live_sources": {
+      "checked_at": "2026-11-02T09:30:48.698050+00:00",
+      "count": 25,
+      "ok": true,
+      "app_route_checks_passed": 150,
+      "app_route_checks_failed": 0
+    },
+    "existing_ci": {
+      "run_id": 41415139800,
+      "commit": "3182efa06df98d30cbdf502165099efdbd0f1d22",
+      "conclusion": "success",
+      "python_tests": 81,
+      "project_checks": 41,
+      "js_tests": 88,
+      "boundary": "Existing published functional code run inspected; no new Actions run dispatched during this audit."
+    },
+    "public_clash_rule_caches": {
+      "checked_at": "2026-11-02T09:30:49.971980+00:00",
+      "nonempty": 31,
+      "total": 31,
+      "games": [
+        {
+          "name": "国内游戏直连",
+          "cache_exists": true,
+          "entries": 263,
+          "mtime_utc": "2026-11-02T08:19:18.438315+00:00",
+          "sha256": "ce9763398b966bed81e9eb96e86e03fb6b2061847dc677b5a1e2d6c090a4827c"
+        },
+        {
+          "name": "国服游戏平台",
+          "cache_exists": true,
+          "entries": 37,
+          "mtime_utc": "2026-11-02T08:19:18.447335+00:00",
+          "sha256": "e3bb9624c50c35ca5d46b22aeb23bdc8feca93c5ccdfcb3f8392180ca9d85d5a"
+        },
+        {
+          "name": "腾讯服务直连",
+          "cache_exists": true,
+          "entries": 686,
+          "mtime_utc": "2026-11-02T08:19:18.456183+00:00",
+          "sha256": "07f4973e3a03947bd00ddf966038d09daddb51a912df3b3f367760b8950b3666"
+        }
+      ],
+      "boundary": "Only public rule files read. Cache presence does not certify active core loading."
+    },
+    "config_sha256_unchanged": {
+      "config/stash.yaml": "9a6c7062b20433c7060202f1cccb5ce609c2955e95f4de50a03ad90ad9849dec",
+      "config/clash-verge-auto.yaml": "7961e7616148b1436aca1e0155bd1139d3289f84afcde52b90dd71efb95bb233"
+    }
+  },
+  "findings": [
+    {
+      "id": "validation-cache",
+      "status": "confirmed; not changed",
+      "file": "tools/validate.py:79",
+      "issue": "LRU capacity 32 is below the current 34 Stash rule files. A sequential second pass misses every file.",
+      "benchmark": {
+        "32": [
+          {
+            "seconds": 0.9224929999909364,
+            "new_hits": 0,
+            "new_misses": 34
+          },
+          {
+            "seconds": 0.9704200000269338,
+            "new_hits": 0,
+            "new_misses": 34
+          }
+        ],
+        "64": [
+          {
+            "seconds": 1.396696100011468,
+            "new_hits": 0,
+            "new_misses": 34
+          },
+          {
+            "seconds": 0.02395579998847097,
+            "new_hits": 34,
+            "new_misses": 0
+          }
+        ]
+      },
+      "suggestion": "Increase bounded capacity or scope the cache to a validation run.",
+      "impact": "Repeated maintenance validation only; not mobile routing speed; benchmark is not whole-CI speedup."
+    },
+    {
+      "id": "stale-guidance",
+      "status": "confirmed; not changed",
+      "files": [
+        "docs/UPDATES.md:85",
+        "docs/SUBSCRIBE.md:13",
+        "docs/SUBSCRIBE.md:29",
+        "docs/QUICKSTART.md:3",
+        "docs/QUICKSTART.md:40"
+      ],
+      "issue": "Recovery command still includes removed --bundle, old local noon task is described as active, group count is 20 instead of 21, and quick start only identifies AD version with weekly manual main-profile refresh guidance.",
+      "evidence": "build_ads.py --help accepts only --write; current configuration, update workflow and authority document checked.",
+      "suggestion": "Align current installation/recovery guidance with two current entries, automatic updates and AD/ROUTE/MOBILE version markers; preserve historical narrative."
+    },
+    {
+      "id": "scheduled-start-times",
+      "status": "observed; root cause unconfirmed; unchanged",
+      "evidence": {
+        "checked_at": "2026-11-02T09:33:14.858606+00:00",
+        "workflow": {
+          "id": 400739694,
+          "name": "必要规则云端更新",
+          "path": ".github/workflows/refresh-rules.yml",
+          "state": "active",
+          "updated_at": "2026-10-29T14:51:32.000Z"
+        },
+        "default_branch": "main",
+        "archived": false,
+        "disabled": false,
+        "runs": [
+          {
+            "id": 41300965967,
+            "event": "schedule",
+            "status": "completed",
+            "conclusion": "success",
+            "created_at": "2026-11-01T11:14:02Z",
+            "updated_at": "2026-11-01T11:16:19Z",
+            "head_sha": "bb8451a2b2cc2f9dbcfb35dedc6c92a7968d76d0",
+            "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41300965967"
+          },
+          {
+            "id": 41192407710,
+            "event": "schedule",
+            "status": "completed",
+            "conclusion": "success",
+            "created_at": "2026-10-31T10:21:15Z",
+            "updated_at": "2026-10-31T10:23:53Z",
+            "head_sha": "593b4f60f9ee529de8ab8928bee7e2aeb313179a",
+            "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41192407710"
+          },
+          {
+            "id": 41043635535,
+            "event": "schedule",
+            "status": "completed",
+            "conclusion": "success",
+            "created_at": "2026-10-30T10:50:03Z",
+            "updated_at": "2026-10-30T10:53:50Z",
+            "head_sha": "593b4f60f9ee529de8ab8928bee7e2aeb313179a",
+            "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41043635535"
+          },
+          {
+            "id": 40896300394,
+            "event": "push",
+            "status": "completed",
+            "conclusion": "success",
+            "created_at": "2026-10-29T14:55:16Z",
+            "updated_at": "2026-10-29T14:59:22Z",
+            "head_sha": "109a059780ff122e7c1778817b963fad2b0debfd",
+            "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40896300394"
+          },
+          {
+            "id": 40895682826,
+            "event": "push",
+            "status": "completed",
+            "conclusion": "success",
+            "created_at": "2026-10-29T14:51:34Z",
+            "updated_at": "2026-10-29T14:54:05Z",
+            "head_sha": "df929f1c85566452a64fe9bcb6cae1ff6d3d9cb1",
+            "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40895682826"
+          }
+        ],
+        "boundary": "Read-only public endpoints; no authentication data, dispatch, enable or other mutation."
+      },
+      "historical_cron_checked": {
+        "bb8451a2b2cc2f9dbcfb35dedc6c92a7968d76d0": "17 4 * * *",
+        "593b4f60f9ee529de8ab8928bee7e2aeb313179a": "17 4 * * *"
+      },
+      "observation": "Workflow active. Latest three scheduled runs succeeded but were created at 18:50, 18:21 and 19:14 Asia/Shanghai, instead of planned 12:17. No November 2 scheduled run visible at 17:33.",
+      "impact": "Timeliness of six converted sources; does not control the 25 distinct direct upstream subscriptions.",
+      "reference": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule",
+      "boundary": "GitHub documents possible scheduling delay; that is not proof of this repository delay root cause. No schedule change or manual dispatch."
+    }
+  ],
+  "not_verified": [
+    "iPhone native Stash loading and actual ad removal",
+    "Real app comments, game session latency or loss",
+    "Current Clash core loading of all public cache files",
+    "Root cause of the previous one-off Stash provider incident"
+  ],
+  "changes": [
+    "PROGRESS.md audit entry",
+    "research/general-review-20261102.json"
+  ],
+  "git_delivery": "Local audit documentation only; not committed or pushed.",
+  "privacy": "No private subscription, proxy nodes, certificate, controller secret or app account payload read or retained.",
+  "follow_up": {
+    "updated_at": "2026-11-02T09:51:38.954476+00:00",
+    "authorization": "Fix validation cache and stale docs, investigate scheduling delay, preserve routing and publish after validation; no new features.",
+    "cache_fix": {
+      "maxsize_before": 32,
+      "maxsize_after": 64,
+      "validation": {
+        "checked_at": "2026-11-02T09:49:40.381248+00:00",
+        "cache_capacity": 64,
+        "passes": [
+          {
+            "seconds": 0.7804688999895006,
+            "hits": 0,
+            "misses": 34
+          },
+          {
+            "seconds": 0.023727599997073412,
+            "hits": 34,
+            "misses": 0
+          }
+        ],
+        "caller_mutation_isolated": true,
+        "checks": [
+          {
+            "command": "python -X utf8 tools/build_ads.py",
+            "exit_code": 0,
+            "seconds": 11.909989200008567
+          },
+          {
+            "command": "python -X utf8 -m unittest tests.test_subscriptions.Subscriptions.test_policy_order_groups_and_http_unchanged_by_splitting_sets -v",
+            "exit_code": 0,
+            "seconds": 1.8643656999920495
+          },
+          {
+            "command": "python -X utf8 tools/validate.py",
+            "exit_code": 0,
+            "seconds": 35.473157899978105
+          }
+        ],
+        "runtime_configs_unchanged": {
+          "config/stash.yaml": "9a6c7062b20433c7060202f1cccb5ce609c2955e95f4de50a03ad90ad9849dec",
+          "config/clash-verge-auto.yaml": "7961e7616148b1436aca1e0155bd1139d3289f84afcde52b90dd71efb95bb233"
+        }
+      }
+    },
+    "additional_validator_fix": {
+      "issue": "Full-directory YAML scans included ignored local or environment files and encountered empty parsed data.",
+      "first_attempt": {
+        "project_checks": 41,
+        "failures": 1,
+        "errors": 1,
+        "preserved_locally": true
+      },
+      "resolution": "Use the same Git publication candidate scope as the existing secret scanner; retain YAML uniqueness and TLS/MITM checks, including .github workflows.",
+      "scope_probe": {
+        "public_config_files": 92,
+        "invalid_ignored_fixture_excluded": true,
+        "both_main_configs_and_workflow_included": true
+      }
+    },
+    "documentation_fix": {
+      "files": [
+        "AGENTS.md",
+        "docs/UPDATES.md",
+        "docs/QUICKSTART.md",
+        "docs/SUBSCRIBE.md",
+        "docs/APP-SPLASH.md",
+        "docs/FMZ-INTEGRATION.md",
+        "docs/STASH-CAPABILITIES.md",
+        "docs/SOURCES.md",
+        "docs/AD-ARCHITECTURE.md",
+        "docs/COMMUNITY-SOURCES.md"
+      ],
+      "details": [
+        "Remove retired --bundle and local daily task instructions",
+        "Align auto-updating main subscriptions and version markers",
+        "Correct current group/provider counts and mark historical migration counts",
+        "Remove obsolete static package/recovery entry guidance",
+        "Synchronize generated architecture prose hashes without altering runtime appendix inputs"
+      ],
+      "stash_subscription_reference": "https://stash.wiki/features/service-provider-subscription"
+    },
+    "schedule_investigation": {
+      "checked_at": "2026-11-02T09:42:29.412841+00:00",
+      "workflow_state": "active",
+      "cron_utc": "17 4 * * *",
+      "runs": [
+        {
+          "id": 41300965967,
+          "event": "schedule",
+          "head_sha": "bb8451a2b2cc2f9dbcfb35dedc6c92a7968d76d0",
+          "created_at": "2026-11-01T11:14:02Z",
+          "run_started_at": "2026-11-01T11:14:02Z",
+          "updated_at": "2026-11-01T11:16:19Z",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41300965967",
+          "scheduled_to_created_seconds": 25022,
+          "jobs": [
+            {
+              "id": 124831597400,
+              "name": "refresh",
+              "created_at": "2026-11-01T11:14:02Z",
+              "started_at": "2026-11-01T11:14:04Z",
+              "completed_at": "2026-11-01T11:16:18Z",
+              "conclusion": "success",
+              "created_to_job_start_seconds": 2,
+              "execution_seconds": 134
+            }
+          ]
+        },
+        {
+          "id": 41192407710,
+          "event": "schedule",
+          "head_sha": "593b4f60f9ee529de8ab8928bee7e2aeb313179a",
+          "created_at": "2026-10-31T10:21:15Z",
+          "run_started_at": "2026-10-31T10:21:15Z",
+          "updated_at": "2026-10-31T10:23:53Z",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41192407710",
+          "scheduled_to_created_seconds": 21855,
+          "jobs": [
+            {
+              "id": 124511677630,
+              "name": "refresh",
+              "created_at": "2026-10-31T10:21:16Z",
+              "started_at": "2026-10-31T10:21:18Z",
+              "completed_at": "2026-10-31T10:23:52Z",
+              "conclusion": "success",
+              "created_to_job_start_seconds": 3,
+              "execution_seconds": 154
+            }
+          ]
+        },
+        {
+          "id": 41043635535,
+          "event": "schedule",
+          "head_sha": "593b4f60f9ee529de8ab8928bee7e2aeb313179a",
+          "created_at": "2026-10-30T10:50:03Z",
+          "run_started_at": "2026-10-30T10:50:03Z",
+          "updated_at": "2026-10-30T10:53:50Z",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "html_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41043635535",
+          "scheduled_to_created_seconds": 23583,
+          "jobs": [
+            {
+              "id": 124022233295,
+              "name": "refresh",
+              "created_at": "2026-10-30T10:50:04Z",
+              "started_at": "2026-10-30T10:50:06Z",
+              "completed_at": "2026-10-30T10:53:49Z",
+              "conclusion": "success",
+              "created_to_job_start_seconds": 3,
+              "execution_seconds": 223
+            }
+          ]
+        }
+      ],
+      "boundary": "Public unauthenticated metadata only; no workflow dispatch, re-enable or settings mutation.",
+      "status_incidents": [
+        {
+          "name": "Incident with Dependabot",
+          "started_at": "2026-10-30T20:59:14.215Z",
+          "resolved_at": "2026-10-30T23:29:06.291Z",
+          "shortlink": "https://stspg.io/5bh6qnzn76tk",
+          "status": "resolved"
+        },
+        {
+          "name": "Incident with Actions, Pages, and Webhooks",
+          "started_at": "2026-10-30T17:50:54.670Z",
+          "resolved_at": "2026-10-30T19:23:40.177Z",
+          "shortlink": "https://stspg.io/5cd2m4n59spv",
+          "status": "resolved"
+        },
+        {
+          "name": "Disruption with GitHub services",
+          "started_at": "2026-10-30T14:31:16.529Z",
+          "resolved_at": "2026-10-30T15:02:51.002Z",
+          "shortlink": "https://stspg.io/6p81rf34z4nc",
+          "status": "resolved"
+        }
+      ],
+      "status_boundary": "Only the returned incident page and dates reviewed; absence is not proof that the scheduler was healthy."
+    },
+    "schedule_conclusion": {
+      "confirmed": "The latest three scheduled runs were created 6-7 hours after the correct UTC cron. Jobs started 2-3 seconds later and succeeded in 134-223 seconds. Workflow active; one attempt each.",
+      "inference": "The observed multi-hour delay is before run creation in the GitHub schedule/dispatch stage, not project execution or long runner/concurrency wait after creation.",
+      "unconfirmed": "Specific GitHub internal cause; returned official incident windows do not overlap these observed delays. No evidence to attribute the delay to those incidents.",
+      "action": "Preserve existing cron and workflow. No new scheduler, compensating task, manual update dispatch or client change.",
+      "references": [
+        "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule",
+        "https://www.githubstatus.com/api/v2/incidents.json"
+      ],
+      "access_notes": "Connector omitted job timestamps/unsupported detailed endpoint; public unauthenticated HTTPS read used. Initial sandbox DNS failure, authorized read succeeded."
+    },
+    "preservation": {
+      "runtime_and_workflow_files_byte_identical": 102,
+      "config_sha256": {
+        "config/stash.yaml": "9a6c7062b20433c7060202f1cccb5ce609c2955e95f4de50a03ad90ad9849dec",
+        "config/clash-verge-auto.yaml": "7961e7616148b1436aca1e0155bd1139d3289f84afcde52b90dd71efb95bb233"
+      },
+      "iphone_acceptance_added": false,
+      "historical_progress_suffix_unchanged": true
+    },
+    "local_validation": {
+      "project_checks_passed": 41,
+      "js_tests_passed": 88,
+      "subscription_policy_regression_passed": 1,
+      "generation_drift": 0,
+      "secret_scan_current_files": 236,
+      "secret_scan_historical_blobs": 302,
+      "secret_scan_findings": 0,
+      "changed_docs_local_links_valid": 216
+    },
+    "publication": {
+      "status": "local checks passed; pending commit, push and Linux CI"
+    }
+  }
+}

@@ -45,7 +45,7 @@ TLS 与已有源内容校验保持开启。刷新同一 SHA 必须匹配原校�
 
 ## 官方来源
 
-Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNECT 403 阻塞；没有假称读过最新正文，也不编造最低版本号。已有原生公开模块仅作为辅助证据。具体未核实清单见 [STASH-CAPABILITIES.md](STASH-CAPABILITIES.md)。
+Stash 官方文档入口：https://stash.wiki/ 。历史HTTP能力调查曾受云网络 CONNECT 403 阻塞；2026-11-02已复核[托管订阅定时更新说明](https://stash.wiki/features/service-provider-subscription)，其默认12小时间隔可在配置页调整。该页核对不代表其他原生能力或最低版本均已确认。已有原生公开模块仅作为辅助证据，具体未核实清单见 [STASH-CAPABILITIES.md](STASH-CAPABILITIES.md)。
 
 ## 广告来源与修改（.4修订记录；当前增量见下方.5）
 
@@ -57,7 +57,7 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 | app2smile/rules，版本见上表 | MIT；B站/贴吧原分支继续保留，使用本项目共同运行保护模板 | B站protobuf未实现；不因存在Stash模块便认定当前广告全部有效 |
 | 项目原创运行模板、诊断工具 | MIT原创部分；派生运行JS仍按各自MIT/GPL2/GPL3归属，完整可读转换源在`tools/ad_transforms` | 11个响应JS各自独立构建；手动自检页在同一入口，旧只读probe默认不挂载。仅手动开始后的15分钟内写本机固定诊断状态，不捕获Cookie、不外联、不写账号数据 |
 
-基础38条与扩展38,066条仍来自同一固定AdvertisingLite Classical快照，不增加数量冒充效果。在AD-20261020.2时，按用户要求把原主入口恢复为整合订阅，纳入全部40款已有专项和11份响应JS。当前AD-20261020.4由同一入口声明脚本URL及手动自检，唯一广告RULE-SET仍默认引用扩展快照；局域网、关键系统服务与私人精确白名单优先。旧main.yaml＋core保留38条基础包及expanded兼容机制；当前用户无需导入这些文件。扩展接入另加flowplus.meituan.net与bootpreload.uve.weibo.com精确DIRECT例外，避免上游整域拒绝与已审阅路径处理竞争；未改上游规则快照，实际原生顺序仍待设备确认。逐App开关需求已取消，整合入口无需另开expanded或App覆写；来源内容与处理范围未因此增加，具体见[模块目录](AD-MODULES.md)。
+基础38条与扩展38,066条仍来自同一固定AdvertisingLite Classical快照，不增加数量冒充效果。在AD-20261020.2时，按用户要求把原主入口恢复为整合订阅，纳入全部40款已有专项和11份响应JS。当时的AD-20261020.4由同一入口声明脚本URL及手动自检，广告RULE-SET默认引用扩展快照；局域网、关键系统服务与私人精确白名单优先。旧main.yaml＋core保留38条基础包及expanded兼容机制；当前用户无需导入这些文件。扩展接入另加flowplus.meituan.net与bootpreload.uve.weibo.com精确DIRECT例外，避免上游整域拒绝与已审阅路径处理竞争；未改上游规则快照，实际原生顺序仍待设备确认。逐App开关需求已取消，整合入口无需另开expanded或App覆写；来源内容与处理范围未因此增加，具体见[模块目录](AD-MODULES.md)。
 
 2026-10-20已有HEAD核对记录：fmz200和app2smile仍等于所用固定提交；blackmatrix7推进至`f9e403a75bbc4bee939c6d8dd766cf78f1b512f3`，但采用的startup.js、AdvertisingScript原生声明、AdvertisingLite Classical三个文件与固定版本逐字相同，保留原已审查快照。维护状态证据在ad-repair-evidence.json。
 
@@ -65,7 +65,7 @@ Stash 官方文档入口：https://stash.wiki/ 。当前访问受云网络 CONNE
 
 原固定空JSON/空正文的共享request脚本已删除，微博两条开屏也用原生reject-dict，联通两条恢复reject-img；不再把QX动作未经核实挪入旧rewrite字段。Mock评估后当前不需要：已有原生固定空结果可表达，条件性响应处理仍保留JS。原生字段采用用户提供的当前官方能力清单，手机返回类型/业务回退仍需验收。
 
-AD-20261020.2曾在整合入口和本地包使用`script-providers.content`；用户随后反馈`provider: url,payload, path are all empty`，11个仅含content的脚本声明与该缺失字段条件直接对应。AD-20261020.3恢复`url`与`interval`声明，沿用项目既有原生Stash来源与原脚本地址，脚本逻辑及各自许可证不变。历史content示例已停止维护，不能继续作为当前兼容性的依据；本次不猜测payload类型或最低版本，也不把离线验证当手机导入通过。probe仍默认关闭。ZIP保留原路径、来源与源码，但脚本需联网取得；不能把包内广告覆写叠加到当前整合入口。
+AD-20261020.2曾在整合入口和本地包使用`script-providers.content`；用户随后反馈`provider: url,payload, path are all empty`，11个仅含content的脚本声明与该缺失字段条件直接对应。AD-20261020.3恢复`url`与`interval`声明，沿用项目既有原生Stash来源与原脚本地址，脚本逻辑及各自许可证不变。历史content示例已停止维护，不能继续作为当前兼容性的依据；本次不猜测payload类型或最低版本，也不把离线验证当手机导入通过。probe仍默认关闭。当时ZIP保留原路径、来源与源码，但脚本仍需联网取得；旧离线包现已退役，不把其中的广告覆写叠加到当前整合入口。
 
 用户随后确认`.3`导入可用，但开屏仍在；规则模式、广告组REJECT、HTTP/MITM与证书信任已确认。`.4`保留原38条原生动作和11份广告转换逻辑，新增自检页和响应脚本的临时固定状态记录。当前无真实响应样本，不能将模拟宿主对象形态或缺少记录认定为根因；也没有因缺少证据盲目放宽业务结构保护。
 
@@ -79,7 +79,7 @@ AD-20261020.2曾在整合入口和本地包使用`script-providers.content`；�
 
 `research/ad-catalog.json`是35个生成模块的源数据；原5款模块在原路径维护。`tools/ad_transforms`保存11份有归属的广告转换源，`build_ad_scripts.py`生成同名稳定JS并引入原创观察记录逻辑；`build_ad_diagnostics.py`生成手动自检页、对应模块和旧只读probe。`build_subscription.py`构建原公共入口，`config_helpers.py`提供当前生成链共用的序列化和规则展开函数，不再构建旧离线包。详细规格的真实声明/完整JS附录由`render_ad_architecture.py`生成，避免文档再次保留旧代码。
 
-维护者修改功能后执行`python tools/build_ads.py --write --bundle`重建，再运行`python tools/validate.py`及私人配置回归。纯文字调整仍须检查生成一致性、链接和运行结构未变，不把重复运行功能测试当作新的手机证据。输出哈希由构建同步，**不改变上游固定SHA或源哈希**；升级来源仍须先审查许可、实际代码与业务影响。不能为通过审计修改源校验值或关闭TLS。真实手机验收单独记录，当前均未完成。
+维护者修改功能后执行`python -X utf8 tools/build_ads.py --write`重建，再运行`python tools/validate.py`及私人配置回归。纯文字调整仍须检查生成一致性、链接和运行结构未变，不把重复运行功能测试当作新的手机证据。输出哈希由构建同步，**不改变上游固定SHA或源哈希**；升级来源仍须先审查许可、实际代码与业务影响。不能为通过审计修改源校验值或关闭TLS。真实手机验收单独记录，当前均未完成。
 
 ## fmz200指定来源接入 AD-20261020.5
 

@@ -51,6 +51,15 @@ UniqueLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, uni
 def load(path):
     return yaml.load((ROOT / path).read_text(), Loader=UniqueLoader)
 
+def public_config_paths():
+    # Match the secret scanner's publication scope; never walk local caches or environments.
+    paths = subprocess.check_output(
+        ['git', '-C', str(ROOT), 'ls-files', '-z', '--cached', '--others', '--exclude-standard']
+    ).decode('utf-8').split('\0')
+    return sorted({Path(p) for p in paths if Path(p).suffix in {'.yaml', '.yml', '.stoverride'}
+                   and (ROOT / p).is_file()})
+
+
 def merge_model(base, override, path=()):
     """Documented project expectation, requiring comparison with actual Stash merged preview.
     Maps deep-merge; rules and http.script/mitm arrays prepend; other arrays replace.
@@ -76,10 +85,11 @@ def merged(*optional):
     private = load('examples/private-provider.stoverride')
     return merge_model(result, private)
 
-@lru_cache(maxsize=32)
+@lru_cache(maxsize=64)
 def rule_payload_snapshot(path, mtime_ns, size):
     # Routing fixtures share large, unchanged YAML lists. Keep an immutable
-    # snapshot per file version; a source edit invalidates its cache key.
+    # snapshot per file version, with room for both profiles and source fixtures.
+    # A source edit invalidates its cache key.
     return tuple(load(path)['payload'])
 
 def provider_rules(config):
@@ -187,9 +197,9 @@ class ProjectChecks(unittest.TestCase):
         cls.groups = {g['name']: g for g in cls.config['proxy-groups']}
 
     def test_all_yaml_has_unique_keys(self):
-        for ext in ('*.yaml', '*.yml', '*.stoverride'):
-            for file in ROOT.rglob(ext):
-                if '.git' not in file.parts: self.assertIsNotNone(load(file.relative_to(ROOT)))
+        for path in public_config_paths():
+            with self.subTest(path=path):
+                self.assertIsNotNone(load(path))
 
     def test_all_provider_sources_reject_empty_and_content_only_declarations(self):
         # Reproduce the user's failure shape, including unreferenced providers.
@@ -734,9 +744,9 @@ class ProjectChecks(unittest.TestCase):
         # One separately reviewed manual self-check host, never an App wildcard.
         self.assertEqual(load('modules/diagnostics/self-check.stoverride')['http']['mitm'], ['example.com'])
         reviewed_hosts.add('example.com')
-        for file in [*ROOT.rglob('*.yaml'), *ROOT.rglob('*.stoverride')]:
-            data = load(file.relative_to(ROOT))
-            self.assertNotIn('skip-cert-verify: true', file.read_text())
+        for path in public_config_paths():
+            data = load(path)
+            self.assertNotIn('skip-cert-verify: true', (ROOT / path).read_text())
             for domain in data.get('http', {}).get('mitm', []):
                 self.assertNotIn('*', domain)
                 self.assertIn(domain, reviewed_hosts)
