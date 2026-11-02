@@ -189,6 +189,123 @@
   },
   "device_acceptance": "No iPhone/live app comment loading, posting, IP display or service-unlock acceptance.",
   "publication": {
-    "status": "prepared; push and Linux CI pending"
+    "status": "published; public files match; Linux CI passed; current Clash profile refreshed",
+    "functional_commit": "a6deb12a47112153d52838398428c48eb9788a12",
+    "public_files": [
+      {
+        "file": "config/stash.yaml",
+        "match": true,
+        "sha256": "e7d2c8f9f0bdcd039014e6377ea561bb8221c5a6da5d45da00ecb19c6d75c373"
+      },
+      {
+        "file": "config/clash-verge-auto.yaml",
+        "match": true,
+        "sha256": "6b79f57b32f14592ac42c7c1ed65be3648a74d93a7363f3ff446c8595ded00b0"
+      },
+      {
+        "file": "rules/vendor/xiaohongshu-community.yaml",
+        "match": true,
+        "sha256": "58cc063a3bf633111a43ce67b6bd30ee6eb4a433a7dc948b847d17b6042738c4"
+      },
+      {
+        "file": "rules/vendor/douyin-community.yaml",
+        "match": true,
+        "sha256": "6441d8d5e19ca06c0e7430fe5d3d74e14ec07178be1df79d0eecf0b2dc239683"
+      },
+      {
+        "file": "rules/vendor/douyin-bm7.yaml",
+        "match": true,
+        "sha256": "5be083182bedaaf072e158fd82012ee36a5c1140b36735783fba531ae96f26ae"
+      }
+    ],
+    "linux_ci": {
+      "run_id": 41407088931,
+      "job_id": 125151471149,
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41407088931",
+      "head_sha": "a6deb12a47112153d52838398428c48eb9788a12",
+      "status": "completed",
+      "conclusion": "success",
+      "python": {
+        "total": 77,
+        "passed": 77,
+        "skipped": 0
+      },
+      "project": 41,
+      "javascript": 88,
+      "public_source_health": {
+        "checked_at": "2026-11-02T07:37:13.112225+00:00",
+        "ok": true,
+        "sources": 21,
+        "review_required": 0,
+        "errors": 0,
+        "app_routes_passed": 88
+      },
+      "public_scan": {
+        "files": 228,
+        "historical_blobs": 250,
+        "findings": 0
+      },
+      "artifact": {
+        "id": 13124360843,
+        "name": "public-subscription-health",
+        "files": [
+          "direct-source-health.json",
+          "direct-source-health.md"
+        ],
+        "retention_days": 30,
+        "bytes": 5763,
+        "sha256": "dc833a17e7a8a604a4e318377942335197a06e4a9fffa0b1b3b6dab510afb888"
+      }
+    },
+    "remaining_acceptance": "Refresh Stash main configuration to ROUTE-20261102.2; actual iPhone app/comment loading, posting and IP display are not tested."
+  },
+  "client_refresh": {
+    "authorization": "User explicitly allowed launching Clash Verge and refreshing the current subscription.",
+    "file_verification": {
+      "checkedAt": "2026-11-02T07:44:31.867182+00:00",
+      "activeProfileIsJimmyAuto": true,
+      "profileMatchesPublishedBytes": true,
+      "profileUpdated": 1793605303,
+      "updateIntervalMinutes": 1440,
+      "runtimeAutomaticPoolCount": 8,
+      "runtimeAutomaticPoolsHidden": true,
+      "runtimeAutomaticPoolsStatus204": true,
+      "runtimeAutomaticPoolsTolerance50": true,
+      "businessSelectorsHaveNoRawNodes": true,
+      "airportHealthStatus204": true,
+      "airportHealthInterval": 300,
+      "runtimeRuleProviderCount": 28,
+      "domesticRoutesDirect": true,
+      "scope": "Read-only file comparison and public runtime structure; no controller requests, secret access, private URLs or node data retained."
+    },
+    "ui_verification": {
+      "checked_at": "2026-11-02T07:45:51.577Z",
+      "profile": "Jimmy 全自动",
+      "refresh_completed": true,
+      "automatic_pools_hidden_on_main_list": true,
+      "manual_node_count": 56,
+      "observed_selections_preserved": {
+        "Jimmy · 海外AI": "Jimmy · ai",
+        "Jimmy · TikTok": "Jimmy · ai",
+        "Jimmy · Adobe": "Jimmy · 总代理"
+      },
+      "loaded_rule_providers": 28,
+      "all_providers_nonempty": true,
+      "priority_targets": {
+        "小红书直连": "DIRECT",
+        "抖音直连": "DIRECT",
+        "抖音补充": "DIRECT",
+        "东方财富直连": "DIRECT",
+        "TikTok核心": "Jimmy · TikTok"
+      },
+      "new_provider_counts": {
+        "小红书直连": 12,
+        "抖音直连": 71,
+        "抖音补充": 13
+      },
+      "new_providers_recently_downloaded": true
+    },
+    "verification_limit": "Post-refresh controller API check was rejected by automatic review due to controller-secret exposure concerns. It was not retried or bypassed; UI and read-only file checks completed the acceptance instead. The pre-refresh no-pin receipt remains separate; no post-refresh pin API state is claimed.",
+    "privacy": "No private subscription URLs, node credentials, node names or controller secrets were saved in public evidence."
   }
 }
