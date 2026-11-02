@@ -7,7 +7,7 @@
 | Stash | [config/stash.yaml](config/stash.yaml) |
 | Clash Verge | [config/clash-verge-auto.yaml](config/clash-verge-auto.yaml) |
 
-当前分流版本 `ROUTE-20261102.2`，广告版本 `AD-20261020.5`。`ai`池只包含日本、美国、台湾；新加坡独立组保留。21个业务策略组、TikTok/Instagram/X统一分流、Adobe及国内应用分流保留。Clash另有一个隐藏的订阅下载回退组。
+当前分流版本 `ROUTE-20261102.3`，广告版本 `AD-20261020.5`。`ai`池只包含日本、美国、台湾；新加坡独立组保留。21个业务策略组、TikTok/Instagram/X统一分流、Adobe及国内应用分流保留。Clash另有一个隐藏的订阅下载回退组。
 
 ## 使用
 
@@ -29,7 +29,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clas
 
 ## 自动更新
 
-每端20份兼容规则直订维护中的上游，间隔24小时。6份必要转换由[GitHub Actions](.github/workflows/refresh-rules.yml)每天北京时间12:17计划执行，有实际变化且验证通过才提交。主配置更新和规则集更新是两层：修改策略组需要刷新主配置。电脑上的旧任务已移除，不需要开机维护，详情见[更新说明](docs/UPDATES.md)。
+每端23份兼容规则直订维护中的上游，间隔24小时。6份必要转换由[GitHub Actions](.github/workflows/refresh-rules.yml)每天北京时间12:17计划执行，有实际变化且验证通过才提交。主配置更新和规则集更新是两层：修改策略组需要刷新主配置。电脑上的旧任务已移除，不需要开机维护，详情见[更新说明](docs/UPDATES.md)。
 
 ## 需求、沟通和维护源
 

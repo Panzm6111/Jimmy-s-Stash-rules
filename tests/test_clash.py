@@ -38,12 +38,13 @@ class ClashChecks(unittest.TestCase):
         clash=load('config/clash-verge-auto.yaml')
         for config, domestic, ai, social in [(stash,'国内直连','海外AI','TikTok'),
                                               (clash,'Jimmy · 国内直连','Jimmy · 海外AI','Jimmy · TikTok')]:
-            for host in ['eastmoneysec.com','eastmoneyloans.com','api.weixin.qq.com',
+            for host in ['eastmoneysec.com','eastmoneyloans.com',
                          'api.bilibili.com','api.m.jd.com','api.m.taobao.com',
                          'alibabacloud.com','quote.10jqka.com.cn']:
                 self.assertEqual(route(config,host,country='ZZ'),domestic,host)
             self.assertEqual(route(config,'push2.eastmoney.com',country='ZZ'),'DIRECT')
             self.assertEqual(route(config,'push2his.eastmoney.com',country='ZZ'),'DIRECT')
+            self.assertEqual(route(config,'api.weixin.qq.com',country='ZZ'),'DIRECT')
             self.assertEqual(route(config,'api.openai.com',country='ZZ'),ai)
             self.assertEqual(route(config,'www.tiktok.com',country='ZZ'),social)
         self.assertEqual(route(stash,'emdcadvertise.eastmoney.com'), '广告拦截')
@@ -95,8 +96,8 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
-        self.assertEqual(len(clash['rule-providers']),30)
-        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),30)
+        self.assertEqual(len(clash['rule-providers']),33)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),33)
         self.assertTrue(all(p['type']=='http' and p['behavior'] in {'classical','domain'} and p['interval']==86400 for p in clash['rule-providers'].values()))
         self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 
@@ -158,7 +159,7 @@ class ClashChecks(unittest.TestCase):
         self.assertFalse(download['lazy'])
         self.assertEqual(download['use'],['机场'])
         self.assertNotIn('proxies',download)
-        self.assertEqual(len(full['rule-providers']),28)
+        self.assertEqual(len(full['rule-providers']),31)
         removed={'广告路径例外','App广告域名'}
         expected=[r for r in overlay['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
         self.assertEqual(full['rules'],expected)

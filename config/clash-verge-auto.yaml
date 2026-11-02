@@ -304,6 +304,8 @@ rules:
 - RULE-SET,抖音直连,DIRECT
 - RULE-SET,抖音补充,DIRECT
 - RULE-SET,东方财富直连,DIRECT
+- RULE-SET,国内游戏直连,DIRECT
+- RULE-SET,国服游戏平台,DIRECT
 - RULE-SET,Adobe服务,Jimmy · Adobe
 - RULE-SET,Adobe官方补充,Jimmy · Adobe
 - RULE-SET,基础广告,Jimmy · 广告拦截
@@ -318,6 +320,7 @@ rules:
 - RULE-SET,Apple服务,Jimmy · Apple
 - RULE-SET,GitHub,Jimmy · 总代理
 - RULE-SET,Microsoft服务,Jimmy · Microsoft
+- RULE-SET,腾讯服务直连,DIRECT
 - RULE-SET,国内服务,Jimmy · 国内直连
 - RULE-SET,海外社交,Jimmy · TikTok
 - RULE-SET,社交Discord,Jimmy · TikTok
@@ -325,7 +328,7 @@ rules:
 - RULE-SET,社交LINE,Jimmy · TikTok
 - RULE-SET,社交Signal,Jimmy · TikTok
 - RULE-SET,通用代理,Jimmy · 总代理
-- GEOIP,CN,Jimmy · 国内直连
+- GEOIP,CN,DIRECT
 - MATCH,Jimmy · 未匹配流量
 rule-providers:
   Adobe服务:
@@ -551,6 +554,30 @@ rule-providers:
     format: yaml
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DouYin/DouYin.yaml
     path: ./ruleset/jimmy-merge-13c9df7ecf58.yaml
+    proxy: Jimmy · 自动节点
+  国内游戏直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games-cn.yaml
+    path: ./ruleset/jimmy-merge-55e037ae2f9d.yaml
+    proxy: Jimmy · 自动节点
+  国服游戏平台:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.yaml
+    path: ./ruleset/jimmy-merge-ee9cb8af8c21.yaml
+    proxy: Jimmy · 自动节点
+  腾讯服务直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tencent.yaml
+    path: ./ruleset/jimmy-merge-f5ab188f0a54.yaml
     proxy: Jimmy · 自动节点
 mixed-port: 7890
 profile:

@@ -1,0 +1,190 @@
+{
+  "date": "2026-11-02",
+  "route_version": "ROUTE-20261102.3",
+  "base_commit": "82b59e58ee0e66a21acee37aa5fb3dd8a941ae06",
+  "requirements": [
+    "Domestic games especially Honor of Kings direct",
+    "Clearly overseas games keep existing routing",
+    "Ambiguous shared game services direct per latest explicit user instruction"
+  ],
+  "sources": {
+    "repository": "MetaCubeX/meta-rules-dat",
+    "revision": "dc60743738b8c81d45b61773d585b97d5c3f428d",
+    "revision_time": "2026-11-02T01:43:19Z",
+    "categories": {
+      "category-games-cn": 263,
+      "category-games@cn": 37,
+      "tencent": 686
+    },
+    "license": "GPL-3.0"
+  },
+  "overseas_baseline": [
+    {
+      "host": "store.steampowered.com",
+      "policy": "总代理",
+      "provider": "通用代理"
+    },
+    {
+      "host": "steamcommunity.com",
+      "policy": "总代理",
+      "provider": "通用代理"
+    },
+    {
+      "host": "www.epicgames.com",
+      "policy": "总代理",
+      "provider": "通用代理"
+    },
+    {
+      "host": "www.ea.com",
+      "policy": "总代理",
+      "provider": "通用代理"
+    },
+    {
+      "host": "www.ubisoft.com",
+      "policy": "总代理",
+      "provider": "通用代理"
+    },
+    {
+      "host": "www.battle.net",
+      "policy": "总代理",
+      "provider": "通用代理"
+    },
+    {
+      "host": "api-account-os.hoyoverse.com",
+      "policy": "总代理",
+      "provider": "通用代理"
+    },
+    {
+      "host": "www.riotgames.com",
+      "policy": "总代理",
+      "provider": "通用代理"
+    }
+  ],
+  "validation": {
+    "status": "local passed",
+    "python": {
+      "total": 78,
+      "passed": 78,
+      "skipped": 0,
+      "note": "Initial full run 77 passed/1 failed because old test expected WeChat to use the configurable domestic group; updated expected DIRECT for the newly adopted whole Tencent list and all 11 Clash checks passed on rerun. First sandbox-only health test hit temporary-directory permissions; isolated authorized run passed."
+    },
+    "project": 41,
+    "javascript": 88,
+    "public_sources": 24,
+    "app_route_checks": 150,
+    "native_public_provider_load": [
+      {
+        "configuration": "Stash routing model (not native Stash)",
+        "providers": 33,
+        "counts": {
+          "Adobe服务": 260,
+          "Adobe官方补充": 28,
+          "基础广告": 38066,
+          "海外AI": 213,
+          "海外AI补充": 55,
+          "Netflix": 1156,
+          "YouTube": 183,
+          "Telegram": 35,
+          "Apple服务": 1579,
+          "Microsoft服务": 668,
+          "东方财富直连": 8,
+          "国内服务": 110177,
+          "TikTok": 34,
+          "Instagram": 4,
+          "Twitter": 33,
+          "GitHub": 31,
+          "海外社交": 627,
+          "社交Discord": 28,
+          "社交WhatsApp": 11,
+          "社交LINE": 20,
+          "社交Signal": 8,
+          "通用代理": 27291,
+          "系统直连例外": 26,
+          "广告路径例外": 2,
+          "TikTok广告": 1,
+          "TikTok核心": 39,
+          "App广告域名": 19,
+          "小红书直连": 12,
+          "抖音直连": 71,
+          "抖音补充": 13,
+          "国内游戏直连": 263,
+          "国服游戏平台": 37,
+          "腾讯服务直连": 686
+        },
+        "source_bytes_verified": true,
+        "current_client_modified": false
+      },
+      {
+        "configuration": "config/clash-verge-auto.yaml",
+        "providers": 31,
+        "counts": {
+          "Adobe服务": 260,
+          "Adobe官方补充": 28,
+          "基础广告": 844,
+          "海外AI": 213,
+          "海外AI补充": 55,
+          "Netflix": 1156,
+          "YouTube": 183,
+          "Telegram": 35,
+          "Apple服务": 1579,
+          "Microsoft服务": 668,
+          "东方财富直连": 8,
+          "国内服务": 110177,
+          "TikTok": 34,
+          "Instagram": 4,
+          "Twitter": 33,
+          "GitHub": 31,
+          "海外社交": 627,
+          "社交Discord": 28,
+          "社交WhatsApp": 11,
+          "社交LINE": 20,
+          "社交Signal": 8,
+          "通用代理": 27291,
+          "系统直连例外": 26,
+          "TikTok广告": 1,
+          "TikTok核心": 39,
+          "小红书直连": 12,
+          "抖音直连": 71,
+          "抖音补充": 13,
+          "国内游戏直连": 263,
+          "国服游戏平台": 37,
+          "腾讯服务直连": 686
+        },
+        "source_bytes_verified": true,
+        "current_client_modified": false
+      }
+    ],
+    "invariants": {
+      "profiles": {
+        "config/stash.yaml": {
+          "only_rules_and_rule_providers_changed": true,
+          "rule_providers": 33,
+          "route_declarations": 35
+        },
+        "config/clash-verge-auto.yaml": {
+          "only_rules_and_rule_providers_changed": true,
+          "rule_providers": 31,
+          "route_declarations": 33
+        }
+      },
+      "public_files_scanned": 232,
+      "findings": 0,
+      "historical_suffix_preserved": true
+    },
+    "initial_source_check": {
+      "network_errors": 4,
+      "names": [
+        "社交Discord",
+        "社交LINE",
+        "社交Signal",
+        "Adobe服务"
+      ],
+      "retry_all_24": "passed"
+    },
+    "live_checked_at": "2026-11-02T08:03:15.817275+00:00"
+  },
+  "publication": {
+    "status": "pending"
+  },
+  "acceptance_boundary": "No real game login, matchmaking, voice chat, full-match latency or packet-loss test. DIRECT is routing, not application-level VPN exclusion. Shared Tencent non-game services may also be direct; earlier dedicated foreign application routes keep precedence."
+}

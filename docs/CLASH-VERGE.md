@@ -8,7 +8,7 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-auto.yaml
 ```
 
-规则、21个业务策略组和规则顺序随主订阅更新；另有1个隐藏的订阅更新回退组。28个规则集，广告层只采用基础域名规则，不执行Stash的HTTP改写或脚本。`Jimmy · ai`只包含日本、美国、台湾；新加坡独立组保留。
+规则、21个业务策略组和规则顺序随主订阅更新；另有1个隐藏的订阅更新回退组。31个规则集，广告层只采用基础域名规则，不执行Stash的HTTP改写或脚本。`Jimmy · ai`只包含日本、美国、台湾；新加坡独立组保留。
 
 ### 2026-11-02 自动选择防误触
 

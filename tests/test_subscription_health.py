@@ -53,5 +53,20 @@ class HealthChecks(unittest.TestCase):
             direct={p['url'] for p in config['rule-providers'].values() if 'Panzm6111/' not in p['url']}
             self.assertTrue(direct<=monitored)
 
+    def test_game_direct_routing_cannot_inherit_domestic_group_proxy(self):
+        for filename,prefix in [('config/stash.yaml',''),('config/clash-verge-auto.yaml','Jimmy · ')]:
+            config=v.load(filename)
+            domestic=next(g for g in config['proxy-groups'] if g['name']==prefix+'国内直连')
+            domestic['proxies']=[prefix+'ai','DIRECT']
+            for host in ['pvp.qq.com','sgame.qq.com','dlied1.qq.com','msdk.qq.com','www.yuanshen.com']:
+                self.assertEqual(v.route(config,host),'DIRECT',host)
+            # Synthetic IP/country inputs, not claimed real game server addresses.
+            for address in ['203.0.113.5','2001:db8::5']:
+                self.assertEqual(v.route(config,address=address,country='CN'),'DIRECT')
+                self.assertEqual(v.route(config,address=address,country='JP'),prefix+'未匹配流量')
+            # Domain-specific foreign routes retain priority even with a CN IP.
+            for host,policy in [('www.steampowered.com','总代理'),('api.openai.com','海外AI'),('www.tiktok.com','TikTok')]:
+                self.assertEqual(v.route(config,host,'203.0.113.5','CN'),prefix+policy)
+
 
 if __name__=='__main__':unittest.main()

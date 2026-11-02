@@ -2,7 +2,7 @@
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # JIMMY-STASH AD-20261020.5；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。
-# JIMMY-ROUTING ROUTE-20261102.2；30个远程规则集，兼容规则直订上游，必要转换由GitHub执行；保留21个策略组。
+# JIMMY-ROUTING ROUTE-20261102.3；33个远程规则集，国内游戏/腾讯共用服务及中国IP直连；保留21个策略组。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
 # Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。
 # 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。
@@ -340,6 +340,8 @@ rules:
 - RULE-SET,抖音直连,DIRECT
 - RULE-SET,抖音补充,DIRECT
 - RULE-SET,东方财富直连,DIRECT
+- RULE-SET,国内游戏直连,DIRECT
+- RULE-SET,国服游戏平台,DIRECT
 - RULE-SET,Adobe服务,Adobe
 - RULE-SET,Adobe官方补充,Adobe
 - RULE-SET,基础广告,广告拦截
@@ -354,6 +356,7 @@ rules:
 - RULE-SET,Apple服务,Apple
 - RULE-SET,GitHub,总代理
 - RULE-SET,Microsoft服务,Microsoft
+- RULE-SET,腾讯服务直连,DIRECT
 - RULE-SET,国内服务,国内直连
 - RULE-SET,海外社交,TikTok
 - RULE-SET,社交Discord,TikTok
@@ -361,7 +364,7 @@ rules:
 - RULE-SET,社交LINE,TikTok
 - RULE-SET,社交Signal,TikTok
 - RULE-SET,通用代理,总代理
-- GEOIP,CN,国内直连
+- GEOIP,CN,DIRECT
 - MATCH,未匹配流量
 rule-providers:
   Adobe服务:
@@ -536,6 +539,24 @@ rule-providers:
     behavior: classical
     format: yaml
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DouYin/DouYin.yaml
+  国内游戏直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games-cn.yaml
+  国服游戏平台:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.yaml
+  腾讯服务直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tencent.yaml
 http:
   mitm:
   - example.com

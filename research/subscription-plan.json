@@ -187,6 +187,33 @@
         "format": "yaml",
         "snapshot": "rules/vendor/douyin-bm7.yaml"
       }
+    ],
+    "国内游戏直连": [
+      {
+        "name": "国内游戏直连",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games-cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/games-cn-community.yaml"
+      }
+    ],
+    "国服游戏平台": [
+      {
+        "name": "国服游戏平台",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/games-cn-tagged.yaml"
+      }
+    ],
+    "腾讯服务直连": [
+      {
+        "name": "腾讯服务直连",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tencent.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/tencent-direct.yaml"
+      }
     ]
   },
   "clash_basic_ads": {

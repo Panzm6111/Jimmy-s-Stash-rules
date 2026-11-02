@@ -65,12 +65,23 @@ def remote_integrated():
              ('抖音直连','rules/vendor/douyin-community.yaml','DIRECT'),
              ('抖音补充','rules/vendor/douyin-bm7.yaml','DIRECT'),
              ('东方财富直连','rules/vendor/eastmoney-community.yaml','DIRECT'),
+             ('国内游戏直连','rules/vendor/games-cn-community.yaml','DIRECT'),
+             ('国服游戏平台','rules/vendor/games-cn-tagged.yaml','DIRECT'),
              ('Adobe服务','rules/adobe.yaml','Adobe')]
     for name, path, policy in extra:
         config['rule-providers'][name] = {'type':'http','behavior':'classical','url':RAW+path,'interval':86400}
     for provider in config['rule-providers'].values():
         provider.update(type='http',behavior='classical',interval=86400)
     config['rules'] = [f'RULE-SET,{name},{policy}' for name,_,policy in extra] + core['rules'][slot:]
+    # Shared Tencent login/CDN/game infrastructure follows reviewed ad and
+    # dedicated application rules, but cannot inherit a manual domestic proxy.
+    config['rule-providers']['腾讯服务直连'] = {
+        'type':'http','behavior':'classical','url':RAW+'rules/vendor/tencent-direct.yaml','interval':86400}
+    domestic = config['rules'].index('RULE-SET,国内服务,国内直连')
+    config['rules'].insert(domestic, 'RULE-SET,腾讯服务直连,DIRECT')
+    # Literal Chinese destinations (including game UDP) keep a direct fallback.
+    # Earlier domain/application decisions still win; never bypass all UDP.
+    config['rules'] = ['GEOIP,CN,DIRECT' if r == 'GEOIP,CN,国内直连' else r for r in config['rules']]
     terminal=next(i for i,r in enumerate(config['rules']) if r.startswith('MATCH,'))
     config['rules']=config['rules'][:terminal+1]
     from provider_sources import apply
@@ -86,7 +97,7 @@ def render():
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261102.2；30个远程规则集，兼容规则直订上游，必要转换由GitHub执行；保留21个策略组。\n'
+            '# JIMMY-ROUTING ROUTE-20261102.3；33个远程规则集，国内游戏/腾讯共用服务及中国IP直连；保留21个策略组。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
             '# 新增example.com精确MITM仅供自检；自检成功不代表App开屏已去除。\n'
@@ -105,7 +116,7 @@ def verify(text):
     config = yaml.safe_load(text)
     validate_structure(config)
     assert set(config['rule-providers']) == set(remote_integrated()['rule-providers'])
-    assert len(config['rule-providers']) == 30
+    assert len(config['rule-providers']) == 33
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1
     from provider_sources import plan
     assert config['rule-providers']['基础广告']['url'] == plan()['providers']['基础广告'][0]['url']
@@ -120,6 +131,8 @@ def verify(text):
     assert len(config['proxy-groups']) == 21
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()
+    # The published profile now has an intentionally fixed China-IP fallback.
+    original['rules'] = ['GEOIP,CN,DIRECT' if r == 'GEOIP,CN,国内直连' else r for r in original['rules']]
     for key in ('proxy-groups', 'proxy-providers', 'dns'):
         assert config[key] == merged()[key], 'non-ad configuration changed'
     expanded = merge_model(config, load('modules/ads/expanded.stoverride'))

@@ -261,6 +261,51 @@
       "retained": 13,
       "omitted": [],
       "license": "GPL-2.0"
+    },
+    {
+      "id": "games-cn",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "dc60743738b8c81d45b61773d585b97d5c3f428d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/category-games-cn.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/dc60743738b8c81d45b61773d585b97d5c3f428d/geo/geosite/category-games-cn.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "ce9763398b966bed81e9eb96e86e03fb6b2061847dc677b5a1e2d6c090a4827c",
+      "output": "rules/vendor/games-cn-community.yaml",
+      "output_sha256": "514562e2ef738bc79fef881c31b038abd24f2d9c74546bcd5a384f7342cf8bd1",
+      "retained": 263,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "games-cn-tagged",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "dc60743738b8c81d45b61773d585b97d5c3f428d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/category-games@cn.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/dc60743738b8c81d45b61773d585b97d5c3f428d/geo/geosite/category-games@cn.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "e3bb9624c50c35ca5d46b22aeb23bdc8feca93c5ccdfcb3f8392180ca9d85d5a",
+      "output": "rules/vendor/games-cn-tagged.yaml",
+      "output_sha256": "9074fbf4e870c0cc21668031a477f6c1a2c1b9863e80955442594bcdbe3bd61e",
+      "retained": 37,
+      "omitted": [],
+      "license": "GPL-3.0"
+    },
+    {
+      "id": "tencent-direct",
+      "repository": "MetaCubeX/meta-rules-dat",
+      "revision": "dc60743738b8c81d45b61773d585b97d5c3f428d",
+      "ref": "refs/heads/meta",
+      "path": "geo/geosite/tencent.yaml",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/dc60743738b8c81d45b61773d585b97d5c3f428d/geo/geosite/tencent.yaml",
+      "source_format": "domain_yaml",
+      "source_sha256": "07f4973e3a03947bd00ddf966038d09daddb51a912df3b3f367760b8950b3666",
+      "output": "rules/vendor/tencent-direct.yaml",
+      "output_sha256": "45cb09b7a28cce56062113c1fa3b023495e169fa9fc2e6c83485656a87e5db13",
+      "retained": 686,
+      "omitted": [],
+      "license": "GPL-3.0"
     }
   ],
   "licenses": [

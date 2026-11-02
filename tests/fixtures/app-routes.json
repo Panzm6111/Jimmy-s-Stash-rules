@@ -1,11 +1,13 @@
 {
-  "scope": "Public routing/HTTP-pattern regression samples. Web comment paths are from the referenced implementation authors. Mobile API hosts are representative domain checks, not captured iPhone traffic. These are tests, never new runtime rules.",
+  "scope": "Public routing/HTTP-pattern regression samples. Web comment paths are from the referenced implementation authors. Mobile API hosts are representative domain checks, not captured iPhone traffic. These are tests, never new runtime rules. Game/CDN/SDK samples are public classification fixtures, not an exhaustive observed game connection list; no gameplay or latency acceptance.",
   "sources": {
     "xhs-comments": "https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/xhs/client.py",
     "douyin-comments": "https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/douyin/client.py",
     "tiktok-comments": "https://github.com/davidteather/TikTok-Api/blob/main/TikTokApi/api/video.py",
     "eastmoney-community": "https://guba.eastmoney.com/index.html",
-    "domain-classifications": "research/subscription-plan.json"
+    "domain-classifications": "research/subscription-plan.json",
+    "honor-of-kings-official": "https://pvp.qq.com/",
+    "maintained-game-domains": "research/subscription-plan.json"
   },
   "cases": [
     {"app":"小红书","surface":"web comments","url":"https://edith.xiaohongshu.com/api/sns/web/v2/comment/page","policy":"DIRECT","unmodified_http":true},
@@ -35,7 +37,7 @@
     {"app":"B站","surface":"comments API host","url":"https://api.bilibili.com/x/v2/reply","policy":"国内直连","unmodified_http":true},
     {"app":"知乎","surface":"website","url":"https://www.zhihu.com/","policy":"国内直连"},
     {"app":"微博","surface":"API host","url":"https://api.weibo.cn/","policy":"国内直连"},
-    {"app":"微信","surface":"API host","url":"https://api.weixin.qq.com/","policy":"国内直连"},
+    {"app":"微信","surface":"API host","url":"https://api.weixin.qq.com/","policy":"DIRECT"},
     {"app":"淘宝","surface":"website","url":"https://www.taobao.com/","policy":"国内直连"},
     {"app":"京东","surface":"API host","url":"https://api.m.jd.com/","policy":"国内直连"},
     {"app":"支付宝","surface":"website","url":"https://www.alipay.com/","policy":"国内直连"},
@@ -51,6 +53,37 @@
     {"app":"TikTok tracking","surface":"ad exclusion","url":"https://analytics.tiktok.com/","policy":"广告拦截"},
     {"app":"Generic advertising","surface":"ad exclusion","url":"https://ad.doubleclick.net/","policy":"广告拦截"},
     {"app":"Boundary","surface":"unrelated suffix","url":"https://xiaohongshu.com.evil.example/","policy":"未匹配流量"},
-    {"app":"Boundary","surface":"unrelated suffix","url":"https://douyin.com.evil.example/","policy":"未匹配流量"}
+    {"app":"Boundary","surface":"unrelated suffix","url":"https://douyin.com.evil.example/","policy":"未匹配流量"},
+    {"app":"王者荣耀","surface":"official website","url":"https://pvp.qq.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"王者荣耀","surface":"representative game domain, not captured traffic","url":"https://sgame.qq.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯游戏","surface":"representative shared SDK domain","url":"https://msdk.qq.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯游戏","surface":"representative resource download domain","url":"https://dlied1.qq.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯游戏","surface":"representative shared image domain","url":"https://game.gtimg.cn/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯游戏","surface":"representative WeChat game domain","url":"https://game.weixin.qq.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"WeGame","surface":"website","url":"https://www.wegame.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯游戏安全服务","surface":"vendor domain","url":"https://www.anticheatexpert.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"原神国服","surface":"website","url":"https://www.yuanshen.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"米哈游国服","surface":"vendor domain","url":"https://www.mihoyo.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"星穹铁道国服","surface":"upstream classified domain","url":"https://www.bhsr.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"绝区零国服","surface":"upstream classified domain","url":"https://www.juequling.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"永劫无间国服","surface":"website","url":"https://www.yjwujian.cn/","policy":"DIRECT","unmodified_http":true},
+    {"app":"燕云十六声国服","surface":"website","url":"https://www.yysls.cn/","policy":"DIRECT","unmodified_http":true},
+    {"app":"西山居","surface":"vendor domain","url":"https://www.xoyo.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"完美世界","surface":"vendor domain","url":"https://www.wanmei.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"B站游戏","surface":"vendor domain","url":"https://www.biligame.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯跨区共用服务","surface":"ambiguous service explicitly direct","url":"https://www.midasbuy.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯跨区共用服务","surface":"ambiguous service explicitly direct","url":"https://www.proximabeta.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"腾讯跨区共用服务","surface":"ambiguous service explicitly direct","url":"https://hkgcloudcs.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"蒸汽平台","surface":"China platform","url":"https://www.steamchina.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"Steam国内下载","surface":"upstream cn-tagged CDN","url":"https://dl.steam.clngaa.com/","policy":"DIRECT","unmodified_http":true},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://store.steampowered.com/","policy":"总代理"},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://steamcommunity.com/","policy":"总代理"},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://www.epicgames.com/","policy":"总代理"},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://www.ea.com/","policy":"总代理"},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://www.ubisoft.com/","policy":"总代理"},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://www.battle.net/","policy":"总代理"},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://api-account-os.hoyoverse.com/","policy":"总代理"},
+    {"app":"海外游戏平台保留","surface":"existing policy regression","url":"https://www.riotgames.com/","policy":"总代理"},
+    {"app":"游戏规则边界","surface":"unrelated suffix","url":"https://pvp.qq.com.evil.example/","policy":"未匹配流量"}
   ]
 }
