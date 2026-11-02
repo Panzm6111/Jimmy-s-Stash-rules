@@ -245,7 +245,35 @@
     "upstream_blob_integrity": "Only.Ads and license bytes match GitHub tree blob IDs. Xiaohongshu and Weibo source blobs are unchanged from the previously pinned revision; reviewed local text hashes may normalize trailing newlines."
   },
   "publication": {
-    "status": "pending"
+    "status": "published; Linux CI passed; iPhone acceptance pending",
+    "commit": "3182efa06df98d30cbdf502165099efdbd0f1d22",
+    "ci": {
+      "run_id": 41415139800,
+      "job_id": 125177050393,
+      "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41415139800",
+      "head_sha": "3182efa06df98d30cbdf502165099efdbd0f1d22",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-02T08:43:28Z",
+      "finished_at": "2026-11-02T08:48:22Z",
+      "python_tests": 81,
+      "project_tests": 41,
+      "javascript_tests": 88,
+      "live_sources": 25,
+      "app_routes_passed": 150,
+      "live_checked_at": "2026-11-02T08:47:57.799909+00:00",
+      "artifact": {
+        "id": 13127597399,
+        "name": "public-subscription-health",
+        "expires_at": "2026-12-02T08:48:18Z"
+      }
+    },
+    "public_config_sha256": {
+      "config/stash.yaml": "9a6c7062b20433c7060202f1cccb5ce609c2955e95f4de50a03ad90ad9849dec",
+      "config/clash-verge-auto.yaml": "7961e7616148b1436aca1e0155bd1139d3289f84afcde52b90dd71efb95bb233"
+    },
+    "current_client_modified": false,
+    "required_phone_action": "Refresh original Stash main profile to ROUTE-20261102.4 / MOBILE-AD-20261102.1; confirm mobile supplement nonempty, rule mode, advertisement group REJECT. Keep private overlay and certificate."
   },
   "boundary": "Domain-only opportunity is not measured advertising removal. CN destination IP retains DIRECT. No iPhone or current desktop client operation this turn."
 }
