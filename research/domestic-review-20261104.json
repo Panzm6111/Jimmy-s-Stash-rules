@@ -464,9 +464,43 @@
     "python_targeted_tests_passed": 36,
     "project_checks_passed": 41,
     "js_tests_passed": 88,
-    "first_round": "Project: 2 stale GeoIP expectations; targeted: expanded-set invariant and invocation import path. Corrected source expectations/import invocation; final affected suites all passed."
+    "first_round": "Project: 2 stale GeoIP expectations; targeted: expanded-set invariant and invocation import path. Corrected source expectations/import invocation; final affected suites all passed.",
+    "document_links_valid": 237,
+    "linux_ci": {
+      "run_id": 41838771253,
+      "job_id": 126604496918,
+      "commit": "3eb1f1b819a499d56917d94b6d27383da71352d9",
+      "status": "completed",
+      "conclusion": "success",
+      "python_tests": 81,
+      "project_checks": 41,
+      "js_tests": 88,
+      "live_sources": 27,
+      "app_routes_passed": 210,
+      "secret_scan_current_files": 239,
+      "historical_blobs": 355,
+      "findings": 0
+    }
   },
-  "publication": "local verification passed; pending commit/push and Linux CI",
+  "publication": {
+    "code_commit": "3eb1f1b819a499d56917d94b6d27383da71352d9",
+    "pushed_to": "main",
+    "ci_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/41838771253",
+    "public_profile_git_blobs": {
+      "config/stash.yaml": "d741e46f97734317a339c18d8f6b82e9ca9b0b02",
+      "config/clash-verge-auto.yaml": "71cc2548454ec41544df15d4471fb6ef012f1246"
+    },
+    "public_profiles_match_local": true,
+    "client_refresh_required": true
+  },
   "access_notes": "Initial raw-license branch mismatch and download TLS interruption retained locally. No source write until all licensed source parsing and deltas passed. First tests exposed source-template GeoIP expectation and union-fixture expectations, corrected and rerun.",
-  "boundary": "Public rules, synthetic routing and parser checks only; no private subscription or node export, no real iPhone login/comment/game acceptance."
+  "boundary": "Public rules, synthetic routing and parser checks only; no private subscription or node export, no real iPhone login/comment/game acceptance.",
+  "domestic_rule_coverage": {
+    "cn": 110177,
+    "geolocation_cn": 5421,
+    "qcloud": 347,
+    "distinct_rule_strings": 111666,
+    "additional_to_cn": 1489,
+    "boundary": "Overlapping domain suffixes may cover the same hosts; counts are not app acceptance."
+  }
 }
