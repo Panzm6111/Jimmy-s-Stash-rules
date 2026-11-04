@@ -1,0 +1,472 @@
+{
+  "date": "2026-11-04",
+  "base_commit": "502534f9f338b12c73152ad3085501f7880eaf33",
+  "requirement": "Refresh and publish maintained rules, comprehensively protect domestic apps and websites including Tencent Cloud; preserve dedicated overseas and ad routing priority.",
+  "sources": [
+    {
+      "name": "YouTube",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "rules": 183,
+      "changed": false,
+      "delta": {
+        "old_count": 183,
+        "new_count": 183,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "Instagram",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "rules": 4,
+      "changed": false,
+      "delta": {
+        "old_count": 4,
+        "new_count": 4,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "Twitter",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "rules": 33,
+      "changed": false,
+      "delta": {
+        "old_count": 33,
+        "new_count": 33,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "GitHub",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "rules": 31,
+      "changed": false,
+      "delta": {
+        "old_count": 31,
+        "new_count": 31,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "基础广告",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "rules": 38066,
+      "changed": false,
+      "delta": {
+        "old_count": 38066,
+        "new_count": 38066,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "国内服务",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 110177,
+      "changed": false,
+      "delta": {
+        "old_count": 110177,
+        "new_count": 110177,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "国内地理补充",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 5421,
+      "changed": true,
+      "delta": {
+        "added": 5421,
+        "removed": 0,
+        "blocked": false
+      }
+    },
+    {
+      "name": "腾讯云直连",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 347,
+      "changed": true,
+      "delta": {
+        "added": 347,
+        "removed": 0,
+        "blocked": false
+      }
+    },
+    {
+      "name": "东方财富直连",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 8,
+      "changed": false,
+      "delta": {
+        "old_count": 8,
+        "new_count": 8,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "TikTok核心",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 39,
+      "changed": true,
+      "delta": {
+        "old_count": 36,
+        "new_count": 39,
+        "added": 3,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "TikTok广告",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 1,
+      "changed": false,
+      "delta": {
+        "old_count": 1,
+        "new_count": 1,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "通用代理",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 27293,
+      "changed": true,
+      "delta": {
+        "old_count": 27271,
+        "new_count": 27293,
+        "added": 22,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "海外AI",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 213,
+      "changed": true,
+      "delta": {
+        "old_count": 213,
+        "new_count": 213,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "海外社交",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 627,
+      "changed": true,
+      "delta": {
+        "old_count": 627,
+        "new_count": 627,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "社交Discord",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 28,
+      "changed": false,
+      "delta": {
+        "old_count": 28,
+        "new_count": 28,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "社交WhatsApp",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 11,
+      "changed": false,
+      "delta": {
+        "old_count": 11,
+        "new_count": 11,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "社交LINE",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 20,
+      "changed": false,
+      "delta": {
+        "old_count": 20,
+        "new_count": 20,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "社交Signal",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 8,
+      "changed": false,
+      "delta": {
+        "old_count": 8,
+        "new_count": 8,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "Adobe服务",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 260,
+      "changed": false,
+      "delta": {
+        "old_count": 260,
+        "new_count": 260,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "小红书直连",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 12,
+      "changed": false,
+      "delta": {
+        "old_count": 12,
+        "new_count": 12,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "抖音直连",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 71,
+      "changed": false,
+      "delta": {
+        "old_count": 71,
+        "new_count": 71,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "抖音补充",
+      "revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+      "rules": 13,
+      "changed": false,
+      "delta": {
+        "old_count": 13,
+        "new_count": 13,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "国内游戏直连",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 263,
+      "changed": true,
+      "delta": {
+        "old_count": 263,
+        "new_count": 263,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "国服游戏平台",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 37,
+      "changed": true,
+      "delta": {
+        "old_count": 37,
+        "new_count": 37,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "腾讯服务直连",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 686,
+      "changed": true,
+      "delta": {
+        "old_count": 686,
+        "new_count": 686,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "手机广告补充",
+      "revision": "72dd30fb6d5e2ff7b5bcdbecf164d288f41d9dfa",
+      "rules": 661,
+      "changed": false,
+      "delta": {
+        "old_count": 661,
+        "new_count": 661,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    },
+    {
+      "name": "基础广告",
+      "revision": "bc735930f7942f1159094650f55012ff7e9644a0",
+      "rules": 844,
+      "changed": true,
+      "delta": {
+        "old_count": 844,
+        "new_count": 844,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    }
+  ],
+  "cloud_conversions": {
+    "status": "no_changes",
+    "deltas": [
+      {
+        "output": "rules/vendor/netflix.yaml",
+        "old_count": 1156,
+        "new_count": 1156,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      },
+      {
+        "output": "rules/vendor/telegram.yaml",
+        "old_count": 35,
+        "new_count": 35,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      },
+      {
+        "output": "rules/vendor/tiktok.yaml",
+        "old_count": 34,
+        "new_count": 34,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      },
+      {
+        "output": "rules/apple.yaml",
+        "old_count": 1579,
+        "new_count": 1579,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      },
+      {
+        "output": "rules/microsoft.yaml",
+        "old_count": 668,
+        "new_count": 668,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      },
+      {
+        "output": "rules/vendor/ai-sukka.yaml",
+        "old_count": 55,
+        "new_count": 55,
+        "added": 0,
+        "removed": 0,
+        "blocked": false,
+        "reasons": []
+      }
+    ],
+    "files": {}
+  },
+  "license_check": "All three direct upstream repository licenses matched stored reviewed SHA256; MetaCubeX license read from master, data from meta.",
+  "preservation": {
+    "config/stash.yaml": {
+      "groups_dns_private_provider_http_scripts_unchanged": true,
+      "other_rule_order_unchanged": true,
+      "sha256": "22f36fa04ab6da70326d1583b691252f85052c83a957336fda783a55ff59c982",
+      "providers": 36,
+      "rule_declarations": 38
+    },
+    "config/clash-verge-auto.yaml": {
+      "groups_dns_private_provider_http_scripts_unchanged": true,
+      "other_rule_order_unchanged": true,
+      "sha256": "1931aa96f700797dbff2ed7ea545b0fda8d640e4b001dfe9b0fa6e4daef6b9dd",
+      "providers": 33,
+      "rule_declarations": 35
+    }
+  },
+  "validation": {
+    "live_health": {
+      "checked_at": "2026-11-04T13:25:49.946017+00:00",
+      "ok": true,
+      "sources": 27,
+      "app_routes_passed": 210
+    },
+    "new_cloud_suffix_negative_cases_passed": 4,
+    "python_targeted_tests_passed": 36,
+    "project_checks_passed": 41,
+    "js_tests_passed": 88,
+    "first_round": "Project: 2 stale GeoIP expectations; targeted: expanded-set invariant and invocation import path. Corrected source expectations/import invocation; final affected suites all passed."
+  },
+  "publication": "local verification passed; pending commit/push and Linux CI",
+  "access_notes": "Initial raw-license branch mismatch and download TLS interruption retained locally. No source write until all licensed source parsing and deltas passed. First tests exposed source-template GeoIP expectation and union-fixture expectations, corrected and rerun.",
+  "boundary": "Public rules, synthetic routing and parser checks only; no private subscription or node export, no real iPhone login/comment/game acceptance."
+}

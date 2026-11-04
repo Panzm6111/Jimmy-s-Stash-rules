@@ -78,7 +78,7 @@ def remote_integrated():
     # dedicated application rules, but cannot inherit a manual domestic proxy.
     config['rule-providers']['腾讯服务直连'] = {
         'type':'http','behavior':'classical','url':RAW+'rules/vendor/tencent-direct.yaml','interval':86400}
-    domestic = config['rules'].index('RULE-SET,国内服务,国内直连')
+    domestic = config['rules'].index('RULE-SET,国内服务,DIRECT')
     config['rules'].insert(domestic, 'RULE-SET,腾讯服务直连,DIRECT')
     # Literal Chinese destinations (including game UDP) keep a direct fallback.
     # Earlier domain/application decisions still win; never bypass all UDP.
@@ -103,7 +103,7 @@ def render():
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261102.4；34个远程规则集，原分流及中国IP直连优先；保留21个策略组。\n'
+            '# JIMMY-ROUTING ROUTE-20261104.1；36个远程规则集，原分流及中国IP直连优先；保留21个策略组。\n'
             '# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
@@ -123,7 +123,7 @@ def verify(text):
     config = yaml.safe_load(text)
     validate_structure(config)
     assert set(config['rule-providers']) == set(remote_integrated()['rule-providers'])
-    assert len(config['rule-providers']) == 34
+    assert len(config['rule-providers']) == 36
     assert config['rules'][-2] == f'RULE-SET,{MOBILE_ADS},广告拦截'
     assert config['rules'][-3] == 'GEOIP,CN,DIRECT'
     assert config['rules'].count('RULE-SET,基础广告,广告拦截') == 1

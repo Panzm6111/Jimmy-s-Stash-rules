@@ -321,7 +321,9 @@ rules:
 - RULE-SET,GitHub,Jimmy · 总代理
 - RULE-SET,Microsoft服务,Jimmy · Microsoft
 - RULE-SET,腾讯服务直连,DIRECT
-- RULE-SET,国内服务,Jimmy · 国内直连
+- RULE-SET,国内服务,DIRECT
+- RULE-SET,国内地理补充,DIRECT
+- RULE-SET,腾讯云直连,DIRECT
 - RULE-SET,海外社交,Jimmy · TikTok
 - RULE-SET,社交Discord,Jimmy · TikTok
 - RULE-SET,社交WhatsApp,Jimmy · TikTok
@@ -426,6 +428,22 @@ rule-providers:
     format: yaml
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml
     path: ./ruleset/jimmy-merge-998cddb7fad7.yaml
+    proxy: Jimmy · 自动节点
+  国内地理补充:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-cn.yaml
+    path: ./ruleset/jimmy-merge-065cbd50291a.yaml
+    proxy: Jimmy · 自动节点
+  腾讯云直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/qcloud.yaml
+    path: ./ruleset/jimmy-merge-7cc59447e7bb.yaml
     proxy: Jimmy · 自动节点
   TikTok:
     interval: 86400

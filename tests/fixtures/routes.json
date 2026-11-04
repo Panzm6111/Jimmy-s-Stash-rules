@@ -209,20 +209,20 @@
   },
   {
     "domain": "www.jd.com",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   },
   {
     "domain": "www.taobao.com",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   },
   {
     "domain": "www.alipay.com",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   },
   {
     "domain": "unknown.example",
     "country": "CN",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   },
   {
     "domain": "unknown.example",
@@ -263,21 +263,21 @@
   {
     "domain": "chat.deepseek.com",
     "country": "CN",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   },
   {
     "domain": "kimi.com",
     "country": "CN",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   },
   {
     "domain": "www.doubao.com",
     "country": "CN",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   },
   {
     "domain": "www.qianwen.com",
     "country": "CN",
-    "policy": "国内直连"
+    "policy": "DIRECT"
   }
 ]

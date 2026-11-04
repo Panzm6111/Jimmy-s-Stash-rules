@@ -1,6 +1,6 @@
 # Stash 去广告：当前实现、修复证据与排查规格
 
-当前分流：**ROUTE-20261102.4**，手机补充：**MOBILE-AD-20261102.1**，HTTP/JS：**AD-20261020.5**，继续使用原 `config/stash.yaml` 整合入口。本轮按用户指定的fmz200仓库补齐广告分支，43条原生动作、11份响应JS、1份自检JS，59个精确MITM主机（含自检example.com）。原分流、私人接入和签到暂停状态保留。来源逐项取舍见[fmz200接入明细](FMZ-INTEGRATION.md)，固定源码与哈希见[接入审计](../research/fmz-integration.json)。
+当前分流：**ROUTE-20261104.1**，手机补充：**MOBILE-AD-20261102.1**，HTTP/JS：**AD-20261020.5**，继续使用原 `config/stash.yaml` 整合入口。本轮按用户指定的fmz200仓库补齐广告分支，43条原生动作、11份响应JS、1份自检JS，59个精确MITM主机（含自检example.com）。原分流、私人接入和签到暂停状态保留。来源逐项取舍见[fmz200接入明细](FMZ-INTEGRATION.md)，固定源码与哈希见[接入审计](../research/fmz-integration.json)。
 
 `.4`手机截图显示阿里云盘结构不支持16次、HTTP失败1次，B站正文超限2次/无需修改4次/产生修改1次，菜鸟无需修改11次，京东产生修改1次；其他响应模块无记录。用户表示除贴吧外均打开过，无记录的App仍有广告。这排除了所有JS均未运行的假设；不能区分未命中、未解密、协议和缓存，原生拒绝也不进入响应计数。`.5`没有真机效果通过记录。
 
@@ -25,11 +25,11 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-主配置保留21个策略组、8个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.5整合全部40款已有App专项、11份响应JS、1份手动自检JS及扩展域名规则集。** 34个远程规则集中，“基础广告”provider沿用名称，但其URL直接订阅blackmatrix7的AdvertisingLite扩展规则，本仓库保留离线审查快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
+主配置保留21个策略组、8个测速池、私人“机场”provider、原DNS与分流。**AD-20261020.5整合全部40款已有App专项、11份响应JS、1份手动自检JS及扩展域名规则集。** 36个远程规则集中，“基础广告”provider沿用名称，但其URL直接订阅blackmatrix7的AdvertisingLite扩展规则，本仓库保留离线审查快照，并有真实RULE-SET引用；无需再导入expanded。38条基础包仅保留作维护和旧分层安装兼容。扩展快照的规则数会随维护更新，实际数量见第9节自动生成的清单。扩展包可能误拦，也不能代替开屏接口处理；本次整合不代表效果已通过验收。
 
 12份JS通过`script-providers.<name>.url`引用本仓库原路径，并带公开`?v=AD-20261020.5`版本参数以与旧资源缓存区分，`interval: 86400`。刷新主配置取得新URL、主机和handler，脚本正文仍由Stash联网加载；自检页及观察行显示实际运行版本，下载成功不能冒充执行成功。新主机/handler必须刷新主配置。恢复的非空URL声明继续保留，不回到content-only；精确版本URL也加入发布后下载和字节校验。本轮补齐微博广告字段、相关主机与HTTP匹配；逐项范围见接入明细。
 
-首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部ROUTE-20261102.4、MOBILE-AD-20261102.1及AD-20261020.5，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
+首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部ROUTE-20261104.1、MOBILE-AD-20261102.1及AD-20261020.5，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
 
 **当前需求是整合入口，不设置逐App开关，也不另装expanded。** 主配置内的专项随主配置共同启用；额外覆写的启停不能撤销内置处理。“广告拦截→DIRECT”只控制域名路由，暂停HTTPS改写需关闭HTTP/MITM并重建连接。单App模块文件不是手机上的待安装清单。
 
@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 36 |
+| public_main_rules | 38 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -301,6 +301,18 @@ rule-providers:
     behavior: domain
     format: yaml
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml
+  国内地理补充:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-cn.yaml
+  腾讯云直连:
+    type: http
+    interval: 86400
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/qcloud.yaml
   TikTok:
     interval: 86400
     type: http
@@ -703,8 +715,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `9a6c7062b20433c7060202f1cccb5ce609c2955e95f4de50a03ad90ad9849dec` |
-| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `218c56405a63c3e35321e793bf3b71b6d6a9ba6f32931990c7e9b75f4ee8f4ab` |
+| [config/stash.yaml](../config/stash.yaml) | `22f36fa04ab6da70326d1583b691252f85052c83a957336fda783a55ff59c982` |
+| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `585c38283f3f339c4afd8280d6820e3f6c4ec19bd5bfad07055acd20b31fa2e6` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |

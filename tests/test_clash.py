@@ -36,8 +36,8 @@ class ClashChecks(unittest.TestCase):
         from validate import route, load
         stash=load('config/stash.yaml')
         clash=load('config/clash-verge-auto.yaml')
-        for config, domestic, ai, social in [(stash,'国内直连','海外AI','TikTok'),
-                                              (clash,'Jimmy · 国内直连','Jimmy · 海外AI','Jimmy · TikTok')]:
+        for config, domestic, ai, social in [(stash,'DIRECT','海外AI','TikTok'),
+                                              (clash,'DIRECT','Jimmy · 海外AI','Jimmy · TikTok')]:
             for host in ['eastmoneysec.com','eastmoneyloans.com',
                          'api.bilibili.com','api.m.jd.com','api.m.taobao.com',
                          'alibabacloud.com','quote.10jqka.com.cn']:
@@ -96,8 +96,8 @@ class ClashChecks(unittest.TestCase):
         self.assertNotIn('http', clash)
         self.assertNotIn('script-providers', clash)
         self.assertEqual(clash['rule-providers']['基础广告']['url'], stash['rule-providers']['基础广告']['url'])
-        self.assertEqual(len(clash['rule-providers']),34)
-        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),34)
+        self.assertEqual(len(clash['rule-providers']),36)
+        self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),36)
         self.assertTrue(all(p['type']=='http' and p['behavior'] in {'classical','domain'} and p['interval']==86400 for p in clash['rule-providers'].values()))
         self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
 
@@ -159,7 +159,7 @@ class ClashChecks(unittest.TestCase):
         self.assertFalse(download['lazy'])
         self.assertEqual(download['use'],['机场'])
         self.assertNotIn('proxies',download)
-        self.assertEqual(len(full['rule-providers']),31)
+        self.assertEqual(len(full['rule-providers']),33)
         removed={'广告路径例外','App广告域名','手机广告补充'}
         expected=[r for r in overlay['rules'] if not (r.startswith('RULE-SET,') and r.split(',')[1] in removed)]
         self.assertEqual(full['rules'],expected)

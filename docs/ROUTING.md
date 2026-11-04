@@ -28,7 +28,7 @@ Clash自动池使用50ms切换容差，池/机场/下载回退均要求204响应
 
 本项目共21个业务策略组。统一“TikTok”组接管TikTok、Instagram和X/Twitter，默认美国，允许单独切换；平台和账号真实可用性未验收。两端的“ai”自动池直接合并日本、美国、台湾的名称筛选结果，已于2026-11-02移除新加坡，不串联代理、不引用其他策略组或DIRECT；“海外AI”默认仍选美国。“海外AI”、Netflix、YouTube、Telegram等软件组是 `select`，可以选择“总代理、美国、日本、香港、新加坡、台湾、其他地区、自动节点、手动节点、DIRECT”，Stash仍可直接选择机场的具体节点；Clash改为经“手动节点”选择。新加坡独立池继续保留。软件组内直接选节点只影响这个软件；多个软件跟随同一个池或手动入口时，会共用该入口的结果。
 
-12个业务 `select` 组均提供 `ai`（含Adobe）：总代理、海外AI、TikTok、Netflix、YouTube、Telegram、Apple、Microsoft、未匹配流量、国内直连、广告拦截。“手动节点”保持只选实际节点：Clash的include-all将显式组引用放在自动收集节点之前，加入ai会改变原先首个机场节点的默认值，因此两端均保留此入口为例外。原两国选项原位替换，其余追加在原选项末尾；原首选和其他选项的顺序保留。国家池、自动节点、其他地区及ai自身不加入该引用，避免循环。国内直连仍默认DIRECT，广告拦截仍默认REJECT；主动将这两组选为ai，会使相应域名流量走代理，HTTP广告处理不受该选项控制。Clash唯一入口从同一维护源生成；带Jimmy前缀的入口显示为 `Jimmy · ai`。
+12个业务 `select` 组均提供 `ai`（含Adobe）：总代理、海外AI、TikTok、Netflix、YouTube、Telegram、Apple、Microsoft、未匹配流量、国内直连、广告拦截。“手动节点”保持只选实际节点：Clash的include-all将显式组引用放在自动收集节点之前，加入ai会改变原先首个机场节点的默认值，因此两端均保留此入口为例外。原两国选项原位替换，其余追加在原选项末尾；原首选和其他选项的顺序保留。国家池、自动节点、其他地区及ai自身不加入该引用，避免循环。国内直连仍默认DIRECT，广告拦截仍默认REJECT；国内白名单现已固定DIRECT，不跟随该组手动选择；广告拦截选ai仍会改变其命中流量的出口，HTTP广告处理不受该选项控制。Clash唯一入口从同一维护源生成；带Jimmy前缀的入口显示为 `Jimmy · ai`。
 
 默认值为：**海外AI→美国，Apple/Microsoft→DIRECT，Netflix/YouTube/Telegram/未匹配流量→总代理**。Stash总代理默认REJECT，首次使用需改为“自动节点”或所需地区；Clash总代理默认自动节点。这些是文件默认，已有UI选择可能保留，更新后需核对。
 
@@ -100,3 +100,9 @@ Apple：APNs、iCloud、证书状态与部分系统更新精确域名直接直�
 Adobe服务前置于通用广告和国内/海外聚合规则，防止授权、字体或云服务被误拦；原Stash广告集会拦截activate.adobe.com等授权主机。完整Adobe类别也包含营销/统计域名，因此这些命中流量同样优先走Adobe策略。这是正常业务优先的明确取舍，其他广告规则继续生效。
 
 范围覆盖Photoshop、Lightroom、Illustrator、Premiere、After Effects、Acrobat等共享的登录、授权、更新、素材、字体与云服务域名，以及Firefly和Frame.io的上述端点。域名分流验证不等于各产品真实业务验收；账号地区、订阅权限、地区限制和第三方集成仍由对应服务决定。不拦截授权、不改响应或MITM。
+
+## 国内App与网站白名单（2026-11-04）
+
+国内总分类从可手动选择代理的策略组改为固定DIRECT；“国内直连”组名称保留兼容。MetaCubeX的cn完整分类继续使用，并接入geolocation-cn与qcloud完整分类，分别补充国内网站/App与腾讯云网页、控制台、API/CDN；不手写运行域名，不按整个云厂商IP段放行。两端每24小时直接向上游更新，国内分类命中不依赖IP是否位于中国。
+
+顺序仍在明确广告、海外AI/TikTok等专用服务之后、通用海外分类之前；Apple/Microsoft等专用组和原有广告设置继续生效，Stash HTTP/MITM不由DIRECT关闭。中国IPv4/IPv6仍有最后直连兜底。测试覆盖云服务、购物支付、银行、通讯、出行、办公和评论入口；域名模型通过不代替真实App或网页登录验收。来源与完整更新证据见[本轮核验](../research/domestic-review-20261104.json)。

@@ -54,6 +54,20 @@
         "behavior": "domain",
         "format": "yaml",
         "snapshot": "rules/vendor/china-direct-community.yaml"
+      },
+      {
+        "name": "国内地理补充",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-cn.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/china-geolocation.yaml"
+      },
+      {
+        "name": "腾讯云直连",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/qcloud.yaml",
+        "behavior": "domain",
+        "format": "yaml",
+        "snapshot": "rules/vendor/qcloud.yaml"
       }
     ],
     "东方财富直连": [

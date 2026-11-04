@@ -25,13 +25,16 @@ class Subscriptions(unittest.TestCase):
         for name,parts in p.plan()['providers'].items():
             oldset=set(v.provider_rules(old)[name]);newset=set()
             for part in parts:newset.update(v.provider_rules(new)[part['name']])
-            self.assertEqual(oldset,newset,name)
+            if name=='国内服务':
+                additions=set(v.load('rules/vendor/china-geolocation.yaml')['payload'])|set(v.load('rules/vendor/qcloud.yaml')['payload'])
+                self.assertEqual(oldset|additions,newset,name)
+            else:self.assertEqual(oldset,newset,name)
 
     def test_runtime_upstreams_are_mutable_but_offline_reference_is_explicit(self):
         config=v.load('config/clash-verge-auto.yaml')
         direct=[x for x in config['rule-providers'].values() if 'Panzm6111/' not in x['url']]
-        self.assertEqual(len(direct),23)
-        self.assertEqual(len(config['rule-providers']),31)
+        self.assertEqual(len(direct),25)
+        self.assertEqual(len(config['rule-providers']),33)
         for part in direct:
             self.assertIn(part['behavior'],{'domain','classical'})
             self.assertTrue((ROOT/p.reference_path(part['url'])).is_file())

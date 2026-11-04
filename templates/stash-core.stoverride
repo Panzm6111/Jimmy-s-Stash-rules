@@ -411,8 +411,8 @@ rules:
 - RULE-SET,Apple服务,Apple
 - RULE-SET,GitHub,总代理
 - RULE-SET,Microsoft服务,Microsoft
-- RULE-SET,国内服务,国内直连
+- RULE-SET,国内服务,DIRECT
 - RULE-SET,海外社交,TikTok
 - RULE-SET,通用代理,总代理
-- GEOIP,CN,国内直连
+- GEOIP,CN,DIRECT
 - MATCH,未匹配流量

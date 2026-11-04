@@ -53,12 +53,12 @@ class HealthChecks(unittest.TestCase):
             direct={p['url'] for p in config['rule-providers'].values() if 'Panzm6111/' not in p['url']}
             self.assertTrue(direct<=monitored)
 
-    def test_game_direct_routing_cannot_inherit_domestic_group_proxy(self):
+    def test_domestic_routes_cannot_inherit_group_proxy(self):
         for filename,prefix in [('config/stash.yaml',''),('config/clash-verge-auto.yaml','Jimmy · ')]:
             config=v.load(filename)
             domestic=next(g for g in config['proxy-groups'] if g['name']==prefix+'国内直连')
             domestic['proxies']=[prefix+'ai','DIRECT']
-            for host in ['pvp.qq.com','sgame.qq.com','dlied1.qq.com','msdk.qq.com','www.yuanshen.com']:
+            for host in ['cloud.tencent.com','console.cloud.tencent.com','api.tencentcloudapi.com','www.aliyun.com','www.huaweicloud.com','www.jd.com','www.bilibili.com','www.feishu.cn','pvp.qq.com','sgame.qq.com','dlied1.qq.com','msdk.qq.com','www.yuanshen.com']:
                 self.assertEqual(v.route(config,host),'DIRECT',host)
             # Synthetic IP/country inputs, not claimed real game server addresses.
             for address in ['203.0.113.5','2001:db8::5']:

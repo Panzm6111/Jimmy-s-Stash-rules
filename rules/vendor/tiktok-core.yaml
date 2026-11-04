@@ -1,5 +1,5 @@
 # Mechanically adapted maintained rules; no locally authored domains.
-# Sources and original licenses: research/community-sources.json; tiktok-functional
+# Sources and original licenses: research/community-sources.json; https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/bc735930f7942f1159094650f55012ff7e9644a0/geo/geosite/tiktok@!cn.yaml
 payload:
 - DOMAIN-SUFFIX,bytedapm.com
 - DOMAIN-SUFFIX,muscdn.com
@@ -17,9 +17,12 @@ payload:
 - DOMAIN-SUFFIX,tiktokglobalshopv.com
 - DOMAIN-SUFFIX,tiktokminis.us
 - DOMAIN-SUFFIX,tiktokrow-cdn.com
+- DOMAIN-SUFFIX,tiktokshop.com
+- DOMAIN-SUFFIX,tiktokstaticb.com
 - DOMAIN-SUFFIX,tiktokv.com
 - DOMAIN-SUFFIX,tiktokv.eu
 - DOMAIN-SUFFIX,tiktokv.us
+- DOMAIN-SUFFIX,tiktokvapp.com
 - DOMAIN-SUFFIX,tiktokw.eu
 - DOMAIN-SUFFIX,tiktokw.us
 - DOMAIN-SUFFIX,ttcdn-us.com
