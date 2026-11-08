@@ -63,7 +63,7 @@ def rendered():
                'research/ad-catalog.json','research/sources.lock.json','research/ad-repair-evidence.json',
                'research/fmz-integration.json',
                'tools/generate_ad_modules.py','tools/build_ad_scripts.py','tools/build_ad_diagnostics.py','tools/ad_observation_runtime.js',
-               'tools/build_subscription.py','tools/config_helpers.py','tools/build_private_config.py',
+               'tools/build_subscription.py','tools/stash_ai_guard.py','tools/config_helpers.py','tools/build_private_config.py',
                'tools/render_ad_architecture.py','tools/build_ads.py','modules/diagnostics/ads.stoverride','modules/diagnostics/self-check.stoverride',
                'modules/ads/expanded.stoverride']
     sources += [p.as_posix() for p in modules]

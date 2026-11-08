@@ -116,7 +116,7 @@ class PrivateConfigChecks(unittest.TestCase):
 
     def test_probe_settings_and_service_defaults_are_validated(self):
         config, _ = compose(self.source)
-        for name, key, value in (('自动节点', 'type', 'select'), ('美国', 'tolerance', 50),
+        for name, key, value in (('自动节点', 'type', 'select'), ('美国', 'tolerance', 75),
                                  ('其他地区', 'interval', 60), ('香港', 'tolerance', 0),
                                  ('海外AI', 'proxies', ['总代理', '美国']),
                                  ('Apple', 'proxies', ['总代理', 'DIRECT'])):

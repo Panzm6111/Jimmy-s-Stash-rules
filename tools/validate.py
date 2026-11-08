@@ -436,6 +436,8 @@ class ProjectChecks(unittest.TestCase):
             'https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'])
         self.assertNotIn('fallback', config['dns'])
         self.assertNotIn('dot.pub', json.dumps(config['dns']))
+        self.assertTrue(config['dns']['follow-rule'])
+        self.assertTrue(all(x.startswith('https://') for x in config['dns']['proxy-server-nameserver']))
         self.assertTrue({'Google', 'NCloud'}.isdisjoint(g['name'] for g in config['proxy-groups']))
         for provider in config.get('script-providers', {}).values():
             self.assertEqual(set(provider), {'url', 'interval'})

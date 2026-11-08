@@ -74,6 +74,9 @@ def global_merge(source):
 def base_profile():
     """Internal preparation model; never a second published configuration."""
     source=yaml.safe_load((ROOT/'config/stash.yaml').read_text(encoding='utf-8'))
+    from stash_ai_guard import for_clash
+    from validate import merged
+    source=for_clash(source, merged())
     result={k:copy.deepcopy(v) for k,v in source.items() if k not in {'http','script-providers'}}
     result['mixed-port']=7890
     result['dns']['enable']=True

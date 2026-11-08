@@ -91,7 +91,8 @@ def remote_integrated():
         'type':'http','behavior':'classical','url':RAW+'rules/vendor/mobile-ads-awa.yaml','interval':86400}
     config['rules'].insert(-1, f'RULE-SET,{MOBILE_ADS},广告拦截')
     from provider_sources import apply
-    return apply(config)
+    from stash_ai_guard import apply as guard_ai
+    return guard_ai(apply(config))
 
 
 def render():
@@ -102,8 +103,9 @@ def render():
     return ('#SUBSCRIBED ' + URL + '\n'
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
-            '# JIMMY-STASH ' + VERSION + '；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261104.1；36个远程规则集，原分流及中国IP直连优先；保留21个策略组。\n'
+            '# JIMMY-STASH ' + VERSION + '；21个策略组（含三地区ai、TikTok）、私人订阅接入保留。\n'
+            '# JIMMY-ROUTING ROUTE-20261108.1；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。\n'
+            '# AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。\n'
             '# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
             '# Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。\n'
@@ -142,8 +144,11 @@ def verify(text):
     original = integrated()
     # The published profile now has an intentionally fixed China-IP fallback.
     original['rules'] = ['GEOIP,CN,DIRECT' if r == 'GEOIP,CN,国内直连' else r for r in original['rules']]
+    from stash_ai_guard import for_clash
+    expected_guard = remote_integrated()
     for key in ('proxy-groups', 'proxy-providers', 'dns'):
-        assert config[key] == merged()[key], 'non-ad configuration changed'
+        assert config[key] == expected_guard[key], 'unexpected AI guard change'
+    assert for_clash(config, merged())['dns'] == merged()['dns']
     expanded = merge_model(config, load('modules/ads/expanded.stoverride'))
     assert route(expanded, 'ad.12306.cn') == '广告拦截'
     for case in json.loads((ROOT / 'tests/fixtures/routes.json').read_text()):

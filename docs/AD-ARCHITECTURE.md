@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 38 |
+| public_main_rules | 46 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -715,7 +715,7 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `22f36fa04ab6da70326d1583b691252f85052c83a957336fda783a55ff59c982` |
+| [config/stash.yaml](../config/stash.yaml) | `2967e44c4f1cd6338e9197677b967dc343ef1b436744d4f476fbcb88e1e1d48c` |
 | [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `585c38283f3f339c4afd8280d6820e3f6c4ec19bd5bfad07055acd20b31fa2e6` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |

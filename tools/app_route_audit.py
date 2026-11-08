@@ -14,6 +14,8 @@ def decision(config,sets,host):
         if fields[0]=='RULE-SET':
             for item in sets[fields[1]]:
                 if matches(item,host):return fields[2],fields[1],item
+        elif fields[0] in {'DOMAIN','DOMAIN-SUFFIX','DOMAIN-KEYWORD'}:
+            if matches(','.join(fields[:2]),host):return fields[2],'inline',','.join(fields[:2])
         elif fields[0]=='MATCH':return fields[1],'MATCH',''
     raise ValueError('missing terminal route')
 

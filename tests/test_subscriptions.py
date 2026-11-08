@@ -9,6 +9,67 @@ import cloud_update as cloud
 import validate as v
 
 class Subscriptions(unittest.TestCase):
+    def test_stash_ai_dns_has_no_domestic_race_and_pins_resolver_transport(self):
+        from stash_ai_guard import AI_SUFFIXES, AI_RESOLVERS, BOOTSTRAP
+        config=v.load('config/stash.yaml')
+        dns=config['dns']
+        self.assertTrue(dns['follow-rule'])
+        self.assertEqual(dns['default-nameserver'],list(BOOTSTRAP))
+        self.assertEqual(dns['proxy-server-nameserver'],list(BOOTSTRAP))
+        self.assertNotIn('fallback',dns)
+        for host in AI_SUFFIXES:
+            self.assertEqual(dns['nameserver-policy']['+.'+host],list(AI_RESOLVERS))
+        self.assertEqual(dns['nameserver-policy']['rule-set:海外AI,海外AI补充'],list(AI_RESOLVERS))
+        # Deliberately inject CN GeoIP and competing rejecting rule providers.
+        # Resolver transport must still use the exact AI selector, fail closed
+        # through its existing REJECT sentinel, and not inherit MATCH/ads.
+        poisoned={name:['IP-CIDR,0.0.0.0/0'] for name in config['rule-providers']}
+        with patch.object(v,'provider_rules',return_value=poisoned):
+            for address in ['1.1.1.1','8.8.8.8']:
+                self.assertEqual(v.route(config,address=address,country='CN'),'海外AI')
+        for host in ['dns.alidns.com','doh.pub']:
+            self.assertEqual(v.route(config,host,country='ZZ'),'DIRECT')
+        groups={g['name']:g for g in config['proxy-groups']}
+        for name in ['ai','美国','日本','台湾']:
+            self.assertEqual(groups[name]['tolerance'],50)
+            self.assertEqual(groups[name]['proxies'],['REJECT'])
+        self.assertFalse(config['ipv6'])
+
+    def test_stash_chatgpt_core_survives_unloaded_or_rejecting_remote_sets(self):
+        from stash_ai_guard import AI_SUFFIXES
+        from app_route_audit import decision
+        config=v.load('config/stash.yaml')
+        for failed in [[],['DOMAIN-SUFFIX,chatgpt.com','DOMAIN-SUFFIX,openai.com']]:
+            payload={name:failed for name in config['rule-providers']}
+            with patch.object(v,'provider_rules',return_value=payload):
+                # Keep the deliberate system/LAN exceptions, not a broad bypass.
+                payload['系统直连例外']=[]
+                for host in AI_SUFFIXES:
+                    for prefix in ['', 'auth.', 'ws.']:
+                        self.assertEqual(v.route(config,prefix+host,country='CN'),'海外AI')
+                        self.assertEqual(decision(config,payload,prefix+host)[0],'海外AI')
+                self.assertNotEqual(v.route(config,'chatgpt.com.attacker.invalid',country='CN'),'海外AI')
+        self.assertEqual(v.route(config,'chatgpt.com','192.168.1.1'),'DIRECT')
+
+    def test_stash_guard_isolated_from_clash_and_private_provider(self):
+        from stash_ai_guard import apply, for_clash
+        from build_subscription import remote_integrated
+        source=remote_integrated();before=copy.deepcopy(source)
+        restored=for_clash(source,v.merged())
+        # Reapplying to the pre-guard source neither mutates nor loses secrets
+        # in a synthetic device map; no actual credentials are accessed.
+        fixture=copy.deepcopy(restored)
+        fixture['proxy-providers']['机场']['url']='https://device.example.invalid/private'
+        untouched=copy.deepcopy(fixture)
+        guarded=apply(fixture)
+        self.assertEqual(fixture,untouched)
+        self.assertEqual(guarded['proxy-providers'],fixture['proxy-providers'])
+        self.assertEqual(source,before)
+        clash=v.load('config/clash-verge-auto.yaml')
+        self.assertNotIn('follow-rule',clash['dns'])
+        self.assertNotIn('nameserver-policy',clash['dns'])
+        self.assertEqual(restored['dns'],v.merged()['dns'])
+
     def test_policy_order_groups_and_http_unchanged_by_splitting_sets(self):
         from build_subscription import remote_integrated
         # Compare source semantics before/after provider splitting; no old Git commit required.
@@ -21,7 +82,13 @@ class Subscriptions(unittest.TestCase):
             value=','.join(f)
             if not restored or restored[-1]!=value:restored.append(value)
         self.assertEqual(restored,old['rules'])
-        for key in ['proxy-groups','proxy-providers','dns','http','script-providers']:self.assertEqual(new[key],old[key],key)
+        for key in ['proxy-groups','proxy-providers','http','script-providers']:self.assertEqual(new[key],old[key],key)
+        # DNS rule-set references expand with the same provider split.
+        old_dns=copy.deepcopy(old['dns'])
+        policy=old_dns['nameserver-policy']
+        servers=policy.pop('rule-set:海外AI')
+        policy['rule-set:海外AI,海外AI补充']=servers
+        self.assertEqual(new['dns'],old_dns)
         for name,parts in p.plan()['providers'].items():
             oldset=set(v.provider_rules(old)[name]);newset=set()
             for part in parts:newset.update(v.provider_rules(new)[part['name']])

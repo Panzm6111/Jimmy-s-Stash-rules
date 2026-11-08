@@ -7,7 +7,7 @@
 | Stash | [config/stash.yaml](config/stash.yaml) |
 | Clash Verge | [config/clash-verge-auto.yaml](config/clash-verge-auto.yaml) |
 
-Stash 当前分流版本 `ROUTE-20261104.1`，新增 `MOBILE-AD-20261102.1` 手机域名补充；原 HTTP/JS 版本仍为 `AD-20261020.5`。Clash 本轮配置未变。`ai`池只包含日本、美国、台湾；新加坡独立组保留。21个业务策略组、TikTok/Instagram/X统一分流、Adobe及国内应用分流保留。Clash另有一个隐藏的订阅下载回退组。
+Stash 当前分流版本 `ROUTE-20261108.1`，含 `AI-DNS-20261108.1` AI解析代理保护与 `MOBILE-AD-20261102.1` 手机域名补充；原 HTTP/JS 版本仍为 `AD-20261020.5`。AI DNS要求Stash iOS 3.6+，地区报错按[手机验收步骤](docs/AI-COVERAGE.md#stash-ai-dns-与地区报错2026-11-08)核对；尚无本轮iPhone实测。Clash 本轮配置未变。`ai`池只包含日本、美国、台湾；新加坡独立组保留。21个业务策略组、TikTok/Instagram/X统一分流、Adobe及国内应用分流保留。Clash另有一个隐藏的订阅下载回退组。
 
 ## 使用
 

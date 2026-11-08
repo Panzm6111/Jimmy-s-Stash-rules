@@ -1,8 +1,9 @@
 #SUBSCRIBED https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
-# JIMMY-STASH AD-20261020.5；21个策略组（含三地区ai、TikTok）、DNS、私人订阅接入保留。
-# JIMMY-ROUTING ROUTE-20261104.1；36个远程规则集，原分流及中国IP直连优先；保留21个策略组。
+# JIMMY-STASH AD-20261020.5；21个策略组（含三地区ai、TikTok）、私人订阅接入保留。
+# JIMMY-ROUTING ROUTE-20261108.1；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。
+# AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。
 # JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
 # Safari打开https://example.com/jimmy-stash-check可手动开始15分钟排查；默认不记录。
@@ -30,11 +31,31 @@ ipv6: false
 allow-lan: false
 dns:
   default-nameserver:
-  - 223.5.5.5
-  - 119.29.29.29
+  - https://223.5.5.5/dns-query
+  - https://1.12.12.12/dns-query
   nameserver:
   - https://dns.alidns.com/dns-query
   - https://doh.pub/dns-query
+  follow-rule: true
+  proxy-server-nameserver:
+  - https://223.5.5.5/dns-query
+  - https://1.12.12.12/dns-query
+  nameserver-policy:
+    +.chatgpt.com:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+    +.openai.com:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+    +.oaistatic.com:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+    +.oaiusercontent.com:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+    rule-set:海外AI,海外AI补充:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
 proxy-groups:
 - name: 总代理
   type: select
@@ -72,6 +93,7 @@ proxy-groups:
     ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
   url: https://www.gstatic.com/generate_204
   interval: 1800
+  tolerance: 50
 - name: 美国
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -82,6 +104,7 @@ proxy-groups:
   - 机场
   filter: (?i)(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
     _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)
+  tolerance: 50
 - name: 日本
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -91,6 +114,7 @@ proxy-groups:
   use:
   - 机场
   filter: (?i)(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)
+  tolerance: 50
 - name: ai
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -101,6 +125,7 @@ proxy-groups:
   - 机场
   filter: (?i)(?:(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
     _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)|(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)|(台湾|台灣|臺灣|台北|臺北|🇹🇼|taiwan|taipei|(^|[^a-z])tw([^a-z]|$)|^REJECT$))
+  tolerance: 50
 - name: 香港
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -110,6 +135,7 @@ proxy-groups:
   use:
   - 机场
   filter: (?i)(香港|🇭🇰|hong[ _-]*kong|(^|[^a-z])hkg?([^a-z]|$)|^REJECT$)
+  tolerance: 50
 - name: 新加坡
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -119,6 +145,7 @@ proxy-groups:
   use:
   - 机场
   filter: (?i)(新加坡|狮城|獅城|🇸🇬|singapore|(^|[^a-z])sg([^a-z]|$)|^REJECT$)
+  tolerance: 50
 - name: 台湾
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -128,6 +155,7 @@ proxy-groups:
   use:
   - 机场
   filter: (?i)(台湾|台灣|臺灣|台北|臺北|🇹🇼|taiwan|taipei|(^|[^a-z])tw([^a-z]|$)|^REJECT$)
+  tolerance: 50
 - name: 其他地区
   type: url-test
   proxies:
@@ -140,6 +168,7 @@ proxy-groups:
     _-]*[0-9]+)?$|^REJECT$)
   url: https://www.gstatic.com/generate_204
   interval: 1800
+  tolerance: 50
 - name: 海外AI
   type: select
   proxies:
@@ -332,7 +361,15 @@ proxy-groups:
     ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
     ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
 rules:
+- IP-CIDR,1.1.1.1/32,海外AI,no-resolve
+- IP-CIDR,8.8.8.8/32,海外AI,no-resolve
+- DOMAIN,dns.alidns.com,DIRECT
+- DOMAIN,doh.pub,DIRECT
 - RULE-SET,系统直连例外,DIRECT
+- DOMAIN-SUFFIX,chatgpt.com,海外AI
+- DOMAIN-SUFFIX,openai.com,海外AI
+- DOMAIN-SUFFIX,oaistatic.com,海外AI
+- DOMAIN-SUFFIX,oaiusercontent.com,海外AI
 - RULE-SET,广告路径例外,DIRECT
 - RULE-SET,TikTok广告,广告拦截
 - RULE-SET,TikTok核心,TikTok

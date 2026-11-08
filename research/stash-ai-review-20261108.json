@@ -1,0 +1,155 @@
+{
+  "checked_at": "2026-11-08T20:47:32.349467+08:00",
+  "baseline_commit": "0401ea941ca136b06002bd1c6de959ae3dd1aac0",
+  "request": "iPhone ChatGPT App intermittently reports unsupported region while using ai automatic pool; suspected DNS leak, not proven",
+  "configuration": "ROUTE-20261108.1 / AI-DNS-20261108.1",
+  "status": "implemented_and_locally_validated; iPhone/native Stash and failing node identification pending",
+  "changes": [
+    "Stash AI-only local DNS policy uses overseas IP DoH via the same overseas-AI selector; no domestic race/fallback for this policy",
+    "Independent encrypted direct bootstrap/node DNS prevents proxy-resolution recursion",
+    "Four already-covered ChatGPT core suffixes retained inline after system/LAN exceptions, before remote ads/domestic rules",
+    "Eight Stash url-test pools use documented 50ms tolerance; this is not an unlock or IP-stability test",
+    "Private synthetic config validator preserves the template tolerance; empty pools still reject and remove probe settings",
+    "Clash generator strips Stash-only guard; Clash published bytes unchanged",
+    "Live app route auditor now understands inline domain routes; current DNS/update/checklist documentation corrected"
+  ],
+  "validation": {
+    "python_suite": {
+      "total": 97,
+      "passed": 97,
+      "includes_preexisting_untracked_monitor_tests": 13,
+      "repository_delivery_tests": 84
+    },
+    "project_checks": {
+      "total": 41,
+      "passed": 41
+    },
+    "javascript_tests": {
+      "total": 88,
+      "passed": 88
+    },
+    "final_ai_subscription_suite": {
+      "total": 9,
+      "passed": 9
+    },
+    "generation": "no drift after regeneration",
+    "secrets_pattern_scan": {
+      "current_files_at_scan": 249,
+      "historical_blobs_at_scan": 357,
+      "findings": 0,
+      "boundary": "pattern scan, not a full security audit"
+    },
+    "public_dns_transport": {
+      "scope": "Windows direct HTTPS DoH transport only, not iPhone/Stash/proxy; public example.org A query; no private nodes",
+      "results": [
+        {
+          "url": "https://223.5.5.5/dns-query",
+          "tls_verified": true,
+          "dns_response_valid": true,
+          "seconds": 0.204
+        },
+        {
+          "url": "https://1.12.12.12/dns-query",
+          "tls_verified": true,
+          "dns_response_valid": true,
+          "seconds": 0.282
+        },
+        {
+          "url": "https://1.1.1.1/dns-query",
+          "tls_verified": true,
+          "dns_response_valid": true,
+          "seconds": 1.157
+        },
+        {
+          "url": "https://8.8.8.8/dns-query",
+          "tls_verified": true,
+          "dns_response_valid": true,
+          "seconds": 0.954
+        }
+      ]
+    },
+    "live_sources": {
+      "checked_at": "2026-11-08T12:51:02.132315+00:00",
+      "total": 27,
+      "http_200": 27,
+      "app_routes_passed": 210,
+      "errors": 0,
+      "overall_ok": true,
+      "review_required": []
+    },
+    "game_deletion_review": {
+      "removed_rule_count": 85,
+      "added_rule_count": 0,
+      "profiles": [
+        {
+          "profile": "config/stash.yaml",
+          "tested": 170,
+          "same_policy": 170,
+          "changes": [],
+          "all_current_direct": true
+        },
+        {
+          "profile": "config/clash-verge-auto.yaml",
+          "tested": 170,
+          "same_policy": 170,
+          "changes": [],
+          "all_current_direct": true
+        }
+      ],
+      "boundary": "Public domain route comparison only, no device game sessions or live IP routing"
+    },
+    "game_source_baseline_acceptance": {
+      "status": "manually_reviewed_and_accepted",
+      "source_id": "games-cn",
+      "new_revision": "26cf4440307754d2c2f65cf2f0457c0ae814900f",
+      "license_sha256_unchanged": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "old_count": 263,
+      "new_count": 178,
+      "removed": 85,
+      "added": 0,
+      "all_removed_domains_covered_by_existing_tencent_snapshot": true,
+      "same_policy_comparisons": 340,
+      "source_baseline_only": true,
+      "runtime_rule_provider_url_changed": false,
+      "thresholds_changed": false
+    },
+    "community_regressions": {
+      "passed": 10,
+      "total": 10
+    }
+  },
+  "initial_failures_and_repairs": [
+    "First project pass failed generated architecture count (38 -> 46); regenerated original appendix/audit",
+    "First Python suite had 12 private-config errors after tolerance addition; adapted validation to require exact template tolerance and kept rejection tests",
+    "Live health returned review_required for games-cn (263 -> 178, 85 removed); did not relax thresholds or rewrite source baselines; 340 removed-domain/subdomain routes remain DIRECT; subsequently accepted an immutable source baseline after unchanged license check and proof that all 85 removed domains are covered by existing Tencent rules; live 27-source health is now green"
+  ],
+  "privacy": {
+    "private_subscription_read": false,
+    "private_credentials_accessed": false,
+    "iphone_logs_accessed": false,
+    "client_settings_changed": false,
+    "tasks_changed": false
+  },
+  "published": false,
+  "commit_created": false,
+  "push_performed": false,
+  "cloud_workflow_triggered": false,
+  "limits": [
+    "No actual Stash parser on Windows or iPhone access; docs plus models only",
+    "Node-side DNS is controlled by the node; local DoH does not establish final exit geolocation or reputation",
+    "Users can override DNS/routes or select DIRECT/unsupported exits; rule-mode/active overrides need phone verification",
+    "No failing phone node was identified; cannot claim intermittent region error resolved",
+    "Shared 1.1.1.1/8.8.8.8 IP routes also affect other traffic to these IPs; ordinary domains keep domestic DNS"
+  ],
+  "official_sources": [
+    "https://stash.wiki/features/dns-server",
+    "https://stash.wiki/proxy-protocols/proxy-groups"
+  ],
+  "next_step": "Authorized scoped commit/push, verify public artifact and same-SHA Linux CI, then refresh original phone profile and perform fixed-node Wi-Fi/cellular acceptance",
+  "hashes": {
+    "config/stash.yaml": "2967e44c4f1cd6338e9197677b967dc343ef1b436744d4f476fbcb88e1e1d48c",
+    "config/clash-verge-auto.yaml": "1931aa96f700797dbff2ed7ea545b0fda8d640e4b001dfe9b0fa6e4daef6b9dd",
+    "tools/stash_ai_guard.py": "b856cb258a015e9e4bcfe7804c2715c634c200e60bb13395c33891e9c272ede9"
+  },
+  "publication_authorized": true
+}

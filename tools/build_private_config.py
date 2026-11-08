@@ -112,7 +112,9 @@ def verify(config, template, expected_nodes):
             require(group['type'] == 'url-test', '非空池未使用自动测速。')
             require(all(group.get(key) == value for key, value in PROBE_SETTINGS.items()),
                     '自动池测速地址或频率改变。')
-            require(not any(key in group for key in ('tolerance', 'lazy')), '自动池包含未核实的测速设置。')
+            require(group.get('tolerance') == template_groups[name].get('tolerance') and
+                    ('tolerance' in group) == ('tolerance' in template_groups[name]) and
+                    'lazy' not in group, '自动池包含未核实的测速设置。')
     union = set()
     for name in REGIONS:
         members = by_name[name]['proxies']

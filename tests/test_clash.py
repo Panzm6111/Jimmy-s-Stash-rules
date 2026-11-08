@@ -68,6 +68,9 @@ class ClashChecks(unittest.TestCase):
         for name, body in render().items():
             self.assertEqual((ROOT/name).read_text(encoding='utf-8'), body)
         stash = yaml.safe_load((ROOT/'config/stash.yaml').read_text(encoding='utf-8'))
+        from stash_ai_guard import for_clash
+        from validate import merged
+        stash = for_clash(stash, merged())
         clash = base_profile()
         self.assertEqual(clash['rules'], stash['rules'])
         self.assertEqual(clash['proxy-groups'], stash['proxy-groups'])
