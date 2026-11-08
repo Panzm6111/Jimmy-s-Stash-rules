@@ -3,7 +3,7 @@
   "baseline_commit": "0401ea941ca136b06002bd1c6de959ae3dd1aac0",
   "request": "iPhone ChatGPT App intermittently reports unsupported region while using ai automatic pool; suspected DNS leak, not proven",
   "configuration": "ROUTE-20261108.1 / AI-DNS-20261108.1",
-  "status": "implemented_and_locally_validated; iPhone/native Stash and failing node identification pending",
+  "status": "published_and_same_commit_linux_ci_passed; iPhone/native Stash and failing phone node identification pending",
   "changes": [
     "Stash AI-only local DNS policy uses overseas IP DoH via the same overseas-AI selector; no domestic race/fallback for this policy",
     "Independent encrypted direct bootstrap/node DNS prevents proxy-resolution recursion",
@@ -130,10 +130,10 @@
     "client_settings_changed": false,
     "tasks_changed": false
   },
-  "published": false,
-  "commit_created": false,
-  "push_performed": false,
-  "cloud_workflow_triggered": false,
+  "published": true,
+  "commit_created": true,
+  "push_performed": true,
+  "cloud_workflow_triggered": true,
   "limits": [
     "No actual Stash parser on Windows or iPhone access; docs plus models only",
     "Node-side DNS is controlled by the node; local DoH does not establish final exit geolocation or reputation",
@@ -145,11 +145,66 @@
     "https://stash.wiki/features/dns-server",
     "https://stash.wiki/proxy-protocols/proxy-groups"
   ],
-  "next_step": "Authorized scoped commit/push, verify public artifact and same-SHA Linux CI, then refresh original phone profile and perform fixed-node Wi-Fi/cellular acceptance",
+  "next_step": "On iPhone refresh original profile to ROUTE-20261108.1 / AI-DNS-20261108.1, reconnect Stash and reopen ChatGPT; compare fixed nodes on Wi-Fi/cellular if error persists; record actual matched policy and exit without private logs",
   "hashes": {
     "config/stash.yaml": "2967e44c4f1cd6338e9197677b967dc343ef1b436744d4f476fbcb88e1e1d48c",
     "config/clash-verge-auto.yaml": "1931aa96f700797dbff2ed7ea545b0fda8d640e4b001dfe9b0fa6e4daef6b9dd",
     "tools/stash_ai_guard.py": "b856cb258a015e9e4bcfe7804c2715c634c200e60bb13395c33891e9c272ede9"
   },
-  "publication_authorized": true
+  "publication_authorized": true,
+  "code_commit": "f1472c2ecd0ff3949a6fc19c0ea22feeaa251375",
+  "public_artifacts": [
+    {
+      "path": "config/stash.yaml",
+      "sha256": "2967e44c4f1cd6338e9197677b967dc343ef1b436744d4f476fbcb88e1e1d48c",
+      "matches_local": true
+    },
+    {
+      "path": "config/clash-verge-auto.yaml",
+      "sha256": "1931aa96f700797dbff2ed7ea545b0fda8d640e4b001dfe9b0fa6e4daef6b9dd",
+      "matches_local": true
+    },
+    {
+      "path": "tools/stash_ai_guard.py",
+      "sha256": "b856cb258a015e9e4bcfe7804c2715c634c200e60bb13395c33891e9c272ede9",
+      "matches_local": true
+    }
+  ],
+  "cloud_ci": {
+    "run_id": 42482381083,
+    "head_sha": "f1472c2ecd0ff3949a6fc19c0ea22feeaa251375",
+    "url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/42482381083",
+    "status": "completed",
+    "conclusion": "success",
+    "job_id": 128736920986,
+    "job_started_at": "2026-11-08T12:54:05Z",
+    "job_completed_at": "2026-11-08T12:57:17Z",
+    "job_duration_seconds": 192,
+    "validation": {
+      "python": 84,
+      "project": 41,
+      "javascript": 88,
+      "live_sources": 27,
+      "app_routes": 210,
+      "source_review_required": 0,
+      "source_errors": 0,
+      "secret_findings": 0,
+      "current_files_scanned": 241,
+      "historical_blobs_scanned": 379
+    },
+    "summary": [
+      "Ran 31 tests in 0.611s",
+      "Ran 14 tests in 116.392s",
+      "Ran 11 tests in 2.400s",
+      "Ran 10 tests in 0.134s",
+      "Ran 9 tests in 0.965s",
+      "Ran 9 tests in 15.756s",
+      "Ran 41 tests in 20.106s",
+      "Secret-pattern scan: 241 current files, 379 reachable historical blobs, 0 findings.",
+      "{\"checked_at\": \"2026-11-08T12:56:50.852314+00:00\", \"ok\": true, \"sources\": 27, \"review_required\": 0, \"errors\": 0, \"app_routes_passed\": 210}",
+      "# tests 88",
+      "# pass 88",
+      "# fail 0"
+    ]
+  }
 }
