@@ -125,7 +125,7 @@ proxy-groups:
   - 机场
   filter: (?i)(?:(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|纽约|紐約|西雅图|西雅圖|圣何塞|聖何塞|🇺🇸|united[ _-]*states|los[ _-]*angeles|new[ _-]*york|seattle|san[
     _-]*jose|(^|[^a-z])(us|usa)([^a-z]|$)|^REJECT$)|(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)|(台湾|台灣|臺灣|台北|臺北|🇹🇼|taiwan|taipei|(^|[^a-z])tw([^a-z]|$)|^REJECT$))
-  tolerance: 50
+  tolerance: 100
 - name: 香港
   type: url-test
   url: https://www.gstatic.com/generate_204

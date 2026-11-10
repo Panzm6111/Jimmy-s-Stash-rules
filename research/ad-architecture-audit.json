@@ -21,7 +21,7 @@
     "optional_probe_js": 1
   },
   "input_sha256": {
-    "config/stash.yaml": "2967e44c4f1cd6338e9197677b967dc343ef1b436744d4f476fbcb88e1e1d48c",
+    "config/stash.yaml": "99393c2ba90d3b2b7eb7de1b37cca2331f309e39446209e4d7bbaaf161d0ac23",
     "templates/stash-main.yaml": "dcf813dcfa62754c2bc1429ff3c1aab6367ae5402cb774e3f8b728fe116ff26b",
     "templates/stash-core.stoverride": "585c38283f3f339c4afd8280d6820e3f6c4ec19bd5bfad07055acd20b31fa2e6",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
@@ -38,8 +38,8 @@
     "tools/build_ad_diagnostics.py": "08225111d2793fb4aec5adb3af4c33fd9f9ac46151c0863ff468791876748bba",
     "tools/ad_observation_runtime.js": "a4aaec1eaaadbfbf523a5b1896ab798400349208fe2a67c0bb6912c2d32436dd",
     "tools/build_subscription.py": "196e11d21fa511b7e33744708892d46d2a09c1308dbd2c75d14d9814e8380cc6",
-    "tools/stash_ai_guard.py": "b856cb258a015e9e4bcfe7804c2715c634c200e60bb13395c33891e9c272ede9",
-    "tools/config_helpers.py": "9009f58c0fa2960e8a113c6b32efc8a43a7ebbe5af625ae999d5f54246b592bd",
+    "tools/stash_ai_guard.py": "c578dd5d4ee804168ae5dbba1f73d5f98377ea1acdd1765e29a5cfbaf315025c",
+    "tools/config_helpers.py": "4d8f0f091cbfa19af0acb192b74046787fa670a7fad5aaf2aa9a4843b33cacb4",
     "tools/build_private_config.py": "1652b8a10ed46c93decf0b4948b1d80364b6d7896cf94d5464a84e28904dce01",
     "tools/render_ad_architecture.py": "6643e9831014138bee6a8cebc8cf3789c427cf6d5a135e53dd6211053fe95f16",
     "tools/build_ads.py": "0878482c9ecb3562b5a12e6b00fe506db47c17f7aa2ff628ddd06f75eef984c9",
@@ -115,7 +115,7 @@
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
     "bytes": 158040,
-    "sha256": "358e07de2c5bf6836e79e5ffa64884dd55d11bdb847f4692e26d0e8a730e67c0",
+    "sha256": "50d3de0b83297dad8b09f83014a7282fac2e3f3ca3b6e87144f00735117c22a6",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,

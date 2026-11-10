@@ -4,6 +4,7 @@ Native semantics: https://stash.wiki/features/dns-server (iOS 3.6+).
 Keep this out of Mihomo: follow-rule is a Stash option, not respect-rules.
 """
 import copy
+from config_helpers import pool_tolerance_ms
 
 AI_SUFFIXES = ('chatgpt.com', 'openai.com', 'oaistatic.com', 'oaiusercontent.com')
 AI_RESOLVERS = ('https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query')
@@ -41,7 +42,7 @@ def apply(source):
     config['rules'][slot:slot] = CORE_ROUTES
     for group in config['proxy-groups']:
         if group['type'] == 'url-test':
-            group['tolerance'] = 50
+            group['tolerance'] = pool_tolerance_ms(group['name'])
     return config
 
 

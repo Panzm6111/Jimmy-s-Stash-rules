@@ -3,6 +3,7 @@
 import argparse, copy, hashlib
 from pathlib import Path
 import yaml
+from config_helpers import pool_tolerance_ms
 ROOT=Path(__file__).resolve().parents[1]
 AIRPORT_INFO_EXCLUDE=r'(?i)(请勿连接|跳转域名)'
 DOWNLOAD_GROUP='Jimmy · 订阅更新'
@@ -53,7 +54,7 @@ def global_merge(source):
             group['proxies']=['自动节点']+[name for name in group['proxies'] if name!='自动节点']
         if group['type']=='url-test':
             # UI guard only: Mihomo's API can still pin a URLTest pool.
-            group.update(hidden=True, tolerance=100 if original=='ai' else 50, **{'expected-status':204})
+            group.update(hidden=True, tolerance=pool_tolerance_ms(original), **{'expected-status':204})
         elif group['type']=='select' and original!='手动节点':
             # Raw airport nodes have one explicit manual entry point.
             for key in ('include-all','empty-fallback','filter'):

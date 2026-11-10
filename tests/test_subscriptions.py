@@ -31,9 +31,16 @@ class Subscriptions(unittest.TestCase):
             self.assertEqual(v.route(config,host,country='ZZ'),'DIRECT')
         groups={g['name']:g for g in config['proxy-groups']}
         for name in ['ai','美国','日本','台湾']:
-            self.assertEqual(groups[name]['tolerance'],50)
             self.assertEqual(groups[name]['proxies'],['REJECT'])
         self.assertFalse(config['ipv6'])
+
+    def test_both_published_profiles_use_the_same_pool_tolerances(self):
+        expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区'), 50)
+        expected['ai'] = 100
+        for path, prefix in [('config/stash.yaml',''), ('config/clash-verge-auto.yaml','Jimmy · ')]:
+            with self.subTest(path=path):
+                pools = {g['name']: g['tolerance'] for g in v.load(path)['proxy-groups'] if g['type']=='url-test'}
+                self.assertEqual(pools, {prefix + name: ms for name, ms in expected.items()})
 
     def test_stash_chatgpt_core_survives_unloaded_or_rejecting_remote_sets(self):
         from stash_ai_guard import AI_SUFFIXES
