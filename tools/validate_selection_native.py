@@ -75,9 +75,12 @@ def main():
             check(current['now']=='US-fixture','healthy lowest-latency node selected automatically')
             check(current['hidden'] and current['expectedStatus']=='204','hidden and expected-status fields loaded')
             time.sleep(1.1)
-            state['JP-fixture']=[204,.24];api(provider_path+'/healthcheck');time.sleep(11)
-            check(next(p for p in api(provider_path)['proxies'] if p['name']=='JP-fixture')['extra'][probe]['alive'],'previously invalid node recovers on a new 204 response')
-            check(api(group_path)['now']=='US-fixture','50ms tolerance prevents switching for a small improvement')
+            state['JP-fixture']=[204,.175];api(provider_path+'/healthcheck');time.sleep(11)
+            measured={p['name']:p['extra'][probe] for p in api(provider_path)['proxies']}
+            check(measured['JP-fixture']['alive'],'previously invalid node recovers on a new 204 response')
+            advantage=measured['US-fixture']['history'][-1]['delay']-measured['JP-fixture']['history'][-1]['delay']
+            check(50<advantage<100,'measured improvement is between the old and new thresholds')
+            check(api(group_path)['now']=='US-fixture','100ms AI tolerance retains the current healthy node')
             state['JP-fixture']=[204,.01];api(provider_path+'/healthcheck');time.sleep(11)
             check(api(group_path)['now']=='JP-fixture','improvement greater than tolerance switches automatically')
             api(group_path,'PUT',{'name':'TW-fixture'})
@@ -88,7 +91,7 @@ def main():
             state['US-fixture']=[204,.001];api(provider_path+'/healthcheck');time.sleep(11)
             boundary={'former_first_member':'JP-fixture','selected_after_small_improvement':api(group_path)['now'],
                       'note':'v1.19.32 may ignore tolerance when the current node is the first member; not a hard switching guarantee.'}
-            result={'passed':len(checks),'checks':checks,'actual_client_modified':False,'private_nodes_used':False,
+            result={'passed':len(checks),'checks':checks,'retained_at_advantage_ms':advantage,'actual_client_modified':False,'private_nodes_used':False,
                     'first_member_tolerance_boundary':boundary,
                     'boundary':'Synthetic Mihomo test; no Clash UI or real AI/TikTok acceptance.'}
             (runtime/'result.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')

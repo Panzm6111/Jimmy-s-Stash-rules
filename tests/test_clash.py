@@ -183,9 +183,11 @@ class ClashChecks(unittest.TestCase):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         pools=[g for g in full['proxy-groups'] if g['type']=='url-test']
         self.assertEqual(len(pools),8)
+        self.assertIn('Jimmy · ai', {g['name'] for g in pools})
         for g in pools:
             self.assertTrue(g['hidden']);self.assertTrue(g['include-all'])
-            self.assertEqual(g['tolerance'],50);self.assertEqual(g['expected-status'],204)
+            self.assertEqual(g['tolerance'],100 if g['name']=='Jimmy · ai' else 50)
+            self.assertEqual(g['expected-status'],204)
         for g in full['proxy-groups']:
             if g['type']!='select':continue
             if g['name']=='Jimmy · 手动节点':self.assertTrue(g['include-all'])

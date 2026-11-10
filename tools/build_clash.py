@@ -53,7 +53,7 @@ def global_merge(source):
             group['proxies']=['自动节点']+[name for name in group['proxies'] if name!='自动节点']
         if group['type']=='url-test':
             # UI guard only: Mihomo's API can still pin a URLTest pool.
-            group.update(hidden=True, tolerance=50, **{'expected-status':204})
+            group.update(hidden=True, tolerance=100 if original=='ai' else 50, **{'expected-status':204})
         elif group['type']=='select' and original!='手动节点':
             # Raw airport nodes have one explicit manual entry point.
             for key in ('include-all','empty-fallback','filter'):

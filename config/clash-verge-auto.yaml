@@ -98,7 +98,7 @@ proxy-groups:
   include-all: true
   empty-fallback: REJECT
   hidden: true
-  tolerance: 50
+  tolerance: 100
   expected-status: 204
 - name: Jimmy · 香港
   type: url-test
