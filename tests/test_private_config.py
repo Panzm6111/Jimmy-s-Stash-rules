@@ -49,15 +49,15 @@ class PrivateConfigChecks(unittest.TestCase):
     def test_region_and_complement_and_neutral_defaults(self):
         config, report = compose(self.source)
         groups = {g['name']: g for g in config['proxy-groups']}
-        self.assertEqual(groups['香港'], {'name': '香港', 'type': 'select', 'proxies': ['REJECT']})
+        self.assertEqual(groups['香港'], {'name': '香港', 'type': 'select', 'proxies': ['REJECT'], 'hidden': True})
         self.assertEqual(groups['美国']['proxies'], [self.source['proxies'][0]['name'], 'REJECT'])
         self.assertEqual(groups['其他地区']['proxies'], ['未收录的远方线路', 'REJECT'])
         self.assertEqual(len(groups['自动节点']['proxies']), 4)
-        self.assertEqual(groups['总代理']['proxies'][0], '最速节点')
+        self.assertEqual(groups['总代理']['proxies'][0], '最优速组')
         self.assertEqual(groups['海外AI']['proxies'][0], 'GPT 服务优选')
-        self.assertEqual(groups['TikTok']['proxies'][0], 'TikTok 服务优选')
-        self.assertEqual(groups['GPT 服务优选']['proxies'][0], 'ai')
-        self.assertEqual(groups['TikTok 服务优选']['proxies'][0], 'AI最速')
+        self.assertEqual(groups['TikTok']['proxies'][0], '总代理')
+        self.assertEqual(groups['GPT 服务优选']['proxies'][0], 'AI组')
+        self.assertEqual(groups['TikTok 服务检测组']['proxies'][0], 'AI最速组')
         self.assertEqual(groups['Apple']['proxies'][0], 'DIRECT')
         self.assertFalse(report['subscription_auto_update'])
         self.assertFalse(report['native_stash_tested'])
@@ -83,7 +83,7 @@ class PrivateConfigChecks(unittest.TestCase):
                 group = groups[name]
                 self.assertEqual(group['type'], 'url-test')
                 self.assertGreater(len(group['proxies']), 1)
-                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, dict(PROBE_SETTINGS, interval=60 if name in ('ai','AI最速','最速节点') else 1800))
+                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, dict(PROBE_SETTINGS, interval=60 if name in ('AI组','AI最速组','最优速组') else 1800))
         self.assertEqual(groups['手动节点']['type'], 'select')
         self.assertEqual(groups['手动节点']['proxies'], groups['自动节点']['proxies'])
         for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):
@@ -93,7 +93,7 @@ class PrivateConfigChecks(unittest.TestCase):
         source = load('examples/provider-simulated.yaml')
         config, _ = compose(source)
         group = next(g for g in config['proxy-groups'] if g['name'] == '其他地区')
-        self.assertEqual(group, {'name': '其他地区', 'type': 'select', 'proxies': ['REJECT']})
+        self.assertEqual(group, {'name': '其他地区', 'type': 'select', 'proxies': ['REJECT'], 'hidden': True})
 
     def test_empty_pools_strip_legacy_probe_settings(self):
         template = copy.deepcopy(self.template)
@@ -103,7 +103,7 @@ class PrivateConfigChecks(unittest.TestCase):
         config, _ = compose(load('examples/provider-simulated.yaml'), template=template)
         groups = {g['name']: g for g in config['proxy-groups']}
         for name in ('香港', '其他地区'):
-            self.assertEqual(groups[name], {'name': name, 'type': 'select', 'proxies': ['REJECT']})
+            self.assertEqual(groups[name], {'name': name, 'type': 'select', 'proxies': ['REJECT'], 'hidden': True})
 
     def test_country_pools_cannot_fall_back_to_other_nodes_or_direct(self):
         config, _ = compose(self.source)
@@ -139,7 +139,7 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertEqual(yaml.safe_load(render(config)), config)
 
     def test_name_conflicts_aliased_without_connection_changes(self):
-        for bad_name in ('总代理', 'REJECT', '美国', '自动节点', '海外AI', 'ai'):
+        for bad_name in ('总代理', 'REJECT', '美国', '自动节点', '海外AI', 'AI组'):
             source = copy.deepcopy(self.source)
             source['proxies'][0]['name'] = bad_name
             config, report = compose(source)
@@ -174,25 +174,25 @@ class PrivateConfigChecks(unittest.TestCase):
 
     def test_curated_membership(self):
         source = copy.deepcopy(self.source)
-        for name in ('SG01', 'TW01', '香港01', 'JP-US-TW', '新加坡 A', '日本 A', '美国 D', 'HKG A'):
+        for name in ('SG01', 'TW01', '香港01', 'JP-US-TW', '新加坡 A', '台湾 E', '台湾 D', '日本 A', '美国 D', 'HKG A'):
             node = copy.deepcopy(source['proxies'][0])
             node['name'] = name
             source['proxies'].append(node)
         config, _ = compose(source)
         groups = {g['name']: g for g in config['proxy-groups']}
-        self.assertEqual(set(groups['ai']['proxies']),
-                         {'新加坡 A','REJECT'})
-        self.assertEqual(set(groups['AI最速']['proxies']), {'新加坡 A','日本 A','美国 D','REJECT'})
-        self.assertEqual(set(groups['最速节点']['proxies']), {'新加坡 A','日本 A','HKG A','REJECT'})
-        self.assertNotIn('SG01', groups['ai']['proxies'])
+        self.assertEqual(set(groups['AI组']['proxies']),
+                         {'新加坡 A','台湾 E','台湾 D','REJECT'})
+        self.assertEqual(set(groups['AI最速组']['proxies']), {'新加坡 A','台湾 E','台湾 D','日本 A','REJECT'})
+        self.assertEqual(set(groups['最优速组']['proxies']), {'新加坡 A','台湾 E','日本 A','HKG A','REJECT'})
+        self.assertNotIn('SG01', groups['AI组']['proxies'])
         self.assertIn('SG01', groups['新加坡']['proxies'])
-        self.assertNotIn('香港01', groups['ai']['proxies'])
+        self.assertNotIn('香港01', groups['AI组']['proxies'])
         for group in self.template['proxy-groups']:
-            if group['type'] == 'select' and group['name'] not in {'手动节点', 'GPT 服务优选','TikTok 服务优选'}:
-                self.assertIn('ai', groups[group['name']]['proxies'])
-        for forbidden in ('SG01', '香港01', 'DIRECT', 'ai', '日本'):
+            if group['type'] == 'select' and group['name'] not in {'手动节点', 'GPT 服务优选','TikTok 服务检测组'}:
+                self.assertIn('AI组', groups[group['name']]['proxies'])
+        for forbidden in ('SG01', '香港01', 'DIRECT', 'AI组', '日本'):
             broken = copy.deepcopy(config)
-            next(g for g in broken['proxy-groups'] if g['name']=='ai')['proxies'].insert(0, forbidden)
+            next(g for g in broken['proxy-groups'] if g['name']=='AI组')['proxies'].insert(0, forbidden)
             with self.subTest(forbidden=forbidden), self.assertRaises(BuildError):
                 verify(broken, self.template, config['proxies'])
 
@@ -201,8 +201,8 @@ class PrivateConfigChecks(unittest.TestCase):
         node['name'] = '香港01'
         config, _ = compose({'proxies':[node]})
         groups = {g['name']:g for g in config['proxy-groups']}
-        self.assertEqual(groups['ai'], {'name':'ai','type':'select','proxies':['REJECT']})
-        self.assertIn('ai', groups['海外AI']['proxies'])
+        self.assertEqual(groups['AI组'], {'name':'AI组','type':'select','proxies':['REJECT'],'hidden':True})
+        self.assertIn('AI组', groups['海外AI']['proxies'])
 
     def test_private_output_permissions_and_repository_guard(self):
         with self.assertRaises(BuildError):

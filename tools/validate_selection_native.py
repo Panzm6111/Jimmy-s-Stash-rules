@@ -10,7 +10,7 @@ def main():
     runtime=Path(tempfile.mkdtemp(prefix='selection-',dir=ROOT/'.local'))
     # Keep initial fastest away from index zero; v1.19.32 has a separate
     # first-member tolerance boundary, recorded below rather than hidden.
-    state={'新加坡 A':[204,.01],'荷兰':[200,.43],'英国 B':[200,.60]}
+    state={'新加坡 A':[204,.01],'台湾 E':[200,.43],'台湾 D':[200,.60]}
     tiktok={name:[200,.25] for name in (*state,'日本 A')}
     tiktok['日本 A']=[200,.002]
     servers=[];checks=[]
@@ -38,7 +38,7 @@ def main():
         nodes.append(dict(name=name,type='http',server='127.0.0.1',port=server.server_port))
     source=yaml.safe_load((ROOT/'config/clash-verge-auto.yaml').read_text(encoding='utf-8'))
     groups={g['name']:copy.deepcopy(g) for g in source['proxy-groups']}
-    group=groups['Jimmy · ai']; social=groups['Jimmy · AI最速']
+    group=groups['Jimmy · AI组']; social=groups['Jimmy · AI最速组']
     assert group['url']=='https://chatgpt.com/' and social['url']=='https://www.tiktok.com/foryou'
     # Three separate paths let one service fail while generic transport stays healthy.
     generic='http://probe.example.invalid/generic'
@@ -80,30 +80,30 @@ def main():
                 if time.monotonic()>deadline:raise AssertionError('health probe did not finish')
                 time.sleep(.2)
             check(not proxies['新加坡 A']['extra'][probe]['alive'],'wrong 204 from GPT is rejected while generic transport succeeds')
-            check(proxies['荷兰']['extra'][probe]['alive'] and proxies['英国 B']['extra'][probe]['alive'],'HTTP 200 succeeds on both healthy GPT exits')
+            check(proxies['台湾 E']['extra'][probe]['alive'] and proxies['台湾 D']['extra'][probe]['alive'],'HTTP 200 succeeds on both healthy GPT exits')
             check(all(p['extra'][generic]['alive'] for p in proxies.values()), 'generic provider 204 remains healthy')
             check(probe not in proxies['日本 A']['extra'] and social_probe not in proxies['HKG A']['extra']
                   and probe not in proxies['HKG A']['extra'], 'service checks respect the distinct pool filters')
             check(api(social_path)['now']=='日本 A' and proxies['新加坡 A']['extra'][social_probe]['alive'],
                   'TikTok uses its own history on shared exits')
             current=api(group_path)
-            check(current['now']=='荷兰','healthy lowest-latency node selected automatically')
+            check(current['now']=='台湾 E','healthy lowest-latency node selected automatically')
             check(current['hidden'] and current['expectedStatus']=='200','hidden and expected-status fields loaded')
             time.sleep(1.1)
             state['新加坡 A']=[200,.25];api(provider_path+'/healthcheck');time.sleep(11)
             measured={p['name']:p['extra'][probe] for p in api(provider_path)['proxies'] if probe in p['extra']}
             check(measured['新加坡 A']['alive'],'previously invalid node recovers on a new service 200')
-            advantage=measured['荷兰']['history'][-1]['delay']-measured['新加坡 A']['history'][-1]['delay']
+            advantage=measured['台湾 E']['history'][-1]['delay']-measured['新加坡 A']['history'][-1]['delay']
             check(100<advantage<250,'measured improvement is between the old and new thresholds')
-            check(api(group_path)['now']=='荷兰','250ms AI tolerance retains the current healthy node')
+            check(api(group_path)['now']=='台湾 E','250ms AI tolerance retains the current healthy node')
             state['新加坡 A']=[200,.01];api(provider_path+'/healthcheck');time.sleep(11)
             check(api(group_path)['now']=='新加坡 A','improvement greater than tolerance switches automatically')
-            api(group_path,'PUT',{'name':'英国 B'})
-            check(api(group_path)['fixed']=='英国 B','hidden is not a hard API manual-selection lock')
+            api(group_path,'PUT',{'name':'台湾 D'})
+            check(api(group_path)['fixed']=='台湾 D','hidden is not a hard API manual-selection lock')
             api(group_path,'DELETE')
             current=api(group_path)
             check(not current['fixed'] and current['now']=='新加坡 A','explicit unpin restores automatic selection')
-            state['荷兰']=[200,.001];api(provider_path+'/healthcheck');time.sleep(11)
+            state['台湾 E']=[200,.001];api(provider_path+'/healthcheck');time.sleep(11)
             boundary={'former_first_member':'新加坡 A','selected_after_small_improvement':api(group_path)['now'],
                       'note':'The tested Mihomo build may ignore tolerance when the current node is the first member; not a hard switching guarantee.'}
             failed=api(group_path)['now']

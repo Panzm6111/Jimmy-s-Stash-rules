@@ -87,15 +87,25 @@ def main():
             check((runtime/'airport.yaml').exists(),'successful later download replaces startup fallback with a cache')
             check(state['airport_ua_matched']>0,'airport fetch requests Clash YAML through explicit client user agent')
             check(len([n for n in groups if n.startswith('Jimmy · ')])==25,'24 policy groups and one download failover group load')
-            check(groups['Jimmy · Claude']['now']=='Jimmy · ai','Claude web has its own selector with the curated ai default')
+            check(groups['Jimmy · Claude']['now']=='Jimmy · AI组','Claude web has its own selector with the curated ai default')
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
-            check(groups['Jimmy · 总代理']['now']=='Jimmy · 最速节点','initial default is automatic pool')
-            check('Jimmy · ai' in groups['Jimmy · 海外AI']['all'],'curated ai option exposed')
-            check(groups['Jimmy · ai']['hidden'],'automatic pool exposes hidden flag')
-            check('US-synthetic' not in groups['Jimmy · 海外AI']['all'],'business selector contains policies, not raw nodes')
+            check(groups['Jimmy · 总代理']['now']=='Jimmy · 最优速组','initial default is automatic pool')
+            check('Jimmy · AI组' in groups['Jimmy · 海外AI']['all'],'curated ai option exposed')
+            check(groups['Jimmy · AI组']['hidden'],'automatic pool exposes hidden flag')
+            fixed = {'DIRECT','REJECT'}
+            for declaration in public['proxy-groups']:
+                name = declaration['name']
+                if declaration['type'] != 'select':
+                    continue
+                if name in {'Jimmy · 总代理','Jimmy · 手动节点'}:
+                    check('US-synthetic' in groups[name]['all'], name + ' exposes individual nodes')
+                else:
+                    check(all(member.startswith('Jimmy · ') or member in fixed for member in groups[name]['all']),
+                          name + ' only exposes groups and built-in policies')
+            check(groups['Jimmy · TikTok']['now'] == 'Jimmy · 总代理', 'TikTok follows the general selector')
             check(groups['Jimmy · 新加坡']['all']==['REJECT'],'empty region rejects instead of direct fallback')
-            api('/proxies/'+urllib.parse.quote('Jimmy · 海外AI',safe=''),'PUT',{'name':'Jimmy · ai'})
+            api('/proxies/'+urllib.parse.quote('Jimmy · 海外AI',safe=''),'PUT',{'name':'Jimmy · AI组'})
             next_public=copy.deepcopy(public)
             next_public['proxy-groups'].append({'name':'Jimmy · remote-update-fixture','type':'select','proxies':['Jimmy · 美国']})
             next_public['rule-providers']['remote-update-fixture']=copy.deepcopy(public['rule-providers']['海外AI'])
@@ -109,7 +119,7 @@ def main():
             while api('/providers/rules')['providers'].get('remote-update-fixture',{}).get('ruleCount')!=1 and time.monotonic()<deadline:time.sleep(.1)
             check(api('/providers/rules')['providers'].get('remote-update-fixture',{}).get('ruleCount')==1,'new provider declaration loads rules after reload')
             check(next_config['proxy-providers']['机场']['url']==private_url,'private airport URL survives public structural update')
-            check(groups['Jimmy · 海外AI']['now']=='Jimmy · ai','selected AI pool survives reload')
+            check(groups['Jimmy · 海外AI']['now']=='Jimmy · AI组','selected AI pool survives reload')
             state['airport_version']=2
             api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
             members=api('/proxies')['proxies']['Jimmy · 手动节点']['all']

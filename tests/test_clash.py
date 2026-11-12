@@ -80,19 +80,19 @@ class ClashChecks(unittest.TestCase):
             prefix = 'Jimmy · '
             groups = {g['name']:g for g in config['proxy-groups']}
             self.assertNotIn(prefix+'日本+美国', groups)
-            pool = groups[prefix+'ai']
+            pool = groups[prefix+'AI组']
             self.assertEqual(pool['type'], 'url-test')
             self.assertEqual(pool['interval'], 60)
             self.assertEqual(pool['url'], 'https://chatgpt.com/')
-            for name, expected in [('新加坡 A',True),('荷兰',True),('英国 B',True),('US01',False),('JP01',False),('SG01',False),('新加坡 SG 02',False),('🇸🇬 Singapore',False),('TW01',False),('HK01',False),('DIRECT',False)]:
+            for name, expected in [('新加坡 A',True),('台湾 E',True),('台湾 D',True),('荷兰',False),('英国 B',False),('US01',False),('JP01',False),('SG01',False),('新加坡 SG 02',False),('🇸🇬 Singapore',False),('TW01',False),('HK01',False),('DIRECT',False)]:
                 self.assertEqual(bool(re.search(pool['filter'],name)),expected)
             for group in groups.values():
-                self.assertEqual(group.get('proxies',[]).count(prefix+'ai'), int(group['type']=='select' and group['name']!=prefix+'手动节点'))
+                self.assertEqual(group.get('proxies',[]).count(prefix+'AI组'), int(group['type']=='select' and group['name']!=prefix+'手动节点'))
                 self.assertNotIn(prefix+'日本+美国', group.get('proxies',[]))
             self.assertEqual(groups[prefix+'手动节点'].get('proxies',[]), ['REJECT'] if not prefix else [])
-            self.assertEqual(groups[prefix+'总代理']['proxies'][0], prefix+'最速节点')
-            self.assertEqual(groups[prefix+'海外AI']['proxies'][0], prefix+'ai')
-            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'AI最速')
+            self.assertEqual(groups[prefix+'总代理']['proxies'][0], prefix+'最优速组')
+            self.assertEqual(groups[prefix+'海外AI']['proxies'][0], prefix+'AI组')
+            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'总代理')
             for name in ('Apple','Microsoft','国内直连'):
                 self.assertEqual(groups[prefix+name]['proxies'][0], 'DIRECT')
             self.assertEqual(groups[prefix+'广告拦截']['proxies'][0], 'REJECT')
@@ -143,8 +143,8 @@ class ClashChecks(unittest.TestCase):
             self.assertNotIn('use',group)
             if group.get('include-all'):self.assertEqual(group['empty-fallback'],'REJECT')
         groups={g['name']:g for g in overlay['proxy-groups']}
-        self.assertEqual(groups['Jimmy · 总代理']['proxies'][0],'Jimmy · 最速节点')
-        self.assertIn('Jimmy · ai',groups['Jimmy · 海外AI']['proxies'])
+        self.assertEqual(groups['Jimmy · 总代理']['proxies'][0],'Jimmy · 最优速组')
+        self.assertIn('Jimmy · AI组',groups['Jimmy · 海外AI']['proxies'])
 
     def test_merge_refuses_unknown_route_syntax(self):
         source=base_profile()
@@ -183,14 +183,14 @@ class ClashChecks(unittest.TestCase):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         pools=[g for g in full['proxy-groups'] if g['type']=='url-test']
         self.assertEqual(len(pools),10)
-        self.assertIn('Jimmy · ai', {g['name'] for g in pools})
+        self.assertIn('Jimmy · AI组', {g['name'] for g in pools})
         for g in pools:
             self.assertTrue(g['hidden']);self.assertTrue(g['include-all'])
-            self.assertEqual(g['tolerance'],{'Jimmy · ai':250,'Jimmy · AI最速':100}.get(g['name'],50))
-            self.assertEqual(g['expected-status'],200 if g['name'] in {'Jimmy · ai','Jimmy · AI最速'} else 204)
+            self.assertEqual(g['tolerance'],{'Jimmy · AI组':250,'Jimmy · AI最速组':100}.get(g['name'],50))
+            self.assertEqual(g['expected-status'],200 if g['name'] in {'Jimmy · AI组','Jimmy · AI最速组'} else 204)
         for g in full['proxy-groups']:
             if g['type']!='select':continue
-            if g['name']=='Jimmy · 手动节点':self.assertTrue(g['include-all'])
+            if g['name'] in {'Jimmy · 手动节点','Jimmy · 总代理'}:self.assertTrue(g['include-all'])
             else:
                 self.assertFalse(g.get('include-all',False));self.assertNotIn('use',g)
         groups={g['name']:g for g in full['proxy-groups']}

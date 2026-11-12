@@ -1,25 +1,30 @@
 """Service endpoints and Stash selectors; native URL tests remain the default fallback."""
-ROUTING_VERSION = 'ROUTE-20261112.3'
-GPT_POOL = 'ai'
-TIKTOK_POOL = 'AI最速'
+import re
+
+ROUTING_VERSION = 'ROUTE-20261113.1'
+GPT_POOL = 'AI组'
+TIKTOK_POOL = 'AI最速组'
 ENDPOINTS = {GPT_POOL: 'https://chatgpt.com/', TIKTOK_POOL: 'https://www.tiktok.com/foryou'}
-# (business selector, native pool, selector owned by the optional on-device check)
-SERVICES = (('海外AI', GPT_POOL, 'GPT 服务优选'), ('TikTok', TIKTOK_POOL, 'TikTok 服务优选'))
-MANAGED = {selector: pool for _, pool, selector in SERVICES}
+# The installed private iOS script looks up this literal name and intersects its
+# members with the GPT selector. Its code and controller secret stay on-device.
+LEGACY_GPT_POOL = 'ai'
+MANAGED = {'GPT 服务优选': GPT_POOL, 'TikTok 服务检测组': TIKTOK_POOL, LEGACY_GPT_POOL: GPT_POOL}
 
 
 def add_stash_selectors(config):
     groups = {g['name']: g for g in config['proxy-groups']}
-    for business, pool, selector in SERVICES:
+    for selector, pool in MANAGED.items():
         native = groups[pool]
-        # Preserve a working first choice if the private script is not enabled.
-        # The filter includes the native pool itself, as well as its real exits.
         if not native['filter'].endswith('|REJECT)$'):
             raise ValueError('Expected an anchored curated pool with a REJECT sentinel')
-        allowed = native['filter'].removesuffix('|REJECT)$') + '|' + pool + ')$'
-        config['proxy-groups'].append({'name': selector, 'type': 'select',
-            'proxies': [pool], 'use': native['use'][:], 'filter': allowed, 'interval': -1})
-        groups[business]['proxies'].insert(0, selector)
+        choices = [pool, LEGACY_GPT_POOL] if selector == 'GPT 服务优选' else [pool]
+        allowed = native['filter'].removesuffix('|REJECT)$') + '|' + '|'.join(map(re.escape, choices)) + ')$'
+        config['proxy-groups'].append({'name': selector, 'type': 'select', 'hidden': True,
+            'proxies': choices, 'use': native['use'][:], 'filter': allowed, 'interval': -1})
+    groups['海外AI']['proxies'].insert(0, 'GPT 服务优选')
+    # An old saved TikTok service choice must fall back to the new default.
+    # The new service selector is opt-in. The old on-device script leaves it alone.
+    groups['TikTok']['proxies'].append('TikTok 服务检测组')
 
 def render_private_override(root):
     # Device-local copy: its executable code cannot be replaced via a remote script update.

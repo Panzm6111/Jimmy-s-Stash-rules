@@ -26,8 +26,8 @@ script-providers:
     payload: |
       // Runs inside the iPhone VPN extension. Only the loopback controller receives the key.
       const services = [
-        { name: 'GPT 服务优选', business: '海外AI', pool: 'ai', url: 'https://chatgpt.com/', tolerance: 250 },
-        { name: 'TikTok 服务优选', business: 'TikTok', pool: 'AI最速', url: 'https://www.tiktok.com/foryou', tolerance: 100 }
+        { name: 'GPT 服务优选', business: '海外AI', pool: 'AI组', url: 'https://chatgpt.com/', tolerance: 250 },
+        { name: 'TikTok 服务检测组', business: 'TikTok', pool: 'AI最速组', url: 'https://www.tiktok.com/foryou', tolerance: 100 }
       ];
       const key = 'jimmy.service-health.v1';
       const minute = 60000;
@@ -89,7 +89,9 @@ script-providers:
         if (now < (state.backoff || 0)) return;
         const candidates = pool.all.filter(n => n !== 'REJECT' && n !== 'DIRECT' && group.all.includes(n));
         const before = group.now;
-        const current = before === service.pool ? pool.now : before;
+        const legacy = service.business === '海外AI' && before === 'ai' ? groups.ai?.now : undefined;
+        const onPool = before === service.pool || legacy === service.pool;
+        const current = onPool ? pool.now : (legacy || before);
         if (!candidates.length) { state.failures = 0; report(service, state, '没有候选节点'); return; }
         const result = candidates.includes(current) ? await probe(service, current) : {kind:'down'};
         function pause(sample) {
@@ -114,7 +116,7 @@ script-providers:
         if (result.kind === 'up') {
           state.failures = 0;
           report(service, state, '入口可达 · ' + current);
-          if (before === service.pool || now < (state.review || 0)) return;
+          if (onPool || now < (state.review || 0)) return;
           state.review = now + 5 * minute;
           if (pool.now === current) { await select(service.pool); return; }
           if (!candidates.includes(pool.now)) return;

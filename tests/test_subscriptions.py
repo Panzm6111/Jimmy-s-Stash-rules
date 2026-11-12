@@ -32,17 +32,46 @@ class Subscriptions(unittest.TestCase):
         for host in ['dns.alidns.com','doh.pub']:
             self.assertEqual(v.route(config,host,country='ZZ'),'DIRECT')
         groups={g['name']:g for g in config['proxy-groups']}
-        for name in ['ai','美国','日本','台湾']:
+        for name in ['AI组','美国','日本','台湾']:
             self.assertEqual(groups[name]['proxies'],['REJECT'])
         self.assertFalse(config['ipv6'])
 
     def test_both_published_profiles_use_the_same_pool_tolerances(self):
         expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区'), 50)
-        expected.update({'ai':250, 'AI最速':100, '最速节点':50})
+        expected.update({'AI组':250, 'AI最速组':100, '最优速组':50})
         for path, prefix in [('config/stash.yaml',''), ('config/clash-verge-auto.yaml','Jimmy · ')]:
             with self.subTest(path=path):
                 pools = {g['name']: g['tolerance'] for g in v.load(path)['proxy-groups'] if g['type']=='url-test'}
                 self.assertEqual(pools, {prefix + name: ms for name, ms in expected.items()})
+
+    def test_only_general_and_manual_selectors_show_airport_nodes(self):
+        for filename, prefix in [('stash.yaml', ''), ('clash-verge-auto.yaml', 'Jimmy · ')]:
+            groups = {g['name']: g for g in v.load('config/' + filename)['proxy-groups']}
+            for name, group in groups.items():
+                if group.get('hidden'):
+                    continue
+                with self.subTest(profile=filename, group=name):
+                    exposes_nodes = bool(group.get('use') or group.get('include-all'))
+                    self.assertEqual(exposes_nodes, name in {prefix+'总代理', prefix+'手动节点'})
+                    self.assertTrue(set(group.get('proxies', [])) <= set(groups) | {'DIRECT','REJECT'})
+            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'总代理')
+            self.assertNotIn(prefix+'TikTok 服务优选', groups[prefix+'TikTok']['proxies'])
+            self.assertNotIn(prefix+'AI最速', groups[prefix+'TikTok']['proxies'])
+
+    def test_installed_stash_gpt_script_can_address_its_old_pool(self):
+        groups = {g['name']:g for g in v.load('config/stash.yaml')['proxy-groups']}
+        managed, legacy = groups['GPT 服务优选'], groups['ai']
+        self.assertEqual(groups['海外AI']['proxies'][0], managed['name'])
+        self.assertEqual(managed['proxies'], ['AI组','ai'])
+        self.assertEqual(legacy['proxies'], ['AI组'])
+        self.assertTrue(managed['hidden'] and legacy['hidden'])
+        self.assertNotIn('ai', groups['海外AI']['proxies'])
+        for choice in ('新加坡 A','台湾 E','台湾 D','AI组'):
+            self.assertRegex(choice, managed['filter'])
+            self.assertRegex(choice, legacy['filter'])
+        for removed in ('荷兰','英国 B','日本 A','台湾 F','REJECT','DIRECT'):
+            self.assertNotRegex(removed, managed['filter'])
+            self.assertNotRegex(removed, legacy['filter'])
 
     def test_stash_chatgpt_core_survives_unloaded_or_rejecting_remote_sets(self):
         from stash_ai_guard import AI_SUFFIXES
@@ -79,7 +108,7 @@ class Subscriptions(unittest.TestCase):
         groups = {g['name']:g for g in v.load('config/stash.yaml')['proxy-groups']}
         import re
         for selector, pool in MANAGED.items():
-            for candidate in ['新加坡 A','荷兰','英国 B','日本 A','美国 D','HKG A','DIRECT','无关']:
+            for candidate in ['新加坡 A','台湾 E','台湾 D','荷兰','英国 B','日本 A','美国 D','HKG A','DIRECT','无关']:
                 self.assertEqual(bool(re.search(groups[selector]['filter'],candidate)),
                                  bool(re.search(groups[pool]['filter'],candidate)))
             self.assertRegex(pool, groups[selector]['filter'])
@@ -126,7 +155,7 @@ class Subscriptions(unittest.TestCase):
             cfg = v.load('config/' + filename)
             target = prefix + 'Claude'
             groups = {g['name']: g for g in cfg['proxy-groups']}
-            self.assertEqual(groups[target]['proxies'][0], prefix + 'ai')
+            self.assertEqual(groups[target]['proxies'][0], prefix + 'AI组')
             sets = {name: [] for name in cfg['rule-providers']}
             for host in ('claude.ai', 'portal.anthropic.com', 's-cdn.anthropic.com',
                          'assets-proxy.anthropic.com', 'claude.com', 'files.claudeusercontent.com'):

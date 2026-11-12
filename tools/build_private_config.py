@@ -23,7 +23,7 @@ from config_helpers import dump, flatten
 from service_health import MANAGED
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
-CURATED = ('ai', 'AI最速', '最速节点')
+CURATED = ('AI组', 'AI最速组', '最优速组')
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
 AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', *CURATED)
 PROBE_SETTINGS = {'url': 'https://www.gstatic.com/generate_204', 'interval': 1800}
@@ -99,7 +99,7 @@ def verify(config, template, expected_nodes):
     template_groups = {g['name']: g for g in template['proxy-groups']}
     for name, group in template_groups.items():
         if group['type'] == 'select' and name not in {'手动节点', *MANAGED}:
-            require('ai' in by_name[name]['proxies'], '选择组缺少ai选项。')
+            require('AI组' in by_name[name]['proxies'], '选择组缺少 AI组选项。')
             require(by_name[name]['proxies'][0] == group['proxies'][0], '选择组默认选项改变。')
     require(not ({'全部节点', 'OpenAI'} & set(names)), '仍有旧策略组名称。')
     for name in AUTO_POOLS:
@@ -133,13 +133,13 @@ def verify(config, template, expected_nodes):
             set(by_name['手动节点']['proxies']) - {'REJECT'} == node_names, '手动节点有遗漏或类型改变。')
     require(set(by_name['其他地区']['proxies']) - {'REJECT'} == node_names - union,
             '其他地区不是五地区的补集。')
-    require(by_name['总代理']['proxies'][0] == '最速节点', '总代理默认项错误。')
+    require(by_name['总代理']['proxies'][0] == '最优速组', '总代理默认项错误。')
     for selector, pool in MANAGED.items():
         if selector in template_groups:
-            expected_members = [pool] + [n['name'] for n in expected_nodes if re.search(template_groups[pool]['filter'], n['name'])]
+            expected_members = template_groups[selector]['proxies'] + [n['name'] for n in expected_nodes if re.search(template_groups[pool]['filter'], n['name'])]
             require(by_name[selector]['proxies'] == expected_members, '服务选择组候选或顺序错误。')
     require(by_name['海外AI']['proxies'][0] == template_groups['海外AI']['proxies'][0], '海外 AI 默认项错误。')
-    for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):
+    for name in ('TikTok', 'Netflix', 'YouTube', 'Telegram', 'Adobe', '未匹配流量'):
         require(by_name[name]['proxies'][0] == '总代理', '软件未默认跟随总代理。')
     for name in ('Apple', 'Microsoft'):
         require(by_name[name]['proxies'][0] == 'DIRECT', '系统软件默认直连改变。')
@@ -217,7 +217,7 @@ def compose(source, template=None):
                     group.pop(key, None)
         elif name in MANAGED:
             native = MANAGED[name]
-            group['proxies'] = [native, *pool_nodes[native]]
+            group['proxies'] = [*group['proxies'], *pool_nodes[native]]
         elif name == '手动节点':
             group['proxies'] = all_names + ['REJECT']
         elif expanded:
@@ -243,7 +243,7 @@ def compose(source, template=None):
 def render(config):
     return ('# JIMMY-STASH 本机私人节点快照；含连接凭据，不公开、不提交、不转发。\n'
             '# 本文件可直接作为主配置导入，不需要私人覆写或替换订阅URL。\n'
-            '# 首次导入：总代理默认最速节点；使用规则模式。\n'
+            '# 首次导入：总代理默认最优速组；使用规则模式。\n'
             '# 自动节点和地区池按 URL 测试延迟选最快节点；其他地区为五地区以外的全部候选。\n'
             '# 海外AI 使用精选候选，Apple 默认直连；可配合本机服务检测覆写使用。\n'
             '# 不含机场旧DNS/分流/控制端口；连接字段原样保留，重名节点仅加显示前缀。\n'

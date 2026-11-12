@@ -21,9 +21,9 @@
     "optional_probe_js": 1
   },
   "input_sha256": {
-    "config/stash.yaml": "2f8b6b6e857401ad478b0507bb9a9cdc10c9bd7c3d4fef1dc663d5969b61e94b",
+    "config/stash.yaml": "2121ab82254d86bf4d27f7ad57919c9fa6f934824731966be081151c47a31c37",
     "templates/stash-main.yaml": "dcf813dcfa62754c2bc1429ff3c1aab6367ae5402cb774e3f8b728fe116ff26b",
-    "templates/stash-core.stoverride": "9e0abe20bc15114c89bc011ec1b22d70be1b5d70d1f68e9127c535c194d4077e",
+    "templates/stash-core.stoverride": "43fb7c9662a1998ffc24c846edc43eff8b15ff2c848fc27a88f93a4c5e56151c",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
     "rules/vendor/ads-expanded.yaml": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
     "rules/system-direct.yaml": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f",
@@ -37,11 +37,11 @@
     "tools/build_ad_scripts.py": "cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22",
     "tools/build_ad_diagnostics.py": "08225111d2793fb4aec5adb3af4c33fd9f9ac46151c0863ff468791876748bba",
     "tools/ad_observation_runtime.js": "a4aaec1eaaadbfbf523a5b1896ab798400349208fe2a67c0bb6912c2d32436dd",
-    "tools/build_subscription.py": "720762cc45f19d5a0a49567ac9154279bba5a683f482e566b2ab1f285e0744d8",
+    "tools/build_subscription.py": "613bbc962827f7127dc069a35c93f257e505ffd6ff3ab63052515ca7b0220e1a",
     "tools/stash_ai_guard.py": "ef57b322f2870ef5bbbd06514c795dbcd7202b9075ba70c90688c4af3398d170",
-    "tools/service_health.py": "9a23466e31d78cdc01cc1202da727c31708efd4dd1d7c787da2d7729d87ac8a5",
-    "tools/config_helpers.py": "5c788e6b37474e9033545e191a0af5aa6cbe82b6bc19eb8fc86ac91059372354",
-    "tools/build_private_config.py": "c62f5d711babe34cda2a03b5e9b86a8d58047085f89b9c4db1021d6cabe2ce2b",
+    "tools/service_health.py": "1b68d13e988571cedd342e3861abf0614f3140d61f08076789c6f504a33453b3",
+    "tools/config_helpers.py": "c485872cdbd174a28597ce5ba9883a0ec2c45607905f38db7b106d09788c22f2",
+    "tools/build_private_config.py": "8723a9ca62122c1ada050de416f46a5830047bd00fca0b8db91325d9a3071874",
     "tools/render_ad_architecture.py": "06a5018a4d05984318c1a698e7a92db53fd906f9c5acf4bfbeccbac7f7c1d9bf",
     "tools/build_ads.py": "0878482c9ecb3562b5a12e6b00fe506db47c17f7aa2ff628ddd06f75eef984c9",
     "modules/diagnostics/ads.stoverride": "c5f0e0e34cc4f5424188fb54d984975a1be967f24ca01b8cae331ca1b6e0b49f",
@@ -115,8 +115,8 @@
   "prose_prefix_sha256": "d82dfc595a12bc64a171bdb9b5f7936f9f428e0f773bf10d0fcdbec119822320",
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
-    "bytes": 158040,
-    "sha256": "16c02153250e244cac2293d652f75daa762b0129cfe0da31da26b3524636ba67",
+    "bytes": 158043,
+    "sha256": "18093d8d515ad61d601777fe056e65cbaf83bb0033b4fb8a01c2b5b08b73b063",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,

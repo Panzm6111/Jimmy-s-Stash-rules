@@ -17,7 +17,7 @@ INFO_PREFIXES = (
     'remaining traffic', 'traffic remaining', 'expire', 'expiry',
     'expiration', 'update subscription',
 )
-SELECTORS = {'手动节点', '自动节点', '海外AI', 'Netflix', 'YouTube', 'Telegram', 'Apple', 'Microsoft', '未匹配流量'}
+SELECTORS = {'总代理', '手动节点', '自动节点'}
 
 def node_filter():
     # A prefix trie expresses the complement with anchors, alternation and
