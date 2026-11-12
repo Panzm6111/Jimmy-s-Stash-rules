@@ -17,6 +17,8 @@ iPhone 刷新原主配置即可。已启用的私人机场、MitM 和服务检�
 
 两份发布配置已对照 NCloud 结项的 56 个节点名称。27 个直订地址、两端 234 项路由、36 项隔离 Mihomo 配置与重载检查、5 项从 .3 缓存选择迁移、16 项测速和换线检查通过。旧版 iPhone 脚本用本地模拟控制接口验证。iPhone 实机刷新、后台调度和 Dot 实聊仍待设备验收。
 
+**发布回执。** [规则提交 `9626514`](https://github.com/Panzm6111/Jimmy-s-Stash-rules/commit/96265142b7e4629c3c71a7a76d574a4806522fc1) 已推送 main。[该提交的 Linux 检查](https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/43258205503) 已通过。北京时间 11 月 13 日 00:30 从两个原订阅及可选覆写的 main 地址和固定提交地址共下载六份，均为 HTTP 200，内容与提交逐字节相同。Stash 原地址此前短暂返回 .3，复核时已更新。已保存的 iOS 3.6.5 私人覆写脚本与模拟所用旧脚本逐字相符。设备只需刷新原主配置。
+
 <a id="claude-web-status"></a>
 
 ### 2026-11-12 Claude 网页版与两端规则（ROUTE-20261112.3）
