@@ -7,7 +7,7 @@
 | Stash | [config/stash.yaml](config/stash.yaml) |
 | Clash Verge | [config/clash-verge-auto.yaml](config/clash-verge-auto.yaml) |
 
-Stash 当前分流版本 `ROUTE-20261108.1`，含 `AI-DNS-20261108.1` AI解析代理保护与 `MOBILE-AD-20261102.1` 手机域名补充；原 HTTP/JS 版本仍为 `AD-20261020.5`。AI DNS要求Stash iOS 3.6+，地区报错按[手机验收步骤](docs/AI-COVERAGE.md#stash-ai-dns-与地区报错2026-11-08)核对；尚无本轮iPhone实测。Clash 本轮配置未变。`ai`池只包含日本、美国、台湾；新加坡独立组保留。21个业务策略组、TikTok/Instagram/X统一分流、Adobe及国内应用分流保留。Clash另有一个隐藏的订阅下载回退组。
+当前分流版本为 ROUTE-20261112.1。海外AI 默认选 ai（新加坡 A、荷兰、英国 B，250 ms）。TikTok 默认选 AI最速（这三条加日本 A/B、美国 C/D，100 ms）。总代理默认选最速节点（HKG A/B/C/I/J/M、日本 A/B、荷兰、新加坡 A、英国 B，50 ms）。 Netflix、YouTube、Telegram、Adobe 和未匹配流量默认跟随总代理。Apple、Microsoft、国内直连默认 DIRECT，广告拦截默认 REJECT。已有设备会记住手选结果，刷新主订阅后请核对这三个业务入口。 [测速与故障切换说明](docs/ROUTING.md)。
 
 ## 使用
 

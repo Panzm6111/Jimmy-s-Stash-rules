@@ -10,7 +10,7 @@ def main():
     runtime=Path(tempfile.mkdtemp(prefix='selection-',dir=ROOT/'.local'))
     # Keep initial fastest away from index zero; v1.19.32 has a separate
     # first-member tolerance boundary, recorded below rather than hidden.
-    state={'JP-fixture':[200,.01],'US-fixture':[204,.25],'TW-fixture':[204,.60]}
+    state={'新加坡 A':[200,.01],'荷兰':[204,.43],'英国 B':[204,.60]}
     servers=[];checks=[]
     def check(ok,label):
         if not ok:raise AssertionError(label)
@@ -69,29 +69,37 @@ def main():
                 if all(p.get('history') for p in proxies.values()):break
                 if time.monotonic()>deadline:raise AssertionError('health probe did not finish')
                 time.sleep(.2)
-            check(not proxies['JP-fixture']['extra'][probe]['alive'],'HTTP 200 is rejected for this test URL despite transport success')
-            check(proxies['US-fixture']['extra'][probe]['alive'] and proxies['TW-fixture']['extra'][probe]['alive'],'HTTP 204 probe succeeds on both healthy fixtures')
+            check(not proxies['新加坡 A']['extra'][probe]['alive'],'HTTP 200 is rejected for this test URL despite transport success')
+            check(proxies['荷兰']['extra'][probe]['alive'] and proxies['英国 B']['extra'][probe]['alive'],'HTTP 204 probe succeeds on both healthy fixtures')
             current=api(group_path)
-            check(current['now']=='US-fixture','healthy lowest-latency node selected automatically')
+            check(current['now']=='荷兰','healthy lowest-latency node selected automatically')
             check(current['hidden'] and current['expectedStatus']=='204','hidden and expected-status fields loaded')
             time.sleep(1.1)
-            state['JP-fixture']=[204,.175];api(provider_path+'/healthcheck');time.sleep(11)
+            state['新加坡 A']=[204,.25];api(provider_path+'/healthcheck');time.sleep(11)
             measured={p['name']:p['extra'][probe] for p in api(provider_path)['proxies']}
-            check(measured['JP-fixture']['alive'],'previously invalid node recovers on a new 204 response')
-            advantage=measured['US-fixture']['history'][-1]['delay']-measured['JP-fixture']['history'][-1]['delay']
-            check(50<advantage<100,'measured improvement is between the old and new thresholds')
-            check(api(group_path)['now']=='US-fixture','100ms AI tolerance retains the current healthy node')
-            state['JP-fixture']=[204,.01];api(provider_path+'/healthcheck');time.sleep(11)
-            check(api(group_path)['now']=='JP-fixture','improvement greater than tolerance switches automatically')
-            api(group_path,'PUT',{'name':'TW-fixture'})
-            check(api(group_path)['fixed']=='TW-fixture','hidden is not a hard API manual-selection lock')
+            check(measured['新加坡 A']['alive'],'previously invalid node recovers on a new 204 response')
+            advantage=measured['荷兰']['history'][-1]['delay']-measured['新加坡 A']['history'][-1]['delay']
+            check(100<advantage<250,'measured improvement is between the old and new thresholds')
+            check(api(group_path)['now']=='荷兰','250ms AI tolerance retains the current healthy node')
+            state['新加坡 A']=[204,.01];api(provider_path+'/healthcheck');time.sleep(11)
+            check(api(group_path)['now']=='新加坡 A','improvement greater than tolerance switches automatically')
+            api(group_path,'PUT',{'name':'英国 B'})
+            check(api(group_path)['fixed']=='英国 B','hidden is not a hard API manual-selection lock')
             api(group_path,'DELETE')
             current=api(group_path)
-            check(not current['fixed'] and current['now']=='JP-fixture','explicit unpin restores automatic selection')
-            state['US-fixture']=[204,.001];api(provider_path+'/healthcheck');time.sleep(11)
-            boundary={'former_first_member':'JP-fixture','selected_after_small_improvement':api(group_path)['now'],
+            check(not current['fixed'] and current['now']=='新加坡 A','explicit unpin restores automatic selection')
+            state['荷兰']=[204,.001];api(provider_path+'/healthcheck');time.sleep(11)
+            boundary={'former_first_member':'新加坡 A','selected_after_small_improvement':api(group_path)['now'],
                       'note':'v1.19.32 may ignore tolerance when the current node is the first member; not a hard switching guarantee.'}
-            result={'passed':len(checks),'checks':checks,'retained_at_advantage_ms':advantage,'actual_client_modified':False,'private_nodes_used':False,
+            failed=api(group_path)['now']
+            state[failed]=[503,.01]
+            started=time.monotonic()
+            while api(group_path)['now']==failed:
+                if time.monotonic()-started>90:raise AssertionError('scheduled health check did not switch')
+                time.sleep(.25)
+            elapsed=round(time.monotonic()-started,2)
+            check(not api(group_path).get('fixed'),'unpinned pool switches after an HTTP 503 without manual probing')
+            result={'scheduled_switch_seconds':elapsed,'passed':len(checks),'checks':checks,'retained_at_advantage_ms':advantage,'actual_client_modified':False,'private_nodes_used':False,
                     'first_member_tolerance_boundary':boundary,
                     'boundary':'Synthetic Mihomo test; no Clash UI or real AI/TikTok acceptance.'}
             (runtime/'result.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')

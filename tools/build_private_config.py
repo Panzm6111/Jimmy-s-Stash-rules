@@ -22,9 +22,9 @@ import yaml
 from config_helpers import dump, flatten
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
-AI_REGIONS = ('日本', '美国', '台湾')
+CURATED = ('ai', 'AI最速', '最速节点')
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
-AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', 'ai')
+AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', *CURATED)
 PROBE_SETTINGS = {'url': 'https://www.gstatic.com/generate_204', 'interval': 1800}
 PROBE_FIELDS = (*PROBE_SETTINGS, 'tolerance', 'lazy')
 
@@ -76,7 +76,7 @@ def verify(config, template, expected_nodes):
     groups = config['proxy-groups']
     names = [g['name'] for g in groups]
     node_names = {n['name'] for n in expected_nodes}
-    require(len(names) == len(set(names)) == 21, '策略组数量或唯一性异常。')
+    require(len(names) == len(set(names)) == 23, '策略组数量或唯一性异常。')
     require(not (set(names) & node_names), '节点与策略重名。')
     targets = set(names) | node_names | BUILTINS
     graph = {}
@@ -110,11 +110,11 @@ def verify(config, template, expected_nodes):
             require(not any(key in group for key in PROBE_FIELDS), '空池残留测速参数。')
         else:
             require(group['type'] == 'url-test', '非空池未使用自动测速。')
-            require(all(group.get(key) == value for key, value in PROBE_SETTINGS.items()),
+            require(all(group.get(key) == (60 if key == 'interval' and name in CURATED else value) for key, value in PROBE_SETTINGS.items()),
                     '自动池测速地址或频率改变。')
             require(group.get('tolerance') == template_groups[name].get('tolerance') and
                     ('tolerance' in group) == ('tolerance' in template_groups[name]) and
-                    'lazy' not in group, '自动池包含未核实的测速设置。')
+                    group.get('lazy') == template_groups[name].get('lazy'), '自动池包含未核实的测速设置。')
     union = set()
     for name in REGIONS:
         members = by_name[name]['proxies']
@@ -124,15 +124,15 @@ def verify(config, template, expected_nodes):
         require(set(members) - {'REJECT'} == expected_members, '地区包含错误节点或遗漏节点。')
         union.update(n for n in members if n in node_names)
     require(set(by_name['自动节点']['proxies']) - {'REJECT'} == node_names, '自动节点有遗漏。')
-    require(set(by_name['ai']['proxies']) - {'REJECT'} ==
-            set().union(*(set(by_name[name]['proxies']) for name in AI_REGIONS)) - {'REJECT'},
-            'ai不是日本、美国、台湾节点的精确并集。')
+    for name in CURATED:
+        expected = {n for n in node_names if re.fullmatch(template_groups[name]['filter'], n)}
+        require(set(by_name[name]['proxies']) == expected | {'REJECT'}, '精选池成员不符。')
     require(by_name['手动节点']['type'] == 'select' and
             set(by_name['手动节点']['proxies']) - {'REJECT'} == node_names, '手动节点有遗漏或类型改变。')
     require(set(by_name['其他地区']['proxies']) - {'REJECT'} == node_names - union,
             '其他地区不是五地区的补集。')
-    require(by_name['总代理']['proxies'][0] == 'REJECT', '首次出口选择不再中立。')
-    require(by_name['海外AI']['proxies'][0] == '美国', '海外 AI 未默认选择美国。')
+    require(by_name['总代理']['proxies'][0] == '最速节点', '总代理默认项错误。')
+    require(by_name['海外AI']['proxies'][0] == 'ai', '海外 AI 默认项错误。')
     for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):
         require(by_name[name]['proxies'][0] == '总代理', '软件未默认跟随总代理。')
     for name in ('Apple', 'Microsoft'):
@@ -195,7 +195,7 @@ def compose(source, template=None):
                     for name in REGIONS}
     assigned = set().union(*(set(v) for v in region_nodes.values()))
     other_nodes = [n for n in all_names if n not in assigned]
-    pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes, 'ai': list(dict.fromkeys(node for name in AI_REGIONS for node in region_nodes[name]))}
+    pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes, **{name: [n for n in all_names if re.fullmatch(definitions[name]['filter'], n)] for name in CURATED}}
     result = copy.deepcopy(template)
     result.pop('proxy-providers', None)
     result['proxies'] = eligible

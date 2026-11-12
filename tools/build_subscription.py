@@ -103,8 +103,8 @@ def render():
     return ('#SUBSCRIBED ' + URL + '\n'
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
-            '# JIMMY-STASH ' + VERSION + '；21个策略组（含三地区ai、TikTok）、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261108.1；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。\n'
+            '# JIMMY-STASH ' + VERSION + '；23个策略组（含三个精选池）、私人订阅接入保留。\n'
+            '# JIMMY-ROUTING ROUTE-20261112.1；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。\n'
             '# AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。\n'
             '# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
@@ -116,7 +116,7 @@ def render():
             '# 不需另加App或expanded覆写；停用已额外添加的广告覆写，保留私人订阅/白名单。\n'
             '# 当前需求统一为整合入口，不再要求逐App开关；原模块保留作维护来源与旧安装兼容。\n'
             '# 各独立模块/JS保持原许可；来源与完整源码：https://github.com/Panzm6111/Jimmy-s-Stash-rules/blob/main/docs/SOURCES.md\n'
-            '# 私人机场URL只在设备本地覆写，不放到GitHub。总代理首次REJECT，需选择出口。\n'
+            '# 私人机场URL只在设备本地覆写，不放到GitHub。总代理默认最速节点，旧设备可能保留手选。\n'
             '# 当前仅离线验证；真实Stash解析、MITM、脚本执行与广告效果待iPhone验收。\n'
             + dump(config))
 
@@ -139,7 +139,7 @@ def verify(text):
     for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider
         assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
-    assert len(config['proxy-groups']) == 21
+    assert len(config['proxy-groups']) == 23
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()
     # The published profile now has an intentionally fixed China-IP fallback.

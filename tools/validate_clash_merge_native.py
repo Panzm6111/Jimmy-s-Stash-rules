@@ -184,9 +184,9 @@ try:
         check(len(provider_states) == len(overlay['rule-providers']), 'all remote rule providers loaded')
         check(state['proxy_connects'] >= len(provider_states), 'rule HTTP downloads passed through selected test proxy')
         check(set(groups[group_name('手动节点')]['all']) == {'US-inline-fixture','HK-inline-fixture','JP-provider-fixture','SG-provider-fixture'} | colliding_names, 'inline and provider nodes included; quota marker excluded')
-        check(set(groups[group_name('ai')]['all']) == {'US-inline-fixture','JP-provider-fixture','美国','日本','台湾'}, 'three-region ai filters both node sources and excludes Singapore')
+        check(set(groups[group_name('ai')]['all']) == {'REJECT'}, 'no curated names in fixture: reject fallback')
         check(groups[group_name('总代理')]['now'] == group_name('自动节点'), 'new master group starts with automatic nodes')
-        check(group_name('ai') in groups[group_name('海外AI')]['all'], 'AI exposes three-region ai choice')
+        check(group_name('ai') in groups[group_name('海外AI')]['all'], 'AI exposes curated ai choice')
         check(groups[group_name('其他地区')]['all'] == ['REJECT'], 'empty region falls back to rejection')
         check(all(groups[n]['type'] == 'Http' and groups[group_name(n)]['type'] in {'Selector','URLTest'} for n in colliding_names), 'airport nodes and namespaced custom groups coexist')
         state['rules_version'] = 2

@@ -2,7 +2,7 @@
 
 2026-10-29起，两端的 `海外AI` 直接使用社区维护的完整分类：MetaCubeX 的 `category-ai-!cn` 与 Sukka 的 `Source/non_ip/ai.conf`，只做兼容格式转换和去重。当前两份来源分别213条、55条，合并为231条；原 [rules/openai.yaml](../rules/openai.yaml) 地址保持不变。来源、提交、许可和逐文件哈希见 [community-sources.json](../research/community-sources.json)。
 
-`海外AI` 默认美国。两端的 `ai` 在日本、美国、台湾节点间自动测速选优，2026-11-02按用户要求移除其中的新加坡节点；新加坡独立组和其他业务组的选项、默认值保留。各业务select组都可选择 `ai`，Clash带前缀入口显示为 `Jimmy · ai`；测速地址成功不代表账号、地区和平台风控一定通过。AI分流不需要MITM，不解密聊天正文。
+海外AI 默认选 ai（新加坡 A、荷兰、英国 B，250 ms）。TikTok 默认选 AI最速（这三条加日本 A/B、美国 C/D，100 ms）。总代理默认选最速节点（HKG A/B/C/I/J/M、日本 A/B、荷兰、新加坡 A、英国 B，50 ms）。 AI 分流无需 MITM。Clash 组名带 Jimmy · 前缀。
 
 ## Stash AI DNS 与地区报错（2026-11-08）
 

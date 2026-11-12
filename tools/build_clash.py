@@ -30,7 +30,7 @@ def remote_profile(source):
     result['proxy-providers']['机场']['proxy']=DOWNLOAD_GROUP
     # Groups using `use` rely on provider health checks, not their own timer.
     result['proxy-providers']['机场']['health-check'].update(
-        enable=True, interval=300, lazy=False, timeout=5000, **{'expected-status':204})
+        enable=True, interval=60, lazy=False, timeout=5000, **{'expected-status':204})
     result['proxy-groups'][-1]['expected-status']=204
     # Airports may vary subscription format by User-Agent.
     # Request the same Clash YAML representation as the supported desktop client.
@@ -50,8 +50,6 @@ def global_merge(source):
             if group['type']=='url-test' or original=='手动节点':
                 group['proxies']=[name for name in group.get('proxies',[]) if name!='REJECT']
                 if not group['proxies']:del group['proxies']
-        if original=='总代理':
-            group['proxies']=['自动节点']+[name for name in group['proxies'] if name!='自动节点']
         if group['type']=='url-test':
             # UI guard only: Mihomo's API can still pin a URLTest pool.
             group.update(hidden=True, tolerance=pool_tolerance_ms(original), **{'expected-status':204})

@@ -30,7 +30,7 @@ class ClashChecks(unittest.TestCase):
             self.assertEqual(route(config,'push2.eastmoney.com',country='ZZ'),'DIRECT')
             self.assertEqual(route(config,'analytics.tiktok.com'),target.replace('Adobe','广告拦截'))
             group=next(g for g in config['proxy-groups'] if g['name']==target)
-            self.assertEqual(group['proxies'][0],target.replace('Adobe','美国'))
+            self.assertEqual(group['proxies'][0],target.replace('Adobe','总代理'))
 
     def test_maintained_domestic_routes_override_broad_proxy_and_keep_foreign_services(self):
         from validate import route, load
@@ -82,17 +82,17 @@ class ClashChecks(unittest.TestCase):
             self.assertNotIn(prefix+'日本+美国', groups)
             pool = groups[prefix+'ai']
             self.assertEqual(pool['type'], 'url-test')
-            self.assertEqual(pool['interval'], 1800)
+            self.assertEqual(pool['interval'], 60)
             self.assertEqual(pool['url'], 'https://www.gstatic.com/generate_204')
-            for name, expected in [('US01',True),('JP01',True),('SG01',False),('新加坡 SG 02',False),('🇸🇬 Singapore',False),('TW01',True),('HK01',False),('DIRECT',False)]:
+            for name, expected in [('新加坡 A',True),('荷兰',True),('英国 B',True),('US01',False),('JP01',False),('SG01',False),('新加坡 SG 02',False),('🇸🇬 Singapore',False),('TW01',False),('HK01',False),('DIRECT',False)]:
                 self.assertEqual(bool(re.search(pool['filter'],name)),expected)
             for group in groups.values():
                 self.assertEqual(group.get('proxies',[]).count(prefix+'ai'), int(group['type']=='select' and group['name']!=prefix+'手动节点'))
                 self.assertNotIn(prefix+'日本+美国', group.get('proxies',[]))
             self.assertEqual(groups[prefix+'手动节点'].get('proxies',[]), ['REJECT'] if not prefix else [])
-            self.assertEqual(groups[prefix+'总代理']['proxies'][0], 'REJECT' if not prefix else prefix+'自动节点')
-            self.assertEqual(groups[prefix+'海外AI']['proxies'][0], prefix+'美国')
-            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'美国')
+            self.assertEqual(groups[prefix+'总代理']['proxies'][0], prefix+'最速节点')
+            self.assertEqual(groups[prefix+'海外AI']['proxies'][0], prefix+'ai')
+            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'AI最速')
             for name in ('Apple','Microsoft','国内直连'):
                 self.assertEqual(groups[prefix+name]['proxies'][0], 'DIRECT')
             self.assertEqual(groups[prefix+'广告拦截']['proxies'][0], 'REJECT')
@@ -120,7 +120,7 @@ class ClashChecks(unittest.TestCase):
         for key in ['proxies','proxy-providers','dns','tun','mixed-port']:
             self.assertEqual(merged[key],airport[key])
         names={g['name'] for g in merged['proxy-groups']}
-        self.assertEqual(len(names),21)
+        self.assertEqual(len(names),23)
         self.assertTrue(all(name.startswith('Jimmy · ') for name in names))
         self.assertNotIn('台湾',names)
 
@@ -143,7 +143,7 @@ class ClashChecks(unittest.TestCase):
             self.assertNotIn('use',group)
             if group.get('include-all'):self.assertEqual(group['empty-fallback'],'REJECT')
         groups={g['name']:g for g in overlay['proxy-groups']}
-        self.assertEqual(groups['Jimmy · 总代理']['proxies'][0],'Jimmy · 自动节点')
+        self.assertEqual(groups['Jimmy · 总代理']['proxies'][0],'Jimmy · 最速节点')
         self.assertIn('Jimmy · ai',groups['Jimmy · 海外AI']['proxies'])
 
     def test_merge_refuses_unknown_route_syntax(self):
@@ -156,7 +156,7 @@ class ClashChecks(unittest.TestCase):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         overlay=global_merge(source)
         self.assertEqual(full['proxy-groups'][:-1],overlay['proxy-groups'])
-        self.assertEqual(len(full['proxy-groups']),22)
+        self.assertEqual(len(full['proxy-groups']),24)
         download=full['proxy-groups'][-1]
         self.assertEqual(download['type'],'fallback')
         self.assertFalse(download['lazy'])
@@ -174,7 +174,7 @@ class ClashChecks(unittest.TestCase):
         health=full['proxy-providers']['机场']['health-check']
         self.assertTrue(health['enable'])
         self.assertFalse(health['lazy'])
-        self.assertEqual(health['interval'],300)
+        self.assertEqual(health['interval'],60)
         self.assertEqual(health['timeout'],5000)
         self.assertEqual(health['expected-status'],204)
         self.assertEqual(full['proxy-providers']['机场']['url'],'https://example.invalid/REPLACE_ON_DEVICE')
@@ -182,11 +182,11 @@ class ClashChecks(unittest.TestCase):
     def test_automatic_pool_ui_guard_and_explicit_manual_entry(self):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         pools=[g for g in full['proxy-groups'] if g['type']=='url-test']
-        self.assertEqual(len(pools),8)
+        self.assertEqual(len(pools),10)
         self.assertIn('Jimmy · ai', {g['name'] for g in pools})
         for g in pools:
             self.assertTrue(g['hidden']);self.assertTrue(g['include-all'])
-            self.assertEqual(g['tolerance'],100 if g['name']=='Jimmy · ai' else 50)
+            self.assertEqual(g['tolerance'],{'Jimmy · ai':250,'Jimmy · AI最速':100}.get(g['name'],50))
             self.assertEqual(g['expected-status'],204)
         for g in full['proxy-groups']:
             if g['type']!='select':continue

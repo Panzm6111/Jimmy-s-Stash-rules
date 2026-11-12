@@ -11,7 +11,7 @@ class ConfigDumper(yaml.SafeDumper): pass
 
 def pool_tolerance_ms(name):
     """Use the shared, unprefixed pool name for both subscription formats."""
-    return 100 if name == 'ai' else 50
+    return {'ai': 250, 'AI最速': 100}.get(name, 50)
 
 def dump(data):
     return yaml.dump(data, Dumper=ConfigDumper, allow_unicode=True, sort_keys=False, width=120)

@@ -53,8 +53,8 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertEqual(groups['美国']['proxies'], [self.source['proxies'][0]['name'], 'REJECT'])
         self.assertEqual(groups['其他地区']['proxies'], ['未收录的远方线路', 'REJECT'])
         self.assertEqual(len(groups['自动节点']['proxies']), 4)
-        self.assertEqual(groups['总代理']['proxies'][0], 'REJECT')
-        self.assertEqual(groups['海外AI']['proxies'][0], '美国')
+        self.assertEqual(groups['总代理']['proxies'][0], '最速节点')
+        self.assertEqual(groups['海外AI']['proxies'][0], 'ai')
         self.assertEqual(groups['Apple']['proxies'][0], 'DIRECT')
         self.assertFalse(report['subscription_auto_update'])
         self.assertFalse(report['native_stash_tested'])
@@ -69,7 +69,7 @@ class PrivateConfigChecks(unittest.TestCase):
 
     def test_all_seven_nonempty_pools_use_url_test_and_manual_stays_select(self):
         source = copy.deepcopy(self.source)
-        for name in ('HKG02', '新加坡 SG 02', '台湾 TW 02'):
+        for name in ('HKG02', '新加坡 SG 02', '台湾 TW 02','新加坡 A'):
             node = copy.deepcopy(source['proxies'][0])
             node['name'] = name
             source['proxies'].append(node)
@@ -80,7 +80,7 @@ class PrivateConfigChecks(unittest.TestCase):
                 group = groups[name]
                 self.assertEqual(group['type'], 'url-test')
                 self.assertGreater(len(group['proxies']), 1)
-                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, PROBE_SETTINGS)
+                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, dict(PROBE_SETTINGS, interval=60 if name in ('ai','AI最速','最速节点') else 1800))
         self.assertEqual(groups['手动节点']['type'], 'select')
         self.assertEqual(groups['手动节点']['proxies'], groups['自动节点']['proxies'])
         for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):
@@ -169,17 +169,18 @@ class PrivateConfigChecks(unittest.TestCase):
         with self.assertRaises(BuildError):
             verify(broken, self.template, config['proxies'])
 
-    def test_ai_pool_is_exact_three_region_union(self):
+    def test_curated_membership(self):
         source = copy.deepcopy(self.source)
-        for name in ('SG01', 'TW01', '香港01', 'JP-US-TW'):
+        for name in ('SG01', 'TW01', '香港01', 'JP-US-TW', '新加坡 A', '日本 A', '美国 D', 'HKG A'):
             node = copy.deepcopy(source['proxies'][0])
             node['name'] = name
             source['proxies'].append(node)
         config, _ = compose(source)
         groups = {g['name']: g for g in config['proxy-groups']}
         self.assertEqual(set(groups['ai']['proxies']),
-                         set().union(*(set(groups[n]['proxies']) for n in ('日本','美国','台湾'))))
-        self.assertEqual(groups['ai']['proxies'].count('JP-US-TW'), 1)
+                         {'新加坡 A','REJECT'})
+        self.assertEqual(set(groups['AI最速']['proxies']), {'新加坡 A','日本 A','美国 D','REJECT'})
+        self.assertEqual(set(groups['最速节点']['proxies']), {'新加坡 A','日本 A','HKG A','REJECT'})
         self.assertNotIn('SG01', groups['ai']['proxies'])
         self.assertIn('SG01', groups['新加坡']['proxies'])
         self.assertNotIn('香港01', groups['ai']['proxies'])

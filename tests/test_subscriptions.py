@@ -36,7 +36,7 @@ class Subscriptions(unittest.TestCase):
 
     def test_both_published_profiles_use_the_same_pool_tolerances(self):
         expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区'), 50)
-        expected['ai'] = 100
+        expected.update({'ai':250, 'AI最速':100, '最速节点':50})
         for path, prefix in [('config/stash.yaml',''), ('config/clash-verge-auto.yaml','Jimmy · ')]:
             with self.subTest(path=path):
                 pools = {g['name']: g['tolerance'] for g in v.load(path)['proxy-groups'] if g['type']=='url-test'}

@@ -10,6 +10,12 @@
     "maintained-game-domains": "research/subscription-plan.json"
   },
   "cases": [
+    {"app": "海外AI", "surface": "service endpoint", "url": "https://chatgpt.com/", "policy": "海外AI", "unmodified_http": true},
+    {"app": "海外AI", "surface": "service endpoint", "url": "https://auth.openai.com/", "policy": "海外AI", "unmodified_http": true},
+    {"app": "海外AI", "surface": "service endpoint", "url": "https://cdn.oaistatic.com/", "policy": "海外AI", "unmodified_http": true},
+    {"app": "海外AI", "surface": "service endpoint", "url": "https://files.oaiusercontent.com/", "policy": "海外AI", "unmodified_http": true},
+    {"app": "海外AI", "surface": "service endpoint", "url": "https://api.anthropic.com/", "policy": "海外AI", "unmodified_http": true},
+    {"app": "海外AI", "surface": "service endpoint", "url": "https://gemini.google.com/", "policy": "海外AI", "unmodified_http": true},
     {"app":"小红书","surface":"web comments","url":"https://edith.xiaohongshu.com/api/sns/web/v2/comment/page","policy":"DIRECT","unmodified_http":true},
     {"app":"小红书","surface":"web replies","url":"https://edith.xiaohongshu.com/api/sns/web/v2/comment/sub/page","policy":"DIRECT","unmodified_http":true},
     {"app":"小红书","surface":"web comments with query","url":"https://edith.xiaohongshu.com/api/sns/web/v2/comment/page?cursor=fixture","policy":"DIRECT","unmodified_http":true},
