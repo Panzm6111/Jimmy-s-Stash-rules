@@ -1,5 +1,5 @@
 """Service endpoints and Stash selectors; native URL tests remain the default fallback."""
-ROUTING_VERSION = 'ROUTE-20261112.2'
+ROUTING_VERSION = 'ROUTE-20261112.3'
 GPT_POOL = 'ai'
 TIKTOK_POOL = 'AI最速'
 ENDPOINTS = {GPT_POOL: 'https://chatgpt.com/', TIKTOK_POOL: 'https://www.tiktok.com/foryou'}

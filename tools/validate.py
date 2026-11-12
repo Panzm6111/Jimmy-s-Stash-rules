@@ -388,7 +388,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_other_and_all_nodes_do_not_hide_connection_candidates(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
-        self.assertEqual(len(self.groups), 23)
+        self.assertEqual(len(self.groups), 24)
         other = self.groups['其他地区']
         all_nodes = self.groups['自动节点']
         self.assertEqual(other['type'], 'url-test')
@@ -644,7 +644,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_curated_pools_and_choices(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
-        defaults = {'总代理':'最速节点', '手动节点':'REJECT', '海外AI':'ai',
+        defaults = {'总代理':'最速节点', '手动节点':'REJECT', '海外AI':'ai', 'Claude':'ai',
                     'TikTok':'AI最速', 'Netflix':'总代理', 'YouTube':'总代理',
                     'Telegram':'总代理', 'Apple':'DIRECT', 'Microsoft':'DIRECT', 'Adobe':'总代理',
                     '未匹配流量':'总代理', '国内直连':'DIRECT', '广告拦截':'REJECT'}

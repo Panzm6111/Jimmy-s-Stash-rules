@@ -6,6 +6,8 @@
 
 当前手机验收按[独立服务检测与截图指南](ROUTING.md#iphone-service-health)操作。以下保留 11 月 8 日的 DNS 排查依据；当时的成员及容差已由当前设置替代。
 
+Claude 网页版从 ROUTE-20261112.3 起使用独立的 `Claude` 选择组，默认 `ai`。主站、官方验证门户、第一方资源和用户内容的内置路由与域名解析设置见[网页版配置](ROUTING.md#claude-web)。
+
 ## Stash AI DNS 与地区报错（2026-11-08）
 
 `ROUTE-20261108.1 / AI-DNS-20261108.1` 使用 Stash iOS 3.6+ 的原生 DNS 功能。维护源为 [stash_ai_guard.py](../tools/stash_ai_guard.py)，由整合入口生成器调用；Clash生成时明确移除这层Stash专用配置，Clash入口维持原内容。

@@ -53,15 +53,15 @@
   },
   {
     "domain": "api.anthropic.com",
-    "policy": "海外AI"
+    "policy": "Claude"
   },
   {
     "domain": "claude.ai",
-    "policy": "海外AI"
+    "policy": "Claude"
   },
   {
     "domain": "files.claudeusercontent.com",
-    "policy": "海外AI"
+    "policy": "Claude"
   },
   {
     "domain": "gemini.google.com",

@@ -86,7 +86,8 @@ def main():
             api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
             check((runtime/'airport.yaml').exists(),'successful later download replaces startup fallback with a cache')
             check(state['airport_ua_matched']>0,'airport fetch requests Clash YAML through explicit client user agent')
-            check(len([n for n in groups if n.startswith('Jimmy · ')])==24,'23 application groups and one download failover group load')
+            check(len([n for n in groups if n.startswith('Jimmy · ')])==25,'24 policy groups and one download failover group load')
+            check(groups['Jimmy · Claude']['now']=='Jimmy · ai','Claude web has its own selector with the curated ai default')
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
             check(groups['Jimmy · 总代理']['now']=='Jimmy · 最速节点','initial default is automatic pool')

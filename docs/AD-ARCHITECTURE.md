@@ -1,6 +1,6 @@
 # Stash 去广告：当前实现、修复证据与排查规格
 
-当前分流：**ROUTE-20261112.2**，手机补充：**MOBILE-AD-20261102.1**，HTTP/JS：**AD-20261020.5**，继续使用原 `config/stash.yaml` 整合入口。本轮按用户指定的fmz200仓库补齐广告分支，43条原生动作、11份响应JS、1份自检JS，59个精确MITM主机（含自检example.com）。原分流、私人接入和签到暂停状态保留。来源逐项取舍见[fmz200接入明细](FMZ-INTEGRATION.md)，固定源码与哈希见[接入审计](../research/fmz-integration.json)。
+当前分流：**ROUTE-20261112.3**，手机补充：**MOBILE-AD-20261102.1**，HTTP/JS：**AD-20261020.5**，继续使用原 `config/stash.yaml` 整合入口。本轮按用户指定的fmz200仓库补齐广告分支，43条原生动作、11份响应JS、1份自检JS，59个精确MITM主机（含自检example.com）。原分流、私人接入和签到暂停状态保留。来源逐项取舍见[fmz200接入明细](FMZ-INTEGRATION.md)，固定源码与哈希见[接入审计](../research/fmz-integration.json)。
 
 `.4`手机截图显示阿里云盘结构不支持16次、HTTP失败1次，B站正文超限2次/无需修改4次/产生修改1次，菜鸟无需修改11次，京东产生修改1次；其他响应模块无记录。用户表示除贴吧外均打开过，无记录的App仍有广告。这排除了所有JS均未运行的假设；不能区分未命中、未解密、协议和缓存，原生拒绝也不进入响应计数。`.5`没有真机效果通过记录。
 
@@ -29,7 +29,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 12份JS通过`script-providers.<name>.url`引用本仓库原路径，并带公开`?v=AD-20261020.5`版本参数以与旧资源缓存区分，`interval: 86400`。刷新主配置取得新URL、主机和handler，脚本正文仍由Stash联网加载；自检页及观察行显示实际运行版本，下载成功不能冒充执行成功。新主机/handler必须刷新主配置。恢复的非空URL声明继续保留，不回到content-only；精确版本URL也加入发布后下载和字节校验。本轮补齐微博广告字段、相关主机与HTTP匹配；逐项范围见接入明细。
 
-首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部ROUTE-20261112.2、MOBILE-AD-20261102.1及AD-20261020.5，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
+首次更新：保留已能用的本机私人覆写和证书；停用额外App专项、旧整合“广告增强”、expanded及其同名副本；刷新**原主配置**并确认头部ROUTE-20261112.3、MOBILE-AD-20261102.1及AD-20261020.5，再重建连接。未添加过这些额外覆写就跳过停用步骤。私人URL不写进公共配置，不需要重填已生效的私人接入。
 
 **当前需求是整合入口，不设置逐App开关，也不另装expanded。** 主配置内的专项随主配置共同启用；额外覆写的启停不能撤销内置处理。“广告拦截→DIRECT”只控制域名路由，暂停HTTPS改写需关闭HTTP/MITM并重建连接。单App模块文件不是手机上的待安装清单。
 
@@ -159,7 +159,7 @@ AD-20261020.5补充：微博增加api/mapi的weibo.cn与weibo.com精确主机，
 | 项目 | 实际值 |
 |---|---|
 | app_modules | 40 |
-| public_main_rules | 50 |
+| public_main_rules | 56 |
 | basic_ad_payload | 38 |
 | expanded_ad_payload | 38,066 |
 | app_domain_rules | 19 |
@@ -715,8 +715,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `9baa31a12162584169c0d2284f6f54522416aba465b9ffc4d4f2dcf41247bd95` |
-| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `459ad34d515c297e68edfceddaec86e17b111294ad294d9bb578bbb82f2dec5b` |
+| [config/stash.yaml](../config/stash.yaml) | `2f8b6b6e857401ad478b0507bb9a9cdc10c9bd7c3d4fef1dc663d5969b61e94b` |
+| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `9e0abe20bc15114c89bc011ec1b22d70be1b5d70d1f68e9127c535c194d4077e` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |

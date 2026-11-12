@@ -120,7 +120,7 @@ class ClashChecks(unittest.TestCase):
         for key in ['proxies','proxy-providers','dns','tun','mixed-port']:
             self.assertEqual(merged[key],airport[key])
         names={g['name'] for g in merged['proxy-groups']}
-        self.assertEqual(len(names),23)
+        self.assertEqual(len(names),24)
         self.assertTrue(all(name.startswith('Jimmy · ') for name in names))
         self.assertNotIn('台湾',names)
 
@@ -156,7 +156,7 @@ class ClashChecks(unittest.TestCase):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         overlay=global_merge(source)
         self.assertEqual(full['proxy-groups'][:-1],overlay['proxy-groups'])
-        self.assertEqual(len(full['proxy-groups']),24)
+        self.assertEqual(len(full['proxy-groups']),25)
         download=full['proxy-groups'][-1]
         self.assertEqual(download['type'],'fallback')
         self.assertFalse(download['lazy'])

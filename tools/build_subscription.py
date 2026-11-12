@@ -105,8 +105,8 @@ def render():
     return ('#SUBSCRIBED ' + URL + '\n'
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
-            '# JIMMY-STASH ' + VERSION + '；25个策略组（含两个服务选择组）、私人订阅接入保留。\n'
-            f'# JIMMY-ROUTING {ROUTING_VERSION}；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。\n'
+            '# JIMMY-STASH ' + VERSION + '；26个策略组（含 Claude 网页与两个服务选择组）、私人订阅接入保留。\n'
+            f'# JIMMY-ROUTING {ROUTING_VERSION}；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。\n'
             '# AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。\n'
             '# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
@@ -141,7 +141,7 @@ def verify(text):
     for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider
         assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
-    assert len(config['proxy-groups']) == 25
+    assert len(config['proxy-groups']) == 26
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()
     # The published profile now has an intentionally fixed China-IP fallback.

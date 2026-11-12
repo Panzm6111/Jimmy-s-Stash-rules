@@ -1,6 +1,6 @@
 # 粘贴链接导入Stash
 
-当前主配置版本为 ROUTE-20261112.2。Stash 的 AI-DNS-20261108.1 需要 iOS 版 Stash 3.6+。请刷新原主配置；iPhone 的[独立服务检测需另外启用一次](ROUTING.md#iphone-service-health)。
+本页对应主配置 ROUTE-20261112.3，设备刷新后可在文件头核对版本。Stash 的 AI-DNS-20261108.1 需要 iOS 版 Stash 3.6+。请刷新原主配置；iPhone 的[独立服务检测需另外启用一次](ROUTING.md#iphone-service-health)。
 
 海外AI 的 ai 池为新加坡 A、荷兰、英国 B（250 ms）；TikTok 的 AI最速池另含日本 A/B、美国 C/D（100 ms）；总代理默认最速节点，为 HKG A/B/C/I/J/M、日本 A/B、荷兰、新加坡 A、英国 B（50 ms）。Stash 前两项分别经「GPT 服务优选」「TikTok 服务优选」，Clash 直接选对应池。
 
@@ -10,7 +10,7 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 ```
 
-Stash 整合入口含 25 个策略组，其中 10 个为自动测速池。HTTP/JS 版本 AD-20261020.5 包含 40 款专项、11 份响应脚本和 1 份手动自检脚本。
+Stash 整合入口含 26 个策略组，其中 10 个为自动测速池。HTTP/JS 版本 AD-20261020.5 包含 40 款专项、11 份响应脚本和 1 份手动自检脚本。
 
 `provider: url,payload, path are all empty`已在`.3`修复，用户确认可导入；若仍运行旧版，按[简明更新步骤](QUICKSTART.md)刷新原链接并重连。用户随后反馈开屏仍在，`.4`增加诊断以定位执行环节，没有把广告效果认定为已修复。原私人机场覆写与证书继续使用。
 

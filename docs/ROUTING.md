@@ -1,16 +1,28 @@
 # 分流与地区节点池
 
-## 当前分流与测速（ROUTE-20261112.2）
+## 当前分流与测速（ROUTE-20261112.3）
 
-Stash 有 25 个策略组（含两个独立服务选择组），Clash 有 23 个组另加 1 个隐藏下载回退组；两端各有 10 个自动测速池。两端分别加载 36、33 个规则集，分别有 26、25 个直订上游，两端合计 27 个独立上游地址。
+Stash 有 26 个策略组（含两个独立服务选择组），Clash 有 24 个组另加 1 个隐藏下载回退组；两端各有 10 个自动测速池。两端分别加载 36、33 个规则集，分别有 26、25 个直订上游，两端合计 27 个独立上游地址。
 
 三个精选池均设为每 60 秒主动检查；其余七个常规池的组配置为 1800 秒、50 ms。Clash 机场另每 60 秒做通用 HTTP 204 检查（5 秒超时）；ai 和 AI最速分别按 ChatGPT、TikTok 入口的 HTTP 200 记录独立健康状态。Stash 的原生测速结果按节点共用，启用本机服务检测后才会按业务分别判断。容差是两条健康线路之间的延迟差，不是故障等待时间。 Mihomo 中已固定的池应解除图钉。旧连接可能需要应用发起重连。
+
+<a id="claude-web"></a>
+
+### Claude 网页版
+
+在浏览器打开 [Claude](https://claude.ai/)。安装引导中选择“稍后安装”即可继续使用网页。规则模式下，Stash 的 `Claude` 和 Clash 的 `Jimmy · Claude` 默认选择精选 `ai` 池。这个独立入口适用于主站、登录、官方账户验证、静态资源和用户内容。要复核出口，可在客户端的连接记录中查看 `claude.ai`、`portal.anthropic.com`、`s-cdn.anthropic.com` 或 `assets-proxy.anthropic.com` 对应的策略链。全局模式下查看 `GLOBAL` 的实际选择。
+
+四条内置后缀覆盖 `claude.ai`、`claude.com`、`anthropic.com`、`claudeusercontent.com` 及其子域，顺序在基础广告之后、远程海外 AI 分类之前。即使 AI 分类尚未下载，网页仍有明确出口。第三方共用登录与验证站沿用各自规则。精选池的常规探测检查 ChatGPT；Claude 的登录、验证和回复要在网页分别确认。[Anthropic 官方网络域名](https://support.claude.com/en/articles/13198485-enforce-network-level-access-control-with-tenant-restrictions) · [用户内容域名说明](https://support.claude.com/en/articles/13065128-claude-in-chrome-admin-controls)
+
+需要客户端真实解析时，Stash 把这四个域交给两台加密 DNS（`1.0.0.1`、`8.8.4.4`），到这两个地址的连接通过 `Claude`。Clash 直接把这四个域的加密 DNS 请求绑定到 `Jimmy · Claude`。两端都用独立解析器查找代理服务器，手选 Claude 出口后，网页与该组 DNS 一起生效。[Stash DNS](https://stash.wiki/en/features/dns-server) · [Mihomo DNS](https://wiki.metacubex.one/en/config/dns/)
+
+如果网页显示“完成验证以继续”，请在网页内点击“打开验证门户”，由账户持有人完成 Anthropic 要求的步骤，再回到新对话确认能收到回复。
 
 <a id="iphone-service-health"></a>
 
 ### iPhone：让 GPT、TikTok 按服务自动切换
 
-1. 在 Stash 配置列表刷新并启用原主配置；文本开头应有 **ROUTE-20261112.2**。保留现有私人机场覆写，在**规则模式**连接。只更新机场或点测速，不会取得新策略。
+1. 在 Stash 配置列表刷新并启用原主配置；文本开头应有 **ROUTE-20261112.3**。保留现有私人机场覆写，在**规则模式**连接。只更新机场或点测速，不会取得新策略。
 2. 打开 **设置 → 外部访问 → 外部控制**，设置本机控制密钥，记下界面显示的端口。不要打开与此无关的「允许局域网代理」或做路由器端口转发。脚本只向手机自己的 `127.0.0.1` 发送密钥；外部控制的监听范围由 Stash 设置决定。
 3. 将[服务检测覆写](../examples/stash-service-health.stoverride)下载为本地文件，在 Stash 的覆写列表导入本地副本并启用。若显示**参数**（官方标注 iOS 3.7+ Beta），在那里填写端口、密钥，点**保存并应用**。若没有参数页，则在本地副本中删除从 `arguments-version:` 到 `cron:` 之前的参数声明（保留 `cron:`），将 `argument:` 一行改成 `argument: '{"port":9090,"secret":"在此填本机密钥"}'`；用自己的端口和 JSON 可正确表示的密钥。不要分享填写后的副本。定时模块无需新证书或解密账号流量。
 4. 在策略页逐项核对：**海外AI → GPT 服务优选 → ai**，**TikTok → TikTok 服务优选 → AI最速**，**总代理 → 最速节点**。前两项的最后一层也可能显示脚本已验证的具体节点，这是切换后的正常状态。旧手选可能保留；若业务选择器直接选了地区、裸节点或手动组，脚本尊重该选择。确认两个服务选择组都列得出对应机场节点。

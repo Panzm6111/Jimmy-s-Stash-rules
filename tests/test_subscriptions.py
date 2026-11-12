@@ -27,6 +27,8 @@ class Subscriptions(unittest.TestCase):
         with patch.object(v,'provider_rules',return_value=poisoned):
             for address in ['1.1.1.1','8.8.8.8']:
                 self.assertEqual(v.route(config,address=address,country='CN'),'海外AI')
+            for address in ['1.0.0.1','8.8.4.4']:
+                self.assertEqual(v.route(config,address=address,country='CN'),'Claude')
         for host in ['dns.alidns.com','doh.pub']:
             self.assertEqual(v.route(config,host,country='ZZ'),'DIRECT')
         groups={g['name']:g for g in config['proxy-groups']}
@@ -113,8 +115,35 @@ class Subscriptions(unittest.TestCase):
         self.assertEqual(source,before)
         clash=v.load('config/clash-verge-auto.yaml')
         self.assertNotIn('follow-rule',clash['dns'])
-        self.assertNotIn('nameserver-policy',clash['dns'])
+        self.assertNotIn('+.chatgpt.com',clash['dns']['nameserver-policy'])
         self.assertEqual(restored['dns'],v.merged()['dns'])
+
+    def test_claude_web_with_unavailable_providers_and_competing_ads(self):
+        from app_route_audit import decision
+        from stash_ai_guard import AI_RESOLVERS, CLAUDE_RESOLVERS
+        domains = ('claude.ai', 'anthropic.com', 'claude.com', 'claudeusercontent.com')
+        for filename, prefix in [('stash.yaml', ''), ('clash-verge-auto.yaml', 'Jimmy · ')]:
+            cfg = v.load('config/' + filename)
+            target = prefix + 'Claude'
+            groups = {g['name']: g for g in cfg['proxy-groups']}
+            self.assertEqual(groups[target]['proxies'][0], prefix + 'ai')
+            sets = {name: [] for name in cfg['rule-providers']}
+            for host in ('claude.ai', 'portal.anthropic.com', 's-cdn.anthropic.com',
+                         'assets-proxy.anthropic.com', 'claude.com', 'files.claudeusercontent.com'):
+                self.assertEqual(decision(cfg, sets, host)[:2], (target, 'inline'))
+            for host in ('claude.ai.example.org', 'notanthropic.com', 'accounts.google.com',
+                         'challenges.cloudflare.com', 'cdn.jsdelivr.net', 'chatgpt.com'):
+                self.assertNotEqual(decision(cfg, sets, host)[0], target)
+            sets['基础广告'] = ['DOMAIN,advertisement.claude.ai']
+            self.assertEqual(decision(cfg, sets, 'advertisement.claude.ai')[0], prefix + '广告拦截')
+            policy = cfg['dns']['nameserver-policy']
+            keys = {'+.' + host for host in domains}
+            if prefix:
+                self.assertEqual(set(policy), keys)
+                self.assertEqual(cfg['dns']['proxy-server-nameserver'], cfg['dns']['nameserver'])
+            expected = [r + '#' + target for r in AI_RESOLVERS] if prefix else list(CLAUDE_RESOLVERS)
+            for k in keys:
+                self.assertEqual(policy[k], expected)
 
     def test_policy_order_groups_and_http_unchanged_by_splitting_sets(self):
         from build_subscription import remote_integrated
