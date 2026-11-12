@@ -58,6 +58,45 @@ class Subscriptions(unittest.TestCase):
                 self.assertNotEqual(v.route(config,'chatgpt.com.attacker.invalid',country='CN'),'海外AI')
         self.assertEqual(v.route(config,'chatgpt.com','192.168.1.1'),'DIRECT')
 
+    def test_stash_service_override_is_private_and_reproducible(self):
+        from service_health import MANAGED, render_private_override
+        src = (ROOT/'examples/stash-service-health.stoverride').read_text(encoding='utf-8')
+        self.assertEqual(src, render_private_override(ROOT))
+        config = yaml.safe_load(src)
+        self.assertNotIn('cron', v.load('config/stash.yaml'))
+        self.assertNotIn('cron', v.load('config/clash-verge-auto.yaml'))
+        self.assertEqual(config['arguments-version'], 1)
+        self.assertTrue(config['arguments']['secret']['required'])
+        self.assertNotIn('default', config['arguments']['secret'])
+        cron, = config['cron']['script']
+        self.assertEqual(cron['cron'], '* * * * *')
+        self.assertEqual(cron['argument'], '{"port":${args.port|json},"secret":${args.secret|json}}')
+        params = config['script-providers'][cron['name']]
+        self.assertEqual(set(params), {'payload'})
+        self.assertEqual(params['payload'], (ROOT/'scripts/service-health.js').read_text(encoding='utf-8'))
+        groups = {g['name']:g for g in v.load('config/stash.yaml')['proxy-groups']}
+        import re
+        for selector, pool in MANAGED.items():
+            for candidate in ['新加坡 A','荷兰','英国 B','日本 A','美国 D','HKG A','DIRECT','无关']:
+                self.assertEqual(bool(re.search(groups[selector]['filter'],candidate)),
+                                 bool(re.search(groups[pool]['filter'],candidate)))
+            self.assertRegex(pool, groups[selector]['filter'])
+            self.assertNotRegex('REJECT', groups[selector]['filter'])
+
+    def test_both_service_routes_retain_offline_coverage_and_ad_priority(self):
+        from stash_ai_guard import AI_SUFFIXES, TIKTOK_ENTRY_HOSTS
+        from app_route_audit import decision
+        for config_name, prefix in [('stash', ''), ('clash-verge-auto', 'Jimmy · ')]:
+            cfg = v.load('config/' + config_name + '.yaml')
+            data = {k: [] for k in cfg['rule-providers']}
+            for key in AI_SUFFIXES:
+                self.assertEqual(decision(cfg, data, 'auth.' + key)[0], prefix + '海外AI')
+            for host in TIKTOK_ENTRY_HOSTS:
+                self.assertEqual(decision(cfg, data, host)[0], prefix + 'TikTok')
+            self.assertNotEqual(decision(cfg, data, 'www.tiktok.com.example.invalid')[0], prefix + 'TikTok')
+            data['TikTok广告'] = ['DOMAIN,www.tiktok.com']
+            self.assertEqual(decision(cfg, data, 'www.tiktok.com')[0], prefix + '广告拦截')
+
     def test_stash_guard_isolated_from_clash_and_private_provider(self):
         from stash_ai_guard import apply, for_clash
         from build_subscription import remote_integrated

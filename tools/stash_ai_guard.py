@@ -5,6 +5,7 @@ Keep this out of Mihomo: follow-rule is a Stash option, not respect-rules.
 """
 import copy
 from config_helpers import pool_tolerance_ms
+from service_health import add_stash_selectors
 
 AI_SUFFIXES = ('chatgpt.com', 'openai.com', 'oaistatic.com', 'oaiusercontent.com')
 AI_RESOLVERS = ('https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query')
@@ -16,7 +17,10 @@ DNS_ROUTES = (
     'DOMAIN,doh.pub,DIRECT',
 )
 CORE_ROUTES = tuple('DOMAIN-SUFFIX,' + host + ',海外AI' for host in AI_SUFFIXES)
-STASH_ONLY_ROUTES = DNS_ROUTES + CORE_ROUTES
+TIKTOK_ENTRY_HOSTS = ('www.tiktok.com', 'api16-normal-c-useast1a.tiktokv.com',
+                     'api16-normal-c-alisg.tiktokv.com', 'v16.tiktokcdn.com')
+TIKTOK_ROUTES = tuple('DOMAIN,' + host + ',TikTok' for host in TIKTOK_ENTRY_HOSTS)
+STASH_ONLY_ROUTES = DNS_ROUTES
 
 
 def apply(source):
@@ -35,14 +39,17 @@ def apply(source):
     dns['nameserver-policy'] = policy
     # Resolver IPs are dedicated to AI DNS here. Pin their traffic to exactly
     # the same selector as AI connections, before ads/GeoIP/MATCH can intercept.
-    config['rules'] = list(DNS_ROUTES) + config['rules']
+    config['rules'] = list(DNS_ROUTES) + [r for r in config['rules'] if r not in CORE_ROUTES + TIKTOK_ROUTES + DNS_ROUTES]
     # Preserve existing LAN/system exceptions. Core services remain proxied
     # even if an HTTP rule provider is empty/unavailable during startup.
     slot = config['rules'].index('RULE-SET,系统直连例外,DIRECT') + 1
     config['rules'][slot:slot] = CORE_ROUTES
+    slot = config['rules'].index('RULE-SET,TikTok广告,广告拦截') + 1
+    config['rules'][slot:slot] = TIKTOK_ROUTES
     for group in config['proxy-groups']:
         if group['type'] == 'url-test':
             group['tolerance'] = pool_tolerance_ms(group['name'])
+    add_stash_selectors(config)
     return config
 
 
@@ -50,13 +57,6 @@ def for_clash(source, baseline):
     """Retain the established Clash DNS/groups; do not copy Stash-only options."""
     config = copy.deepcopy(source)
     config['dns'] = copy.deepcopy(baseline['dns'])
-    baseline_groups = {g['name']: g for g in baseline['proxy-groups']}
-    for group in config['proxy-groups']:
-        if group['type'] == 'url-test':
-            original = baseline_groups.get(group['name'], {})
-            if 'tolerance' in original:
-                group['tolerance'] = original['tolerance']
-            else:
-                group.pop('tolerance', None)
+    config['proxy-groups'] = copy.deepcopy(baseline['proxy-groups'])
     config['rules'] = [r for r in config['rules'] if r not in STASH_ONLY_ROUTES]
     return config

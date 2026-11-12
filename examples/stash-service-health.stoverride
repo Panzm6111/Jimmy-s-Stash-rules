@@ -1,0 +1,163 @@
+# 导入本地副本，在「参数」中填写本机外部控制的端口与密钥。不要分享含密钥的截图。
+name: GPT 与 TikTok 服务检测
+desc: 每分钟通过当前出口分别检查 ChatGPT 和 TikTok。请在本设备填写控制端口与密钥。
+arguments-version: 1
+arguments:
+  port:
+    type: input
+    value-type: integer
+    title: 本机控制端口
+    default: 9090
+    minimum: 1
+    maximum: 65535
+  secret:
+    type: input
+    title: 本机控制密钥
+    description: 与「设置 → 外部访问」相同，请勿截图分享。
+    required: true
+cron:
+  script:
+    - name: jimmy-service-health
+      cron: '* * * * *'
+      timeout: 35
+      argument: '{"port":${args.port|json},"secret":${args.secret|json}}'
+script-providers:
+  jimmy-service-health:
+    payload: |
+      // Runs inside the iPhone VPN extension. Only the loopback controller receives the key.
+      const services = [
+        { name: 'GPT 服务优选', business: '海外AI', pool: 'ai', url: 'https://chatgpt.com/', tolerance: 250 },
+        { name: 'TikTok 服务优选', business: 'TikTok', pool: 'AI最速', url: 'https://www.tiktok.com/foryou', tolerance: 100 }
+      ];
+      const key = 'jimmy.service-health.v1';
+      const minute = 60000;
+
+      function request(method, options) {
+        return new Promise(resolve => {
+          $httpClient[method]({ 'auto-cookie': false, 'auto-redirect': false, ...options },
+            (error, response, data) => resolve({ error, response: response || {}, data }));
+        });
+      }
+
+      function localController(settings) {
+        if (!Number.isInteger(settings.port) || settings.port < 1 || settings.port > 65535 ||
+            typeof settings.secret !== 'string' || !settings.secret || settings.secret === 'REPLACE_ON_IPHONE' ||
+            /[\r\n]/.test(settings.secret)) throw Error('settings');
+        return async function control(path, selection) {
+          const headers = { Authorization: 'Bearer ' + settings.secret, 'X-Stash-Selected-Proxy': 'DIRECT', 'Cache-Control': 'no-store, no-cache' };
+          const options = { url: 'http://127.0.0.1:' + settings.port + path, headers, timeout: 3 };
+          if (selection !== undefined) {
+            headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify({name: selection});
+          }
+          const result = await request(selection === undefined ? 'get' : 'put', options);
+          const status = Number(result.response.status || result.response.statusCode);
+          if (result.error || !(status >= 200 && status < 300)) throw Error('controller');
+          return selection === undefined ? JSON.parse(result.data) : null;
+        };
+      }
+
+      async function probe(service, node) {
+        const start = Date.now();
+        const {error, response} = await request('head', {url: service.url, timeout: 6,
+          headers: {'X-Stash-Selected-Proxy': encodeURIComponent(node), 'Cache-Control':'no-store, no-cache'}});
+        const status = Number(response.status || response.statusCode || 0);
+        const headers = Object.fromEntries(Object.entries(response.headers || {}).map(([k,v]) => [k.toLowerCase(), String(v)]));
+        if (status === 429 || headers['retry-after']) {
+          const retry = headers['retry-after'] || '';
+          const duration = /^\d+$/.test(retry) ? Number(retry) * 1000 : Date.parse(retry) - start;
+          return {kind: 'backoff', until: start + Math.max(5 * minute, Number.isFinite(duration) ? duration : 0)};
+        }
+        if (status === 401 || status === 403 || headers['cf-mitigated'] === 'challenge') return {kind: 'unknown'};
+        if (error || !status || status >= 500) return {kind: 'down'};
+        if (status === 200 && /^text\/html\b/i.test(headers['content-type'] || '')) return {kind: 'up', ms: Date.now() - start};
+        return {kind: 'unknown'};
+      }
+
+      function report(service, state, status) {
+        if (state.status !== status) console.log(service.name + ' | ' + status);
+        state.status = status;
+      }
+
+      async function evaluate(service, state, groups, control, now) {
+        const group = groups[service.name], pool = groups[service.pool];
+        if (groups[service.business]?.now !== service.name || !Array.isArray(group?.all) || !Array.isArray(pool?.all)) {
+          // Keep a server's Retry-After even if the user temporarily selects a different policy.
+          state.failures = 0;
+          return;
+        }
+        if (now < (state.backoff || 0)) return;
+        const candidates = pool.all.filter(n => n !== 'REJECT' && n !== 'DIRECT' && group.all.includes(n));
+        const before = group.now;
+        const current = before === service.pool ? pool.now : before;
+        if (!candidates.length) { state.failures = 0; report(service, state, '没有候选节点'); return; }
+        const result = candidates.includes(current) ? await probe(service, current) : {kind:'down'};
+        function pause(sample) {
+          state.failures = 0;
+          state.backoff = sample.until;
+          report(service, state, '服务要求稍后重试');
+        }
+        async function select(target) {
+          // A user may change policy, or a provider may refresh, while requests are in flight.
+          const [freshConfig, freshGroups] = await Promise.all([control('/configs'),control('/proxies')]);
+          const fresh = freshGroups.proxies;
+          if (freshConfig.mode?.toLowerCase() !== 'rule' || fresh[service.business]?.now !== service.name || fresh[service.name]?.now !== before ||
+              !fresh[service.name]?.all?.includes(target) || fresh[service.pool]?.now !== pool.now ||
+              (target !== service.pool && !fresh[service.pool]?.all?.includes(target))) return;
+          await control('/proxies/' + encodeURIComponent(service.name), target);
+          state.failures = 0;
+          state.review = now + 5 * minute;
+          report(service, state, '自动选择 ' + target);
+        }
+        if (result.kind === 'backoff') { pause(result); return; }
+        if (result.kind === 'unknown') { state.failures = 0; report(service, state, '响应无法确认，保留出口'); return; }
+        if (result.kind === 'up') {
+          state.failures = 0;
+          report(service, state, '入口可达 · ' + current);
+          if (before === service.pool || now < (state.review || 0)) return;
+          state.review = now + 5 * minute;
+          if (pool.now === current) { await select(service.pool); return; }
+          if (!candidates.includes(pool.now)) return;
+          const preferred = await probe(service, pool.now);
+          if (preferred.kind === 'backoff') { pause(preferred); return; }
+          if (preferred.kind === 'up' && result.ms - preferred.ms > service.tolerance) await select(service.pool);
+          return;
+        }
+
+        if (state.node !== current || now - (state.last || 0) > 150000 || now < state.last) state.failures = 0;
+        // Re-running within the same tick cannot turn one observed failure into two.
+        if (state.node === current && state.failures && now - state.last < 30000) return;
+        state.last = now;
+        state.node = current;
+        state.failures = (state.failures || 0) + 1;
+        report(service, state, '入口失败 · ' + current);
+        if (state.failures < 2) return;
+        const alternatives = candidates.filter(n => n !== current);
+        if (!alternatives.length) return;
+        const offset = (state.cursor || 0) % alternatives.length;
+        const batch = alternatives.concat(alternatives).slice(offset, offset + Math.min(2, alternatives.length));
+        state.cursor = (offset + batch.length) % alternatives.length;
+        const samples = await Promise.all(batch.map(async n => ({n, ...await probe(service, n)})));
+        const limited = samples.find(s => s.kind === 'backoff');
+        if (limited) { pause(limited); return; }
+        const best = samples.filter(s => s.kind === 'up').sort((a,b) => a.ms - b.ms)[0];
+        if (best) await select(best.n === pool.now ? service.pool : best.n);
+        else report(service, state, '本轮无已验证备用，保留原选择');
+      }
+
+      async function main() {
+        const control = localController(JSON.parse($argument));
+        const raw = $persistentStore.read(key);
+        let state;
+        try { state = JSON.parse(raw || '{}') || {}; } catch (_) { state = {}; }
+        if ((await control('/configs')).mode?.toLowerCase() !== 'rule') return;
+        const groups = (await control('/proxies')).proxies;
+        await Promise.all(services.map(async service => {
+          const record = state[service.name] || (state[service.name] = {});
+          try { await evaluate(service, record, groups, control, Date.now()); }
+          catch (_) { report(service, record, '本机读取或切换失败'); }
+        }));
+        $persistentStore.write(JSON.stringify(state), key);
+      }
+
+      main().catch(() => console.log('服务检测未启动，请核对本机控制端口、密钥和规则模式。')).finally(() => $done());

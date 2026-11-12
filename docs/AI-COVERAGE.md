@@ -2,7 +2,9 @@
 
 2026-10-29起，两端的 `海外AI` 直接使用社区维护的完整分类：MetaCubeX 的 `category-ai-!cn` 与 Sukka 的 `Source/non_ip/ai.conf`，只做兼容格式转换和去重。当前两份来源分别213条、55条，合并为231条；原 [rules/openai.yaml](../rules/openai.yaml) 地址保持不变。来源、提交、许可和逐文件哈希见 [community-sources.json](../research/community-sources.json)。
 
-海外AI 默认选 ai（新加坡 A、荷兰、英国 B，250 ms）。TikTok 默认选 AI最速（这三条加日本 A/B、美国 C/D，100 ms）。总代理默认选最速节点（HKG A/B/C/I/J/M、日本 A/B、荷兰、新加坡 A、英国 B，50 ms）。 AI 分流无需 MITM。Clash 组名带 Jimmy · 前缀。
+海外AI 的 ai 池为新加坡 A、荷兰、英国 B（250 ms）；TikTok 的 AI最速池另含日本 A/B、美国 C/D（100 ms）；总代理默认最速节点，为 HKG A/B/C/I/J/M、日本 A/B、荷兰、新加坡 A、英国 B（50 ms）。Stash 前两项分别经「GPT 服务优选」「TikTok 服务优选」，Clash 直接选对应池。 AI 分流无需 MITM。Clash 组名带 Jimmy · 前缀。
+
+当前手机验收按[独立服务检测与截图指南](ROUTING.md#iphone-service-health)操作。以下保留 11 月 8 日的 DNS 排查依据；当时的成员及容差已由当前设置替代。
 
 ## Stash AI DNS 与地区报错（2026-11-08）
 
@@ -11,7 +13,7 @@
 - ChatGPT的 `chatgpt.com`、`openai.com`、`oaistatic.com`、`oaiusercontent.com` 及子域名有本地路由保护，位于原系统/LAN例外之后、广告与国内总分类之前；即使远程AI规则集未加载，也不会因该缺失落入国内IP直连。其他AI服务仍使用完整上游分类。
 - 上述四类域名及两份AI集合的**本地真实DNS解析**指定Cloudflare/Google的IP地址DoH，启用 `follow-rule`，对应两个解析器IP在规则首部固定走 `海外AI`。不与国内DNS并发争抢结果，不为AI增加国内回退。`海外AI` 仍须选代理出口；人为选择DIRECT、其他覆写或直连模式可以改变结果。
 - 普通域名保留阿里/腾讯DoH；为两个DNS主机增加固定DIRECT路由。bootstrap和代理节点域名使用独立的、直接连接的国内IP地址DoH，避免“连接代理需要DNS、DNS又需要代理”的循环。国内解析商仍会看到这些bootstrap/节点及普通域名查询，不能把此方案称作全设备零DNS泄露。通过代理按域名建连时，最终解析仍可能由节点侧完成。
-- Stash 与 Clash 的 AI 自动池切换容差均为 100 ms，其余七个自动池均为 50 ms，减少相近延迟导致的频繁切换。`ai` 仍在日本/美国/台湾中选优，Google 204测速不验证ChatGPT地区、登录或出口信誉；容差不保证不换IP。节点名称也不是出口所在地的证明。
+- 当时通过通用延迟判断健康，不能验证 ChatGPT 地区、登录或出口信誉；现在的服务入口检查也不验证账号或模型回复。节点名称也不是出口所在地的证明。
 
 依据：[Stash内置DNS](https://stash.wiki/features/dns-server)、[Stash策略组](https://stash.wiki/proxy-protocols/proxy-groups)。本地生成、路由模型和回归通过不等同于iPhone原生DNS或ChatGPT实测通过。
 

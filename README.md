@@ -7,7 +7,7 @@
 | Stash | [config/stash.yaml](config/stash.yaml) |
 | Clash Verge | [config/clash-verge-auto.yaml](config/clash-verge-auto.yaml) |
 
-当前分流版本为 ROUTE-20261112.1。海外AI 默认选 ai（新加坡 A、荷兰、英国 B，250 ms）。TikTok 默认选 AI最速（这三条加日本 A/B、美国 C/D，100 ms）。总代理默认选最速节点（HKG A/B/C/I/J/M、日本 A/B、荷兰、新加坡 A、英国 B，50 ms）。 Netflix、YouTube、Telegram、Adobe 和未匹配流量默认跟随总代理。Apple、Microsoft、国内直连默认 DIRECT，广告拦截默认 REJECT。已有设备会记住手选结果，刷新主订阅后请核对这三个业务入口。 [测速与故障切换说明](docs/ROUTING.md)。
+当前分流版本为 ROUTE-20261112.2。海外AI 的 ai 池为新加坡 A、荷兰、英国 B（250 ms）；TikTok 的 AI最速池另含日本 A/B、美国 C/D（100 ms）；总代理默认最速节点，为 HKG A/B/C/I/J/M、日本 A/B、荷兰、新加坡 A、英国 B（50 ms）。Stash 前两项分别经「GPT 服务优选」「TikTok 服务优选」，Clash 直接选对应池。 Netflix、YouTube、Telegram、Adobe 和未匹配流量默认跟随总代理。Apple、Microsoft、国内直连默认 DIRECT，广告拦截默认 REJECT。已有设备会记住手选结果，刷新主订阅后请核对这三个业务入口。 [iPhone 一次设置服务检测及故障截图指南](docs/ROUTING.md#iphone-service-health)。
 
 ## 使用
 

@@ -20,6 +20,7 @@ import uuid
 import yaml
 
 from config_helpers import dump, flatten
+from service_health import MANAGED
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
 CURATED = ('ai', 'AI最速', '最速节点')
@@ -76,7 +77,8 @@ def verify(config, template, expected_nodes):
     groups = config['proxy-groups']
     names = [g['name'] for g in groups]
     node_names = {n['name'] for n in expected_nodes}
-    require(len(names) == len(set(names)) == 23, '策略组数量或唯一性异常。')
+    require(len(names) == len(set(names)) == len(template['proxy-groups']), '策略组数量或唯一性异常。')
+    require(set(names) == {g['name'] for g in template['proxy-groups']}, '策略组与模板不符。')
     require(not (set(names) & node_names), '节点与策略重名。')
     targets = set(names) | node_names | BUILTINS
     graph = {}
@@ -96,7 +98,7 @@ def verify(config, template, expected_nodes):
     by_name = {g['name']: g for g in groups}
     template_groups = {g['name']: g for g in template['proxy-groups']}
     for name, group in template_groups.items():
-        if group['type'] == 'select' and name != '手动节点':
+        if group['type'] == 'select' and name not in {'手动节点', *MANAGED}:
             require('ai' in by_name[name]['proxies'], '选择组缺少ai选项。')
             require(by_name[name]['proxies'][0] == group['proxies'][0], '选择组默认选项改变。')
     require(not ({'全部节点', 'OpenAI'} & set(names)), '仍有旧策略组名称。')
@@ -132,7 +134,11 @@ def verify(config, template, expected_nodes):
     require(set(by_name['其他地区']['proxies']) - {'REJECT'} == node_names - union,
             '其他地区不是五地区的补集。')
     require(by_name['总代理']['proxies'][0] == '最速节点', '总代理默认项错误。')
-    require(by_name['海外AI']['proxies'][0] == 'ai', '海外 AI 默认项错误。')
+    for selector, pool in MANAGED.items():
+        if selector in template_groups:
+            expected_members = [pool] + [n['name'] for n in expected_nodes if re.search(template_groups[pool]['filter'], n['name'])]
+            require(by_name[selector]['proxies'] == expected_members, '服务选择组候选或顺序错误。')
+    require(by_name['海外AI']['proxies'][0] == template_groups['海外AI']['proxies'][0], '海外 AI 默认项错误。')
     for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):
         require(by_name[name]['proxies'][0] == '总代理', '软件未默认跟随总代理。')
     for name in ('Apple', 'Microsoft'):
@@ -209,6 +215,9 @@ def compose(source, template=None):
                 group['type'] = 'select'
                 for key in PROBE_FIELDS:
                     group.pop(key, None)
+        elif name in MANAGED:
+            native = MANAGED[name]
+            group['proxies'] = [native, *pool_nodes[native]]
         elif name == '手动节点':
             group['proxies'] = all_names + ['REJECT']
         elif expanded:
@@ -234,9 +243,9 @@ def compose(source, template=None):
 def render(config):
     return ('# JIMMY-STASH 本机私人节点快照；含连接凭据，不公开、不提交、不转发。\n'
             '# 本文件可直接作为主配置导入，不需要私人覆写或替换订阅URL。\n'
-            '# 首次导入：总代理选择自动节点或有节点的地区；使用规则模式。\n'
+            '# 首次导入：总代理默认最速节点；使用规则模式。\n'
             '# 自动节点和地区池按 URL 测试延迟选最快节点；其他地区为五地区以外的全部候选。\n'
-            '# 海外AI 默认美国，Apple 默认直连；测速不代表解锁，不跨地区兜底。\n'
+            '# 海外AI 使用精选候选，Apple 默认直连；可配合本机服务检测覆写使用。\n'
             '# 不含机场旧DNS/分流/控制端口；连接字段原样保留，重名节点仅加显示前缀。\n'
             '# 本地节点和内嵌规则不会自动跟随机场/公共配置更新，需要重新合成。\n'
             '# 已包含全部现有广告专项；JS通过原生URL联网加载，不再叠加广告覆写。\n'

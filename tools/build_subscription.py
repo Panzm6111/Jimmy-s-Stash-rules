@@ -8,6 +8,8 @@ from config_helpers import flatten, dump, script_references
 from validate import ROOT, RAW, load, merged, merge_model, route, validate_structure
 from scan_secrets import inspect
 
+from service_health import ROUTING_VERSION, render_private_override
+
 OUTPUT = 'config/stash.yaml'
 URL = RAW + OUTPUT
 VERSION = 'AD-20261020.5'
@@ -103,8 +105,8 @@ def render():
     return ('#SUBSCRIBED ' + URL + '\n'
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
-            '# JIMMY-STASH ' + VERSION + '；23个策略组（含三个精选池）、私人订阅接入保留。\n'
-            '# JIMMY-ROUTING ROUTE-20261112.1；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。\n'
+            '# JIMMY-STASH ' + VERSION + '；25个策略组（含两个服务选择组）、私人订阅接入保留。\n'
+            f'# JIMMY-ROUTING {ROUTING_VERSION}；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。\n'
             '# AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。\n'
             '# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
@@ -139,7 +141,7 @@ def verify(text):
     for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider
         assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
-    assert len(config['proxy-groups']) == 23
+    assert len(config['proxy-groups']) == 25
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()
     # The published profile now has an intentionally fixed China-IP fallback.
@@ -168,7 +170,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write', action='store_true')
     args = parser.parse_args()
-    for name, body in remote_payload_documents().items():
+    documents = remote_payload_documents()
+    documents['examples/stash-service-health.stoverride'] = render_private_override(ROOT)
+    for name, body in documents.items():
         path = ROOT/name
         if args.write:
             path.write_text(body,encoding='utf-8',newline='\n')

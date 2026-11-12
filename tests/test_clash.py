@@ -83,7 +83,7 @@ class ClashChecks(unittest.TestCase):
             pool = groups[prefix+'ai']
             self.assertEqual(pool['type'], 'url-test')
             self.assertEqual(pool['interval'], 60)
-            self.assertEqual(pool['url'], 'https://www.gstatic.com/generate_204')
+            self.assertEqual(pool['url'], 'https://chatgpt.com/')
             for name, expected in [('新加坡 A',True),('荷兰',True),('英国 B',True),('US01',False),('JP01',False),('SG01',False),('新加坡 SG 02',False),('🇸🇬 Singapore',False),('TW01',False),('HK01',False),('DIRECT',False)]:
                 self.assertEqual(bool(re.search(pool['filter'],name)),expected)
             for group in groups.values():
@@ -102,7 +102,7 @@ class ClashChecks(unittest.TestCase):
         self.assertEqual(len(clash['rule-providers']),36)
         self.assertEqual(len({p['path'] for p in clash['rule-providers'].values()}),36)
         self.assertTrue(all(p['type']=='http' and p['behavior'] in {'classical','domain'} and p['interval']==86400 for p in clash['rule-providers'].values()))
-        self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH'} for r in clash['rules']))
+        self.assertTrue(all(r.split(',')[0] in {'RULE-SET','GEOIP','MATCH','DOMAIN','DOMAIN-SUFFIX'} for r in clash['rules']))
 
 
 
@@ -187,7 +187,7 @@ class ClashChecks(unittest.TestCase):
         for g in pools:
             self.assertTrue(g['hidden']);self.assertTrue(g['include-all'])
             self.assertEqual(g['tolerance'],{'Jimmy · ai':250,'Jimmy · AI最速':100}.get(g['name'],50))
-            self.assertEqual(g['expected-status'],204)
+            self.assertEqual(g['expected-status'],200 if g['name'] in {'Jimmy · ai','Jimmy · AI最速'} else 204)
         for g in full['proxy-groups']:
             if g['type']!='select':continue
             if g['name']=='Jimmy · 手动节点':self.assertTrue(g['include-all'])

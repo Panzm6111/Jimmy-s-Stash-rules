@@ -664,11 +664,15 @@ class ProjectChecks(unittest.TestCase):
                 self.assertEqual({n for n in universe if re.search(groups[name]['filter'],n)}, members)
             for name in fixtures['other'] + fixtures['negative'] + fixtures['info'] + ['DIRECT', 'ai']:
                 self.assertNotRegex(name, pool['filter'])
+            expected_defaults = defaults.copy()
+            if 'GPT 服务优选' in groups:
+                expected_defaults.update({'海外AI':'GPT 服务优选', 'TikTok':'TikTok 服务优选',
+                                          'GPT 服务优选':'ai', 'TikTok 服务优选':'AI最速'})
             self.assertEqual({g['name']:g['proxies'][0] for g in groups.values()
-                              if g['type']=='select'}, defaults)
+                              if g['type']=='select'}, expected_defaults)
             for group in groups.values():
                 self.assertNotIn('日本+美国', group['proxies'])
-                self.assertEqual(group['proxies'].count('ai'), int(group['type']=='select' and group['name']!='手动节点'))
+                self.assertEqual(group['proxies'].count('ai'), int(group['type']=='select' and group['name'] not in {'手动节点','TikTok 服务优选'}))
 
     def test_social_routes_share_tiktok_policy(self):
         self.assertEqual(self.groups['TikTok']['proxies'][0], 'AI最速')
@@ -764,7 +768,7 @@ def main():
     args = parser.parse_args()
     result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(ProjectChecks))
     if not result.wasSuccessful(): return 1
-    node = subprocess.run(['node', '--test', *[str(p) for p in sorted((ROOT / 'tests').glob('ads*.test.cjs'))]], cwd=ROOT,
+    node = subprocess.run(['node', '--test', *[str(p) for p in sorted((ROOT / 'tests').glob('*.test.cjs'))]], cwd=ROOT,
                           env=dict(os.environ, PYTHON=sys.executable, PYTHONUTF8='1'))
     if node.returncode: return node.returncode
     scan = subprocess.run([sys.executable, str(ROOT / 'tools/scan_secrets.py'), '--history'], cwd=ROOT)

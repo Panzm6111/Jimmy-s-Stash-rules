@@ -54,7 +54,10 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertEqual(groups['其他地区']['proxies'], ['未收录的远方线路', 'REJECT'])
         self.assertEqual(len(groups['自动节点']['proxies']), 4)
         self.assertEqual(groups['总代理']['proxies'][0], '最速节点')
-        self.assertEqual(groups['海外AI']['proxies'][0], 'ai')
+        self.assertEqual(groups['海外AI']['proxies'][0], 'GPT 服务优选')
+        self.assertEqual(groups['TikTok']['proxies'][0], 'TikTok 服务优选')
+        self.assertEqual(groups['GPT 服务优选']['proxies'][0], 'ai')
+        self.assertEqual(groups['TikTok 服务优选']['proxies'][0], 'AI最速')
         self.assertEqual(groups['Apple']['proxies'][0], 'DIRECT')
         self.assertFalse(report['subscription_auto_update'])
         self.assertFalse(report['native_stash_tested'])
@@ -185,7 +188,7 @@ class PrivateConfigChecks(unittest.TestCase):
         self.assertIn('SG01', groups['新加坡']['proxies'])
         self.assertNotIn('香港01', groups['ai']['proxies'])
         for group in self.template['proxy-groups']:
-            if group['type'] == 'select' and group['name'] != '手动节点':
+            if group['type'] == 'select' and group['name'] not in {'手动节点', 'GPT 服务优选','TikTok 服务优选'}:
                 self.assertIn('ai', groups[group['name']]['proxies'])
         for forbidden in ('SG01', '香港01', 'DIRECT', 'ai', '日本'):
             broken = copy.deepcopy(config)

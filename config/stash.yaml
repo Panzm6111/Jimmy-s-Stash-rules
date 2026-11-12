@@ -1,8 +1,8 @@
 #SUBSCRIBED https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
-# JIMMY-STASH AD-20261020.5；23个策略组（含三个精选池）、私人订阅接入保留。
-# JIMMY-ROUTING ROUTE-20261112.1；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。
+# JIMMY-STASH AD-20261020.5；25个策略组（含两个服务选择组）、私人订阅接入保留。
+# JIMMY-ROUTING ROUTE-20261112.2；AI加密DNS跟随海外AI，核心域名本地保护；36个远程规则集。
 # AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。
 # JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
@@ -196,6 +196,7 @@ proxy-groups:
 - name: 海外AI
   type: select
   proxies:
+  - GPT 服务优选
   - ai
   - 美国
   - 总代理
@@ -217,6 +218,7 @@ proxy-groups:
 - name: TikTok
   type: select
   proxies:
+  - TikTok 服务优选
   - AI最速
   - 美国
   - 总代理
@@ -386,6 +388,22 @@ proxy-groups:
     ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
     ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
     ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: GPT 服务优选
+  type: select
+  proxies:
+  - ai
+  use:
+  - 机场
+  filter: (?i)^(新加坡 A|荷兰|英国 B|ai)$
+  interval: -1
+- name: TikTok 服务优选
+  type: select
+  proxies:
+  - AI最速
+  use:
+  - 机场
+  filter: (?i)^(新加坡 A|荷兰|英国 B|日本 [AB]|美国 [CD]|AI最速)$
+  interval: -1
 rules:
 - IP-CIDR,1.1.1.1/32,海外AI,no-resolve
 - IP-CIDR,8.8.8.8/32,海外AI,no-resolve
@@ -398,6 +416,10 @@ rules:
 - DOMAIN-SUFFIX,oaiusercontent.com,海外AI
 - RULE-SET,广告路径例外,DIRECT
 - RULE-SET,TikTok广告,广告拦截
+- DOMAIN,www.tiktok.com,TikTok
+- DOMAIN,api16-normal-c-useast1a.tiktokv.com,TikTok
+- DOMAIN,api16-normal-c-alisg.tiktokv.com,TikTok
+- DOMAIN,v16.tiktokcdn.com,TikTok
 - RULE-SET,TikTok核心,TikTok
 - RULE-SET,App广告域名,广告拦截
 - RULE-SET,小红书直连,DIRECT
