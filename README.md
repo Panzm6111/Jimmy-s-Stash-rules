@@ -35,7 +35,7 @@ Stash 26份、Clash 25份兼容规则直订维护中的上游，间隔24小时�
 
 ## 需求、沟通和维护源
 
-- 唯一状态主文档：[PROGRESS.md](PROGRESS.md)。确认需求、关键取舍、沟通和历史证据原文继续保留。
+- 统一主文档：[PROGRESS.md](PROGRESS.md)。Stash / Clash规则维护、调试结论、进度与历史共用这一份；确认需求、关键取舍、沟通和历史证据原文继续保留。
 - 需求与实现规格：[AD-ARCHITECTURE](docs/AD-ARCHITECTURE.md)、[App范围](docs/APP-INVENTORY.md)、[分流](docs/ROUTING.md)、[AI覆盖](docs/AI-COVERAGE.md)。
 - 来源、许可和验证证据：[SOURCES](docs/SOURCES.md)、[COMMUNITY-SOURCES](docs/COMMUNITY-SOURCES.md)、[research](research/)、[licenses](licenses/)。
 - `templates/stash-main.yaml`、`templates/stash-core.stoverride`和`modules/`是生成最新版的维护源，不是另一套安装版本。`rules/`、`scripts/`是最新配置的依赖；`tools/`、`tests/`负责生成、转换和验证，不能只保留两个YAML而删除这些依赖。

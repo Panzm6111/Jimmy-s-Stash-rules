@@ -2,7 +2,7 @@
 
 <!-- project-main: PROGRESS.md -->
 
-- 本目录是已有 Jimmy-s-Stash-rules 仓库，唯一状态主文件为 [PROGRESS.md](PROGRESS.md)。先读顶部六节，再按任务阅读历史；README只作使用导航，不另建PROJECT.md、同名仓库或平行进度台账。
+- 本目录是已有 Jimmy-s-Stash-rules 仓库，统一主文件为 [PROGRESS.md](PROGRESS.md)，Stash / Clash的规则维护、调试结论、进度和历史共用这一份，不另立平行调试记录。先读顶部六节，再按任务阅读历史；README只作使用导航，不另建PROJECT.md、同名仓库或平行进度台账。
 - 开工核对项目根、适用规则、Git分支、暂存区、未提交及未跟踪文件。保留其他会话和用户内容；以最新已确认需求及实际文件决定范围。
 - 用户说“更新”即要求同轮更新 Stash 和 Clash。两端均须核对实现、验证和发布状态。只有客户端能力确实无法实现时才允许单端例外，并在 PROGRESS.md 说明受限端、原因及影响。
 - 本地接续目录为 `D:\Codex workspace\VPN rules`；原Documents/GitHub目录只作为历史参照，未经任务要求不对其同步或清理。

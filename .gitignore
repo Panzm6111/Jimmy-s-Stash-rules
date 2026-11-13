@@ -25,3 +25,6 @@ __pycache__/
 .DS_Store
 # 可重建的公开下载包；私人填好后的配置仍只留在设备。
 dist/
+# Machine-specific performance receipts remain local; reusable code is versioned.
+/research/clash-monitor-setup-20261108.json
+/research/performance-review-20261107.json

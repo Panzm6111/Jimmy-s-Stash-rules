@@ -1,0 +1,80 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>节点稳定性监测</title><style>/*STYLE*/</style>
+<main><header><h1>节点稳定性监测</h1><p id="window">正在读取本机数据库…</p><progress id="progress" max="100" value="0" style="width:100%;accent-color:#176b52" aria-label="当前监测窗口已用时间"></progress><p id="remaining"></p></header>
+<section><h2>采集状态</h2><p>原评分使用节点责任归因口径；“未知”包含已超时但责任不明的请求。实际请求成功率请看生成的报告。</p><p id="health"></p><p id="capacity"></p></section>
+<section><h2>节点归因排名</h2><label>时段 <select id="period"><option>全部</option><option>白天</option><option>晚间</option><option>凌晨</option></select></label>
+<p id="qualify"></p><div id="top"></div></section>
+<section data-guest><h2>ChatGPT 匿名访客页面 · 半小时检查</h2><p id="guestWindow"></p><p>OK 表示官网匿名应用已加载、输入框可编辑并持续就绪。NG 表示明确的地区限制。实际对话未验证。按同一 Provider 和节点名称关联历史 8 KiB 首页成绩，配置更新前后的原始身份可在下表查看。</p><div id="guestTable"></div></section>
+<section><h2>全部节点</h2><p id="gptComparison"></p><label><input id="retired" type="checkbox"> 包括已退出的配置版本</label><div id="all"></div></section>
+<section><h2>单节点详情</h2><label>节点 <select id="node"></select></label><p id="compare"></p>
+<div data-guest><h3>ChatGPT 匿名访客访问判定</h3><p><strong id="visitorVerdict"></strong></p></div><div id="target"></div><div data-gpt><h3>ChatGPT 首页连接记录 · 8 KiB 抽样</h3><p>每次通过指定节点请求 https://chatgpt.com/。当前每节点目标间隔为 7 分 30 秒，全组共用一个专项名额。旧条件为握手 3 秒、全程 5 秒，新条件为握手 5 秒、全程 7 秒。HTTP 200 表示官网入口返回了成功响应；首页标记仅检查前 8 KiB。账号登录、发送消息和持续收到模型回复属于后续步骤。</p><p id="gptTotal"></p><div id="gptDetail"></div></div><h3>成功请求延迟趋势</h3><p>每十分钟的 P50 分桶上限（ms）。绿色为 Google，蓝色为 Cloudflare。</p><svg id="trend" viewBox="0 0 800 150" role="img" aria-label="双目标延迟趋势"></svg>
+<h3>最近异常观测</h3><div id="fail"></div><h3>候选连接复用及传输记录</h3><div id="extra"></div></section>
+</main><script>
+const $=id=>document.getElementById(id),fmt=t=>t?new Date(t*1000).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'—';
+const pct=n=>n==null?'—':(n*100).toFixed(1)+'%',mib=n=>(n/1048576).toFixed(0);
+let current;
+function table(id,head,rows){
+ let table=document.createElement('table'),h=table.createTHead().insertRow(),body=table.createTBody();
+ for(const key of head){let th=document.createElement('th');th.textContent=key;h.append(th)}
+ for(const row of rows){let tr=body.insertRow();for(const x of row)tr.insertCell().textContent=x??'—'}
+ $(id).replaceChildren(table);
+}
+function render(){
+ const s=current,e=s.env,now=Date.now()/1000,age=now-s.at,visible=x=>x.active!==false||$('retired').checked,rows=s.ranks[$('period').value].filter(visible),good=rows.filter(x=>x.eligible);
+ $('window').textContent=(s.phase==='pressure'?'30 分钟压力验证':'72 小时正式观测')+' · '+s.state+' · 已运行 '+((Math.min(now,s.end)-s.start)/3600).toFixed(2)+' 小时 · '+fmt(s.start)+' 至 '+fmt(s.end)+'（北京）';
+ let left=Math.max(0,Math.ceil(s.end-now)),fraction=Math.min(1,Math.max(0,(now-s.start)/(s.end-s.start)));
+ $('progress').value=100*fraction;
+ $('remaining').textContent='日历进度 '+pct(fraction)+' · 剩余 '+Math.floor(left/3600)+' 小时 '+Math.floor(left%3600/60)+' 分 '+left%60+' 秒 · 已结算实际请求 '+s.ranks['全部'].reduce((sum,x)=>sum+x.actual,0).toLocaleString('zh-CN')+' 次';
+ $('health').textContent='心跳 '+fmt(s.at)+(age>45?'（采集数据已过期）':'')+' · '+(e.nodes||0)+' 个节点 · 在途 '+(e.in_flight??'—')+' / '+(e.limit??'—')+' · 最近已结算分钟节点归因成功率 '+pct(s.recent[1]?s.recent[0]/s.recent[1]:null)+'（'+(s.recent[0]||0)+' / '+(s.recent[1]||0)+'，截至 '+fmt(s.recent_end)+'）';
+ $('capacity').textContent='主机 CPU '+e.cpu+'% · 采集器 / 测量内核 '+mib(e.rss)+' / '+mib(e.core_rss)+' MiB · 磁盘可用 '+(e.disk_free/1073741824).toFixed(1)+' GiB · 物理接口总吞吐 '+(e.net_Bps/1024).toFixed(0)+' KiB/s · 普通 / 候选计划 '+e.ordinary+' / '+e.candidate+' 秒';
+ $('qualify').textContent='达到样本、覆盖与置信门槛的节点 '+good.length+' 个。当前显示前 '+Math.min(good.length,10)+' 个。';
+ table('top',['节点','评分','节点归因成功率','有效覆盖','有效样本'],good.slice(0,10).map(r=>[r.name,r.score,pct(r.success),pct(r.coverage),r.n]));
+ const guest=s.guest;
+ document.querySelectorAll("[data-guest]").forEach(el=>el.hidden=s.config?.guest_enabled===false);
+ document.querySelectorAll("[data-gpt]").forEach(el=>el.hidden=s.config?.chatgpt_enabled===false);
+ $('guestWindow').textContent=guest?.end?fmt(guest.start)+' 至 '+fmt(guest.end)+(Date.now()/1000>=guest.end?' · 窗口已结束':' · 进行中'):'尚无专项窗口';
+ table('guestTable',['节点','Provider','AI 组','匿名页面','观测次数及结果','3 秒首页 200/已知','5 秒首页 200/已知'],(guest?.rows||[]).map(n=>[n.name,n.provider,n.ai?'是':'',n.result,Object.entries(n.outcomes).map(([k,v])=>k+' '+v).join('，'),n.history[3]||'—',n.history[5]||'—']));
+ const c=s.gpt_comparison;
+ $('gptComparison').textContent=c?'旧条件疑似握手超时的 '+c.cohort+' 个节点中，已复测 '+c.retested+' 个，'+c.now200+' 个在新条件下收到过 HTTP 200。其中 '+c.late200+' 个在同一次探测中握手用时超过 3 秒、在 5 秒内完成且收到 HTTP 200。':'';
+ table('all',['节点','配置身份','GPT 实际对话','ChatGPT 首页最近一次','3 秒条件 HTTP 200 / 已知','5 秒条件 HTTP 200 / 已知','其中 3–5 秒握手后 200 次','上分钟 Hz','时段平均 Hz','请求覆盖估计','全窗口有效覆盖','实际请求','漏采估计','忙跳过','容量跳过','节点归因成功率'],rows.map(r=>{
+   const g=s.gpt?.[r.id],old=g?.conditions?.[3],fresh=g?.conditions?.[5];
+   const ratio=v=>v?.known?v.ok+' / '+v.known+' · '+pct(v.ok/v.known):'—';
+   return [r.name,'#'+r.id+(r.active===false?' 已退出':''),'未验证',g?.latest||'未测',ratio(old),ratio(fresh),fresh?.late??'—',r.recent_hz,r.hz,pct(r.request_coverage),pct(r.window_coverage),r.actual,r.missed_estimate,r.busy,r.capacity,pct(r.success)]
+ }));
+ if(s.config?.chatgpt_enabled===false){
+ $('gptComparison').textContent='本次按用户要求取消 GPT 匿名首页和浏览器检测。';
+ table('all',['节点','配置身份','上分钟 Hz','时段平均 Hz','请求覆盖估计','全窗口有效覆盖','实际请求','漏采估计','忙跳过','容量跳过','节点归因成功率'],rows.map(r=>[r.name,'#'+r.id+(r.active===false?' 已退出':''),r.recent_hz,r.hz,pct(r.request_coverage),pct(r.window_coverage),r.actual,r.missed_estimate,r.busy,r.capacity,pct(r.success)]));
+ }
+ $('window').textContent=(s.config?.subscription||'历史未标注')+' · '+$('window').textContent+' · GPT 首页 '+(s.config?.chatgpt_enabled===false?'已取消':'启用');
+ const key=$('node').value;
+ $('node').replaceChildren(...s.ranks['全部'].filter(visible).map(r=>new Option(r.name+' · '+(r.provider||'')+' #'+r.id,r.id)));
+ if([...$('node').options].some(o=>o.value===key))$('node').value=key;
+}
+async function details(){
+ let n=Number($('node').value);if(!n)return;
+ let d=await (await fetch('/node?run='+current.id+'&id='+n)).json();
+ if(Number($('node').value)!==n)return;
+ let bands=['白天','晚间','凌晨'].map(s=>{let r=current.ranks[s].find(x=>x.id===n);return s+' '+pct(r?.success)+'（有效覆盖 '+pct(r?.coverage)+'）'});
+ let r=current.ranks['全部'].find(x=>x.id===n);
+ const visitor=current.guest?.rows?.find(x=>x.name===r.name && x.provider===r.provider);
+ const reasons={BROWSER_OR_NETWORK_ERROR:'浏览器或网络出错',TIMEOUT:'页面检查超时',CHALLENGE:'出现访问挑战',RATE_LIMITED:'受到限流',LOGIN_REQUIRED:'页面要求登录',IN_PROGRESS:'检查中',UNKNOWN:'检查中断'};
+ const why=Object.entries(visitor?.outcomes||{}).filter(([k])=>k in reasons).map(([k,v])=>reasons[k]+' '+v+' 次').join('，');
+ $('visitorVerdict').textContent=r.name+' · '+(visitor?.result||'未测')+(why?'（'+why+'）':'');
+ let cg=current.gpt?.[n]?.conditions;
+ $('gptTotal').textContent=[3,5].map(k=>{let v=cg?.[k];return k+' 秒条件：'+(v?.known?'TLS 完成 '+v.tls+' 次，HTTP 200 '+v.ok+' / '+v.known+' 次，'+(k===3?'疑似握手超时 '+v.old_timeout:'3–5 秒握手后 HTTP 200 '+v.late)+' 次，访问挑战 '+(v.counts?.CHALLENGE||0)+' 次，明确地区限制 '+(v.counts?.REGION_RESTRICTED||0)+' 次':'尚无已知结果')}).join('。');
+ table('gptDetail',['北京时间','握手限时 s','判定','HTTP','TLS 已验证','握手耗时 ms','全程耗时 ms','结束阶段'],(d.gpt||[]).map(x=>[fmt(x.at),x.tls_limit,x.label,x.http,x.tls?'是':'未确认',x.handshake_ms==null?'—':Math.round(x.handshake_ms),x.elapsed,x.phase]));
+ $('compare').textContent=bands.join(' · ')+'。全窗口可归因失败 '+(r.n-r.targets.reduce((sum,t)=>sum+t.ok,0))+' 次，其他已执行但排除的观测 '+(r.actual-r.n)+' 次。';
+ table('target',['目标','成功 / 有效','95% Wilson 下界','P50 ≤ ms','P95 ≤ ms','P99 ≤ ms'],r.targets.map((t,i)=>[i?'Cloudflare':'Google',t.ok+' / '+t.n,pct(t.lower),t.p50,t.p95,t.p99]));
+ let chart=$('trend');chart.replaceChildren();let points=d.series.filter(x=>x.p50);if(points.length){
+ let min=Math.min(...points.map(x=>x.at)),max=Math.max(...points.map(x=>x.at)),high=Math.max(...points.map(x=>x.p50));
+ for(let t=0;t<2;t++){let previous=null;for(let a of points.filter(x=>x.t===t)){
+ let x=18+764*(a.at-min)/Math.max(1,max-min),y=140-120*a.p50/high,color=t?'#306bba':'#087862';
+ if(previous&&a.at-previous.at<=600){let line=document.createElementNS(chart.namespaceURI,'line');for(let [k,v] of Object.entries({x1:previous.x,y1:previous.y,x2:x,y2:y,stroke:color,'stroke-width':2}))line.setAttribute(k,v);chart.append(line)}
+ let dot=document.createElementNS(chart.namespaceURI,'circle');for(let [k,v] of Object.entries({cx:x,cy:y,r:3,fill:color}))dot.setAttribute(k,v);
+ let tip=document.createElementNS(chart.namespaceURI,'title');tip.textContent=fmt(a.at)+' · ≤ '+a.p50+' ms';dot.append(tip);chart.append(dot);previous={x,y,at:a.at}
+ }}}
+ table('fail',['北京时间','目标','判定','原始返回'],d.failures.map(f=>[fmt(f[0]),f[1]?'Cloudflare':'Google',f[2],f[3]]));
+ table('extra',['北京时间','接收字节','小对象 KiB/s','同 TLS 连接复用','错误'],d.transfers.map(r=>[fmt(r.start),r.data.bytes,r.data.small_request_Bps?(r.data.small_request_Bps/1024).toFixed(1):'—',JSON.stringify(r.data.reuse),r.data.error||'—']));
+}
+async function refresh(){try{let res=await fetch('/state');if(!res.ok)throw Error();current=await res.json();if(!current.waiting){render();await details()}}catch(e){$('window').textContent='读取失败，稍后重试。'}finally{setTimeout(refresh,15000)}}
+$('period').onchange=render;$('retired').onchange=()=>{render();details()};$('node').onchange=details;refresh();
+</script></html>
