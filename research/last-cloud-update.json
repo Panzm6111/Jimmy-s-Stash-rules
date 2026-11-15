@@ -1,8 +1,66 @@
 {
-  "status": "initial_hosted_checks_no_changes",
-  "checked_sources": 6,
-  "changed_files": 0,
-  "automatic_commits": 0,
-  "run_url": "https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/40896300394",
-  "note": "This receipt records migration acceptance; future automatic runs only update this file when converted rules have actual changes."
+  "date": "2026-11-15T19:55:12.504479+08:00",
+  "upstream_revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+  "source_heads": {
+    "blackmatrix7/ios_rule_script refs/heads/master": "0b6897dc17e0c513d25449c935a9694818e32f0c",
+    "SukkaW/Surge HEAD": "379da3dfaf474b471aadec1762def03dc53d12b9"
+  },
+  "deltas": [
+    {
+      "output": "rules/vendor/netflix.yaml",
+      "old_count": 1156,
+      "new_count": 1156,
+      "added": 0,
+      "removed": 0,
+      "blocked": false,
+      "reasons": []
+    },
+    {
+      "output": "rules/vendor/telegram.yaml",
+      "old_count": 35,
+      "new_count": 35,
+      "added": 0,
+      "removed": 0,
+      "blocked": false,
+      "reasons": []
+    },
+    {
+      "output": "rules/vendor/tiktok.yaml",
+      "old_count": 34,
+      "new_count": 34,
+      "added": 0,
+      "removed": 0,
+      "blocked": false,
+      "reasons": []
+    },
+    {
+      "output": "rules/apple.yaml",
+      "old_count": 1579,
+      "new_count": 1579,
+      "added": 0,
+      "removed": 0,
+      "blocked": false,
+      "reasons": []
+    },
+    {
+      "output": "rules/microsoft.yaml",
+      "old_count": 668,
+      "new_count": 668,
+      "added": 0,
+      "removed": 0,
+      "blocked": false,
+      "reasons": []
+    },
+    {
+      "output": "rules/vendor/ai-sukka.yaml",
+      "old_count": 55,
+      "new_count": 57,
+      "added": 2,
+      "removed": 0,
+      "blocked": false,
+      "reasons": []
+    }
+  ],
+  "device_tested": false,
+  "status": "converted; publication follows workflow validation"
 }
