@@ -49,7 +49,7 @@ class Subscriptions(unittest.TestCase):
                 self.assertEqual(pools,want)
                 stable=next(g for g in v.load(path)['proxy-groups'] if g['name']==prefix+'AI组')
                 self.assertEqual(stable['type'],'fallback')
-                self.assertEqual(stable['interval'],60 if prefix else 5)
+                self.assertEqual(stable['interval'],60 if prefix else 3)
                 self.assertNotIn('tolerance',stable)
                 self.assertEqual(stable['proxies'],[prefix+PRIORITY_PREFIX+n for n in STABLE])
 
@@ -102,7 +102,7 @@ class Subscriptions(unittest.TestCase):
             if group['type'] in ('url-test','fallback'):
                 self.assertEqual(group['url'],'https://chatgpt.com/')
                 if group['name'] in ('AI组','AI最速组','最优速组') or group['name'].startswith('AI稳备 · '):
-                    self.assertEqual(group['interval'],5)
+                    self.assertEqual(group['interval'],3)
         self.assertNotIn('secret',config)
         self.assertNotIn('external-controller',config)
         self.assertNotIn('cron',config)

@@ -83,7 +83,7 @@ class PrivateConfigChecks(unittest.TestCase):
                 group = groups[name]
                 self.assertEqual(group['type'], 'url-test')
                 self.assertGreater(len(group['proxies']), 1)
-                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, dict(PROBE_SETTINGS, interval=5 if name in ('AI最速组','最优速组') else 1800))
+                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, dict(PROBE_SETTINGS, interval=3 if name in ('AI最速组','最优速组') else 1800))
         self.assertEqual(groups['手动节点']['type'], 'select')
         self.assertEqual(groups['手动节点']['proxies'], groups['自动节点']['proxies'])
         for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):

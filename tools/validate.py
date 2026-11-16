@@ -497,7 +497,7 @@ class ProjectChecks(unittest.TestCase):
         for name in pools:
             group = self.groups[name]
             self.assertEqual(group['url'], 'https://www.gstatic.com/generate_204')
-            self.assertEqual(group['interval'], 5 if name in ('AI最速组','最优速组') else 1800)
+            self.assertEqual(group['interval'], 3 if name in ('AI最速组','最优速组') else 1800)
             self.assertEqual(group['proxies'], ['REJECT'])
             self.assertRegex('REJECT', group['filter'])
             self.assertEqual(group['use'], ['机场'])
@@ -509,7 +509,7 @@ class ProjectChecks(unittest.TestCase):
         self.assertEqual(self.groups['Microsoft']['proxies'][0], 'DIRECT')
         self.assertEqual(self.groups['总代理']['proxies'][0], '最优速组')
         self.assertEqual(self.groups['AI组']['type'],'fallback')
-        self.assertEqual(self.groups['AI组']['interval'],5)
+        self.assertEqual(self.groups['AI组']['interval'],3)
 
     def test_independent_software_choices(self):
         choices = {'海外AI': '美国', 'Netflix': '日本', 'YouTube': '香港'}

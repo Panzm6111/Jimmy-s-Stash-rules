@@ -8,7 +8,7 @@ from config_helpers import flatten, dump, script_references
 from validate import ROOT, RAW, load, merged, merge_model, route, validate_structure
 from scan_secrets import inspect
 
-from service_health import ROUTING_VERSION
+from service_health import STASH_ROUTING_VERSION
 
 OUTPUT = 'config/stash.yaml'
 URL = RAW + OUTPUT
@@ -106,7 +106,7 @@ def render():
             '# Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。\n'
             '# 固定地址：' + URL + '\n'
             '# JIMMY-STASH ' + VERSION + '；原生稳定优先回退，不再使用 GPT/TikTok 服务检测覆写。\n'
-            f'# JIMMY-ROUTING {ROUTING_VERSION}；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。\n'
+            f'# JIMMY-ROUTING {STASH_ROUTING_VERSION}；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。\n'
             '# AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。\n'
             '# JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。\n'
             '# 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。\n'
