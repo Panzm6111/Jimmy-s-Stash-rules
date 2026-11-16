@@ -70,7 +70,7 @@ proxy-groups:
 - name: AI组
   type: fallback
   url: https://www.gstatic.com/generate_204
-  interval: 30
+  interval: 5
   lazy: false
   proxies:
   - REJECT
@@ -81,7 +81,7 @@ proxy-groups:
 - name: AI最速组
   type: url-test
   url: https://www.gstatic.com/generate_204
-  interval: 30
+  interval: 5
   lazy: false
   proxies:
   - REJECT
@@ -92,7 +92,7 @@ proxy-groups:
 - name: 最优速组
   type: url-test
   url: https://www.gstatic.com/generate_204
-  interval: 30
+  interval: 5
   lazy: false
   proxies:
   - REJECT

@@ -5,7 +5,7 @@ Keep this out of Mihomo: follow-rule is a Stash option, not respect-rules.
 """
 import copy
 from config_helpers import pool_tolerance_ms
-from curated_pools import apply_ordered_stable
+from curated_pools import apply_ordered_stable, STASH_CHECK_TIMEOUT
 
 AI_SUFFIXES = ('chatgpt.com', 'openai.com', 'oaistatic.com', 'oaiusercontent.com')
 AI_RESOLVERS = ('https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query')
@@ -70,7 +70,7 @@ def apply(source):
             # prevents generic 204 probes overwriting an AI transport failure.
             group['url'] = 'https://chatgpt.com/'
     for provider in config['proxy-providers'].values():
-        provider.update({'benchmark-url':'https://chatgpt.com/','benchmark-timeout':5})
+        provider.update({'benchmark-url':'https://chatgpt.com/','benchmark-timeout':STASH_CHECK_TIMEOUT})
         provider.setdefault('health-check',{}).update(enable=True,url='https://chatgpt.com/')
     apply_ordered_stable(config)
     return config

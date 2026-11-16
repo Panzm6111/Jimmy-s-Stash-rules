@@ -5,7 +5,7 @@ from pathlib import Path
 import yaml
 from config_helpers import pool_tolerance_ms
 from service_health import ENDPOINTS, ROUTING_VERSION
-from curated_pools import apply_ordered_stable, PRIORITY_PREFIX, CHECK_INTERVAL
+from curated_pools import apply_ordered_stable, PRIORITY_PREFIX, MEMBERS, CLASH_CHECK_INTERVAL
 from stash_ai_guard import AI_RESOLVERS, claude_dns_policy
 ROOT=Path(__file__).resolve().parents[1]
 AIRPORT_INFO_EXCLUDE=r'(?i)(请勿连接|跳转域名)'
@@ -54,6 +54,10 @@ def global_merge(source):
     names={group['name']:'Jimmy · '+group['name'] for group in overlay['proxy-groups']}
     for group in overlay['proxy-groups']:
         original=group['name']
+        if original in MEMBERS or original.startswith(PRIORITY_PREFIX):
+            # Keep the desktop cadence the user already likes. Dial failures
+            # trigger health checks independently of this scheduled interval.
+            group['interval']=CLASH_CHECK_INTERVAL
         if 'use' in group:
             del group['use']
             group.update({'include-all':True,'empty-fallback':'REJECT'})

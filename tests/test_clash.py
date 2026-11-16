@@ -82,7 +82,7 @@ class ClashChecks(unittest.TestCase):
             self.assertNotIn(prefix+'日本+美国', groups)
             pool = groups[prefix+'AI组']
             self.assertEqual(pool['type'], 'fallback')
-            self.assertEqual(pool['interval'], 30)
+            self.assertEqual(pool['interval'], 60)
             self.assertEqual(pool['url'], 'https://chatgpt.com/')
             from curated_pools import STABLE, PRIORITY_PREFIX
             self.assertEqual(pool['proxies'],[prefix+PRIORITY_PREFIX+n for n in STABLE])
