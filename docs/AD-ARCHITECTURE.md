@@ -715,8 +715,8 @@ payload:
 
 | 文件 | SHA256 |
 |---|---|
-| [config/stash.yaml](../config/stash.yaml) | `2121ab82254d86bf4d27f7ad57919c9fa6f934824731966be081151c47a31c37` |
-| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `43fb7c9662a1998ffc24c846edc43eff8b15ff2c848fc27a88f93a4c5e56151c` |
+| [config/stash.yaml](../config/stash.yaml) | `b5530e1ba4ac9caa4838ebf40b0f0f8b4d234224f60d0ccac44b0076dc9d6f6c` |
+| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `614c18d4976bec1341dfbb6de83606b7ab6e1cf92ffcfd34ac7abb0433239747` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |

@@ -32,17 +32,25 @@ class Subscriptions(unittest.TestCase):
         for host in ['dns.alidns.com','doh.pub']:
             self.assertEqual(v.route(config,host,country='ZZ'),'DIRECT')
         groups={g['name']:g for g in config['proxy-groups']}
-        for name in ['AI组','美国','日本','台湾']:
+        for name in ['美国','日本','台湾']:
             self.assertEqual(groups[name]['proxies'],['REJECT'])
+        self.assertEqual(groups['AI组']['type'],'fallback')
         self.assertFalse(config['ipv6'])
 
     def test_both_published_profiles_use_the_same_pool_tolerances(self):
         expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区'), 50)
-        expected.update({'AI组':250, 'AI最速组':100, '最优速组':50})
+        from curated_pools import STABLE, PRIORITY_PREFIX
+        expected.update({'AI最速组':100, '最优速组':50})
+        expected.update({PRIORITY_PREFIX+n:50 for n in STABLE})
         for path, prefix in [('config/stash.yaml',''), ('config/clash-verge-auto.yaml','Jimmy · ')]:
             with self.subTest(path=path):
                 pools = {g['name']: g['tolerance'] for g in v.load(path)['proxy-groups'] if g['type']=='url-test'}
-                self.assertEqual(pools, {prefix + name: ms for name, ms in expected.items()})
+                want={prefix + name: ms for name, ms in expected.items()}
+                self.assertEqual(pools,want)
+                stable=next(g for g in v.load(path)['proxy-groups'] if g['name']==prefix+'AI组')
+                self.assertEqual(stable['type'],'fallback')
+                self.assertNotIn('tolerance',stable)
+                self.assertEqual(stable['proxies'],[prefix+PRIORITY_PREFIX+n for n in STABLE])
 
     def test_only_general_and_manual_selectors_show_airport_nodes(self):
         for filename, prefix in [('stash.yaml', ''), ('clash-verge-auto.yaml', 'Jimmy · ')]:
@@ -58,20 +66,14 @@ class Subscriptions(unittest.TestCase):
             self.assertNotIn(prefix+'TikTok 服务优选', groups[prefix+'TikTok']['proxies'])
             self.assertNotIn(prefix+'AI最速', groups[prefix+'TikTok']['proxies'])
 
-    def test_installed_stash_gpt_script_can_address_its_old_pool(self):
-        groups = {g['name']:g for g in v.load('config/stash.yaml')['proxy-groups']}
-        managed, legacy = groups['GPT 服务优选'], groups['ai']
-        self.assertEqual(groups['海外AI']['proxies'][0], managed['name'])
-        self.assertEqual(managed['proxies'], ['AI组','ai'])
-        self.assertEqual(legacy['proxies'], ['AI组'])
-        self.assertTrue(managed['hidden'] and legacy['hidden'])
-        self.assertNotIn('ai', groups['海外AI']['proxies'])
-        for choice in ('新加坡 A','台湾 E','台湾 D','AI组'):
-            self.assertRegex(choice, managed['filter'])
-            self.assertRegex(choice, legacy['filter'])
-        for removed in ('荷兰','英国 B','日本 A','台湾 F','REJECT','DIRECT'):
-            self.assertNotRegex(removed, managed['filter'])
-            self.assertNotRegex(removed, legacy['filter'])
+    def test_retired_service_selectors_cannot_pin_the_native_stable_pool(self):
+        for filename,prefix in [('stash.yaml',''),('clash-verge-auto.yaml','Jimmy · ')]:
+            config=v.load('config/'+filename)
+            groups={g['name']:g for g in config['proxy-groups']}
+            self.assertEqual(groups[prefix+'海外AI']['proxies'][0],prefix+'AI组')
+            for name in ('GPT 服务优选','TikTok 服务检测组','ai'):
+                self.assertNotIn(prefix+name,groups)
+            self.assertNotIn('cron',config)
 
     def test_stash_chatgpt_core_survives_unloaded_or_rejecting_remote_sets(self):
         from stash_ai_guard import AI_SUFFIXES
@@ -89,30 +91,18 @@ class Subscriptions(unittest.TestCase):
                 self.assertNotEqual(v.route(config,'chatgpt.com.attacker.invalid',country='CN'),'海外AI')
         self.assertEqual(v.route(config,'chatgpt.com','192.168.1.1'),'DIRECT')
 
-    def test_stash_service_override_is_private_and_reproducible(self):
-        from service_health import MANAGED, render_private_override
-        src = (ROOT/'examples/stash-service-health.stoverride').read_text(encoding='utf-8')
-        self.assertEqual(src, render_private_override(ROOT))
-        config = yaml.safe_load(src)
-        self.assertNotIn('cron', v.load('config/stash.yaml'))
-        self.assertNotIn('cron', v.load('config/clash-verge-auto.yaml'))
-        self.assertEqual(config['arguments-version'], 1)
-        self.assertTrue(config['arguments']['secret']['required'])
-        self.assertNotIn('default', config['arguments']['secret'])
-        cron, = config['cron']['script']
-        self.assertEqual(cron['cron'], '* * * * *')
-        self.assertEqual(cron['argument'], '{"port":${args.port|json},"secret":${args.secret|json}}')
-        params = config['script-providers'][cron['name']]
-        self.assertEqual(set(params), {'payload'})
-        self.assertEqual(params['payload'], (ROOT/'scripts/service-health.js').read_text(encoding='utf-8'))
-        groups = {g['name']:g for g in v.load('config/stash.yaml')['proxy-groups']}
-        import re
-        for selector, pool in MANAGED.items():
-            for candidate in ['新加坡 A','台湾 E','台湾 D','荷兰','英国 B','日本 A','美国 D','HKG A','DIRECT','无关']:
-                self.assertEqual(bool(re.search(groups[selector]['filter'],candidate)),
-                                 bool(re.search(groups[pool]['filter'],candidate)))
-            self.assertRegex(pool, groups[selector]['filter'])
-            self.assertNotRegex('REJECT', groups[selector]['filter'])
+    def test_stash_native_shared_health_has_one_target_without_controller_credentials(self):
+        config=v.load('config/stash.yaml')
+        provider=config['proxy-providers']['机场']
+        self.assertEqual(provider['benchmark-url'],'https://chatgpt.com/')
+        self.assertEqual(provider['benchmark-timeout'],5)
+        self.assertEqual(provider['health-check']['url'],'https://chatgpt.com/')
+        for group in config['proxy-groups']:
+            if group['type'] in ('url-test','fallback'):
+                self.assertEqual(group['url'],'https://chatgpt.com/')
+        self.assertNotIn('secret',config)
+        self.assertNotIn('external-controller',config)
+        self.assertNotIn('cron',config)
 
     def test_both_service_routes_retain_offline_coverage_and_ad_priority(self):
         from stash_ai_guard import AI_SUFFIXES, TIKTOK_ENTRY_HOSTS
@@ -140,7 +130,8 @@ class Subscriptions(unittest.TestCase):
         untouched=copy.deepcopy(fixture)
         guarded=apply(fixture)
         self.assertEqual(fixture,untouched)
-        self.assertEqual(guarded['proxy-providers'],fixture['proxy-providers'])
+        self.assertEqual(guarded['proxy-providers']['机场']['url'],fixture['proxy-providers']['机场']['url'])
+        self.assertEqual(guarded['proxy-providers']['机场']['benchmark-url'],'https://chatgpt.com/')
         self.assertEqual(source,before)
         clash=v.load('config/clash-verge-auto.yaml')
         self.assertNotIn('follow-rule',clash['dns'])

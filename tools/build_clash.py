@@ -5,6 +5,7 @@ from pathlib import Path
 import yaml
 from config_helpers import pool_tolerance_ms
 from service_health import ENDPOINTS, ROUTING_VERSION
+from curated_pools import apply_ordered_stable, PRIORITY_PREFIX, CHECK_INTERVAL
 from stash_ai_guard import AI_RESOLVERS, claude_dns_policy
 ROOT=Path(__file__).resolve().parents[1]
 AIRPORT_INFO_EXCLUDE=r'(?i)(请勿连接|跳转域名)'
@@ -38,7 +39,7 @@ def remote_profile(source):
     result['proxy-providers']['机场']['proxy']=DOWNLOAD_GROUP
     # The provider schedules generic checks as well as distinct URL tasks registered by its groups.
     result['proxy-providers']['机场']['health-check'].update(
-        enable=True, interval=60, lazy=False, timeout=5000, **{'expected-status':204})
+        enable=True, url='https://www.gstatic.com/generate_204', interval=60, lazy=False, timeout=5000, **{'expected-status':204})
     result['proxy-groups'][-1]['expected-status']=204
     # Airports may vary subscription format by User-Agent.
     # Request the same Clash YAML representation as the supported desktop client.
@@ -49,6 +50,7 @@ def remote_profile(source):
 def global_merge(source):
     """Pure overlay: keep the airport's node/provider and application settings."""
     overlay={key:copy.deepcopy(source[key]) for key in ('proxy-groups','rule-providers','rules')}
+    apply_ordered_stable(overlay)
     names={group['name']:'Jimmy · '+group['name'] for group in overlay['proxy-groups']}
     for group in overlay['proxy-groups']:
         original=group['name']
@@ -61,8 +63,12 @@ def global_merge(source):
         if group['type']=='url-test':
             # UI guard only: Mihomo's API can still pin a URLTest pool.
             group.update(hidden=True, tolerance=pool_tolerance_ms(original), **{'expected-status':204})
-            if original in ENDPOINTS:
-                group.update(url=ENDPOINTS[original], timeout=6000, **{'expected-status':200})
+            if original in ENDPOINTS or original.startswith(PRIORITY_PREFIX):
+                group.update(url=ENDPOINTS.get(original, ENDPOINTS['AI组']), timeout=6000,
+                             **{'expected-status':200}, **{'max-failed-times':1})
+        elif group['type']=='fallback' and original=='AI组':
+            group.update(url=ENDPOINTS[original], timeout=6000, lazy=False,
+                         **{'expected-status':200, 'max-failed-times':1})
         elif group['type']=='select' and original not in {'总代理','手动节点'}:
             # Only the general and manual selectors expose individual nodes.
             for key in ('include-all','empty-fallback','filter'):

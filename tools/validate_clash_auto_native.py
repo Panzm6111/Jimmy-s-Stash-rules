@@ -86,13 +86,18 @@ def main():
             api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
             check((runtime/'airport.yaml').exists(),'successful later download replaces startup fallback with a cache')
             check(state['airport_ua_matched']>0,'airport fetch requests Clash YAML through explicit client user agent')
-            check(len([n for n in groups if n.startswith('Jimmy · ')])==25,'24 policy groups and one download failover group load')
+            check(len([n for n in groups if n.startswith('Jimmy · ')])==32,'31 policy groups and one download failover group load')
             check(groups['Jimmy · Claude']['now']=='Jimmy · AI组','Claude web has its own selector with the curated ai default')
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
             check(groups['Jimmy · 总代理']['now']=='Jimmy · 最优速组','initial default is automatic pool')
             check('Jimmy · AI组' in groups['Jimmy · 海外AI']['all'],'curated ai option exposed')
             check(groups['Jimmy · AI组']['hidden'],'automatic pool exposes hidden flag')
+            stable_children=groups['Jimmy · AI组']['all']
+            check(len(stable_children)==7 and all(groups[n]['all']==['REJECT'] for n in stable_children),
+                  'all absent curated names fail closed through individual priority layers')
+            check(all(groups[n]['now']=='REJECT' for n in stable_children),
+                  'empty stable layers select REJECT rather than DIRECT')
             fixed = {'DIRECT','REJECT'}
             for declaration in public['proxy-groups']:
                 name = declaration['name']

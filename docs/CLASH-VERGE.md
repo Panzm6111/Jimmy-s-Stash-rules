@@ -10,9 +10,9 @@
 https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/clash-verge-auto.yaml
 ```
 
-主订阅包含 24 个策略组、1 个隐藏下载回退组和 33 个规则集。AI组收新加坡 A、台湾 E/D（250 ms）。AI最速组在这三条上加入日本 A/B（100 ms）。最优速组收 HKG B/A/C/I/J/M、荷兰、新加坡 A、台湾 E、日本 A/B（50 ms）。海外AI 和 Claude 默认用 AI组，总代理默认用最优速组。
+主订阅包含 31 个策略组、1 个隐藏下载回退组和 33 个规则集。AI组按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的优先级故障回退；AI最速组收日本 A/B、HKG B/C/J（100 ms）；最优速组收日本 A/B、HKG B/A/C/I/J/M（50 ms）。海外AI 和 Claude 默认 AI组，总代理默认最优速组。
 
-GPT 与 TikTok 入口按网址各自探测，刷新原主订阅即可使用；先确认两个业务选的是对应自动池且未固定具体出口。Stash 的本机覆写不适用于 Clash。详见[服务检测边界](ROUTING.md#iphone-service-health)。
+两个 AI 池均按 ChatGPT 入口探测；TikTok 默认跟随总代理，不另做独立 TikTok 检测。刷新原主订阅并解除自动池图钉。Stash 服务检测覆写已退役。详见[服务检测边界](ROUTING.md#iphone-service-health)。
 
 ### 2026-11-02 自动选择防误触
 
@@ -20,7 +20,7 @@ GPT 与 TikTok 入口按网址各自探测，刷新原主订阅即可使用；�
 
 刷新原 Jimmy 全自动订阅。原池名失效后，其选择回到新默认。先前手选且仍有效的地区组或单节点可能保留，仅在实际选择与预期不符时核对。
 
-三个精选池均设为每 60 秒主动检查；其余七个常规池的组配置为 1800 秒、50 ms。Clash 机场另每 60 秒做通用 HTTP 204 检查（5 秒超时）。AI组和 AI最速组分别按 ChatGPT、TikTok 入口的 HTTP 200 记录独立健康状态。Stash 的原生测速结果按节点共用，启用本机服务检测后才会按业务分别判断。容差是两条健康线路之间的延迟差，不是故障等待时间。 原有手动图钉可能覆盖自动选择。探测成功后，GPT 账号及 TikTok 的地区可用性仍要在应用中确认。
+最稳组使用有序 fallback，精选池每 30 秒主动检查；其余七个常规池为 1800 秒。机场每 60 秒检查通用 204。两个 AI 池及优先层要求 ChatGPT HTTP 200、6 秒限时、失败触发复核；不再由本地服务脚本切换。自动池图钉可能覆盖自动选择。入口成功不等于账号、生成或播放验收。
 
 小红书、抖音和东方财富的完整上游分类前置保护为DIRECT；抖音补充分类先于旧TikTok补充，修复aweme.snssdk.com误入TikTok的问题。TikTok专属功能分类优先于国内分类，评论与内容仍交给TikTok组。共享国内分类中的部分广告域名也会被放行；Stash的明确App广告与HTTP处理仍保留。代表性检查及边界见[分流说明](ROUTING.md)。
 

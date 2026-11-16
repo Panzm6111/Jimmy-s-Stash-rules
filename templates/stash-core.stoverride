@@ -68,37 +68,37 @@ proxy-groups:
   filter: (?i)(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)
   hidden: true
 - name: AI组
-  type: url-test
+  type: fallback
   url: https://www.gstatic.com/generate_204
-  interval: 60
+  interval: 30
   lazy: false
   proxies:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(新加坡 A|台湾 [ED]|REJECT)$
+  filter: (?i)^(HKG [BCJ]|新加坡 A|台湾 B|日本 A|美国 B|REJECT)$
   hidden: true
 - name: AI最速组
   type: url-test
   url: https://www.gstatic.com/generate_204
-  interval: 60
+  interval: 30
   lazy: false
   proxies:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(新加坡 A|台湾 [ED]|日本 [AB]|REJECT)$
+  filter: (?i)^(日本 [AB]|HKG [BCJ]|REJECT)$
   hidden: true
 - name: 最优速组
   type: url-test
   url: https://www.gstatic.com/generate_204
-  interval: 60
+  interval: 30
   lazy: false
   proxies:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(HKG [BACIJM]|荷兰|新加坡 A|台湾 E|日本 [AB]|REJECT)$
+  filter: (?i)^(日本 [AB]|HKG [BACIJM]|REJECT)$
   hidden: true
 - name: 香港
   type: url-test

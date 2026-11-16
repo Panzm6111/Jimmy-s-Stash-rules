@@ -7,7 +7,7 @@
 | Stash | [config/stash.yaml](config/stash.yaml) |
 | Clash Verge | [config/clash-verge-auto.yaml](config/clash-verge-auto.yaml) |
 
-本页说明对应 ROUTE-20261113.1，设备使用的版本见主配置文件头。AI组收新加坡 A、台湾 E/D（250 ms）。AI最速组在这三条上加入日本 A/B（100 ms）。最优速组收 HKG B/A/C/I/J/M、荷兰、新加坡 A、台湾 E、日本 A/B（50 ms）。海外AI 和 Claude 默认用 AI组，总代理默认用最优速组。 TikTok（含 Instagram、X）、Netflix、YouTube、Telegram、Adobe 和未匹配流量默认跟随总代理。Apple、Microsoft、国内直连默认 DIRECT，广告默认 REJECT。 总代理和手动节点可直接选机场单节点。其他可见业务选择器只列组和内建策略，自动池及手机服务选择器的候选隐藏。iPhone 刷新原主配置即可。已启用的私人机场、MitM 和服务检测覆写继续使用。GPT 的旧本地脚本有隐藏兼容入口。TikTok 默认跟随总代理，旧脚本不会切换它。 [iPhone 服务检测及故障截图指南](docs/ROUTING.md#iphone-service-health)。
+本页对应 ROUTE-20261116.1。AI组（最稳）按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的优先级故障回退；AI最速组收日本 A/B、HKG B/C/J；最优速组收日本 A/B、HKG B/A/C/I/J/M。精选池每 30 秒主动检查。海外AI/Claude 默认 AI组，其余代理业务默认总代理，国内与系统直连沿用。手机删除旧 GPT/TikTok 服务检测覆写，保留私人机场与 MitM，刷新原主配置即可；不再需要脚本控制端口/密钥。Stash 原生测速共享，统一以 ChatGPT 为目标；Clash 保留 AI 与通用目标独立检查。入口测速不能证明真实回复或 TikTok 播放可用。[故障恢复、覆写删除与日志指南](docs/ROUTING.md#iphone-service-health)。
 
 Claude 网页版使用独立策略组，默认选 `AI组`。主站、账户验证和第一方资源都按这个组分流。[网页版设置与连接核对](docs/ROUTING.md#claude-web)
 

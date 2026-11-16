@@ -492,12 +492,12 @@ class ProjectChecks(unittest.TestCase):
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
-        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'AI组', 'AI最速组', '最优速组'}
+        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'AI最速组', '最优速组'}
         self.assertEqual({g['name'] for g in self.groups.values() if g['type'] == 'url-test'}, pools)
         for name in pools:
             group = self.groups[name]
             self.assertEqual(group['url'], 'https://www.gstatic.com/generate_204')
-            self.assertEqual(group['interval'], 60 if name in ('AI组','AI最速组','最优速组') else 1800)
+            self.assertEqual(group['interval'], 30 if name in ('AI最速组','最优速组') else 1800)
             self.assertEqual(group['proxies'], ['REJECT'])
             self.assertRegex('REJECT', group['filter'])
             self.assertEqual(group['use'], ['机场'])
@@ -508,6 +508,8 @@ class ProjectChecks(unittest.TestCase):
         self.assertEqual(self.groups['Apple']['proxies'][0], 'DIRECT')
         self.assertEqual(self.groups['Microsoft']['proxies'][0], 'DIRECT')
         self.assertEqual(self.groups['总代理']['proxies'][0], '最优速组')
+        self.assertEqual(self.groups['AI组']['type'],'fallback')
+        self.assertEqual(self.groups['AI组']['interval'],30)
 
     def test_independent_software_choices(self):
         choices = {'海外AI': '美国', 'Netflix': '日本', 'YouTube': '香港'}
@@ -653,17 +655,17 @@ class ProjectChecks(unittest.TestCase):
             groups = {g['name']: g for g in config['proxy-groups']}
             self.assertNotIn('日本+美国', groups)
             pool = groups['AI组']
-            self.assertEqual(pool['type'], 'url-test')
-            self.assertEqual(pool['proxies'], ['REJECT'])
-            ai = {'新加坡 A','台湾 E','台湾 D'}
-            jp = {'日本 A','日本 B'}
-            hk = {'HKG '+x for x in 'ABCIJM'}
-            expected = {'AI组': ai, 'AI最速组': ai | jp, '最优速组': {'荷兰','新加坡 A','台湾 E'} | jp | hk}
+            self.assertEqual(pool['type'], 'fallback')
+            from curated_pools import MEMBERS, STABLE, PRIORITY_PREFIX, name_filter
+            if 'filter' in pool:self.assertEqual(pool['proxies'],['REJECT'])
+            else:self.assertEqual(pool['proxies'],[PRIORITY_PREFIX+n for n in STABLE])
+            expected = {name:set(members) for name,members in MEMBERS.items()}
             universe = set.union(*expected.values()) | {'HKG K','[Vless] 日本 [直连]','美国 A','美国 C','美国 D','英国 B','台湾 F','台湾 EE','新加坡 AA','英国 B 备用','荷兰 2','DIRECT'}
             for name, members in expected.items():
-                self.assertEqual({n for n in universe if re.search(groups[name]['filter'],n)}, members)
+                pattern=groups[name].get('filter',name_filter(MEMBERS[name]))
+                self.assertEqual({n for n in universe if re.search(pattern,n)}, members)
             for name in fixtures['other'] + fixtures['negative'] + fixtures['info'] + ['DIRECT', 'AI组']:
-                self.assertNotRegex(name, pool['filter'])
+                self.assertNotRegex(name, pool.get('filter',name_filter(STABLE)))
             expected_defaults = defaults.copy()
             if 'GPT 服务优选' in groups:
                 expected_defaults.update({'海外AI':'GPT 服务优选', 'ai':'AI组',

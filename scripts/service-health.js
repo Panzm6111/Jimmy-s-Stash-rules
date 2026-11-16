@@ -1,3 +1,4 @@
+// Retired 2026-11-16. Historical evidence only; current profiles do not activate this script.
 // Runs inside the iPhone VPN extension. Only the loopback controller receives the key.
 const services = [
   { name: 'GPT 服务优选', business: '海外AI', pool: 'AI组', url: 'https://chatgpt.com/', tolerance: 250 },

@@ -5,7 +5,7 @@ Keep this out of Mihomo: follow-rule is a Stash option, not respect-rules.
 """
 import copy
 from config_helpers import pool_tolerance_ms
-from service_health import add_stash_selectors
+from curated_pools import apply_ordered_stable
 
 AI_SUFFIXES = ('chatgpt.com', 'openai.com', 'oaistatic.com', 'oaiusercontent.com')
 AI_RESOLVERS = ('https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query')
@@ -65,7 +65,14 @@ def apply(source):
     for group in config['proxy-groups']:
         if group['type'] == 'url-test':
             group['tolerance'] = pool_tolerance_ms(group['name'])
-    add_stash_selectors(config)
+        if group['type'] in {'url-test','fallback'}:
+            # Stash shares each node's health among groups. A single target
+            # prevents generic 204 probes overwriting an AI transport failure.
+            group['url'] = 'https://chatgpt.com/'
+    for provider in config['proxy-providers'].values():
+        provider.update({'benchmark-url':'https://chatgpt.com/','benchmark-timeout':5})
+        provider.setdefault('health-check',{}).update(enable=True,url='https://chatgpt.com/')
+    apply_ordered_stable(config)
     return config
 
 
@@ -74,5 +81,8 @@ def for_clash(source, baseline):
     config = copy.deepcopy(source)
     config['dns'] = copy.deepcopy(baseline['dns'])
     config['proxy-groups'] = copy.deepcopy(baseline['proxy-groups'])
+    for provider in config.get('proxy-providers',{}).values():
+        provider.pop('benchmark-url',None)
+        provider.pop('benchmark-timeout',None)
     config['rules'] = [r for r in config['rules'] if r not in STASH_ONLY_ROUTES]
     return config
