@@ -125,15 +125,15 @@
     {
       "id": "ai-sukka",
       "repository": "SukkaW/Surge",
-      "revision": "379da3dfaf474b471aadec1762def03dc53d12b9",
+      "revision": "a8727444cd47a35464a7f4b74ac669c51e68c2d3",
       "ref": "HEAD",
       "path": "Source/non_ip/ai.conf",
-      "url": "https://raw.githubusercontent.com/SukkaW/Surge/379da3dfaf474b471aadec1762def03dc53d12b9/Source/non_ip/ai.conf",
+      "url": "https://raw.githubusercontent.com/SukkaW/Surge/a8727444cd47a35464a7f4b74ac669c51e68c2d3/Source/non_ip/ai.conf",
       "source_format": "classical_text",
-      "source_sha256": "282a89c0424f73f9ac31b4919c93b22563b91807fd31d6f4e9cdc4b44003fa0e",
+      "source_sha256": "0690ba991e66ca42cea4c4104d6d2af27cf1dccebdba9dd13d20ac6f117b7380",
       "output": "rules/vendor/ai-sukka.yaml",
-      "output_sha256": "0d14b54ecd4789f10511ac6a529004b335b17efcd1d67a932fe153e385fc6bb2",
-      "retained": 57,
+      "output_sha256": "6d74d9715ca2daf88668f438e63a2e1c47329c324fd90a35a8567a814f0198fa",
+      "retained": 58,
       "omitted": [
         "URL-REGEX,https://www\\.google\\.com/.*continue=https://gemini\\.google\\.com.+"
       ],
