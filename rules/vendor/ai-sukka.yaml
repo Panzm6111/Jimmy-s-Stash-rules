@@ -1,5 +1,5 @@
 # Mechanically adapted maintained rules; no locally authored domains.
-# Sources and original licenses: research/community-sources.json; SukkaW/Surge/Source/non_ip/ai.conf @ a8727444cd47a35464a7f4b74ac669c51e68c2d3
+# Sources and original licenses: research/community-sources.json; SukkaW/Surge/Source/non_ip/ai.conf @ 32f900e8759db8276cf6c9dcd0cc81f19c61c58f
 payload:
 - DOMAIN-SUFFIX,openai.com
 - DOMAIN-SUFFIX,oaistatic.com
@@ -13,6 +13,8 @@ payload:
 - DOMAIN-SUFFIX,anthropic.com
 - DOMAIN-SUFFIX,claude.ai
 - DOMAIN-SUFFIX,claude.com
+- DOMAIN,bridge.claudeusercontent.com
+- DOMAIN,claude.site
 - DOMAIN-SUFFIX,clau.de
 - DOMAIN-SUFFIX,bard.google.com
 - DOMAIN-SUFFIX,gemini.google
