@@ -8,6 +8,8 @@ Stash 和 Clash 的 Gemini 网页、AI Studio、生成接口及代码助手专�
 
 已同步此前两次云端规则变化，再次检查六份需转换的上游源，本轮无新增规则差异。27 个上游直订地址和双端 234 项代表性分流检查全部通过。
 
+两端已发布，原订阅地址下载结果与生成文件逐字节一致。电脑原 Clash 卡片已同步，内核已加载 7 条线路和 14 条 Gemini 规则，15 个原有手选项核对一致。经电脑代理访问 Gemini 首页时，连接记录为 Jimmy · Gemini → 日本 A，完整下载返回 HTTP 200，耗时约 1.10 秒。iPhone 可刷新原 Stash 订阅获取新版，实机加载待确认。[发布提交](https://github.com/Panzm6111/Jimmy-s-Stash-rules/commit/461dffa) · [云端检查通过](https://github.com/Panzm6111/Jimmy-s-Stash-rules/actions/runs/44929676313)
+
 <!-- cleanup-20261113-start -->
 ### 2026-11-13 旧验证材料回收（本地）
 
