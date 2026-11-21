@@ -120,7 +120,7 @@ class ClashChecks(unittest.TestCase):
         for key in ['proxies','proxy-providers','dns','tun','mixed-port']:
             self.assertEqual(merged[key],airport[key])
         names={g['name'] for g in merged['proxy-groups']}
-        self.assertEqual(len(names),31)
+        self.assertEqual(len(names),32)
         self.assertTrue(all(name.startswith('Jimmy · ') for name in names))
         self.assertNotIn('台湾',names)
 
@@ -156,7 +156,7 @@ class ClashChecks(unittest.TestCase):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         overlay=global_merge(source)
         self.assertEqual(full['proxy-groups'][:-1],overlay['proxy-groups'])
-        self.assertEqual(len(full['proxy-groups']),32)
+        self.assertEqual(len(full['proxy-groups']),33)
         download=full['proxy-groups'][-1]
         self.assertEqual(download['type'],'fallback')
         self.assertFalse(download['lazy'])
@@ -182,12 +182,12 @@ class ClashChecks(unittest.TestCase):
     def test_automatic_pool_ui_guard_and_explicit_manual_entry(self):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         pools=[g for g in full['proxy-groups'] if g['type']=='url-test']
-        self.assertEqual(len(pools),16)
+        self.assertEqual(len(pools),17)
         self.assertNotIn('Jimmy · AI组', {g['name'] for g in pools})
         for g in pools:
-            self.assertTrue(g['hidden']);self.assertTrue(g['include-all'])
-            self.assertEqual(g['tolerance'],{'Jimmy · AI最速组':100,'Jimmy · TikTok 服务检测组':100}.get(g['name'],50))
-            service=g['name'] in {'Jimmy · AI最速组','Jimmy · TikTok 服务检测组'} or 'AI稳备 · ' in g['name']
+            self.assertEqual(g['hidden'], g['name'] != 'Jimmy · Gemini');self.assertTrue(g['include-all'])
+            self.assertEqual(g['tolerance'],{'Jimmy · Gemini':200,'Jimmy · AI最速组':100,'Jimmy · TikTok 服务检测组':100}.get(g['name'],50))
+            service=g['name'] in {'Jimmy · Gemini','Jimmy · AI最速组','Jimmy · TikTok 服务检测组'} or 'AI稳备 · ' in g['name']
             self.assertEqual(g['expected-status'],200 if service else 204)
         for g in full['proxy-groups']:
             if g['type']!='select':continue

@@ -5,7 +5,8 @@ import re
 STABLE = ('HKG B', 'HKG C', 'HKG J', '新加坡 A', '台湾 B', '日本 A', '美国 B')
 AI_FAST = ('日本 A', '日本 B', 'HKG B', 'HKG C', 'HKG J')
 NODE_FAST = ('日本 A', '日本 B', 'HKG B', 'HKG C', 'HKG A', 'HKG I', 'HKG J', 'HKG M')
-MEMBERS = {'AI组': STABLE, 'AI最速组': AI_FAST, '最优速组': NODE_FAST}
+GEMINI = ('日本 A', '日本 B', '新加坡 A', '新加坡 B', '台湾 B', '美国 B', '美国 D')
+MEMBERS = {'Gemini': GEMINI, 'AI组': STABLE, 'AI最速组': AI_FAST, '最优速组': NODE_FAST}
 PRIORITY_PREFIX = 'AI稳备 · '
 CHECK_INTERVAL = 3
 CLASH_CHECK_INTERVAL = 60

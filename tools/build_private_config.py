@@ -24,9 +24,9 @@ from service_health import MANAGED
 from curated_pools import MEMBERS, STABLE, PRIORITY_PREFIX, CHECK_INTERVAL, name_filter
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
-CURATED = ('AI组', 'AI最速组', '最优速组')
+CURATED = ('AI组', 'AI最速组', '最优速组', 'Gemini')
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
-AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', 'AI最速组', '最优速组')
+AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', 'AI最速组', '最优速组', 'Gemini')
 PROBE_SETTINGS = {'url': 'https://chatgpt.com/', 'interval': 1800}
 PROBE_FIELDS = (*PROBE_SETTINGS, 'tolerance', 'lazy')
 

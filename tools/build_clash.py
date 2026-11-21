@@ -66,7 +66,7 @@ def global_merge(source):
                 if not group['proxies']:del group['proxies']
         if group['type']=='url-test':
             # UI guard only: Mihomo's API can still pin a URLTest pool.
-            group.update(hidden=True, tolerance=pool_tolerance_ms(original), **{'expected-status':204})
+            group.update(hidden=original != 'Gemini', tolerance=pool_tolerance_ms(original), **{'expected-status':204})
             if original in ENDPOINTS or original.startswith(PRIORITY_PREFIX):
                 group.update(url=ENDPOINTS.get(original, ENDPOINTS['AI组']), timeout=6000,
                              **{'expected-status':200}, **{'max-failed-times':1})

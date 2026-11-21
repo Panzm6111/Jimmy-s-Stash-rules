@@ -141,7 +141,7 @@ def verify(text):
     for name, provider in script_references(integrated())['script-providers'].items():
         assert config['script-providers'][name] == provider
         assert set(provider) == {'url', 'interval'} and provider['interval'] == 86400
-    assert len(config['proxy-groups']) == 31
+    assert len(config['proxy-groups']) == 32
     assert config['proxy-providers']['机场']['url'] == 'https://example.invalid/REPLACE_ON_DEVICE'
     original = integrated()
     # The published profile now has an intentionally fixed China-IP fallback.

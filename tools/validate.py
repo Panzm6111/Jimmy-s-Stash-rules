@@ -388,7 +388,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_other_and_all_nodes_do_not_hide_connection_candidates(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
-        self.assertEqual(len(self.groups), 24)
+        self.assertEqual(len(self.groups), 25)
         other = self.groups['其他地区']
         all_nodes = self.groups['自动节点']
         self.assertEqual(other['type'], 'url-test')
@@ -492,12 +492,12 @@ class ProjectChecks(unittest.TestCase):
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
-        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'AI最速组', '最优速组'}
+        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'AI最速组', '最优速组', 'Gemini'}
         self.assertEqual({g['name'] for g in self.groups.values() if g['type'] == 'url-test'}, pools)
         for name in pools:
             group = self.groups[name]
             self.assertEqual(group['url'], 'https://www.gstatic.com/generate_204')
-            self.assertEqual(group['interval'], 3 if name in ('AI最速组','最优速组') else 1800)
+            self.assertEqual(group['interval'], 3 if name in ('AI最速组','最优速组','Gemini') else 1800)
             self.assertEqual(group['proxies'], ['REJECT'])
             self.assertRegex('REJECT', group['filter'])
             self.assertEqual(group['use'], ['机场'])

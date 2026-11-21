@@ -40,7 +40,7 @@ class Subscriptions(unittest.TestCase):
     def test_both_published_profiles_use_the_same_pool_tolerances(self):
         expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区'), 50)
         from curated_pools import STABLE, PRIORITY_PREFIX
-        expected.update({'AI最速组':100, '最优速组':50})
+        expected.update({'Gemini':200, 'AI最速组':100, '最优速组':50})
         expected.update({PRIORITY_PREFIX+n:50 for n in STABLE})
         for path, prefix in [('config/stash.yaml',''), ('config/clash-verge-auto.yaml','Jimmy · ')]:
             with self.subTest(path=path):
@@ -61,7 +61,7 @@ class Subscriptions(unittest.TestCase):
                     continue
                 with self.subTest(profile=filename, group=name):
                     exposes_nodes = bool(group.get('use') or group.get('include-all'))
-                    self.assertEqual(exposes_nodes, name in {prefix+'总代理', prefix+'手动节点'})
+                    self.assertEqual(exposes_nodes, name in {prefix+'总代理', prefix+'手动节点', prefix+'Gemini'})
                     self.assertTrue(set(group.get('proxies', [])) <= set(groups) | {'DIRECT','REJECT'})
             self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'总代理')
             self.assertNotIn(prefix+'TikTok 服务优选', groups[prefix+'TikTok']['proxies'])
@@ -101,7 +101,7 @@ class Subscriptions(unittest.TestCase):
         for group in config['proxy-groups']:
             if group['type'] in ('url-test','fallback'):
                 self.assertEqual(group['url'],'https://chatgpt.com/')
-                if group['name'] in ('AI组','AI最速组','最优速组') or group['name'].startswith('AI稳备 · '):
+                if group['name'] in ('AI组','AI最速组','最优速组','Gemini') or group['name'].startswith('AI稳备 · '):
                     self.assertEqual(group['interval'],3)
         self.assertNotIn('secret',config)
         self.assertNotIn('external-controller',config)

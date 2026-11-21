@@ -2,7 +2,7 @@
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # JIMMY-STASH AD-20261020.5；原生稳定优先回退，不再使用 GPT/TikTok 服务检测覆写。
-# JIMMY-ROUTING ROUTE-20261116.3；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。
+# JIMMY-ROUTING ROUTE-20261122.1；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。
 # AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。
 # JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
@@ -166,6 +166,17 @@ proxy-groups:
   filter: (?i)^(日本 [AB]|HKG [BCJ]|REJECT)$
   hidden: true
   tolerance: 100
+- name: Gemini
+  type: url-test
+  url: https://chatgpt.com/
+  interval: 3
+  lazy: false
+  tolerance: 200
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)^(日本 [AB]|新加坡 [AB]|台湾 B|美国 [BD]|REJECT)$
 - name: 最优速组
   type: url-test
   url: https://chatgpt.com/
@@ -501,6 +512,20 @@ rules:
 - RULE-SET,Adobe服务,Adobe
 - RULE-SET,Adobe官方补充,Adobe
 - RULE-SET,基础广告,广告拦截
+- DOMAIN-SUFFIX,gemini.google.com,Gemini
+- DOMAIN-SUFFIX,gemini.google,Gemini
+- DOMAIN-SUFFIX,gemini.gstatic.com,Gemini
+- DOMAIN-SUFFIX,bard.google.com,Gemini
+- DOMAIN-SUFFIX,aistudio.google.com,Gemini
+- DOMAIN-SUFFIX,makersuite.google.com,Gemini
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,Gemini
+- DOMAIN-SUFFIX,geminiweb-pa.googleapis.com,Gemini
+- DOMAIN-SUFFIX,geminicodeassist.googleapis.com,Gemini
+- DOMAIN-SUFFIX,cloudcode-pa.googleapis.com,Gemini
+- DOMAIN,geminiweb-pa.clients.google.com,Gemini
+- DOMAIN,geminiweb-pa.clients6.google.com,Gemini
+- DOMAIN,alkalimakersuite-pa.clients6.google.com,Gemini
+- DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com,Gemini
 - DOMAIN-SUFFIX,claude.ai,Claude
 - DOMAIN-SUFFIX,anthropic.com,Claude
 - DOMAIN-SUFFIX,claude.com,Claude

@@ -65,15 +65,15 @@
   },
   {
     "domain": "gemini.google.com",
-    "policy": "海外AI"
+    "policy": "Gemini"
   },
   {
     "domain": "aistudio.google.com",
-    "policy": "海外AI"
+    "policy": "Gemini"
   },
   {
     "domain": "generativelanguage.googleapis.com",
-    "policy": "海外AI"
+    "policy": "Gemini"
   },
   {
     "domain": "notebooklm.google.com",
@@ -81,7 +81,7 @@
   },
   {
     "domain": "cloudcode-pa.googleapis.com",
-    "policy": "海外AI"
+    "policy": "Gemini"
   },
   {
     "domain": "copilot.microsoft.com",

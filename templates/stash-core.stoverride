@@ -89,6 +89,17 @@ proxy-groups:
   - 机场
   filter: (?i)^(日本 [AB]|HKG [BCJ]|REJECT)$
   hidden: true
+- name: Gemini
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 3
+  lazy: false
+  tolerance: 200
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: (?i)^(日本 [AB]|新加坡 [AB]|台湾 B|美国 [BD]|REJECT)$
 - name: 最优速组
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -411,6 +422,20 @@ rules:
 - RULE-SET,东方财富直连,DIRECT
 - RULE-SET,Adobe服务,Adobe
 - RULE-SET,基础广告,广告拦截
+- DOMAIN-SUFFIX,gemini.google.com,Gemini
+- DOMAIN-SUFFIX,gemini.google,Gemini
+- DOMAIN-SUFFIX,gemini.gstatic.com,Gemini
+- DOMAIN-SUFFIX,bard.google.com,Gemini
+- DOMAIN-SUFFIX,aistudio.google.com,Gemini
+- DOMAIN-SUFFIX,makersuite.google.com,Gemini
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,Gemini
+- DOMAIN-SUFFIX,geminiweb-pa.googleapis.com,Gemini
+- DOMAIN-SUFFIX,geminicodeassist.googleapis.com,Gemini
+- DOMAIN-SUFFIX,cloudcode-pa.googleapis.com,Gemini
+- DOMAIN,geminiweb-pa.clients.google.com,Gemini
+- DOMAIN,geminiweb-pa.clients6.google.com,Gemini
+- DOMAIN,alkalimakersuite-pa.clients6.google.com,Gemini
+- DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com,Gemini
 - DOMAIN-SUFFIX,claude.ai,Claude
 - DOMAIN-SUFFIX,anthropic.com,Claude
 - DOMAIN-SUFFIX,claude.com,Claude
