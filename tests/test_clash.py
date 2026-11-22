@@ -92,7 +92,7 @@ class ClashChecks(unittest.TestCase):
             self.assertEqual(groups[prefix+'手动节点'].get('proxies',[]), ['REJECT'] if not prefix else [])
             self.assertEqual(groups[prefix+'总代理']['proxies'][0], prefix+'最优速组')
             self.assertEqual(groups[prefix+'海外AI']['proxies'][0], prefix+'AI组')
-            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'总代理')
+            self.assertEqual(groups[prefix+'TikTok']['use'], ['机场'])
             for name in ('Apple','Microsoft','国内直连'):
                 self.assertEqual(groups[prefix+name]['proxies'][0], 'DIRECT')
             self.assertEqual(groups[prefix+'广告拦截']['proxies'][0], 'REJECT')
@@ -155,7 +155,11 @@ class ClashChecks(unittest.TestCase):
         source=base_profile()
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         overlay=global_merge(source)
-        self.assertEqual(full['proxy-groups'][:-1],overlay['proxy-groups'])
+        expected_groups=copy.deepcopy(overlay['proxy-groups'])
+        tiktok=next(g for g in expected_groups if g['name']=='Jimmy · TikTok')
+        del tiktok['include-all']
+        tiktok['use']=['机场']
+        self.assertEqual(full['proxy-groups'][:-1],expected_groups)
         self.assertEqual(len(full['proxy-groups']),33)
         download=full['proxy-groups'][-1]
         self.assertEqual(download['type'],'fallback')
@@ -182,11 +186,18 @@ class ClashChecks(unittest.TestCase):
     def test_automatic_pool_ui_guard_and_explicit_manual_entry(self):
         full=yaml.safe_load(render()['config/clash-verge-auto.yaml'])
         pools=[g for g in full['proxy-groups'] if g['type']=='url-test']
-        self.assertEqual(len(pools),17)
+        self.assertEqual(len(pools),18)
         self.assertNotIn('Jimmy · AI组', {g['name'] for g in pools})
         for g in pools:
-            self.assertEqual(g['hidden'], g['name'] != 'Jimmy · Gemini');self.assertTrue(g['include-all'])
-            self.assertEqual(g['tolerance'],{'Jimmy · Gemini':200,'Jimmy · AI最速组':100,'Jimmy · TikTok 服务检测组':100}.get(g['name'],50))
+            self.assertEqual(g['hidden'], g['name'] not in ('Jimmy · Gemini','Jimmy · TikTok'))
+            if g['name'] == 'Jimmy · TikTok':
+                self.assertEqual(g['use'], ['机场'])
+                self.assertEqual(g['empty-fallback'], 'REJECT')
+                self.assertEqual(g['url'], 'https://www.gstatic.com/generate_204')
+                self.assertEqual(g['interval'], 60)
+            else:
+                self.assertTrue(g['include-all'])
+            self.assertEqual(g['tolerance'],{'Jimmy · Gemini':200,'Jimmy · TikTok':150,'Jimmy · AI最速组':100,'Jimmy · TikTok 服务检测组':100}.get(g['name'],50))
             service=g['name'] in {'Jimmy · Gemini','Jimmy · AI最速组','Jimmy · TikTok 服务检测组'} or 'AI稳备 · ' in g['name']
             self.assertEqual(g['expected-status'],200 if service else 204)
         for g in full['proxy-groups']:
@@ -195,7 +206,7 @@ class ClashChecks(unittest.TestCase):
             else:
                 self.assertFalse(g.get('include-all',False));self.assertNotIn('use',g)
         groups={g['name']:g for g in full['proxy-groups']}
-        for name in ('海外AI','TikTok','Adobe','总代理'):
+        for name in ('海外AI','Adobe','总代理'):
             self.assertIn('Jimmy · 手动节点',groups['Jimmy · '+name]['proxies'])
 
     def test_new_remote_structure_is_not_frozen_in_local_private_merge(self):

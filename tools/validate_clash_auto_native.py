@@ -2,6 +2,7 @@
 import argparse,copy,http.server,json,os,shutil,socket,subprocess,threading,time,urllib.request,urllib.error,urllib.parse
 from pathlib import Path
 import yaml
+from curated_pools import TIKTOK
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -20,10 +21,20 @@ def main():
     def check(ok,label):
         if not ok:raise AssertionError(label)
         checks.append(label)
-    def node(name):return {'name':name,'type':'socks5','server':'127.0.0.1','port':9}
+    check_url='http://tiktok-probe.example.invalid/health'
+    def node(name):
+        if name in TIKTOK:
+            return {'name':name,'type':'http','server':'127.0.0.1','port':fixture.server_port}
+        return {'name':name,'type':'socks5','server':'127.0.0.1','port':9}
     class Fixture(http.server.BaseHTTPRequestHandler):
         def log_message(self,*args):pass
+        def do_HEAD(self):
+            if self.path==check_url:
+                self.send_response(204);self.end_headers()
+            else:self.send_error(404)
         def do_GET(self):
+            if self.path==check_url:
+                self.do_HEAD();return
             if self.path=='/airport.yaml':
                 state['airport_requests']+=1
                 if not state['airport_available']:
@@ -33,6 +44,9 @@ def main():
                     self.send_response(200);self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body);return
                 state['airport_ua_matched']+=1
                 names=['美国','日本','台湾','TikTok','US-synthetic' if state['airport_version']==1 else 'US-updated']
+                if state['airport_version']==2:
+                    names.extend([*TIKTOK, 'HKG M', TIKTOK[0]+' 备用', TIKTOK[0].lower()])
+                    names=list(dict.fromkeys(names))
                 obj={'proxies':[node(n) for n in names]}
             elif self.path.startswith('/rules/'):
                 idx=int(self.path.rsplit('/',1)[1]);behavior=state['rule_behaviors'][idx];prefix='DOMAIN,' if behavior=='classical' else '';obj={'payload':[prefix+'one.example.invalid']+([prefix+'two.example.invalid'] if state['rule_version']==2 else [])}
@@ -55,6 +69,8 @@ def main():
         config.update({'external-controller':f'127.0.0.1:{api_port}','mixed-port':0,'mode':'rule',
                        'tun':{'enable':False},'dns':{'enable':False},'log-level':'warning'})
         config['proxy-providers']['机场'].update(url=private_url,path='./airport.yaml',proxy='DIRECT')
+        config['proxy-providers']['机场']['health-check']['url']=check_url
+        next(g for g in config['proxy-groups'] if g['name']=='Jimmy · TikTok')['url']=check_url
         config['proxy-providers']['机场']['payload']=[node(n) for n in ['跳转域名{请勿连接}:example.invalid','美国','日本','台湾','TikTok','US-synthetic']]
         for i,p in enumerate(config['rule-providers'].values()):
             state.setdefault('rule_behaviors',{})[i]=p['behavior']
@@ -62,7 +78,13 @@ def main():
         return config
     path=runtime/'config.yaml'
     def save(value):path.write_text(yaml.safe_dump(value,allow_unicode=True,sort_keys=False),encoding='utf-8')
-    config=prepared(public);save(config)
+    config=prepared(public)
+    # Start as an existing device with the old same-name selector. Force a
+    # non-default saved choice of 总代理, then load the current profile in place.
+    old=copy.deepcopy(config)
+    idx=next(i for i,g in enumerate(old['proxy-groups']) if g['name']=='Jimmy · TikTok')
+    old['proxy-groups'][idx]={'name':'Jimmy · TikTok','type':'select','proxies':['Jimmy · 香港','Jimmy · 总代理']}
+    save(old)
     env={k:v for k,v in os.environ.items() if k.lower() not in {'http_proxy','https_proxy','all_proxy','no_proxy'}}
     process=None
     try:
@@ -76,6 +98,14 @@ def main():
                 except (OSError,ValueError):pass
                 if process.poll() is not None or time.monotonic()>deadline:raise RuntimeError('Fixture initialization failed; inspect local log')
                 time.sleep(.2)
+            tiktok_path='/proxies/'+urllib.parse.quote('Jimmy · TikTok',safe='')
+            api(tiktok_path,'PUT',{'name':'Jimmy · 总代理'})
+            check(api(tiktok_path)['now']=='Jimmy · 总代理','legacy TikTok selector stores an explicit general-pool choice')
+            save(config);api('/configs','PUT',{'path':str(path)})
+            groups=api('/proxies')['proxies']
+            migrated=groups['Jimmy · TikTok']
+            check(migrated['type']=='URLTest' and migrated['all']==['REJECT'] and migrated['now']=='REJECT',
+                  'same-name URLTest drops the old general selection and rejects with no matching exits')
             check(len(providers)==len(public['rule-providers']),'all remote rule providers load')
             check(state['airport_requests']>0 and not (runtime/'airport.yaml').exists(),
                   'private fallback supplies nodes with failed first download and no cache')
@@ -86,7 +116,8 @@ def main():
             api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
             check((runtime/'airport.yaml').exists(),'successful later download replaces startup fallback with a cache')
             check(state['airport_ua_matched']>0,'airport fetch requests Clash YAML through explicit client user agent')
-            check(len([n for n in groups if n.startswith('Jimmy · ')])==32,'31 policy groups and one download failover group load')
+            check({n for n in groups if n.startswith('Jimmy · ')}=={g['name'] for g in public['proxy-groups']},
+                  'all published policy groups and the download failover group load')
             check(groups['Jimmy · Claude']['now']=='Jimmy · AI组','Claude web has its own selector with the curated ai default')
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
@@ -108,7 +139,6 @@ def main():
                 else:
                     check(all(member.startswith('Jimmy · ') or member in fixed for member in groups[name]['all']),
                           name + ' only exposes groups and built-in policies')
-            check(groups['Jimmy · TikTok']['now'] == 'Jimmy · 总代理', 'TikTok follows the general selector')
             check(groups['Jimmy · 新加坡']['all']==['REJECT'],'empty region rejects instead of direct fallback')
             api('/proxies/'+urllib.parse.quote('Jimmy · 海外AI',safe=''),'PUT',{'name':'Jimmy · AI组'})
             next_public=copy.deepcopy(public)
@@ -129,6 +159,14 @@ def main():
             api('/providers/proxies/'+urllib.parse.quote('机场',safe=''),'PUT')
             members=api('/proxies')['proxies']['Jimmy · 手动节点']['all']
             check('US-updated' in members and 'US-synthetic' not in members,'airport node refresh propagates without profile replacement')
+            api('/providers/proxies/'+urllib.parse.quote('机场',safe='')+'/healthcheck')
+            deadline=time.monotonic()+12
+            social=api(tiktok_path)
+            while social['now'] not in TIKTOK and time.monotonic()<deadline:
+                time.sleep(.2)
+                social=api(tiktok_path)
+            check(set(social['all'])==set(TIKTOK) and social['now'] in TIKTOK,
+                  'TikTok pool takes exactly the eight eligible exits after provider refresh')
             state['rule_version']=2
             api('/providers/rules/'+urllib.parse.quote('基础广告',safe=''),'PUT')
             check(api('/providers/rules')['providers']['基础广告']['ruleCount']==2,'advertising rules refresh independently')

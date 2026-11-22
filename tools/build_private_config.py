@@ -24,9 +24,9 @@ from service_health import MANAGED
 from curated_pools import MEMBERS, STABLE, PRIORITY_PREFIX, CHECK_INTERVAL, name_filter
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
-CURATED = ('AI组', 'AI最速组', '最优速组', 'Gemini')
+CURATED = ('AI组', 'AI最速组', '最优速组', 'Gemini', 'TikTok')
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
-AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', 'AI最速组', '最优速组', 'Gemini')
+AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', 'AI最速组', '最优速组', 'Gemini', 'TikTok')
 PROBE_SETTINGS = {'url': 'https://chatgpt.com/', 'interval': 1800}
 PROBE_FIELDS = (*PROBE_SETTINGS, 'tolerance', 'lazy')
 
@@ -128,7 +128,8 @@ def verify(config, template, expected_nodes):
         union.update(n for n in members if n in node_names)
     require(set(by_name['自动节点']['proxies']) - {'REJECT'} == node_names, '自动节点有遗漏。')
     for name in CURATED:
-        expected = {n for n in node_names if re.fullmatch(name_filter(MEMBERS[name]), n)}
+        expected = node_names.intersection(MEMBERS[name]) if name == 'TikTok' else {
+            n for n in node_names if re.fullmatch(name_filter(MEMBERS[name]), n)}
         if name == 'AI组':
             require(by_name[name]['type'] == 'fallback', '最稳组必须按优先级故障回退。')
             require(by_name[name]['proxies'] == [PRIORITY_PREFIX+n for n in STABLE], '最稳顺序改变。')
@@ -146,7 +147,7 @@ def verify(config, template, expected_nodes):
             expected_members = template_groups[selector]['proxies'] + [n for n in MEMBERS[pool] if n in node_names]
             require(by_name[selector]['proxies'] == expected_members, '服务选择组候选或顺序错误。')
     require(by_name['海外AI']['proxies'][0] == template_groups['海外AI']['proxies'][0], '海外 AI 默认项错误。')
-    for name in ('TikTok', 'Netflix', 'YouTube', 'Telegram', 'Adobe', '未匹配流量'):
+    for name in ('Netflix', 'YouTube', 'Telegram', 'Adobe', '未匹配流量'):
         require(by_name[name]['proxies'][0] == '总代理', '软件未默认跟随总代理。')
     for name in ('Apple', 'Microsoft'):
         require(by_name[name]['proxies'][0] == 'DIRECT', '系统软件默认直连改变。')

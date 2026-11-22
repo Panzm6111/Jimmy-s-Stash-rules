@@ -2,7 +2,7 @@
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # JIMMY-STASH AD-20261020.5；原生稳定优先回退，不再使用 GPT/TikTok 服务检测覆写。
-# JIMMY-ROUTING ROUTE-20261122.1；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。
+# JIMMY-ROUTING ROUTE-20261123.1；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。
 # AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。
 # JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
@@ -261,21 +261,16 @@ proxy-groups:
   - 手动节点
   - 总代理
 - name: TikTok
-  type: select
+  type: url-test
+  url: https://chatgpt.com/
+  interval: 3
+  lazy: false
+  tolerance: 150
   proxies:
-  - 总代理
-  - AI最速组
-  - 美国
-  - 日本
-  - AI组
-  - 香港
-  - 新加坡
-  - 台湾
-  - 其他地区
-  - 自动节点
-  - 手动节点
-  - DIRECT
-  - 最优速组
+  - REJECT
+  use:
+  - 机场
+  filter: ^(美国 [ABDEFG]|英国 B|西班牙|REJECT)$
 - name: Netflix
   type: select
   proxies:
@@ -504,6 +499,7 @@ rules:
 - RULE-SET,TikTok核心,TikTok
 - RULE-SET,App广告域名,广告拦截
 - RULE-SET,小红书直连,DIRECT
+- DOMAIN-SUFFIX,snssdk.com,TikTok
 - RULE-SET,抖音直连,DIRECT
 - RULE-SET,抖音补充,DIRECT
 - RULE-SET,东方财富直连,DIRECT

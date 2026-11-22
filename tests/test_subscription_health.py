@@ -10,6 +10,22 @@ import validate as v
 
 
 class HealthChecks(unittest.TestCase):
+    def test_health_run_reports_overlap_drift_after_loading_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            payload = yaml.safe_dump({'payload': ['DOMAIN-SUFFIX,example.invalid']}).encode()
+            (root/'snapshot.yaml').write_bytes(payload)
+            part = dict(name='fixture', url='https://raw.githubusercontent.com/fixture/rules/main/a.yaml',
+                        behavior='classical', snapshot='snapshot.yaml')
+            overlap = {'ok':False, 'actual':[], 'expected':['DOMAIN-SUFFIX,example.invalid,TikTok']}
+            routes = {'ok':False, 'profiles':[{'profile':'Stash', 'tiktok_douyin_overlap':overlap}]}
+            with patch.object(h,'direct_parts',return_value=[part]), patch.object(a,'audit_profiles',return_value=routes), \
+                    patch.dict(h.os.environ, {'GITHUB_STEP_SUMMARY':''}):
+                report = h.run(root, lambda _:payload)
+            self.assertEqual(report['sources'][0]['health'], 'ok')
+            self.assertFalse(report['ok'])
+            self.assertIn('TikTok / Douyin overlap changed', (root/'.local/direct-source-health.md').read_text())
+
     def test_invalid_empty_duplicate_and_unreviewed_formats_rejected(self):
         for data in [b'payload: []',b'<html>failure</html>',b'payload: [1]',
                      b'payload: []\npayload: []',b'payload: ["MATCH,DIRECT"]']:
@@ -39,12 +55,25 @@ class HealthChecks(unittest.TestCase):
         config=v.load('config/stash.yaml');sets=v.provider_rules(config)
         cases=json.loads((ROOT/'tests/fixtures/app-routes.json').read_text(encoding='utf-8'))['cases']
         broken=copy.deepcopy(config)
-        broken['rules'].insert(0,'RULE-SET,TikTok,TikTok')
+        broken['rules'].remove('DOMAIN-SUFFIX,snssdk.com,TikTok')
         failures=[x for x in a.audit(broken,sets,cases) if not x['ok']]
         self.assertTrue(any(x['host']=='aweme.snssdk.com' for x in failures))
         broken=copy.deepcopy(config)
+        broken['rules'].insert(0,'RULE-SET,TikTok,TikTok')
+        failures=[x for x in a.audit(broken,sets,cases) if not x['ok']]
+        self.assertTrue(any(x['host']=='tiktok.fixture.douyin.com' for x in failures))
+        broken=copy.deepcopy(config)
         broken['http']['url-rewrite'].append(r'^https://edith\.xiaohongshu\.com/ - reject-dict')
         self.assertTrue(any(x['http_handlers'] for x in a.audit(broken,sets,cases)))
+
+    def test_overlap_only_promotes_explicit_shared_domain_coverage(self):
+        tiktok=['DOMAIN-SUFFIX,shared.test','DOMAIN,exact.test','DOMAIN,a.one.test',
+                'DOMAIN-SUFFIX,video.two.test','DOMAIN-KEYWORD,tiktok','DOMAIN-SUFFIX,near.test']
+        douyin=['DOMAIN-SUFFIX,shared.test','DOMAIN,child.shared.test','DOMAIN-SUFFIX,exact.test',
+                'DOMAIN-SUFFIX,one.test','DOMAIN,p.video.two.test','DOMAIN,tiktok.douyin.test',
+                'DOMAIN-SUFFIX,notnear.test']
+        self.assertEqual(a.tiktok_douyin_overlap(tiktok,douyin),
+                         ['DOMAIN,a.one.test','DOMAIN,exact.test','DOMAIN,p.video.two.test','DOMAIN-SUFFIX,shared.test'])
 
     def test_every_published_direct_source_is_monitored(self):
         monitored={x['url'] for x in h.direct_parts()}

@@ -42,3 +42,27 @@ def fixture_payload(classical,behavior):
         if kind not in {'DOMAIN','DOMAIN-SUFFIX'}:raise ValueError('Non-domain fixture')
         result.append(('+.' if kind=='DOMAIN-SUFFIX' else '')+host)
     return result
+
+
+def tiktok_douyin_overlap(tiktok, douyin):
+    """Intersect explicit host/suffix coverage without promoting TikTok's keywords."""
+    def domains(rules):
+        return {tuple(rule.split(',', 1)) for rule in rules
+                if rule.startswith(('DOMAIN,', 'DOMAIN-SUFFIX,'))}
+
+    def covers(rule, other):
+        kind, name = rule
+        if kind == 'DOMAIN':
+            return rule == other
+        return other[1] == name or other[1].endswith('.' + name)
+
+    overlap = set()
+    domestic = domains(douyin)
+    for social in domains(tiktok):
+        for local in domestic:
+            if covers(social, local):
+                overlap.add(local)
+            elif covers(local, social):
+                overlap.add(social)
+    return [','.join(rule) for rule in sorted(overlap)
+            if not any(parent != rule and covers(parent, rule) for parent in overlap)]

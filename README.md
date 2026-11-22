@@ -7,7 +7,7 @@
 | Stash | [config/stash.yaml](config/stash.yaml) |
 | Clash Verge | [config/clash-verge-auto.yaml](config/clash-verge-auto.yaml) |
 
-Stash 对应 ROUTE-20261116.3，Clash 对应 ROUTE-20261116.2。AI组（最稳）按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的优先级故障回退；AI最速组收日本 A/B、HKG B/C/J；最优速组收日本 A/B、HKG B/A/C/I/J/M。Stash 精选池设 3 秒主动兜底探测、3 秒探测限时；Clash 保留电脑现有 60 秒节奏。海外AI/Claude 默认 AI组，其余代理业务默认总代理，国内与系统直连沿用。手机删除旧 GPT/TikTok 服务检测覆写，保留私人机场与 MitM，刷新原主配置即可；不再需要脚本控制端口/密钥。Stash 原生测速共享，统一以 ChatGPT 为目标；Clash 保留 AI 与通用目标独立检查。入口测速不能证明真实回复或 TikTok 播放可用。[故障恢复、覆写删除与日志指南](docs/ROUTING.md#iphone-service-health)。
+Stash 与 Clash 当前版本均为 ROUTE-20261123.1。AI组（最稳）按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的优先级故障回退；AI最速组收日本 A/B、HKG B/C/J；最优速组收日本 A/B、HKG B/A/C/I/J/M。Stash 精选池设 3 秒主动兜底探测、3 秒探测限时；Clash 保留电脑现有 60 秒节奏。海外AI 和 Claude 默认 AI组，Gemini 使用独立精选池。TikTok 自动从美国 A/B/D/E/F/G、英国 B、西班牙中择优，抖音与 TikTok 共用的 snssdk.com 也进入此组。原本与 TikTok 共组的 Instagram、X 等业务共用这八条线路。手机删除旧 GPT/TikTok 服务检测覆写，保留私人机场与 MitM，刷新原主配置即可；不再需要脚本控制端口/密钥。Stash 原生测速共享，统一以 ChatGPT 为目标；Clash 保留 AI 与通用目标独立检查。入口测速不能证明真实回复或 TikTok 播放可用。[故障恢复、覆写删除与日志指南](docs/ROUTING.md#iphone-service-health)。
 
 Claude 网页版使用独立策略组，默认选 `AI组`。主站、账户验证和第一方资源都按这个组分流。[网页版设置与连接核对](docs/ROUTING.md#claude-web)
 

@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 import yaml
 from validate import ROOT, provider_rules, matches
+from provider_sources import tiktok_douyin_overlap
 
 
 def decision(config,sets,host):
@@ -54,9 +55,19 @@ def audit_profiles(root=ROOT,live_sources=None):
                 elif 'raw.githubusercontent.com/Panzm6111/' not in provider['url']:
                     raise ValueError('missing checked source')
         results=audit(config,sets,cases,prefix)
-        profiles.append({'profile':filename,'results':results})
+        # Client-side direct subscriptions can drift before a reviewed snapshot
+        # is refreshed. Also flag a removed overlap even if the later rule happens
+        # to route the sample to TikTok today.
+        left=config['rules'].index('RULE-SET,小红书直连,DIRECT') + 1
+        right=config['rules'].index('RULE-SET,抖音直连,DIRECT')
+        actual=config['rules'][left:right]
+        overlap=tiktok_douyin_overlap(sets['TikTok'],sets['抖音直连']+sets['抖音补充'])
+        expected=[rule+','+prefix+'TikTok' for rule in overlap]
+        profiles.append({'profile':filename,'results':results,
+                         'tiktok_douyin_overlap':{'ok':actual==expected,'expected':expected,'actual':actual}})
     flat=[x for profile in profiles for x in profile['results']]
-    return {'ok':all(x['ok'] for x in flat),'passed':sum(x['ok'] for x in flat),
+    return {'ok':all(x['ok'] for x in flat) and all(p['tiktok_douyin_overlap']['ok'] for p in profiles),
+            'passed':sum(x['ok'] for x in flat),
             'failed':sum(not x['ok'] for x in flat),'profiles':profiles,
             'boundary':'Public host/path samples; no app login, comment loading, posting, IP display or iPhone acceptance.'}
 

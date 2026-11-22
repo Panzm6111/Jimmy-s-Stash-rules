@@ -26,3 +26,5 @@
 - 2026-11-02手机去广告：用户明确现有规则优先。Stash新增秋风Only.Ads整份直订，仅在全部既有规则与GEOIP CN之后、MATCH之前；不得上提以提高拦截率。Clash仍只用基础域名广告，HTTP/JS、MITM、DNS、组和私人接入不变；27个直订URL由云端健康检查覆盖。
 
 - 2026-11-16 当前节点策略以 PROGRESS.md 的 pool-release-20261116 为准，取代旧服务覆写/AI容差方案。用户明确停用 GPT/TikTok 服务检测覆写；公共配置不再创建服务选择器、旧 ai 或服务 cron，历史样例不可重新启用。AI组即最稳组，按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的顺序 fallback，7 个隐藏单节点层固定顺序并保留 REJECT。AI最速组为日本 A/B、HKG B/C/J；最优速组为日本 A/B、HKG B/A/C/I/J/M。Stash 精选与优先层设 3 秒兜底探测、provider 3 秒限时，原生测速统一 ChatGPT；Clash 保持用户满意的 60 秒定时节奏，业务连接失败复核另计。电脑 auto_close_connection 已开启，未经要求不改实际客户端设置；不能将桌面隔离秒级恢复当成 Stash 实机通过。手机删除旧覆写由用户操作，保留私人机场与 MitM；手机原生即时故障处理、旧连接与速度差异仍待日志验证。
+
+- 2026-11-23 起，TikTok 与抖音明确收录的共享域名优先走 TikTok。Stash 和 Clash 的 TikTok 同名组直接从 NCloud 美国 A/B/D/E/F/G、英国 B、西班牙八条中自动选线，排除总代理与直连兜底。原本引用此组的其他社交应用共用该名单。改动源及真机待验收项见 PROGRESS.md 的 ROUTE-20261123.1。

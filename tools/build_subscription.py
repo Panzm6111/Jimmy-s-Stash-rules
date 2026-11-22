@@ -76,6 +76,14 @@ def remote_integrated():
     for provider in config['rule-providers'].values():
         provider.update(type='http',behavior='classical',interval=86400)
     config['rules'] = [f'RULE-SET,{name},{policy}' for name,_,policy in extra] + core['rules'][slot:]
+    # Only the shared host/suffix coverage changes sides. Leave keywords,
+    # unrelated TikTok entries and dedicated ads at their existing priorities.
+    from provider_sources import tiktok_douyin_overlap
+    douyin = [rule for name, path, _ in extra if name in ('抖音直连', '抖音补充')
+              for rule in load(path)['payload']]
+    overlap = tiktok_douyin_overlap(load('rules/vendor/tiktok.yaml')['payload'], douyin)
+    before_douyin = config['rules'].index('RULE-SET,抖音直连,DIRECT')
+    config['rules'][before_douyin:before_douyin] = [rule + ',TikTok' for rule in overlap]
     # Shared Tencent login/CDN/game infrastructure follows reviewed ad and
     # dedicated application rules, but cannot inherit a manual domestic proxy.
     config['rule-providers']['腾讯服务直连'] = {

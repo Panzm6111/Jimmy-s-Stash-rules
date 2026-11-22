@@ -15,6 +15,11 @@ def remote_profile(source):
     """Full remotely replaceable structure; only the airport URL belongs in local Merge."""
     result=copy.deepcopy(source)
     result.update(global_merge(source))
+    # Restrict the published pool to the active airport, including when a
+    # private merge imports additional sources with identically named nodes.
+    social = next(g for g in result['proxy-groups'] if g['name'] == 'Jimmy · TikTok')
+    social.pop('include-all')
+    social['use'] = ['机场']
     # Only Claude lookups that need a real answer use these proxied resolvers.
     # Node hostnames must resolve independently before that proxy can connect.
     dns = result['dns']
@@ -66,7 +71,11 @@ def global_merge(source):
                 if not group['proxies']:del group['proxies']
         if group['type']=='url-test':
             # UI guard only: Mihomo's API can still pin a URLTest pool.
-            group.update(hidden=original != 'Gemini', tolerance=pool_tolerance_ms(original), **{'expected-status':204})
+            group.update(hidden=original not in ('Gemini','TikTok'), tolerance=pool_tolerance_ms(original), **{'expected-status':204})
+            if original == 'TikTok':
+                # A restricted regional page can legitimately return HTTP 200.
+                # Probe transport only; admission comes from real service checks.
+                group.update(timeout=5000, **{'max-failed-times':1})
             if original in ENDPOINTS or original.startswith(PRIORITY_PREFIX):
                 group.update(url=ENDPOINTS.get(original, ENDPOINTS['AI组']), timeout=6000,
                              **{'expected-status':200}, **{'max-failed-times':1})

@@ -95,6 +95,11 @@ def run(root=ROOT,fetcher=fetch):
                 f'{receipt["app_routes"].get("failed",0)} failed.',
                 'Direct client downloads are not gated by this monitor.',
                 'Unchanged is healthy after a successful check. No-run is not success.']
+    for profile in receipt['app_routes'].get('profiles', []):
+        overlap = profile['tiktok_douyin_overlap']
+        if not overlap['ok']:
+            summary.append(f'TikTok / Douyin overlap changed for {profile["profile"]}. '
+                           f'Published {overlap["actual"]}; live sources require {overlap["expected"]}.')
     (local/'direct-source-health.md').write_text('\n'.join(summary)+'\n',encoding='utf-8')
     if os.environ.get('GITHUB_STEP_SUMMARY'):
         with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:out.write('\n'.join(summary)+'\n')

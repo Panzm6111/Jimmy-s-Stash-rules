@@ -40,7 +40,7 @@ class Subscriptions(unittest.TestCase):
     def test_both_published_profiles_use_the_same_pool_tolerances(self):
         expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区'), 50)
         from curated_pools import STABLE, PRIORITY_PREFIX
-        expected.update({'Gemini':200, 'AI最速组':100, '最优速组':50})
+        expected.update({'Gemini':200, 'TikTok':150, 'AI最速组':100, '最优速组':50})
         expected.update({PRIORITY_PREFIX+n:50 for n in STABLE})
         for path, prefix in [('config/stash.yaml',''), ('config/clash-verge-auto.yaml','Jimmy · ')]:
             with self.subTest(path=path):
@@ -61,11 +61,13 @@ class Subscriptions(unittest.TestCase):
                     continue
                 with self.subTest(profile=filename, group=name):
                     exposes_nodes = bool(group.get('use') or group.get('include-all'))
-                    self.assertEqual(exposes_nodes, name in {prefix+'总代理', prefix+'手动节点', prefix+'Gemini'})
+                    self.assertEqual(exposes_nodes, name in {prefix+'总代理', prefix+'手动节点', prefix+'Gemini', prefix+'TikTok'})
                     self.assertTrue(set(group.get('proxies', [])) <= set(groups) | {'DIRECT','REJECT'})
-            self.assertEqual(groups[prefix+'TikTok']['proxies'][0], prefix+'总代理')
-            self.assertNotIn(prefix+'TikTok 服务优选', groups[prefix+'TikTok']['proxies'])
-            self.assertNotIn(prefix+'AI最速', groups[prefix+'TikTok']['proxies'])
+            pool = groups[prefix+'TikTok']
+            self.assertEqual(pool['type'], 'url-test')
+            self.assertEqual(pool['use'], ['机场'])
+            self.assertEqual(pool.get('proxies', []), [] if prefix else ['REJECT'])
+            self.assertFalse(pool.get('include-all',False))
 
     def test_retired_service_selectors_cannot_pin_the_native_stable_pool(self):
         for filename,prefix in [('stash.yaml',''),('clash-verge-auto.yaml','Jimmy · ')]:
@@ -75,6 +77,22 @@ class Subscriptions(unittest.TestCase):
             for name in ('GPT 服务优选','TikTok 服务检测组','ai'):
                 self.assertNotIn(prefix+name,groups)
             self.assertNotIn('cron',config)
+
+    def test_tiktok_pool_only_admits_the_verified_full_names(self):
+        import re
+        from curated_pools import TIKTOK
+        self.assertEqual(len(set(TIKTOK)),8)
+        for filename,prefix in [('stash.yaml',''),('clash-verge-auto.yaml','Jimmy · ')]:
+            groups = v.load('config/' + filename)['proxy-groups']
+            pool = next(g for g in groups if g['name'] == prefix+'TikTok')
+            accepted = re.compile(pool['filter'])
+            for member in TIKTOK:
+                self.assertTrue(accepted.search(member),member)
+                for alias in (member.lower(), '备用 '+member, member+' 备用'):
+                    if alias != member:
+                        self.assertFalse(accepted.search(alias),alias)
+            for forbidden in ('DIRECT','总代理','HKG B','HKG M','香港','[Vless] 日本 [直连]'):
+                self.assertFalse(accepted.search(forbidden),forbidden)
 
     def test_stash_chatgpt_core_survives_unloaded_or_rejecting_remote_sets(self):
         from stash_ai_guard import AI_SUFFIXES
@@ -101,7 +119,7 @@ class Subscriptions(unittest.TestCase):
         for group in config['proxy-groups']:
             if group['type'] in ('url-test','fallback'):
                 self.assertEqual(group['url'],'https://chatgpt.com/')
-                if group['name'] in ('AI组','AI最速组','最优速组','Gemini') or group['name'].startswith('AI稳备 · '):
+                if group['name'] in ('AI组','AI最速组','最优速组','Gemini','TikTok') or group['name'].startswith('AI稳备 · '):
                     self.assertEqual(group['interval'],3)
         self.assertNotIn('secret',config)
         self.assertNotIn('external-controller',config)

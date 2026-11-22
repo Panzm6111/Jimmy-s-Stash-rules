@@ -492,12 +492,12 @@ class ProjectChecks(unittest.TestCase):
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
-        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'AI最速组', '最优速组', 'Gemini'}
+        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'AI最速组', '最优速组', 'Gemini', 'TikTok'}
         self.assertEqual({g['name'] for g in self.groups.values() if g['type'] == 'url-test'}, pools)
         for name in pools:
             group = self.groups[name]
             self.assertEqual(group['url'], 'https://www.gstatic.com/generate_204')
-            self.assertEqual(group['interval'], 3 if name in ('AI最速组','最优速组','Gemini') else 1800)
+            self.assertEqual(group['interval'], 3 if name in ('AI最速组','最优速组','Gemini','TikTok') else 1800)
             self.assertEqual(group['proxies'], ['REJECT'])
             self.assertRegex('REJECT', group['filter'])
             self.assertEqual(group['use'], ['机场'])
@@ -647,7 +647,7 @@ class ProjectChecks(unittest.TestCase):
     def test_curated_pools_and_choices(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
         defaults = {'总代理':'最优速组', '手动节点':'REJECT', '海外AI':'AI组', 'Claude':'AI组',
-                    'TikTok':'总代理', 'Netflix':'总代理', 'YouTube':'总代理',
+                    'Netflix':'总代理', 'YouTube':'总代理',
                     'Telegram':'总代理', 'Apple':'DIRECT', 'Microsoft':'DIRECT', 'Adobe':'总代理',
                     '未匹配流量':'总代理', '国内直连':'DIRECT', '广告拦截':'REJECT'}
         for config in [self.config, load('config/stash.yaml')]:
@@ -677,7 +677,7 @@ class ProjectChecks(unittest.TestCase):
                 self.assertEqual(group['proxies'].count('AI组'), int(group['type']=='select' and group['name'] not in {'手动节点','TikTok 服务检测组'}))
 
     def test_social_routes_share_tiktok_policy(self):
-        self.assertEqual(self.groups['TikTok']['proxies'][0], '总代理')
+        self.assertEqual(self.groups['TikTok']['proxies'], ['REJECT'])
         config = load('config/stash.yaml')
         for domain in ['www.tiktok.com', 'api.tiktokv.com', 'www.instagram.com', 'scontent.cdninstagram.com', 'x.com', 'api.twitter.com', 'video.twimg.com']:
             self.assertEqual(route(config, domain), 'TikTok', domain)
