@@ -87,7 +87,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: ^(HKG C|HKG M|美国 B|HKG J|HKG A|HKG I|台湾 C|新加坡 C|REJECT)$
+  filter: ^(HKG C|HKG M|美国 B|HKG J|美国 E|美国 C|台湾 C|新加坡 C|REJECT)$
   hidden: true
 - name: GeminiClaude
   type: url-test
@@ -179,7 +179,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: ^(新加坡 2 直连 CTCM|新加坡 1 直连 CTCM|美国 B|美国 E|美国 C|美国 A|新加坡 C|新加坡 B|REJECT)$
+  filter: ^(美国 E|美国 C|美国 A|美国 D|新加坡 A|美国 F|美国 I|美国 H|REJECT)$
 - name: Netflix
   type: select
   proxies:

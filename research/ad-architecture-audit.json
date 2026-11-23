@@ -21,9 +21,9 @@
     "optional_probe_js": 1
   },
   "input_sha256": {
-    "config/stash.yaml": "4ac960e4aeafd90bd6105222e9cf4d582a015f3ae9c49171a6fca47842ff93d1",
+    "config/stash.yaml": "8fc834e607573ffc7dafc76f58010f9fa055a56ad13a58ab3123d416e12e5217",
     "templates/stash-main.yaml": "dcf813dcfa62754c2bc1429ff3c1aab6367ae5402cb774e3f8b728fe116ff26b",
-    "templates/stash-core.stoverride": "7a88c3bad84da1884c0fc4f4a205ced5687223b91332c28ced1ad07d873e1fe5",
+    "templates/stash-core.stoverride": "c06d98d5ebc7d431e08839b0e5328a0a4adfa70bea83e99889919beb1e3e4f79",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
     "rules/vendor/ads-expanded.yaml": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
     "rules/system-direct.yaml": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f",
@@ -39,7 +39,7 @@
     "tools/ad_observation_runtime.js": "a4aaec1eaaadbfbf523a5b1896ab798400349208fe2a67c0bb6912c2d32436dd",
     "tools/build_subscription.py": "72f5b044f9a86d43f5438b65746586b30c7fd8c6feec4135423330e330fe433f",
     "tools/stash_ai_guard.py": "89d885e5091484e2a8a0fc4d77c61541b827878de57a59614ebe2867c8ee62b6",
-    "tools/service_health.py": "894e3c4a1b4584ead3741a4a993c9bbaa427a7972ee4984b8d11ec903d1669f0",
+    "tools/service_health.py": "c8e8a8e0e1882ec5cae7c31a800b9ceed952cb8dd2a49e11c8ba9a0217276a48",
     "tools/config_helpers.py": "914607296697bb01fe6352ee25b5fd5de8a6f3214178e982f6e432576a93e24c",
     "tools/build_private_config.py": "b2629a8cdbc39a948a5003014e23224d034f66659b569364c7144ca2fcb9aead",
     "tools/render_ad_architecture.py": "06a5018a4d05984318c1a698e7a92db53fd906f9c5acf4bfbeccbac7f7c1d9bf",
@@ -116,7 +116,7 @@
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
     "bytes": 158043,
-    "sha256": "95fbb0568c83dc909fca11393e0add7788b92684588f5556322414c61dba1f95",
+    "sha256": "19f3636ea983b081fe9bcb5336b85217ddfb0676eb5a0bf93bdcc80d79a076f0",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,
