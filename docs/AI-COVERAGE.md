@@ -2,11 +2,11 @@
 
 2026-10-29起，两端的 `海外AI` 直接使用社区维护的完整分类：MetaCubeX 的 `category-ai-!cn` 与 Sukka 的 `Source/non_ip/ai.conf`，只做兼容格式转换和去重。当前两份来源分别213条、55条，合并为231条；原 [rules/openai.yaml](../rules/openai.yaml) 地址保持不变。来源、提交、许可和逐文件哈希见 [community-sources.json](../research/community-sources.json)。
 
-AI组按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的优先级故障回退；AI最速组收日本 A/B、HKG B/C/J（100 ms）；最优速组收日本 A/B、HKG B/A/C/I/J/M（50 ms）。海外AI 和 Claude 默认 AI组，总代理默认最优速组。 AI 分流无需 MITM。Clash 组名带 Jimmy · 前缀。
+海外AI 默认 AI组。Gemini 和 Claude 的专用分流使用 GeminiClaude，两组原生测速容差均为 200 ms。AI 分流无需 MITM。Clash 组名带 Jimmy · 前缀。
 
 当前手机验收按[原生故障恢复与日志指南](ROUTING.md#iphone-service-health)操作。以下保留 11 月 8 日的 DNS 排查依据；当时的成员及容差已由当前设置替代。
 
-Claude 网页版从 ROUTE-20261112.3 起使用独立的 `Claude` 选择组，默认 `AI组`。主站、官方验证门户、第一方资源和用户内容的内置路由与域名解析设置见[网页版配置](ROUTING.md#claude-web)。
+Gemini 与 Claude 的主站、验证门户和第一方资源使用同一自动测速组。路由及域名解析见[网页版配置](ROUTING.md#claude-web)。
 
 ## Stash AI DNS 与地区报错（2026-11-08）
 

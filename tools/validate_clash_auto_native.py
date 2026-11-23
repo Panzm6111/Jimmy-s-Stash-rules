@@ -2,7 +2,7 @@
 import argparse,copy,http.server,json,os,shutil,socket,subprocess,threading,time,urllib.request,urllib.error,urllib.parse
 from pathlib import Path
 import yaml
-from curated_pools import TIKTOK
+from curated_pools import MANUAL_DEFAULT, MANUAL_NODE, MEMBERS, TIKTOK
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -23,7 +23,7 @@ def main():
         checks.append(label)
     check_url='http://tiktok-probe.example.invalid/health'
     def node(name):
-        if name in TIKTOK:
+        if name in {MANUAL_NODE, *(n for pool in MEMBERS.values() for n in pool)}:
             return {'name':name,'type':'http','server':'127.0.0.1','port':fixture.server_port}
         return {'name':name,'type':'socks5','server':'127.0.0.1','port':9}
     class Fixture(http.server.BaseHTTPRequestHandler):
@@ -45,7 +45,8 @@ def main():
                 state['airport_ua_matched']+=1
                 names=['美国','日本','台湾','TikTok','US-synthetic' if state['airport_version']==1 else 'US-updated']
                 if state['airport_version']==2:
-                    names.extend([*TIKTOK, 'HKG M', TIKTOK[0]+' 备用', TIKTOK[0].lower()])
+                    names.extend([MANUAL_NODE, *(n for pool in MEMBERS.values() for n in pool),
+                                  TIKTOK[0]+' 备用', '美国 b'])
                     names=list(dict.fromkeys(names))
                 obj={'proxies':[node(n) for n in names]}
             elif self.path.startswith('/rules/'):
@@ -70,7 +71,9 @@ def main():
                        'tun':{'enable':False},'dns':{'enable':False},'log-level':'warning'})
         config['proxy-providers']['机场'].update(url=private_url,path='./airport.yaml',proxy='DIRECT')
         config['proxy-providers']['机场']['health-check']['url']=check_url
-        next(g for g in config['proxy-groups'] if g['name']=='Jimmy · TikTok')['url']=check_url
+        for group in config['proxy-groups']:
+            if group['name'].removeprefix('Jimmy · ') in {*MEMBERS, MANUAL_DEFAULT}:
+                group.update(url=check_url, **{'expected-status':204})
         config['proxy-providers']['机场']['payload']=[node(n) for n in ['跳转域名{请勿连接}:example.invalid','美国','日本','台湾','TikTok','US-synthetic']]
         for i,p in enumerate(config['rule-providers'].values()):
             state.setdefault('rule_behaviors',{})[i]=p['behavior']
@@ -118,17 +121,17 @@ def main():
             check(state['airport_ua_matched']>0,'airport fetch requests Clash YAML through explicit client user agent')
             check({n for n in groups if n.startswith('Jimmy · ')}=={g['name'] for g in public['proxy-groups']},
                   'all published policy groups and the download failover group load')
-            check(groups['Jimmy · Claude']['now']=='Jimmy · AI组','Claude web has its own selector with the curated ai default')
+            check(groups['Jimmy · GeminiClaude']['type']=='URLTest' and 'Jimmy · Claude' not in groups,
+                  'Gemini and Claude use one automatic pool')
+            check(groups['Jimmy · 手动节点']['now']=='Jimmy · '+MANUAL_DEFAULT,
+                  'fresh manual group starts with its only designated default')
             members=groups['Jimmy · 手动节点']['all']
             check(all(n in members for n in ['美国','日本','台湾','TikTok']),'same-name airport nodes coexist with groups')
             check(groups['Jimmy · 总代理']['now']=='Jimmy · 最优速组','initial default is automatic pool')
             check('Jimmy · AI组' in groups['Jimmy · 海外AI']['all'],'curated ai option exposed')
             check(groups['Jimmy · AI组']['hidden'],'automatic pool exposes hidden flag')
-            stable_children=groups['Jimmy · AI组']['all']
-            check(len(stable_children)==7 and all(groups[n]['all']==['REJECT'] for n in stable_children),
-                  'all absent curated names fail closed through individual priority layers')
-            check(all(groups[n]['now']=='REJECT' for n in stable_children),
-                  'empty stable layers select REJECT rather than DIRECT')
+            check(all(groups['Jimmy · '+n]['all']==['REJECT'] for n in {*MEMBERS, MANUAL_DEFAULT}),
+                  'all absent curated names fail closed')
             fixed = {'DIRECT','REJECT'}
             for declaration in public['proxy-groups']:
                 name = declaration['name']
@@ -167,6 +170,10 @@ def main():
                 social=api(tiktok_path)
             check(set(social['all'])==set(TIKTOK) and social['now'] in TIKTOK,
                   'TikTok pool takes exactly the eight eligible exits after provider refresh')
+            loaded=api('/proxies')['proxies']
+            for name, nodes in MEMBERS.items():
+                check(set(loaded['Jimmy · '+name]['all'])==set(nodes), name+' loads only its eight exact names')
+            check(loaded['Jimmy · '+MANUAL_DEFAULT]['all']==[MANUAL_NODE], 'the manual default resolves to HKG A')
             state['rule_version']=2
             api('/providers/rules/'+urllib.parse.quote('基础广告',safe=''),'PUT')
             check(api('/providers/rules')['providers']['基础广告']['ruleCount']==2,'advertising rules refresh independently')

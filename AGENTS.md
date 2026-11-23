@@ -15,7 +15,7 @@
 - Git只纳入交付、复现和接续必要文件；逐项核对再暂存，禁止无差别全量添加。提交、推送、发布、替换Hook或新增定时任务须符合当次任务及既有授权范围，整理文档不自动触发这些操作。
 - 结束回执说明实际变更、验证结果、主文件是否更新、提交/推送状态和下一步。
 
-- 已确认扩展：Clash Verge沿用完整分流，去广告仅域名规则；生成器tools/build_clash.py。两端共享精选 AI组、AI最速组、最优速组，具体成员以维护模板及 PROGRESS.md 为准，各业务select组可选；Clash前缀入口显示Jimmy · AI组，统一TikTok组覆盖TikTok/Instagram/X。当前Stash 26份、Clash 25份规则直订上游，6份必要转换由GitHub refresh-rules.yml每日北京时间12:17计划执行（平台调度可能延迟）；有实际变化且验证通过才提交推送main，无变化零提交。用户已授权云端验收后停用电脑任务，Windows旧任务已于2026-10-29先禁用备份、再按用户要求移除系统登记（XML备份保留）；不擅自重装或启用。旧Windows脚本与auto_update.py已退役，云端所需主文档写入逻辑已迁入cloud_update.py；保护其他会话内容。
+- 已确认扩展：Clash Verge沿用完整分流，去广告仅域名规则；生成器tools/build_clash.py。两端共享精选 AI组、最优速组、GeminiClaude、TikTok，具体成员以维护模板及 PROGRESS.md 为准，各业务select组可选；Clash前缀入口显示Jimmy · AI组，统一TikTok组覆盖TikTok/Instagram/X。当前Stash 26份、Clash 25份规则直订上游，6份必要转换由GitHub refresh-rules.yml每日北京时间12:17计划执行（平台调度可能延迟）；有实际变化且验证通过才提交推送main，无变化零提交。用户已授权云端验收后停用电脑任务，Windows旧任务已于2026-10-29先禁用备份、再按用户要求移除系统登记（XML备份保留）；不擅自重装或启用。旧Windows脚本与auto_update.py已退役，云端所需主文档写入逻辑已迁入cloud_update.py；保护其他会话内容。
 
 - 2026-11-02用户明确要求只保留Stash/Clash各一个最新发布入口，并确认清空旧Git提交历史。config/只保留stash.yaml与clash-verge-auto.yaml；启动维护源移到templates/。保留需求、沟通过程、研究证据、许可证及最新生成/验证所需源码；不再生成旧Merge、扩展脚本、独立Clash或离线ZIP，不重新添加旧电脑任务。
 
@@ -25,6 +25,6 @@
 
 - 2026-11-02手机去广告：用户明确现有规则优先。Stash新增秋风Only.Ads整份直订，仅在全部既有规则与GEOIP CN之后、MATCH之前；不得上提以提高拦截率。Clash仍只用基础域名广告，HTTP/JS、MITM、DNS、组和私人接入不变；27个直订URL由云端健康检查覆盖。
 
-- 2026-11-16 当前节点策略以 PROGRESS.md 的 pool-release-20261116 为准，取代旧服务覆写/AI容差方案。用户明确停用 GPT/TikTok 服务检测覆写；公共配置不再创建服务选择器、旧 ai 或服务 cron，历史样例不可重新启用。AI组即最稳组，按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的顺序 fallback，7 个隐藏单节点层固定顺序并保留 REJECT。AI最速组为日本 A/B、HKG B/C/J；最优速组为日本 A/B、HKG B/A/C/I/J/M。Stash 精选与优先层设 3 秒兜底探测、provider 3 秒限时，原生测速统一 ChatGPT；Clash 保持用户满意的 60 秒定时节奏，业务连接失败复核另计。电脑 auto_close_connection 已开启，未经要求不改实际客户端设置；不能将桌面隔离秒级恢复当成 Stash 实机通过。手机删除旧覆写由用户操作，保留私人机场与 MitM；手机原生即时故障处理、旧连接与速度差异仍待日志验证。
+- 自 ROUTE-20261123.2 起，两端以 PROGRESS.md 的本版名单和默认值为准。AI最速组和旧 AI 稳备层移除，Gemini 与 Claude 合成同一自动测速组。只基于本轮 NCloud 监控选线，避免沿用旧版服务检测成绩。继续停用 GPT/TikTok 私有检测覆写。
 
-- 2026-11-23 起，TikTok 与抖音明确收录的共享域名优先走 TikTok。Stash 和 Clash 的 TikTok 同名组直接从 NCloud 美国 A/B/D/E/F/G、英国 B、西班牙八条中自动选线，排除总代理与直连兜底。原本引用此组的其他社交应用共用该名单。改动源及真机待验收项见 PROGRESS.md 的 ROUTE-20261123.1。
+- TikTok 与抖音明确收录的共享域名仍优先走 TikTok，Instagram、X 等原先共用组的业务沿用该组。当前节点成员见 PROGRESS.md 的 ROUTE-20261123.2。

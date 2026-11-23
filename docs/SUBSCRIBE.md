@@ -2,7 +2,7 @@
 
 本页对应主配置 ROUTE-20261113.1，设备刷新后可在文件头核对版本。Stash 的 AI-DNS-20261108.1 需要 iOS 版 Stash 3.6+。请刷新原主配置；iPhone 刷新原主配置即可。已启用的私人机场、MitM 和服务检测覆写继续使用。GPT 的旧本地脚本有隐藏兼容入口。TikTok 默认跟随总代理，旧脚本不会切换它。[手机服务检测](ROUTING.md#iphone-service-health)。
 
-AI组收新加坡 A、台湾 E/D（250 ms）。AI最速组在这三条上加入日本 A/B（100 ms）。最优速组收 HKG B/A/C/I/J/M、荷兰、新加坡 A、台湾 E、日本 A/B（50 ms）。海外AI 和 Claude 默认用 AI组，总代理默认用最优速组。
+四个精选池各八条，海外AI 默认 AI组，Gemini 和 Claude 共用 GeminiClaude。总代理默认最优速组。[分流和测速说明](ROUTING.md)。
 
 当前统一使用这一条固定公共配置链接：
 
@@ -52,7 +52,7 @@ proxy-providers:
 
 TikTok（含 Instagram、X）、Netflix、YouTube、Telegram、Adobe 和未匹配流量默认跟随总代理。Apple、Microsoft、国内直连默认 DIRECT，广告默认 REJECT。
 
-三个精选池均设为每 60 秒主动检查；其余七个常规池的组配置为 1800 秒、50 ms。Clash 机场另每 60 秒做通用 HTTP 204 检查（5 秒超时）。AI组和 AI最速组分别按 ChatGPT、TikTok 入口的 HTTP 200 记录独立健康状态。Stash 的原生测速结果按节点共用，启用本机服务检测后才会按业务分别判断。容差是两条健康线路之间的延迟差，不是故障等待时间。 “自动节点”仍可在全机场中选择。
+Stash 精选池每 3 秒主动探测，Clash 每 60 秒主动探测。AI组和 GeminiClaude 容差 200 ms，其余测速池 50 ms。“自动节点”仍可在全机场选择。
 
 总代理和手动节点可直接选机场单节点。其他可见业务选择器只列组和内建策略，自动池及手机服务选择器的候选隐藏。多个业务使用同一手动入口时，共享该入口的选择。
 

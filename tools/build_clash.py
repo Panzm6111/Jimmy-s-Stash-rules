@@ -5,8 +5,8 @@ from pathlib import Path
 import yaml
 from config_helpers import pool_tolerance_ms
 from service_health import ENDPOINTS, CLASH_ROUTING_VERSION
-from curated_pools import apply_ordered_stable, PRIORITY_PREFIX, MEMBERS, CLASH_CHECK_INTERVAL
-from stash_ai_guard import AI_RESOLVERS, claude_dns_policy
+from curated_pools import MANUAL_DEFAULT, MEMBERS, CLASH_CHECK_INTERVAL
+from stash_ai_guard import AI_RESOLVERS, paired_ai_dns_policy
 ROOT=Path(__file__).resolve().parents[1]
 AIRPORT_INFO_EXCLUDE=r'(?i)(请勿连接|跳转域名)'
 DOWNLOAD_GROUP='Jimmy · 订阅更新'
@@ -17,15 +17,17 @@ def remote_profile(source):
     result.update(global_merge(source))
     # Restrict the published pool to the active airport, including when a
     # private merge imports additional sources with identically named nodes.
-    social = next(g for g in result['proxy-groups'] if g['name'] == 'Jimmy · TikTok')
-    social.pop('include-all')
-    social['use'] = ['机场']
-    # Only Claude lookups that need a real answer use these proxied resolvers.
+    airport_only = {'Jimmy · '+name for name in (*MEMBERS, MANUAL_DEFAULT)}
+    for group in result['proxy-groups']:
+        if group['name'] in airport_only:
+            group.pop('include-all')
+            group['use'] = ['机场']
+    # Route Gemini and Claude lookups through their common proxy group.
     # Node hostnames must resolve independently before that proxy can connect.
     dns = result['dns']
     dns.setdefault('proxy-server-nameserver', list(dns['nameserver']))
-    dns.setdefault('nameserver-policy', {}).update(claude_dns_policy(
-        source['rules'], [url + '#Jimmy · Claude' for url in AI_RESOLVERS]))
+    dns.setdefault('nameserver-policy', {}).update(paired_ai_dns_policy(
+        source['rules'], [url + '#Jimmy · GeminiClaude' for url in AI_RESOLVERS]))
     # HTTP-specific exceptions and per-app ads belong to Stash. The Clash subscription
     # uses the whole maintained basic advertising set, not our per-app selections.
     removed={'广告路径例外','App广告域名','手机广告补充'}
@@ -55,11 +57,10 @@ def remote_profile(source):
 def global_merge(source):
     """Pure overlay: keep the airport's node/provider and application settings."""
     overlay={key:copy.deepcopy(source[key]) for key in ('proxy-groups','rule-providers','rules')}
-    apply_ordered_stable(overlay)
     names={group['name']:'Jimmy · '+group['name'] for group in overlay['proxy-groups']}
     for group in overlay['proxy-groups']:
         original=group['name']
-        if original in MEMBERS or original.startswith(PRIORITY_PREFIX):
+        if original in MEMBERS or original == MANUAL_DEFAULT:
             # Keep the desktop cadence the user already likes. Dial failures
             # trigger health checks independently of this scheduled interval.
             group['interval']=CLASH_CHECK_INTERVAL
@@ -71,17 +72,13 @@ def global_merge(source):
                 if not group['proxies']:del group['proxies']
         if group['type']=='url-test':
             # UI guard only: Mihomo's API can still pin a URLTest pool.
-            group.update(hidden=original not in ('Gemini','TikTok'), tolerance=pool_tolerance_ms(original), **{'expected-status':204})
+            group.update(hidden=original not in ('GeminiClaude','TikTok'), tolerance=pool_tolerance_ms(original), **{'expected-status':204})
             if original == 'TikTok':
-                # A restricted regional page can legitimately return HTTP 200.
-                # Probe transport only; admission comes from real service checks.
+                # TikTok measures transport availability with a neutral target.
                 group.update(timeout=5000, **{'max-failed-times':1})
-            if original in ENDPOINTS or original.startswith(PRIORITY_PREFIX):
-                group.update(url=ENDPOINTS.get(original, ENDPOINTS['AI组']), timeout=6000,
+            if original in ENDPOINTS:
+                group.update(url=ENDPOINTS[original], timeout=6000,
                              **{'expected-status':200}, **{'max-failed-times':1})
-        elif group['type']=='fallback' and original=='AI组':
-            group.update(url=ENDPOINTS[original], timeout=6000, lazy=False,
-                         **{'expected-status':200, 'max-failed-times':1})
         elif group['type']=='select' and original not in {'总代理','手动节点'}:
             # Only the general and manual selectors expose individual nodes.
             for key in ('include-all','empty-fallback','filter'):

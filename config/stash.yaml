@@ -1,8 +1,8 @@
 #SUBSCRIBED https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
 # Jimmy Stash 公共订阅入口；由 tools/build_subscription.py 生成。
 # 固定地址：https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stash.yaml
-# JIMMY-STASH AD-20261020.5；原生稳定优先回退，不再使用 GPT/TikTok 服务检测覆写。
-# JIMMY-ROUTING ROUTE-20261123.1；Claude 与海外AI的加密DNS各随其策略组；36个远程规则集。
+# JIMMY-STASH AD-20261020.5；精选组使用原生自动测速。
+# JIMMY-ROUTING ROUTE-20261123.2；GeminiClaude 与海外AI的加密DNS各随其策略组；36个远程规则集。
 # AI-DNS-20261108.1；需Stash iOS 3.6+；节点解析独立，测速不代表ChatGPT地区可用。
 # JIMMY-MOBILE-AD MOBILE-AD-20261102.1；秋风纯广告整集补充，仅在所有既有规则之后、MATCH之前生效。
 # 已整合40款现有专项，11份响应JS使用原生URL加载；扩展域名规则默认启用。
@@ -55,6 +55,48 @@ dns:
     +.oaiusercontent.com:
     - https://1.1.1.1/dns-query
     - https://8.8.8.8/dns-query
+    +.gemini.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.gemini.google:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.gemini.gstatic.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.bard.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.aistudio.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.makersuite.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.generativelanguage.googleapis.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.geminiweb-pa.googleapis.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.geminicodeassist.googleapis.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    +.cloudcode-pa.googleapis.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    geminiweb-pa.clients.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    geminiweb-pa.clients6.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    alkalimakersuite-pa.clients6.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+    webchannel-alkalimakersuite-pa.clients6.google.com:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
     +.claude.ai:
     - https://1.0.0.1/dns-query
     - https://8.8.4.4/dns-query
@@ -86,7 +128,6 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
   use:
   - 机场
   filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
@@ -96,6 +137,7 @@ proxy-groups:
 - name: 手动节点
   type: select
   proxies:
+  - 手动默认 · HKG A
   - REJECT
   use:
   - 机场
@@ -103,6 +145,18 @@ proxy-groups:
     ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
     ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
     ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: 手动默认 · HKG A
+  type: url-test
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: ^(HKG A|REJECT)$
+  url: https://chatgpt.com/
+  interval: 3
+  lazy: false
+  hidden: true
+  tolerance: 50
 - name: 自动节点
   type: url-test
   proxies:
@@ -141,20 +195,6 @@ proxy-groups:
   hidden: true
   tolerance: 50
 - name: AI组
-  type: fallback
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  proxies:
-  - AI稳备 · HKG B
-  - AI稳备 · HKG C
-  - AI稳备 · HKG J
-  - AI稳备 · 新加坡 A
-  - AI稳备 · 台湾 B
-  - AI稳备 · 日本 A
-  - AI稳备 · 美国 B
-  hidden: true
-- name: AI最速组
   type: url-test
   url: https://chatgpt.com/
   interval: 3
@@ -163,10 +203,10 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(日本 [AB]|HKG [BCJ]|REJECT)$
+  filter: ^(HKG C|HKG M|美国 B|HKG J|HKG A|HKG I|台湾 C|新加坡 C|REJECT)$
   hidden: true
-  tolerance: 100
-- name: Gemini
+  tolerance: 200
+- name: GeminiClaude
   type: url-test
   url: https://chatgpt.com/
   interval: 3
@@ -176,7 +216,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(日本 [AB]|新加坡 [AB]|台湾 B|美国 [BD]|REJECT)$
+  filter: ^(美国 B|美国 E|美国 C|台湾 C|美国 A|美国 D|新加坡 C|新加坡 2 直连 CTCM|REJECT)$
 - name: 最优速组
   type: url-test
   url: https://chatgpt.com/
@@ -186,7 +226,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(日本 [AB]|HKG [BACIJM]|REJECT)$
+  filter: ^(台湾 C|HKG C|日本 B|HKG H|HKG M|美国 B|HKG D|HKG F|REJECT)$
   hidden: true
   tolerance: 50
 - name: 香港
@@ -250,32 +290,23 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - DIRECT
-  - AI最速组
   - 最优速组
-- name: Claude
-  type: select
-  proxies:
-  - AI组
-  - AI最速组
-  - 最优速组
-  - 手动节点
-  - 总代理
 - name: TikTok
   type: url-test
   url: https://chatgpt.com/
   interval: 3
   lazy: false
-  tolerance: 150
+  tolerance: 50
   proxies:
   - REJECT
   use:
   - 机场
-  filter: ^(美国 [ABDEFG]|英国 B|西班牙|REJECT)$
+  filter: ^(新加坡 2 直连 CTCM|新加坡 1 直连 CTCM|美国 B|美国 E|美国 C|美国 A|新加坡 C|新加坡 B|REJECT)$
 - name: Netflix
   type: select
   proxies:
-  - 总代理
   - 美国
+  - 总代理
   - 日本
   - 香港
   - 新加坡
@@ -285,11 +316,11 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
   - 最优速组
 - name: YouTube
   type: select
   proxies:
+  - 最优速组
   - 总代理
   - 美国
   - 日本
@@ -301,11 +332,10 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
-  - 最优速组
 - name: Telegram
   type: select
   proxies:
+  - 最优速组
   - 总代理
   - 美国
   - 日本
@@ -317,8 +347,6 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
-  - 最优速组
 - name: Apple
   type: select
   proxies:
@@ -333,7 +361,6 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - AI组
-  - AI最速组
   - 最优速组
 - name: Microsoft
   type: select
@@ -349,11 +376,11 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - AI组
-  - AI最速组
   - 最优速组
 - name: 未匹配流量
   type: select
   proxies:
+  - DIRECT
   - 总代理
   - 美国
   - 日本
@@ -363,9 +390,7 @@ proxy-groups:
   - 其他地区
   - 自动节点
   - 手动节点
-  - DIRECT
   - AI组
-  - AI最速组
   - 最优速组
 - name: 国内直连
   type: select
@@ -381,9 +406,9 @@ proxy-groups:
 - name: Adobe
   type: select
   proxies:
+  - DIRECT
   - 总代理
   - 美国
-  - DIRECT
   - 日本
   - 香港
   - 新加坡
@@ -392,99 +417,14 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - AI组
-  - AI最速组
   - 最优速组
-- name: AI稳备 · HKG B
-  type: url-test
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(HKG B|REJECT)$
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  tolerance: 50
-  hidden: true
-- name: AI稳备 · HKG C
-  type: url-test
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(HKG C|REJECT)$
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  tolerance: 50
-  hidden: true
-- name: AI稳备 · HKG J
-  type: url-test
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(HKG J|REJECT)$
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  tolerance: 50
-  hidden: true
-- name: AI稳备 · 新加坡 A
-  type: url-test
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(新加坡 A|REJECT)$
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  tolerance: 50
-  hidden: true
-- name: AI稳备 · 台湾 B
-  type: url-test
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(台湾 B|REJECT)$
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  tolerance: 50
-  hidden: true
-- name: AI稳备 · 日本 A
-  type: url-test
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(日本 A|REJECT)$
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  tolerance: 50
-  hidden: true
-- name: AI稳备 · 美国 B
-  type: url-test
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(美国 B|REJECT)$
-  url: https://chatgpt.com/
-  interval: 3
-  lazy: false
-  tolerance: 50
-  hidden: true
 rules:
 - IP-CIDR,1.1.1.1/32,海外AI,no-resolve
 - IP-CIDR,8.8.8.8/32,海外AI,no-resolve
 - DOMAIN,dns.alidns.com,DIRECT
 - DOMAIN,doh.pub,DIRECT
-- IP-CIDR,1.0.0.1/32,Claude,no-resolve
-- IP-CIDR,8.8.4.4/32,Claude,no-resolve
+- IP-CIDR,1.0.0.1/32,GeminiClaude,no-resolve
+- IP-CIDR,8.8.4.4/32,GeminiClaude,no-resolve
 - RULE-SET,系统直连例外,DIRECT
 - DOMAIN-SUFFIX,chatgpt.com,海外AI
 - DOMAIN-SUFFIX,openai.com,海外AI
@@ -508,24 +448,24 @@ rules:
 - RULE-SET,Adobe服务,Adobe
 - RULE-SET,Adobe官方补充,Adobe
 - RULE-SET,基础广告,广告拦截
-- DOMAIN-SUFFIX,gemini.google.com,Gemini
-- DOMAIN-SUFFIX,gemini.google,Gemini
-- DOMAIN-SUFFIX,gemini.gstatic.com,Gemini
-- DOMAIN-SUFFIX,bard.google.com,Gemini
-- DOMAIN-SUFFIX,aistudio.google.com,Gemini
-- DOMAIN-SUFFIX,makersuite.google.com,Gemini
-- DOMAIN-SUFFIX,generativelanguage.googleapis.com,Gemini
-- DOMAIN-SUFFIX,geminiweb-pa.googleapis.com,Gemini
-- DOMAIN-SUFFIX,geminicodeassist.googleapis.com,Gemini
-- DOMAIN-SUFFIX,cloudcode-pa.googleapis.com,Gemini
-- DOMAIN,geminiweb-pa.clients.google.com,Gemini
-- DOMAIN,geminiweb-pa.clients6.google.com,Gemini
-- DOMAIN,alkalimakersuite-pa.clients6.google.com,Gemini
-- DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com,Gemini
-- DOMAIN-SUFFIX,claude.ai,Claude
-- DOMAIN-SUFFIX,anthropic.com,Claude
-- DOMAIN-SUFFIX,claude.com,Claude
-- DOMAIN-SUFFIX,claudeusercontent.com,Claude
+- DOMAIN-SUFFIX,gemini.google.com,GeminiClaude
+- DOMAIN-SUFFIX,gemini.google,GeminiClaude
+- DOMAIN-SUFFIX,gemini.gstatic.com,GeminiClaude
+- DOMAIN-SUFFIX,bard.google.com,GeminiClaude
+- DOMAIN-SUFFIX,aistudio.google.com,GeminiClaude
+- DOMAIN-SUFFIX,makersuite.google.com,GeminiClaude
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,GeminiClaude
+- DOMAIN-SUFFIX,geminiweb-pa.googleapis.com,GeminiClaude
+- DOMAIN-SUFFIX,geminicodeassist.googleapis.com,GeminiClaude
+- DOMAIN-SUFFIX,cloudcode-pa.googleapis.com,GeminiClaude
+- DOMAIN,geminiweb-pa.clients.google.com,GeminiClaude
+- DOMAIN,geminiweb-pa.clients6.google.com,GeminiClaude
+- DOMAIN,alkalimakersuite-pa.clients6.google.com,GeminiClaude
+- DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com,GeminiClaude
+- DOMAIN-SUFFIX,claude.ai,GeminiClaude
+- DOMAIN-SUFFIX,anthropic.com,GeminiClaude
+- DOMAIN-SUFFIX,claude.com,GeminiClaude
+- DOMAIN-SUFFIX,claudeusercontent.com,GeminiClaude
 - RULE-SET,海外AI,海外AI
 - RULE-SET,海外AI补充,海外AI
 - RULE-SET,TikTok,TikTok

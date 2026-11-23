@@ -16,7 +16,6 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
   use:
   - 机场
   filter: (?i)^(?:$|[^ertu下到剩套流订距重].*$|e(?:$|[^x].*$|x(?:$|[^p].*$|p(?:$|[^i].*$|i(?:$|[^r].*$|r(?:$|[^aey].*$|a(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$)))))))))|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$|g(?:$|[^
@@ -26,6 +25,7 @@ proxy-groups:
 - name: 手动节点
   type: select
   proxies:
+  - 手动默认 · HKG A
   - REJECT
   use:
   - 机场
@@ -33,6 +33,17 @@ proxy-groups:
     ].*$| (?:$|[^t].*$|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$))))))))))))))))|t(?:$|[^r].*$|r(?:$|[^a].*$|a(?:$|[^f].*$|f(?:$|[^f].*$|f(?:$|[^i].*$|i(?:$|[^c].*$|c(?:$|[^
     ].*$| (?:$|[^r].*$|r(?:$|[^e].*$|e(?:$|[^m].*$|m(?:$|[^a].*$|a(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^i].*$|i(?:$|[^n].*$|n(?:$|[^g].*$))))))))))))))))|u(?:$|[^p].*$|p(?:$|[^d].*$|d(?:$|[^a].*$|a(?:$|[^t].*$|t(?:$|[^e].*$|e(?:$|[^
     ].*$| (?:$|[^s].*$|s(?:$|[^u].*$|u(?:$|[^b].*$|b(?:$|[^s].*$|s(?:$|[^c].*$|c(?:$|[^r].*$|r(?:$|[^i].*$|i(?:$|[^p].*$|p(?:$|[^t].*$|t(?:$|[^i].*$|i(?:$|[^o].*$|o(?:$|[^n].*$))))))))))))))))))|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))|到(?:$|[^期].*$|期(?:$|[^时].*$|时(?:$|[^间].*$)))|剩(?:$|[^余].*$|余(?:$|[^流].*$|流(?:$|[^量].*$)))|套(?:$|[^餐].*$|餐(?:$|[^到].*$|到(?:$|[^期].*$)))|流(?:$|[^量].*$|量(?:$|[^剩].*$|剩(?:$|[^余].*$)))|订(?:$|[^阅].*$|阅(?:$|[^到].*$|到(?:$|[^期].*$)))|距(?:$|[^离].*$|离(?:$|[^下].*$|下(?:$|[^次].*$|次(?:$|[^重].*$|重(?:$|[^置].*$)))))|重(?:$|[^置].*$|置(?:$|[^时].*$|时(?:$|[^间].*$))))
+- name: 手动默认 · HKG A
+  type: url-test
+  proxies:
+  - REJECT
+  use:
+  - 机场
+  filter: ^(HKG A|REJECT)$
+  url: https://www.gstatic.com/generate_204
+  interval: 3
+  lazy: false
+  hidden: true
 - name: 自动节点
   type: url-test
   proxies:
@@ -68,17 +79,6 @@ proxy-groups:
   filter: (?i)(日本|东京|東京|大阪|🇯🇵|japan|tokyo|osaka|(^|[^a-z])jp([^a-z]|$)|^REJECT$)
   hidden: true
 - name: AI组
-  type: fallback
-  url: https://www.gstatic.com/generate_204
-  interval: 3
-  lazy: false
-  proxies:
-  - REJECT
-  use:
-  - 机场
-  filter: (?i)^(HKG [BCJ]|新加坡 A|台湾 B|日本 A|美国 B|REJECT)$
-  hidden: true
-- name: AI最速组
   type: url-test
   url: https://www.gstatic.com/generate_204
   interval: 3
@@ -87,9 +87,9 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(日本 [AB]|HKG [BCJ]|REJECT)$
+  filter: ^(HKG C|HKG M|美国 B|HKG J|HKG A|HKG I|台湾 C|新加坡 C|REJECT)$
   hidden: true
-- name: Gemini
+- name: GeminiClaude
   type: url-test
   url: https://www.gstatic.com/generate_204
   interval: 3
@@ -99,7 +99,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(日本 [AB]|新加坡 [AB]|台湾 B|美国 [BD]|REJECT)$
+  filter: ^(美国 B|美国 E|美国 C|台湾 C|美国 A|美国 D|新加坡 C|新加坡 2 直连 CTCM|REJECT)$
 - name: 最优速组
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -109,7 +109,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: (?i)^(日本 [AB]|HKG [BACIJM]|REJECT)$
+  filter: ^(台湾 C|HKG C|日本 B|HKG H|HKG M|美国 B|HKG D|HKG F|REJECT)$
   hidden: true
 - name: 香港
   type: url-test
@@ -168,16 +168,7 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - DIRECT
-  - AI最速组
   - 最优速组
-- name: Claude
-  type: select
-  proxies:
-  - AI组
-  - AI最速组
-  - 最优速组
-  - 手动节点
-  - 总代理
 - name: TikTok
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -188,12 +179,12 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: ^(美国 [ABDEFG]|英国 B|西班牙|REJECT)$
+  filter: ^(新加坡 2 直连 CTCM|新加坡 1 直连 CTCM|美国 B|美国 E|美国 C|美国 A|新加坡 C|新加坡 B|REJECT)$
 - name: Netflix
   type: select
   proxies:
-  - 总代理
   - 美国
+  - 总代理
   - 日本
   - 香港
   - 新加坡
@@ -203,11 +194,11 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
   - 最优速组
 - name: YouTube
   type: select
   proxies:
+  - 最优速组
   - 总代理
   - 美国
   - 日本
@@ -219,11 +210,10 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
-  - 最优速组
 - name: Telegram
   type: select
   proxies:
+  - 最优速组
   - 总代理
   - 美国
   - 日本
@@ -235,8 +225,6 @@ proxy-groups:
   - 手动节点
   - DIRECT
   - AI组
-  - AI最速组
-  - 最优速组
 - name: Apple
   type: select
   proxies:
@@ -251,7 +239,6 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - AI组
-  - AI最速组
   - 最优速组
 - name: Microsoft
   type: select
@@ -267,11 +254,11 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - AI组
-  - AI最速组
   - 最优速组
 - name: 未匹配流量
   type: select
   proxies:
+  - DIRECT
   - 总代理
   - 美国
   - 日本
@@ -281,9 +268,7 @@ proxy-groups:
   - 其他地区
   - 自动节点
   - 手动节点
-  - DIRECT
   - AI组
-  - AI最速组
   - 最优速组
 - name: 国内直连
   type: select
@@ -299,9 +284,9 @@ proxy-groups:
 - name: Adobe
   type: select
   proxies:
+  - DIRECT
   - 总代理
   - 美国
-  - DIRECT
   - 日本
   - 香港
   - 新加坡
@@ -310,7 +295,6 @@ proxy-groups:
   - 自动节点
   - 手动节点
   - AI组
-  - AI最速组
   - 最优速组
 rule-providers:
   Adobe服务:
@@ -417,24 +401,24 @@ rules:
 - RULE-SET,东方财富直连,DIRECT
 - RULE-SET,Adobe服务,Adobe
 - RULE-SET,基础广告,广告拦截
-- DOMAIN-SUFFIX,gemini.google.com,Gemini
-- DOMAIN-SUFFIX,gemini.google,Gemini
-- DOMAIN-SUFFIX,gemini.gstatic.com,Gemini
-- DOMAIN-SUFFIX,bard.google.com,Gemini
-- DOMAIN-SUFFIX,aistudio.google.com,Gemini
-- DOMAIN-SUFFIX,makersuite.google.com,Gemini
-- DOMAIN-SUFFIX,generativelanguage.googleapis.com,Gemini
-- DOMAIN-SUFFIX,geminiweb-pa.googleapis.com,Gemini
-- DOMAIN-SUFFIX,geminicodeassist.googleapis.com,Gemini
-- DOMAIN-SUFFIX,cloudcode-pa.googleapis.com,Gemini
-- DOMAIN,geminiweb-pa.clients.google.com,Gemini
-- DOMAIN,geminiweb-pa.clients6.google.com,Gemini
-- DOMAIN,alkalimakersuite-pa.clients6.google.com,Gemini
-- DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com,Gemini
-- DOMAIN-SUFFIX,claude.ai,Claude
-- DOMAIN-SUFFIX,anthropic.com,Claude
-- DOMAIN-SUFFIX,claude.com,Claude
-- DOMAIN-SUFFIX,claudeusercontent.com,Claude
+- DOMAIN-SUFFIX,gemini.google.com,GeminiClaude
+- DOMAIN-SUFFIX,gemini.google,GeminiClaude
+- DOMAIN-SUFFIX,gemini.gstatic.com,GeminiClaude
+- DOMAIN-SUFFIX,bard.google.com,GeminiClaude
+- DOMAIN-SUFFIX,aistudio.google.com,GeminiClaude
+- DOMAIN-SUFFIX,makersuite.google.com,GeminiClaude
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,GeminiClaude
+- DOMAIN-SUFFIX,geminiweb-pa.googleapis.com,GeminiClaude
+- DOMAIN-SUFFIX,geminicodeassist.googleapis.com,GeminiClaude
+- DOMAIN-SUFFIX,cloudcode-pa.googleapis.com,GeminiClaude
+- DOMAIN,geminiweb-pa.clients.google.com,GeminiClaude
+- DOMAIN,geminiweb-pa.clients6.google.com,GeminiClaude
+- DOMAIN,alkalimakersuite-pa.clients6.google.com,GeminiClaude
+- DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com,GeminiClaude
+- DOMAIN-SUFFIX,claude.ai,GeminiClaude
+- DOMAIN-SUFFIX,anthropic.com,GeminiClaude
+- DOMAIN-SUFFIX,claude.com,GeminiClaude
+- DOMAIN-SUFFIX,claudeusercontent.com,GeminiClaude
 - RULE-SET,海外AI,海外AI
 - RULE-SET,TikTok,TikTok
 - RULE-SET,Instagram,TikTok

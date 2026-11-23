@@ -10,7 +10,7 @@ import unittest
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
-from build_private_config import AUTO_POOLS, PROBE_SETTINGS, BuildError, compose, render, verify, write_private
+from build_private_config import AUTO_POOLS, CURATED, PROBE_SETTINGS, BuildError, compose, render, verify, write_private
 from validate import ROOT, load
 
 
@@ -72,8 +72,8 @@ class PrivateConfigChecks(unittest.TestCase):
 
     def test_all_seven_nonempty_pools_use_url_test_and_manual_stays_select(self):
         source = copy.deepcopy(self.source)
-        from curated_pools import TIKTOK
-        for name in dict.fromkeys(('HKG02', '新加坡 SG 02', '台湾 TW 02','新加坡 A','日本 A',TIKTOK[0])):
+        from curated_pools import MANUAL_DEFAULT
+        for name in dict.fromkeys(('HKG02', '新加坡 SG 02', '台湾 TW 02','日本 A', *(names[0] for names in CURATED.values()))):
             node = copy.deepcopy(source['proxies'][0])
             node['name'] = name
             source['proxies'].append(node)
@@ -84,11 +84,11 @@ class PrivateConfigChecks(unittest.TestCase):
                 group = groups[name]
                 self.assertEqual(group['type'], 'url-test')
                 self.assertGreater(len(group['proxies']), 1)
-                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, dict(PROBE_SETTINGS, interval=3 if name in ('AI最速组','最优速组','Gemini','TikTok') else 1800))
+                self.assertEqual({key: group[key] for key in PROBE_SETTINGS}, dict(PROBE_SETTINGS, interval=3 if name in CURATED else 1800))
         self.assertEqual(groups['手动节点']['type'], 'select')
-        self.assertEqual(groups['手动节点']['proxies'], groups['自动节点']['proxies'])
-        for name in ('Netflix', 'YouTube', 'Telegram', '未匹配流量'):
-            self.assertEqual(groups[name]['proxies'][0], '总代理')
+        self.assertEqual(groups['手动节点']['proxies'], [MANUAL_DEFAULT, *groups['自动节点']['proxies']])
+        for name, policy in {'Netflix':'美国', 'YouTube':'最优速组', 'Telegram':'最优速组', '未匹配流量':'DIRECT'}.items():
+            self.assertEqual(groups[name]['proxies'][0], policy)
 
     def test_empty_other_region_has_only_reject_and_no_probe_settings(self):
         source = load('examples/provider-simulated.yaml')
@@ -181,12 +181,10 @@ class PrivateConfigChecks(unittest.TestCase):
             source['proxies'].append(node)
         config, _ = compose(source)
         groups = {g['name']: g for g in config['proxy-groups']}
-        from curated_pools import STABLE, PRIORITY_PREFIX
-        self.assertEqual(groups['AI组']['proxies'],[PRIORITY_PREFIX+n for n in STABLE])
-        self.assertEqual(groups[PRIORITY_PREFIX+'新加坡 A']['proxies'],['新加坡 A','REJECT'])
-        self.assertEqual(groups[PRIORITY_PREFIX+'HKG B']['proxies'],['REJECT'])
-        self.assertEqual(set(groups['AI最速组']['proxies']), {'日本 A','REJECT'})
-        self.assertEqual(set(groups['最优速组']['proxies']), {'日本 A','HKG A','REJECT'})
+        self.assertEqual(groups['AI组']['proxies'], ['HKG A', 'REJECT'])
+        self.assertEqual(groups['手动默认 · HKG A']['proxies'], ['HKG A', 'REJECT'])
+        self.assertEqual(groups['GeminiClaude']['proxies'], ['美国 D', 'REJECT'])
+        self.assertEqual(groups['最优速组']['proxies'], ['REJECT'])
         self.assertNotIn('SG01', groups['AI组']['proxies'])
         self.assertIn('SG01', groups['新加坡']['proxies'])
         self.assertNotIn('香港01', groups['AI组']['proxies'])
@@ -204,11 +202,9 @@ class PrivateConfigChecks(unittest.TestCase):
         node['name'] = '香港01'
         config, _ = compose({'proxies':[node]})
         groups = {g['name']:g for g in config['proxy-groups']}
-        from curated_pools import STABLE, PRIORITY_PREFIX
-        self.assertEqual(groups['AI组']['type'],'fallback')
-        for name in STABLE:
-            self.assertEqual(groups[PRIORITY_PREFIX+name]['type'],'select')
-            self.assertEqual(groups[PRIORITY_PREFIX+name]['proxies'],['REJECT'])
+        self.assertEqual(groups['AI组']['type'], 'select')
+        self.assertEqual(groups['AI组']['proxies'], ['REJECT'])
+        self.assertEqual(groups['手动默认 · HKG A']['proxies'], ['REJECT'])
         self.assertIn('AI组', groups['海外AI']['proxies'])
 
     def test_private_output_permissions_and_repository_guard(self):

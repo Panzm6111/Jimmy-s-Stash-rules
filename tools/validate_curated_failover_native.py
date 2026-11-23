@@ -14,7 +14,10 @@ import urllib.request
 
 import yaml
 
-from curated_pools import STABLE, NODE_FAST, PRIORITY_PREFIX
+# Historical ROUTE-20261123.1 evidence fixture.
+STABLE = ('HKG B', 'HKG C', 'HKG J', '新加坡 A', '台湾 B', '日本 A', '美国 B')
+NODE_FAST = ('日本 A', '日本 B', 'HKG B', 'HKG C', 'HKG A', 'HKG I', 'HKG J', 'HKG M')
+PRIORITY_PREFIX = 'AI稳备 · '
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -47,7 +50,8 @@ def main():
         server=http.server.ThreadingHTTPServer(('127.0.0.1',0),handler(name));servers.append(server)
         threading.Thread(target=server.serve_forever,daemon=True).start()
         nodes.append(dict(name=name,type='http',server='127.0.0.1',port=server.server_port))
-    source=yaml.safe_load((ROOT/'config/clash-verge-auto.yaml').read_text('utf-8'))
+    source=yaml.safe_load(subprocess.check_output(
+            ['git', 'show', '963953e:config/clash-verge-auto.yaml'], cwd=ROOT).decode('utf-8'))
     wanted={'Jimmy · AI组','Jimmy · AI最速组','Jimmy · 最优速组',
             *('Jimmy · '+PRIORITY_PREFIX+n for n in STABLE)}
     groups=[copy.deepcopy(g) for g in source['proxy-groups'] if g['name'] in wanted]

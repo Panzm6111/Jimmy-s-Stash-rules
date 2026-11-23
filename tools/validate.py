@@ -388,7 +388,7 @@ class ProjectChecks(unittest.TestCase):
 
     def test_other_and_all_nodes_do_not_hide_connection_candidates(self):
         fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
-        self.assertEqual(len(self.groups), 25)
+        self.assertEqual(len(self.groups), 24)
         other = self.groups['其他地区']
         all_nodes = self.groups['自动节点']
         self.assertEqual(other['type'], 'url-test')
@@ -492,12 +492,14 @@ class ProjectChecks(unittest.TestCase):
 
     def test_automatic_pools_probe_and_fail_closed_references(self):
         # Structural evidence only; Stash owns latency selection and failed-probe handling.
-        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', 'AI最速组', '最优速组', 'Gemini', 'TikTok'}
+        from curated_pools import MANUAL_DEFAULT, MEMBERS
+        curated = {*MEMBERS, MANUAL_DEFAULT}
+        pools = {'自动节点', '美国', '日本', '香港', '新加坡', '台湾', '其他地区', *curated}
         self.assertEqual({g['name'] for g in self.groups.values() if g['type'] == 'url-test'}, pools)
         for name in pools:
             group = self.groups[name]
             self.assertEqual(group['url'], 'https://www.gstatic.com/generate_204')
-            self.assertEqual(group['interval'], 3 if name in ('AI最速组','最优速组','Gemini','TikTok') else 1800)
+            self.assertEqual(group['interval'], 3 if name in curated else 1800)
             self.assertEqual(group['proxies'], ['REJECT'])
             self.assertRegex('REJECT', group['filter'])
             self.assertEqual(group['use'], ['机场'])
@@ -508,7 +510,7 @@ class ProjectChecks(unittest.TestCase):
         self.assertEqual(self.groups['Apple']['proxies'][0], 'DIRECT')
         self.assertEqual(self.groups['Microsoft']['proxies'][0], 'DIRECT')
         self.assertEqual(self.groups['总代理']['proxies'][0], '最优速组')
-        self.assertEqual(self.groups['AI组']['type'],'fallback')
+        self.assertEqual(self.groups['AI组']['type'],'url-test')
         self.assertEqual(self.groups['AI组']['interval'],3)
 
     def test_independent_software_choices(self):
@@ -518,8 +520,8 @@ class ProjectChecks(unittest.TestCase):
         choices['海外AI'] = '台湾'
         self.assertEqual(choices['Netflix'], before['Netflix'])
         self.assertEqual(choices['YouTube'], before['YouTube'])
-        for name in ['Netflix', 'YouTube', 'Telegram', '未匹配流量']:
-            self.assertEqual(self.groups[name]['proxies'][0], '总代理')
+        for name, target in {'Netflix':'美国', 'YouTube':'最优速组', 'Telegram':'最优速组', '未匹配流量':'DIRECT'}.items():
+            self.assertEqual(self.groups[name]['proxies'][0], target)
             self.assertNotIn('use', self.groups[name])
         self.assertIn('总代理', self.groups['海外AI']['proxies'])
         self.assertNotIn('use', self.groups['海外AI'])
@@ -645,36 +647,27 @@ class ProjectChecks(unittest.TestCase):
         self.assertEqual(route(config,'api.github.com'),'海外AI')
 
     def test_curated_pools_and_choices(self):
-        fixtures = json.loads((ROOT / 'tests/fixtures/regions.json').read_text())
-        defaults = {'总代理':'最优速组', '手动节点':'REJECT', '海外AI':'AI组', 'Claude':'AI组',
-                    'Netflix':'总代理', 'YouTube':'总代理',
-                    'Telegram':'总代理', 'Apple':'DIRECT', 'Microsoft':'DIRECT', 'Adobe':'总代理',
-                    '未匹配流量':'总代理', '国内直连':'DIRECT', '广告拦截':'REJECT'}
+        from curated_pools import MEMBERS, MANUAL_DEFAULT, MANUAL_NODE, name_filter
+        defaults = {'总代理':'最优速组', '手动节点':MANUAL_DEFAULT, '海外AI':'AI组',
+                    'Netflix':'美国', 'YouTube':'最优速组', 'Telegram':'最优速组',
+                    'Apple':'DIRECT', 'Microsoft':'DIRECT', 'Adobe':'DIRECT',
+                    '未匹配流量':'DIRECT', '国内直连':'DIRECT', '广告拦截':'REJECT'}
         for config in [self.config, load('config/stash.yaml')]:
             validate_structure(config)
             groups = {g['name']: g for g in config['proxy-groups']}
-            self.assertNotIn('日本+美国', groups)
-            pool = groups['AI组']
-            self.assertEqual(pool['type'], 'fallback')
-            from curated_pools import MEMBERS, STABLE, PRIORITY_PREFIX, name_filter
-            if 'filter' in pool:self.assertEqual(pool['proxies'],['REJECT'])
-            else:self.assertEqual(pool['proxies'],[PRIORITY_PREFIX+n for n in STABLE])
-            expected = {name:set(members) for name,members in MEMBERS.items()}
-            universe = set.union(*expected.values()) | {'HKG K','[Vless] 日本 [直连]','美国 A','美国 C','美国 D','英国 B','台湾 F','台湾 EE','新加坡 AA','英国 B 备用','荷兰 2','DIRECT'}
-            for name, members in expected.items():
-                pattern=groups[name].get('filter',name_filter(MEMBERS[name]))
-                self.assertEqual({n for n in universe if re.search(pattern,n)}, members)
-            for name in fixtures['other'] + fixtures['negative'] + fixtures['info'] + ['DIRECT', 'AI组']:
-                self.assertNotRegex(name, pool.get('filter',name_filter(STABLE)))
-            expected_defaults = defaults.copy()
-            if 'GPT 服务优选' in groups:
-                expected_defaults.update({'海外AI':'GPT 服务优选', 'ai':'AI组',
-                                          'GPT 服务优选':'AI组', 'TikTok 服务检测组':'AI最速组'})
+            self.assertTrue({'AI最速组','Gemini','Claude','日本+美国'}.isdisjoint(groups))
+            self.assertFalse(any(name.startswith('AI稳备 · ') for name in groups))
+            for name, members in {**MEMBERS, MANUAL_DEFAULT:(MANUAL_NODE,)}.items():
+                pool = groups[name]
+                self.assertEqual(pool['type'], 'url-test')
+                self.assertEqual(pool['filter'], name_filter(members))
+                self.assertEqual(pool['use'], ['机场'])
+                self.assertEqual(pool['proxies'], ['REJECT'])
             self.assertEqual({g['name']:g['proxies'][0] for g in groups.values()
-                              if g['type']=='select'}, expected_defaults)
+                              if g['type']=='select'}, defaults)
             for group in groups.values():
-                self.assertNotIn('日本+美国', group['proxies'])
-                self.assertEqual(group['proxies'].count('AI组'), int(group['type']=='select' and group['name'] not in {'手动节点','TikTok 服务检测组'}))
+                self.assertEqual(group['proxies'].count('AI组'), int(group['type']=='select' and group['name']!='手动节点'))
+
 
     def test_social_routes_share_tiktok_policy(self):
         self.assertEqual(self.groups['TikTok']['proxies'], ['REJECT'])

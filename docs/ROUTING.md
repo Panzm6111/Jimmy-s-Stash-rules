@@ -1,26 +1,20 @@
 # 分流与地区节点池
 
-## 当前分流与故障回退（Stash / Clash ROUTE-20261123.1）
+## 当前分流（Stash / Clash ROUTE-20261123.2）
 
-Stash 有 32 个策略组，Clash 另有 1 个隐藏下载回退组。TikTok 和 Gemini 均为可见的原生自动测速组。AI组使用有序回退，7 个隐藏单节点层用于固定优先顺序，避免机场订阅顺序覆盖稳定性排序。两端分别加载 36、33 个规则集，分别有 26、25 个直订上游，两端合计 27 个独立上游地址。
+两端的四个精选组各有八条线路，入选基准只取 11 月 23 日同一轮 NCloud 监控快照。AI组按本轮成功率和最近一小时成功请求中位耗时综合排名，保证美、港、新、台四区均有成员。最优速组按耗时优先，GeminiClaude 排除香港、欧洲，TikTok 排除香港并优先取累计连通率。完整名单和计算口径见[主文档](../PROGRESS.md#route-20261123-2)。
 
-AI组即最稳组，按 **HKG B → HKG C → HKG J → 新加坡 A → 台湾 B → 日本 A → 美国 B** 依次选健康出口，不因日本延迟更低就抢走健康香港出口。AI最速组为日本 A/B、HKG B/C/J，仍用 URL-test、100 ms 容差；最优速组为日本 A/B、HKG B/A/C/I/J/M，仍用 URL-test、50 ms 容差。Stash 最稳组、单节点层和两个速度组设为每 3 秒主动兜底探测；Clash 保持电脑原来的 60 秒周期，业务连接失败触发的复核另计。其他七个常规池仍为 1800 秒。组名继续沿用，设备无需重新选择同名业务策略。
-
-Clash 的两个 AI 池和优先层检查 ChatGPT HTTP 200，超时 6 秒，`max-failed-times: 1` 用于触发强制复核；机场另外每 60 秒检查通用 204（5 秒超时）。Stash 同节点共享原生测速结果，因此将原生测速目标统一为 ChatGPT，并在机场 provider 设置 benchmark-url 与 3 秒限时，防止通用 204 成功掩盖 GPT 连接失败。Stash 最优速组显示的也是该目标的探测延迟，与 Clash 通用 204 延迟不直接等价；都不是线路峰值带宽。
-
-电脑当前 Verge 的 auto_close_connection 已开启，本轮只读取并保留该设置，不修改正在使用的客户端。Mihomo 源码包含业务拨号失败触发健康复核的路径；已确认拒绝可触发立即复核，其他错误有失败计数和限时条件。隔离测试在同样 60 秒周期下，电脑基线从业务故障恢复约 2.8–3.2 秒，新有序回退约 0.5–1.5 秒，未手动测速；这是合成 HTTP GET 的结果。Stash 对等的失败回调和旧连接清理能力尚未实机核实，不把桌面实测直接写成手机效果。
-
-原生探测不发送聊天，也不检查账号、实际生成、TikTok 播放或所有 WebSocket/CDN。Stash 没有本次验证过的独立 HTTP 状态判定及自动清理旧业务连接功能；不能把 403/挑战/有 HTTP 响应的业务错误一概当成原生可发现的掉线。池切换影响新连接，已经挂起的请求可能需要重试。3 秒是 Stash 配置的兜底探测周期，3 秒是探测限时；实际是否及时执行仍需手机日志确认，不能把配置值当成已经验收的恢复时限。明确拒绝、断连与静默不回应是不同故障；后者仍须超时确认。Mihomo 中应解除旧手动图钉。
+AI组和 GeminiClaude 容差 200 ms，其余测速池 50 ms。Stash 精选组和手动默认组使用共享的 ChatGPT 探测，周期与限时均设为 3 秒。Clash 精选组和手动默认组周期仍为 60 秒，AI组探测 ChatGPT HTTP 200，其余精选组用普通 HTTP 204。探测用于选线，业务账号、生成、真实评论和视频播放仍要实机确认。
 
 <a id="claude-web"></a>
 
 ### Claude 网页版
 
-在浏览器打开 [Claude](https://claude.ai/)。安装引导中选择“稍后安装”即可继续使用网页。规则模式下，Stash 的 `Claude` 和 Clash 的 `Jimmy · Claude` 默认选择精选 `AI组` 池。这个独立入口适用于主站、登录、官方账户验证、静态资源和用户内容。要复核出口，可在客户端的连接记录中查看 `claude.ai`、`portal.anthropic.com`、`s-cdn.anthropic.com` 或 `assets-proxy.anthropic.com` 对应的策略链。全局模式下查看 `GLOBAL` 的实际选择。
+在浏览器打开 [Claude](https://claude.ai/) 或 Gemini。两个服务的专用规则共同使用 Stash 的 GeminiClaude 和 Clash 的 Jimmy · GeminiClaude。全局模式查看 GLOBAL 的实际选择，规则模式可从连接记录核对命中组和最终节点。
 
-四条内置后缀覆盖 `claude.ai`、`claude.com`、`anthropic.com`、`claudeusercontent.com` 及其子域，顺序在基础广告之后、远程海外 AI 分类之前。即使 AI 分类尚未下载，网页仍有明确出口。第三方共用登录与验证站沿用各自规则。精选池的常规探测检查 ChatGPT；Claude 的登录、验证和回复要在网页分别确认。[Anthropic 官方网络域名](https://support.claude.com/en/articles/13198485-enforce-network-level-access-control-with-tenant-restrictions) · [用户内容域名说明](https://support.claude.com/en/articles/13065128-claude-in-chrome-admin-controls)
+Claude 的四条后缀和 Gemini 的十四条专用主机规则都在海外 AI 总分类前，基础广告仍优先。即使远程 AI 分类尚未下载，专用入口也有明确策略。普通 Google 域名和第三方验证共用站点沿各自规则。[Anthropic 官方网络域名](https://support.claude.com/en/articles/13198485-enforce-network-level-access-control-with-tenant-restrictions)
 
-需要客户端真实解析时，Stash 把这四个域交给两台加密 DNS（`1.0.0.1`、`8.8.4.4`），到这两个地址的连接通过 `Claude`。Clash 直接把这四个域的加密 DNS 请求绑定到 `Jimmy · Claude`。两端都用独立解析器查找代理服务器，手选 Claude 出口后，网页与该组 DNS 一起生效。[Stash DNS](https://stash.wiki/en/features/dns-server) · [Mihomo DNS](https://wiki.metacubex.one/en/config/dns/)
+Stash 将两项服务的专用主机交给 1.0.0.1、8.8.4.4 的加密 DNS，经 GeminiClaude 发出。Clash 将这些域名的加密 DNS 绑定到 Jimmy · GeminiClaude。机场服务器地址继续由独立解析器查找。[Stash DNS](https://stash.wiki/en/features/dns-server) · [Mihomo DNS](https://wiki.metacubex.one/en/config/dns/)
 
 如果网页显示“完成验证以继续”，请在网页内点击“打开验证门户”，由账户持有人完成 Anthropic 要求的步骤，再回到新对话确认能收到回复。
 
@@ -30,10 +24,10 @@ Clash 的两个 AI 池和优先层检查 ChatGPT HTTP 200，超时 6 秒，`max-
 
 本机保存的旧手机覆写脚本确有 PUT /proxies 切换和每分钟 cron，也可能将服务选择器固定到单节点；这种状态会绕开原生池的后续换线，直到脚本再次处理。该机制可以增加等待，但没有现场日志证明它就是本机每次故障的原因。当前移除服务选择器接管路径，让业务直接进入原生池。
 
-用户已于 2026-11-16 明确停用 GPT/TikTok 服务检测覆写。当前主配置不再包含 GPT 服务优选、TikTok 服务检测组、旧 ai 兼容选择器或服务 cron；海外AI 和 Claude 默认 AI组，TikTok 使用自己的八节点自动组。原脚本/样例仅保留历史证据，不再安装。
+用户已于 2026-11-16 明确停用 GPT/TikTok 服务检测覆写。海外AI 默认 AI组，GeminiClaude 和 TikTok 使用自己的自动组。原脚本和样例只用于历史查阅。
 
 1. 先在手机覆写列表停用并删除 **GPT 与 TikTok 服务检测私人本地版**（名称可能带 iOS365）。保留私人机场与 Stash MitM 两条覆写，并确认机场来源为 NCloud；本次精选名单不匹配 ADSL 名称。无需为删除而导出含控制密钥的旧覆写。
-2. 刷新原主配置，确认文件头为 **ROUTE-20261123.1**。使用规则模式，海外AI 和 Claude 选择 AI组。打开 TikTok 组核对美国 A/B/D/E/F/G、英国 B 和西班牙八个机场节点，可用节点随机场实际提供的名单显示。
+2. 刷新原主配置，确认文件头为 **ROUTE-20261123.2**，核对各组成员和实际选择。若客户端保留了旧手选，可将相关组改为本版默认项。
 3. 新配置不需要外部控制端口/密钥。若外部访问仅为旧脚本开启且没有其他用途，可在设备设置关闭。电脑无法代替用户操作此手机步骤，也不能据本地文件已退役宣称手机条目已删除。
 4. 当前没有故障时可直接删除旧覆写，不必为删除复现掉线。有故障时先记下北京时间、Wi-Fi/蜂窝、前台/后台与 App 报错，先保留现场再手动测速或重连。
 
@@ -63,11 +57,11 @@ TikTok 专属广告和功能分类优先匹配。两端在抖音直连分类之�
 
 ## 软件选择的是池
 
-AI组按 HKG B/C/J、新加坡 A、台湾 B、日本 A、美国 B 的优先级故障回退；AI最速组收日本 A/B、HKG B/C/J（100 ms）；最优速组收日本 A/B、HKG B/A/C/I/J/M（50 ms）。海外AI 和 Claude 默认 AI组，总代理默认最优速组。
+海外AI 默认 AI组。总代理、YouTube、Telegram 默认最优速组，Netflix 默认美国。
 
 总代理和手动节点可直接选机场单节点。TikTok、Instagram、X 及原先指向 TikTok 的其他社交流量共用这个可见的八节点自动组。Stash 和 Clash 都按精确节点名称筛选。测速负责候选之间的选线，真实业务验收要求看到新的视频帧、非空评论和作者资料。
 
-Netflix、YouTube、Telegram、Adobe 和未匹配流量默认跟随总代理。Apple、Microsoft、国内直连默认 DIRECT，广告默认 REJECT。
+Adobe、Apple、Microsoft、国内直连和未匹配流量默认 DIRECT，广告默认 REJECT。手动节点的默认入口锁定 HKG A，仍可自行改选机场其他节点。
 
 “自动节点”包含全机场候选，可跨地区自动选择。两端在总代理或手动节点中可选具体节点，多个业务共用同一个手动入口时，共享该项选择。
 

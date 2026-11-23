@@ -28,30 +28,28 @@ class Subscriptions(unittest.TestCase):
             for address in ['1.1.1.1','8.8.8.8']:
                 self.assertEqual(v.route(config,address=address,country='CN'),'海外AI')
             for address in ['1.0.0.1','8.8.4.4']:
-                self.assertEqual(v.route(config,address=address,country='CN'),'Claude')
+                self.assertEqual(v.route(config,address=address,country='CN'),'GeminiClaude')
         for host in ['dns.alidns.com','doh.pub']:
             self.assertEqual(v.route(config,host,country='ZZ'),'DIRECT')
         groups={g['name']:g for g in config['proxy-groups']}
         for name in ['美国','日本','台湾']:
             self.assertEqual(groups[name]['proxies'],['REJECT'])
-        self.assertEqual(groups['AI组']['type'],'fallback')
+        self.assertEqual(groups['AI组']['type'],'url-test')
         self.assertFalse(config['ipv6'])
 
     def test_both_published_profiles_use_the_same_pool_tolerances(self):
-        expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区'), 50)
-        from curated_pools import STABLE, PRIORITY_PREFIX
-        expected.update({'Gemini':200, 'TikTok':150, 'AI最速组':100, '最优速组':50})
-        expected.update({PRIORITY_PREFIX+n:50 for n in STABLE})
+        from curated_pools import MEMBERS, MANUAL_DEFAULT
+        expected = dict.fromkeys(('自动节点','美国','日本','香港','台湾','新加坡','其他地区',*MEMBERS,MANUAL_DEFAULT), 50)
+        expected.update({'AI组':200, 'GeminiClaude':200})
         for path, prefix in [('config/stash.yaml',''), ('config/clash-verge-auto.yaml','Jimmy · ')]:
             with self.subTest(path=path):
-                pools = {g['name']: g['tolerance'] for g in v.load(path)['proxy-groups'] if g['type']=='url-test'}
-                want={prefix + name: ms for name, ms in expected.items()}
-                self.assertEqual(pools,want)
-                stable=next(g for g in v.load(path)['proxy-groups'] if g['name']==prefix+'AI组')
-                self.assertEqual(stable['type'],'fallback')
-                self.assertEqual(stable['interval'],60 if prefix else 3)
-                self.assertNotIn('tolerance',stable)
-                self.assertEqual(stable['proxies'],[prefix+PRIORITY_PREFIX+n for n in STABLE])
+                groups = v.load(path)['proxy-groups']
+                self.assertEqual({g['name']:g['tolerance'] for g in groups if g['type']=='url-test'},
+                                 {prefix + name: ms for name,ms in expected.items()})
+                for group in groups:
+                    if group['name'].removeprefix(prefix) in {*MEMBERS, MANUAL_DEFAULT}:
+                        self.assertEqual(group['interval'], 60 if prefix else 3)
+
 
     def test_only_general_and_manual_selectors_show_airport_nodes(self):
         for filename, prefix in [('stash.yaml', ''), ('clash-verge-auto.yaml', 'Jimmy · ')]:
@@ -61,7 +59,7 @@ class Subscriptions(unittest.TestCase):
                     continue
                 with self.subTest(profile=filename, group=name):
                     exposes_nodes = bool(group.get('use') or group.get('include-all'))
-                    self.assertEqual(exposes_nodes, name in {prefix+'总代理', prefix+'手动节点', prefix+'Gemini', prefix+'TikTok'})
+                    self.assertEqual(exposes_nodes, name in {prefix+'总代理', prefix+'手动节点', prefix+'GeminiClaude', prefix+'TikTok'})
                     self.assertTrue(set(group.get('proxies', [])) <= set(groups) | {'DIRECT','REJECT'})
             pool = groups[prefix+'TikTok']
             self.assertEqual(pool['type'], 'url-test')
@@ -74,7 +72,7 @@ class Subscriptions(unittest.TestCase):
             config=v.load('config/'+filename)
             groups={g['name']:g for g in config['proxy-groups']}
             self.assertEqual(groups[prefix+'海外AI']['proxies'][0],prefix+'AI组')
-            for name in ('GPT 服务优选','TikTok 服务检测组','ai'):
+            for name in ('GPT 服务优选','TikTok 服务检测组','ai','AI最速组','Claude','Gemini'):
                 self.assertNotIn(prefix+name,groups)
             self.assertNotIn('cron',config)
 
@@ -119,7 +117,7 @@ class Subscriptions(unittest.TestCase):
         for group in config['proxy-groups']:
             if group['type'] in ('url-test','fallback'):
                 self.assertEqual(group['url'],'https://chatgpt.com/')
-                if group['name'] in ('AI组','AI最速组','最优速组','Gemini','TikTok') or group['name'].startswith('AI稳备 · '):
+                if group['name'] in ('AI组','最优速组','GeminiClaude','TikTok','手动默认 · HKG A'):
                     self.assertEqual(group['interval'],3)
         self.assertNotIn('secret',config)
         self.assertNotIn('external-controller',config)
@@ -165,12 +163,13 @@ class Subscriptions(unittest.TestCase):
         domains = ('claude.ai', 'anthropic.com', 'claude.com', 'claudeusercontent.com')
         for filename, prefix in [('stash.yaml', ''), ('clash-verge-auto.yaml', 'Jimmy · ')]:
             cfg = v.load('config/' + filename)
-            target = prefix + 'Claude'
+            target = prefix + 'GeminiClaude'
             groups = {g['name']: g for g in cfg['proxy-groups']}
-            self.assertEqual(groups[target]['proxies'][0], prefix + 'AI组')
+            self.assertEqual(groups[target]['type'], 'url-test')
             sets = {name: [] for name in cfg['rule-providers']}
             for host in ('claude.ai', 'portal.anthropic.com', 's-cdn.anthropic.com',
-                         'assets-proxy.anthropic.com', 'claude.com', 'files.claudeusercontent.com'):
+                         'assets-proxy.anthropic.com', 'claude.com', 'files.claudeusercontent.com',
+                         'gemini.google.com', 'aistudio.google.com', 'geminiweb-pa.clients.google.com'):
                 self.assertEqual(decision(cfg, sets, host)[:2], (target, 'inline'))
             for host in ('claude.ai.example.org', 'notanthropic.com', 'accounts.google.com',
                          'challenges.cloudflare.com', 'cdn.jsdelivr.net', 'chatgpt.com'):
@@ -180,7 +179,8 @@ class Subscriptions(unittest.TestCase):
             policy = cfg['dns']['nameserver-policy']
             keys = {'+.' + host for host in domains}
             if prefix:
-                self.assertEqual(set(policy), keys)
+                self.assertEqual(set(policy), keys | {('+' + '.' if rule.startswith('DOMAIN-SUFFIX,') else '') + rule.split(',')[1]
+                                                      for rule in v.merged()['rules'] if rule.endswith(',GeminiClaude')})
                 self.assertEqual(cfg['dns']['proxy-server-nameserver'], cfg['dns']['nameserver'])
             expected = [r + '#' + target for r in AI_RESOLVERS] if prefix else list(CLAUDE_RESOLVERS)
             for k in keys:

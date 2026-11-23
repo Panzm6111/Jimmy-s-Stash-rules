@@ -33,7 +33,7 @@ https://raw.githubusercontent.com/Panzm6111/Jimmy-s-Stash-rules/main/config/stas
 
 按[完整订阅教程](SUBSCRIBE.md)导入上面的公共URL，在设备只填一次自己的机场订阅到本地私人覆写。公共配置不知道你的私人订阅，不能把机场token拼在公共URL后。安装成功后保留这份私人覆写，以后公共更新继续使用它。
 
-刷新机场后核对节点数量，使用规则模式连接。AI组收新加坡 A、台湾 E/D（250 ms）。AI最速组在这三条上加入日本 A/B（100 ms）。最优速组收 HKG B/A/C/I/J/M、荷兰、新加坡 A、台湾 E、日本 A/B（50 ms）。海外AI 和 Claude 默认用 AI组，总代理默认用最优速组。 想手选具体节点可用“手动节点”。
+刷新机场后核对节点数量，使用规则模式连接。海外AI 默认 AI组，Gemini 和 Claude 用 GeminiClaude 自动测速。总代理与 YouTube、Telegram 默认最优速组，Netflix 默认美国。手动节点默认从 HKG A 起步。[本版成员与默认出口](ROUTING.md)。
 
 HTTP去广告首次才需要在Stash生成自己的CA、按提示安装，并到iOS“设置→通用→关于本机→证书信任设置”完全信任；已有证书不用重做。不扩大解密到全域名或支付/银行主域，不关闭TLS验证，私钥只留设备。
 

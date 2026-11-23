@@ -21,12 +21,12 @@ import yaml
 
 from config_helpers import dump, flatten
 from service_health import MANAGED
-from curated_pools import MEMBERS, STABLE, PRIORITY_PREFIX, CHECK_INTERVAL, name_filter
+from curated_pools import MEMBERS, MANUAL_DEFAULT, MANUAL_NODE, CHECK_INTERVAL
 from validate import BUILTINS, RAW, ROOT, UniqueLoader, load, route
 
-CURATED = ('AI组', 'AI最速组', '最优速组', 'Gemini', 'TikTok')
+CURATED = {**MEMBERS, MANUAL_DEFAULT: (MANUAL_NODE,)}
 REGIONS = ('美国', '日本', '香港', '新加坡', '台湾')
-AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', 'AI最速组', '最优速组', 'Gemini', 'TikTok')
+AUTO_POOLS = ('自动节点', *REGIONS, '其他地区', *CURATED)
 PROBE_SETTINGS = {'url': 'https://chatgpt.com/', 'interval': 1800}
 PROBE_FIELDS = (*PROBE_SETTINGS, 'tolerance', 'lazy')
 
@@ -127,18 +127,11 @@ def verify(config, template, expected_nodes):
         require(set(members) - {'REJECT'} == expected_members, '地区包含错误节点或遗漏节点。')
         union.update(n for n in members if n in node_names)
     require(set(by_name['自动节点']['proxies']) - {'REJECT'} == node_names, '自动节点有遗漏。')
-    for name in CURATED:
-        expected = node_names.intersection(MEMBERS[name]) if name == 'TikTok' else {
-            n for n in node_names if re.fullmatch(name_filter(MEMBERS[name]), n)}
-        if name == 'AI组':
-            require(by_name[name]['type'] == 'fallback', '最稳组必须按优先级故障回退。')
-            require(by_name[name]['proxies'] == [PRIORITY_PREFIX+n for n in STABLE], '最稳顺序改变。')
-            for member in STABLE:
-                require(by_name[PRIORITY_PREFIX+member]['proxies'] == ([member] if member in node_names else [])+['REJECT'], '单节点优先层成员异常。')
-        else:
-            require(set(by_name[name]['proxies']) == expected | {'REJECT'}, '精选池成员不符。')
+    for name, members in CURATED.items():
+        require(by_name[name]['proxies'] == [n for n in members if n in node_names]+['REJECT'], '精选池成员不符。')
     require(by_name['手动节点']['type'] == 'select' and
-            set(by_name['手动节点']['proxies']) - {'REJECT'} == node_names, '手动节点有遗漏或类型改变。')
+            by_name['手动节点']['proxies'][0] == MANUAL_DEFAULT and
+            set(by_name['手动节点']['proxies']) - {'REJECT', MANUAL_DEFAULT} == node_names, '手动节点默认项或候选错误。')
     require(set(by_name['其他地区']['proxies']) - {'REJECT'} == node_names - union,
             '其他地区不是五地区的补集。')
     require(by_name['总代理']['proxies'][0] == '最优速组', '总代理默认项错误。')
@@ -147,10 +140,6 @@ def verify(config, template, expected_nodes):
             expected_members = template_groups[selector]['proxies'] + [n for n in MEMBERS[pool] if n in node_names]
             require(by_name[selector]['proxies'] == expected_members, '服务选择组候选或顺序错误。')
     require(by_name['海外AI']['proxies'][0] == template_groups['海外AI']['proxies'][0], '海外 AI 默认项错误。')
-    for name in ('Netflix', 'YouTube', 'Telegram', 'Adobe', '未匹配流量'):
-        require(by_name[name]['proxies'][0] == '总代理', '软件未默认跟随总代理。')
-    for name in ('Apple', 'Microsoft'):
-        require(by_name[name]['proxies'][0] == 'DIRECT', '系统软件默认直连改变。')
     # Business logic is reused exactly. This is stronger than sampling just a
     # few routing decisions and also preserves script timeouts/failure behavior.
     for key in ('rules', 'dns', 'http', 'script-providers'):
@@ -210,7 +199,7 @@ def compose(source, template=None):
     assigned = set().union(*(set(v) for v in region_nodes.values()))
     other_nodes = [n for n in all_names if n not in assigned]
     pool_nodes = {'自动节点': all_names, **region_nodes, '其他地区': other_nodes,
-                  **{name: [n for n in MEMBERS[name] if n in all_names] for name in CURATED}}
+                  **{name: [n for n in members if n in all_names] for name, members in CURATED.items()}}
     result = copy.deepcopy(template)
     result.pop('proxy-providers', None)
     result['proxies'] = eligible
@@ -224,17 +213,11 @@ def compose(source, template=None):
                 group['type'] = 'select'
                 for key in PROBE_FIELDS:
                     group.pop(key, None)
-        elif name.startswith(PRIORITY_PREFIX):
-            member=name.removeprefix(PRIORITY_PREFIX)
-            group['proxies']=([member] if member in all_names else [])+['REJECT']
-            if member not in all_names:
-                group['type']='select'
-                for key in PROBE_FIELDS:group.pop(key,None)
         elif name in MANAGED:
             native = MANAGED[name]
             group['proxies'] = [*group['proxies'], *pool_nodes[native]]
         elif name == '手动节点':
-            group['proxies'] = all_names + ['REJECT']
+            group['proxies'] = [MANUAL_DEFAULT, *all_names, 'REJECT']
         elif expanded:
             group['proxies'] = list(dict.fromkeys(group['proxies'] + all_names))
     # Keep private node definitions at the beginning, with a clear warning.
