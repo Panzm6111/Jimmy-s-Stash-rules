@@ -175,16 +175,17 @@ class PrivateConfigChecks(unittest.TestCase):
 
     def test_curated_membership(self):
         source = copy.deepcopy(self.source)
-        for name in ('SG01', 'TW01', '香港01', 'JP-US-TW', '新加坡 A', '台湾 E', '台湾 D', '日本 A', '美国 D', 'HKG A'):
+        for name in ('SG01', 'TW01', '香港01', 'JP-US-TW', '新加坡 A', '台湾 E', '台湾 D',
+                     '日本 A', '美国 D', 'HKG A', '台湾 B'):
             node = copy.deepcopy(source['proxies'][0])
             node['name'] = name
             source['proxies'].append(node)
         config, _ = compose(source)
         groups = {g['name']: g for g in config['proxy-groups']}
-        self.assertEqual(groups['AI组']['proxies'], ['HKG A', 'REJECT'])
+        self.assertEqual(groups['AI组']['proxies'], ['台湾 B', 'REJECT'])
         self.assertEqual(groups['手动默认 · HKG A']['proxies'], ['HKG A', 'REJECT'])
-        self.assertEqual(groups['GeminiClaude']['proxies'], ['美国 D', 'REJECT'])
-        self.assertEqual(groups['最优速组']['proxies'], ['REJECT'])
+        self.assertEqual(groups['GeminiClaude']['proxies'], ['台湾 B', '美国 D', 'REJECT'])
+        self.assertEqual(groups['最优速组']['proxies'], ['日本 A', 'REJECT'])
         self.assertNotIn('SG01', groups['AI组']['proxies'])
         self.assertIn('SG01', groups['新加坡']['proxies'])
         self.assertNotIn('香港01', groups['AI组']['proxies'])

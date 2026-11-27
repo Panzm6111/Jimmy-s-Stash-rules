@@ -1,10 +1,10 @@
 """Evidence-selected airport names shared by both subscription formats."""
 import re
 
-AI = ('HKG C', 'HKG M', '美国 B', 'HKG J', '美国 E', '美国 C', '台湾 C', '新加坡 C')
-NODE_FAST = ('台湾 C', 'HKG C', '日本 B', 'HKG H', 'HKG M', '美国 B', 'HKG D', 'HKG F')
-GEMINI_CLAUDE = ('美国 B', '美国 E', '美国 C', '台湾 C', '美国 A', '美国 D', '新加坡 C', '新加坡 2 直连 CTCM')
-TIKTOK = ('美国 E', '美国 C', '美国 A', '美国 D', '新加坡 A', '美国 F', '美国 I', '美国 H')
+AI = ('美国 E', 'HKG M', '台湾 B', '新加坡 C', '日本 B', '美国 C', '美国 B', '美国 A')
+NODE_FAST = ('HKG M', 'HKG G', 'HKG J', 'HKG H', '美国 E', '美国 C', '美国 B', '日本 A')
+GEMINI_CLAUDE = ('美国 B', '美国 E', '美国 C', '台湾 B', '美国 A', '美国 D', '新加坡 C', '日本 B')
+TIKTOK = ('美国 E', '美国 C', '美国 A', '美国 D', '新加坡 A', '美国 F', '美国 I', '日本 B')
 MEMBERS = {'AI组': AI, '最优速组': NODE_FAST, 'GeminiClaude': GEMINI_CLAUDE, 'TikTok': TIKTOK}
 MANUAL_DEFAULT = '手动默认 · HKG A'
 MANUAL_NODE = 'HKG A'

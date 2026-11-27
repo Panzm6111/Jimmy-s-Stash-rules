@@ -87,7 +87,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: ^(HKG C|HKG M|美国 B|HKG J|美国 E|美国 C|台湾 C|新加坡 C|REJECT)$
+  filter: ^(美国 E|HKG M|台湾 B|新加坡 C|日本 B|美国 C|美国 B|美国 A|REJECT)$
   hidden: true
 - name: GeminiClaude
   type: url-test
@@ -99,7 +99,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: ^(美国 B|美国 E|美国 C|台湾 C|美国 A|美国 D|新加坡 C|新加坡 2 直连 CTCM|REJECT)$
+  filter: ^(美国 B|美国 E|美国 C|台湾 B|美国 A|美国 D|新加坡 C|日本 B|REJECT)$
 - name: 最优速组
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -109,7 +109,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: ^(台湾 C|HKG C|日本 B|HKG H|HKG M|美国 B|HKG D|HKG F|REJECT)$
+  filter: ^(HKG M|HKG G|HKG J|HKG H|美国 E|美国 C|美国 B|日本 A|REJECT)$
   hidden: true
 - name: 香港
   type: url-test
@@ -179,7 +179,7 @@ proxy-groups:
   - REJECT
   use:
   - 机场
-  filter: ^(美国 E|美国 C|美国 A|美国 D|新加坡 A|美国 F|美国 I|美国 H|REJECT)$
+  filter: ^(美国 E|美国 C|美国 A|美国 D|新加坡 A|美国 F|美国 I|日本 B|REJECT)$
 - name: Netflix
   type: select
   proxies:

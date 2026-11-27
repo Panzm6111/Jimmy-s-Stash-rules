@@ -7,7 +7,7 @@
 | Stash | [config/stash.yaml](config/stash.yaml) |
 | Clash Verge | [config/clash-verge-auto.yaml](config/clash-verge-auto.yaml) |
 
-Stash 与 Clash 当前版本均为 ROUTE-20261123.3。海外AI 默认 AI组，Gemini 和 Claude 使用 GeminiClaude，TikTok 继续独立自动测速。四个精选组各选八条 NCloud 线路。总代理、YouTube 和 Telegram 默认最优速组，Netflix 默认美国。完整名单、测速方式和既有手选项说明见[当前分流](docs/ROUTING.md)。
+Stash 与 Clash 当前版本均为 ROUTE-20261127.1。海外AI 默认 AI组，Gemini 和 Claude 使用 GeminiClaude，TikTok 继续独立自动测速。四个精选组各选八条 NCloud 线路。总代理、YouTube 和 Telegram 默认最优速组，Netflix 默认美国。完整名单、测速方式和既有手选项说明见[当前分流](docs/ROUTING.md)。
 
 Gemini 与 Claude 的主站和专用依赖共用 GeminiClaude，常规 Google 域名沿原规则分流。[网页版设置与连接核对](docs/ROUTING.md#claude-web)
 

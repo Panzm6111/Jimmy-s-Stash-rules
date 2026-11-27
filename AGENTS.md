@@ -27,4 +27,4 @@
 
 - 自 ROUTE-20261123.2 起，两端以 PROGRESS.md 的本版名单和默认值为准。AI最速组和旧 AI 稳备层移除，Gemini 与 Claude 合成同一自动测速组。只基于本轮 NCloud 监控选线，避免沿用旧版服务检测成绩。继续停用 GPT/TikTok 私有检测覆写。
 
-- TikTok 与抖音明确收录的共享域名仍优先走 TikTok，Instagram、X 等原先共用组的业务沿用该组。当前节点成员见 PROGRESS.md 的 ROUTE-20261123.3。
+- TikTok 与抖音明确收录的共享域名仍优先走 TikTok，Instagram、X 等原先共用组的业务沿用该组。当前节点成员见 PROGRESS.md 的 ROUTE-20261127.1。
