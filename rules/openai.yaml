@@ -234,6 +234,5 @@ payload:
 - DOMAIN,api.jetbrains.ai
 - DOMAIN,openrouter.ai
 - DOMAIN,server.codeium.com
-- DOMAIN,inference.codeium.com
 - DOMAIN,server.self-serve.windsurf.com
 - DOMAIN,cloud.zed.dev

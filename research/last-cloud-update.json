@@ -1,9 +1,9 @@
 {
-  "date": "2026-11-19T20:57:22.959876+08:00",
+  "date": "2026-11-27T21:48:28.053107+08:00",
   "upstream_revision": "0b6897dc17e0c513d25449c935a9694818e32f0c",
   "source_heads": {
     "blackmatrix7/ios_rule_script refs/heads/master": "0b6897dc17e0c513d25449c935a9694818e32f0c",
-    "SukkaW/Surge HEAD": "32f900e8759db8276cf6c9dcd0cc81f19c61c58f"
+    "SukkaW/Surge HEAD": "23305dc014debdda1a59d8c3b7c3586d59d41862"
   },
   "deltas": [
     {
@@ -53,10 +53,10 @@
     },
     {
       "output": "rules/vendor/ai-sukka.yaml",
-      "old_count": 58,
-      "new_count": 60,
-      "added": 2,
-      "removed": 0,
+      "old_count": 60,
+      "new_count": 59,
+      "added": 0,
+      "removed": 1,
       "blocked": false,
       "reasons": []
     }

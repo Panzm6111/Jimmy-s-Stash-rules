@@ -1,5 +1,5 @@
 # Mechanically adapted maintained rules; no locally authored domains.
-# Sources and original licenses: research/community-sources.json; SukkaW/Surge/Source/non_ip/ai.conf @ 32f900e8759db8276cf6c9dcd0cc81f19c61c58f
+# Sources and original licenses: research/community-sources.json; SukkaW/Surge/Source/non_ip/ai.conf @ 23305dc014debdda1a59d8c3b7c3586d59d41862
 payload:
 - DOMAIN-SUFFIX,openai.com
 - DOMAIN-SUFFIX,oaistatic.com
@@ -58,6 +58,5 @@ payload:
 - DOMAIN,openrouter.ai
 - DOMAIN-SUFFIX,cursor.sh
 - DOMAIN,server.codeium.com
-- DOMAIN,inference.codeium.com
 - DOMAIN,server.self-serve.windsurf.com
 - DOMAIN,cloud.zed.dev
