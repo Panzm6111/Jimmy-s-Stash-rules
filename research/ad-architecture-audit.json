@@ -23,7 +23,7 @@
   "input_sha256": {
     "config/stash.yaml": "a042ff1278e6c25836b45047bce335ff3452d692d60984ba4312a4f10c4f16be",
     "templates/stash-main.yaml": "dcf813dcfa62754c2bc1429ff3c1aab6367ae5402cb774e3f8b728fe116ff26b",
-    "templates/stash-core.stoverride": "229fb5c134dd1d4becc3bfe092ed62de7bcc9d0558b69160cd452665695444ab",
+    "templates/stash-core.stoverride": "a85ced75ce1a495b3eb206b72e68ed072e1d7fc916012fa1fbd21398c54f3238",
     "rules/ads-basic.yaml": "a75eb10f7c9a52e950b3fb69cd4a45fbf4f59183df13c03a95255ac8db2c7db7",
     "rules/vendor/ads-expanded.yaml": "61152563d635df552bf3ad608cffbc86449474382f917acc655fb928ddb4d604",
     "rules/system-direct.yaml": "6dec5e154721f9f6bf0a8c1d62465a38fe3e486e60beb20565e5367f153c101f",
@@ -116,7 +116,7 @@
   "documentation": {
     "path": "docs/AD-ARCHITECTURE.md",
     "bytes": 158043,
-    "sha256": "ab349667241b90342f6ea34e8d96494edcdcf0f6860d77282a87e1459d7d8c83",
+    "sha256": "3c8ea1866a117de96c98f2ef20770e8e37a9418dd875bb4a38025f60e784acb5",
     "source_scripts_embedded": 13
   },
   "native_stash_tested": false,

@@ -716,7 +716,7 @@ payload:
 | 文件 | SHA256 |
 |---|---|
 | [config/stash.yaml](../config/stash.yaml) | `a042ff1278e6c25836b45047bce335ff3452d692d60984ba4312a4f10c4f16be` |
-| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `229fb5c134dd1d4becc3bfe092ed62de7bcc9d0558b69160cd452665695444ab` |
+| [templates/stash-core.stoverride](../templates/stash-core.stoverride) | `a85ced75ce1a495b3eb206b72e68ed072e1d7fc916012fa1fbd21398c54f3238` |
 | [tools/build_ad_scripts.py](../tools/build_ad_scripts.py) | `cc01d52f0309bc11fa3a2aa5c5053438a46dbbea9d1f300e6f70e209430fff22` |
 | [scripts/ads/alipan.js](../scripts/ads/alipan.js) | `5b94572903251ccbd62ac5eec8f7c6017aa2a209b138166c39617ec001c6c302` |
 | [scripts/ads/bilibili.js](../scripts/ads/bilibili.js) | `6b8bb4e703cdfe886f99f098e0c9dcd2c4119812b5284782033d5d99630d7232` |
